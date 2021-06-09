@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>WebGL Points Demo</title>
+    <meta name="title" content="WebGL Points Demo" />
+    <meta
+      name="description"
+      content="A demo of an interactive point visualization using WebGL"
+    />
+    <link rel="stylesheet" href="../styles/canvas.css" />
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon" />
+    <script src="../scripts/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="toolbar">
+        <div class="dataset">
+          <label for="dataset">To render:</label>
+          <select name="dataset" id="dataset">
+            <option value="tsne">t-SNE Dataset</option>
+            <option value="tsne-10">t-SNE Dataset (1/10)</option>
+            <option value="tsne-100">t-SNE Dataset (1/100)</option>
+          </select>
+        </div>
+        <div class="controls">
+          <img src="../assets/pan_tool_black_24dp.svg" alt="pan tool" />
+          <img src="../assets/highlight_alt_black_24dp.svg" alt="box select" />
+          <img src="../assets/gesture_black_24dp.svg" alt="lasso select" />
+        </div>
+
+        <div class="scroll-state">
+          <label for="lock-x">Lock X</label>
+          <input type="checkbox" id="lock-x" name="lock-x" />
+          <label for="lock-x">Lock Y</label>
+          <input type="checkbox" id="lock-y" name="lock-y" />
+        </div>
+        <div class="selection-window">
+          <span class="x-range"></span>
+          x
+          <span class="y-range"></span>
+        </div>
+      </div>
+      <div class="content">
+        <div class="rendering-container"></div>
+      </div>
+    </main>
+    <footer>
+      <a
+        class="github"
+        href="https://github.com/SamGRosen/webgl-point-interactivity-demo"
+      >
+        See on GitHub
+      </a>
+    </footer>
+  </body>
+</html>

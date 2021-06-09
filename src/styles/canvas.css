@@ -1,0 +1,74 @@
+@import "./index.css";
+
+.content {
+  padding: 1em;
+}
+
+.toolbar {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background: #ccc;
+  box-shadow: 0 0 10px black;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.controls img {
+  cursor: pointer;
+}
+
+.controls img.selected {
+  padding: 2px;
+  box-shadow: 0 0 5px black;
+}
+
+.rendering-container {
+  position: relative;
+  width: 100%;
+  height: 80%;
+}
+
+canvas,
+#mouse-reader {
+  margin-top: 1em;
+  border: 1px solid #999;
+}
+
+canvas,
+#mouse-reader {
+  height: 90%;
+  width: 100%;
+}
+
+#mouse-reader {
+  position: absolute;
+  z-index: 1;
+}
+
+a.github {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 6px 8px 6px 34px;
+  border: none;
+  color: #333;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+a.github:before {
+  position: absolute;
+  content: "";
+  background-image: url("../assets/github.png");
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  top: 4px;
+  left: 6px;
+}
+a.github:hover {
+  border-color: #333;
+}
