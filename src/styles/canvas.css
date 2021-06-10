@@ -35,7 +35,6 @@
 canvas,
 #mouse-reader {
   margin-top: 1em;
-  border: 1px solid #999;
 }
 
 canvas,
@@ -47,6 +46,15 @@ canvas,
 #mouse-reader {
   position: absolute;
   z-index: 1;
+}
+
+#box-select {
+  position: absolute;
+  top: -10000px;
+  z-index: 1000;
+  background: rgba(124, 124, 247, 0.3);
+  border: 1px rgb(136, 128, 247) dashed;
+  pointer-events: none;
 }
 
 a.github {

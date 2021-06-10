@@ -10,7 +10,7 @@ class Handler {
     this.canvas = document.createElement("canvas");
 
     this.width = Math.min(this.content.clientWidth, 1000);
-    this.height = this.content.clientHeight * 0.75;
+    this.height = this.content.clientHeight * 0.9; // needs to match CSS canvas height
     this.canvas.width = this.width;
     this.canvas.height = this.height;
 
@@ -24,7 +24,6 @@ class Handler {
 
     this.initFpsmeter();
     this.toolbar.init();
-    this.mouseReader.init();
   }
 
   addToDOM(Drawer, extraArgs) {
@@ -39,6 +38,7 @@ class Handler {
     // Set tick for fps meter, allows drawer to have no knowledge of handler
     this.drawer.tick = () => this.meter.tick();
     this.content.appendChild(this.canvas);
+    this.mouseReader.init();
   }
 
   initFpsmeter() {

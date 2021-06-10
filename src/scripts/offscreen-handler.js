@@ -15,14 +15,13 @@ class OffscreenHandler extends Handler {
     // Ensure div is directly on top of canvas
     this.canvas.style.position = "absolute";
     this.mouseReader.element.id = "mouse-reader";
-
-    // Reinit controls with new mouse reader
-    this.mouseReader.init();
   }
 
   addToDOM(worker) {
     this.content.appendChild(this.canvas);
     this.content.appendChild(this.mouseReader.element);
+    // Reinit controls with new mouse reader
+    this.mouseReader.init();
 
     this.offscreenCanvas = this.canvas.transferControlToOffscreen();
 
