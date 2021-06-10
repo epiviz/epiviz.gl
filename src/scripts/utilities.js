@@ -1,5 +1,3 @@
-import regeneratorRuntime from "regenerator-runtime"; // For SuperclusterMapper.getClusters
-
 function scale(domain, range) {
   const domainLength = domain[1] - domain[0];
   const rangeLength = range[1] - range[0];

@@ -1,5 +1,3 @@
-import "@fortawesome/fontawesome-free/js/all.js";
-
 import OffscreenHandler from "./offscreen-handler";
 
 // Explicitly include these for parcel

@@ -68,7 +68,11 @@ class OffscreenHandler extends Handler {
   }
 
   selectPoints(points) {
-    this.dataWorker.postMessage({ type: "selectBox", points });
+    if (points.length === 4) {
+      this.dataWorker.postMessage({ type: "selectBox", points });
+    } else if (points.length >= 6) {
+      this.dataWorker.postMessage({ type: "selectLasso", points });
+    }
   }
 }
 

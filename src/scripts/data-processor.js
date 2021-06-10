@@ -1,4 +1,6 @@
 import Supercluster from "supercluster";
+import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
+import { polygon } from "@turf/helpers";
 
 class DataProcessor {
   constructor(data) {
@@ -39,7 +41,37 @@ class DataProcessor {
     );
   }
 
-  selectLasso(data, zoom = 16) {}
+  selectLasso(points, zoom = 16) {
+    let smallestX = Number.MAX_VALUE;
+    let largestX = Number.MIN_VALUE;
+    let smallestY = Number.MAX_VALUE;
+    let largestY = Number.MIN_VALUE;
+    const polygonPoints = [];
+    for (let i = 0; i < points.length; i += 2) {
+      if (points[i] < smallestX) smallestX = points[i];
+      if (points[i] > largestX) largestX = points[i];
+      if (points[i + 1] < smallestY) smallestY = points[i + 1];
+      if (points[i + 1] > largestY) largestY = points[i + 1];
+      polygonPoints.push([points[i], points[i + 1]]);
+    }
+
+    polygonPoints.push([...polygonPoints[0]]); // First and last must be same position
+
+    const candidatePoints = this.index.getClusters(
+      [smallestX, smallestY, largestX, largestY],
+      zoom
+    );
+    const boundingPolygon = polygon([polygonPoints]);
+
+    console.log(
+      candidatePoints.filter((point) => {
+        return booleanPointInPolygon(
+          point.geometry.coordinates,
+          boundingPolygon
+        );
+      })
+    );
+  }
 }
 
 export default DataProcessor;

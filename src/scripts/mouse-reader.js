@@ -33,12 +33,11 @@ class MouseReader {
           case "pan":
             break;
           case "box":
+          case "lasso":
             this._currentSelectionPoints = this._calculateViewportSpot(
               event.layerX,
               event.layerY
             );
-            break;
-          case "lasso":
             break;
         }
       },
@@ -55,6 +54,7 @@ class MouseReader {
           case "pan":
             this._onPan(event);
             this._updateBoxSelectView();
+            this._updateLassoSelectView();
             break;
           case "box":
             this._currentSelectionPoints = this._currentSelectionPoints
@@ -63,6 +63,10 @@ class MouseReader {
             this._updateBoxSelectView();
             break;
           case "lasso":
+            this._currentSelectionPoints.push(
+              ...this._calculateViewportSpot(event.layerX, event.layerY)
+            );
+            this._updateLassoSelectView();
             break;
         }
       },
@@ -80,9 +84,15 @@ class MouseReader {
             this._updateBoxSelectView();
             return;
           }
-          this._onBoxSelect(event);
+          this._onBoxSelect();
           break;
         case "lasso":
+          if (this._currentSelectionPoints.length < 6) {
+            this._currentSelectionPoints = [];
+            this._updateLassoSelectView();
+            return;
+          }
+          this._onLassoSelect();
           break;
       }
     });
@@ -134,6 +144,7 @@ class MouseReader {
     );
     this.messenger({ type: "viewport", viewport: this.getViewport() });
     this._updateBoxSelectView();
+    this._updateLassoSelectView();
     return false;
   }
 
@@ -217,8 +228,17 @@ class MouseReader {
     this._boxSelectMarker.style.height = `${Math.abs(height)}px`;
   }
 
-  _onBoxSelect(event) {
+  _updateLassoSelectView() {}
+
+  _onBoxSelect() {
     this.messenger({ type: "selectBox", points: this._currentSelectionPoints });
+  }
+
+  _onLassoSelect() {
+    this.messenger({
+      type: "selectLasso",
+      points: this._currentSelectionPoints,
+    });
   }
 
   _calculateViewportSpot(canvasX, canvasY) {

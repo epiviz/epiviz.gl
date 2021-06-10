@@ -74,6 +74,10 @@ class Handler {
         break;
       case "selectBox":
         this.selectPoints(message.points);
+        break;
+      case "selectLasso":
+        this.selectPoints(message.points);
+        break;
     }
   }
 
@@ -98,7 +102,11 @@ class Handler {
   }
 
   selectPoints(points) {
-    this.dataProcessor.selectBox(points);
+    if (points.length === 4) {
+      this.dataProcessor.selectBox(points);
+    } else if (points.length >= 6) {
+      this.dataProcessor.selectLasso(points);
+    }
   }
 }
 

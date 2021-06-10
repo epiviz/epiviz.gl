@@ -9,8 +9,9 @@ self.onmessage = (message) => {
       self.processor.selectBox(message.data.points);
       break;
     case "selectLasso":
-      self.processor.selectLasso(message.data);
+      self.processor.selectLasso(message.data.points);
+      break;
     default:
-      console.error(`Received unknown message type: ${e}`);
+      console.error(`Received unknown message type: ${message.type}`);
   }
 };
