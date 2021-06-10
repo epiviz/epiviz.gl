@@ -9,7 +9,7 @@ class OffscreenHandler extends Handler {
     this.mouseReader = new MouseReader(
       document.createElement("div"),
       this.toolbar,
-      this.sendDrawerState.bind(this)
+      this.handleMessage.bind(this)
     );
 
     // Ensure div is directly on top of canvas
@@ -17,7 +17,7 @@ class OffscreenHandler extends Handler {
     this.mouseReader.element.id = "mouse-reader";
   }
 
-  addToDOM(worker) {
+  addToDOM(worker, dataWorker) {
     this.content.appendChild(this.canvas);
     this.content.appendChild(this.mouseReader.element);
     // Reinit controls with new mouse reader
@@ -27,7 +27,11 @@ class OffscreenHandler extends Handler {
 
     this.worker = worker;
     this.worker.postMessage(
-      { type: "init", canvas: this.offscreenCanvas, ...this.getState() },
+      {
+        type: "init",
+        canvas: this.offscreenCanvas,
+        ...this.mouseReader.getViewport(),
+      },
       [this.offscreenCanvas]
     );
 
@@ -36,14 +40,19 @@ class OffscreenHandler extends Handler {
         this.meter.tick();
       }
     };
+
+    this.dataWorker = dataWorker;
   }
 
-  sendDrawerState() {
-    this.worker.postMessage({ type: "state", ...this.getState() });
+  sendDrawerState(viewport) {
+    this.worker.postMessage({ type: "state", ...viewport });
   }
 
   forceDrawerRender() {
-    this.worker.postMessage({ type: "render", ...this.getState() });
+    this.worker.postMessage({
+      type: "render",
+      ...this.mouseReader.getViewport(),
+    });
   }
 
   sendToDrawerBuffer(responseData) {
@@ -52,6 +61,14 @@ class OffscreenHandler extends Handler {
 
   clearDrawerBuffers() {
     this.worker.postMessage({ type: "clearBuffers" });
+  }
+
+  buildDataProcessor(data) {
+    this.dataWorker.postMessage({ type: "init", data });
+  }
+
+  selectPoints(points) {
+    this.dataWorker.postMessage({ type: "selectBox", points });
   }
 }
 

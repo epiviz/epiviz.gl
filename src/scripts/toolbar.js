@@ -5,7 +5,7 @@ class Toolbar {
     this.lockedX = false;
     this.lockedY = false;
     this.mouseAction = "pan";
-    this.dataset = "tsne";
+    this.dataset = "tsne-10";
   }
 
   init() {
@@ -18,11 +18,17 @@ class Toolbar {
     });
 
     document.getElementById("dataset").value = this.dataset;
-    this.messenger(this.determineDatasetPath(this.dataset));
+    this.messenger({
+      type: "load",
+      path: this.determineDatasetPath(this.dataset),
+    });
 
     document.getElementById("dataset").addEventListener("change", (event) => {
       this.dataset = event.target.value;
-      this.messenger(this.determineDatasetPath(this.dataset));
+      this.messenger({
+        type: "load",
+        path: this.determineDatasetPath(this.dataset),
+      });
     });
 
     this.prevIcon = null; // force only 1 icon to have selected class

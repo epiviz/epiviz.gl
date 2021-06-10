@@ -78,6 +78,7 @@ class MouseReader {
           if (this._currentSelectionPoints.length !== 4) {
             this._currentSelectionPoints = [];
             this._updateBoxSelectView();
+            return;
           }
           this._onBoxSelect(event);
           break;
@@ -131,7 +132,7 @@ class MouseReader {
       this.currentXRange,
       this.currentYRange
     );
-    this.messenger();
+    this.messenger({ type: "viewport", viewport: this.getViewport() });
     this._updateBoxSelectView();
     return false;
   }
@@ -161,7 +162,7 @@ class MouseReader {
       }
     }
 
-    this.messenger();
+    this.messenger({ type: "viewport", viewport: this.getViewport() });
     this.toolbar.updateSelectionWindowDisplay(
       this.currentXRange,
       this.currentYRange
@@ -217,7 +218,7 @@ class MouseReader {
   }
 
   _onBoxSelect(event) {
-    console.log(event);
+    this.messenger({ type: "selectBox", points: this._currentSelectionPoints });
   }
 
   _calculateViewportSpot(canvasX, canvasY) {

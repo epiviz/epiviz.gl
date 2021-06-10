@@ -1,4 +1,5 @@
 import "fpsmeter";
+import DataProcessor from "./data-processor";
 import MouseReader from "./mouse-reader";
 import Toolbar from "./toolbar";
 
@@ -15,11 +16,11 @@ class Handler {
     this.canvas.height = this.height;
 
     // Very poor state management here, best to use redux or flux
-    this.toolbar = new Toolbar(this.loadCsv.bind(this));
+    this.toolbar = new Toolbar(this.handleMessage.bind(this));
     this.mouseReader = new MouseReader(
       this.canvas,
       this.toolbar,
-      this.sendDrawerState.bind(this)
+      this.handleMessage.bind(this)
     );
 
     this.initFpsmeter();
@@ -30,7 +31,7 @@ class Handler {
     this.drawer = new Drawer(
       {
         canvas: this.canvas,
-        ...this.getState(),
+        ...this.mouseReader.getViewport(),
       },
       extraArgs
     );
@@ -55,24 +56,33 @@ class Handler {
 
   loadCsv(path) {
     axios.get(require(path)).then((response) => {
-      this.clearDrawerBuffers();
+      this.buildDataProcessor(response.data);
 
+      this.clearDrawerBuffers();
       this.sendToDrawerBuffer(response.data);
-      this.sendDrawerState();
       this.forceDrawerRender();
     });
   }
 
-  getState() {
-    return this.mouseReader.getViewport();
+  handleMessage(message) {
+    switch (message.type) {
+      case "load":
+        this.loadCsv(message.path);
+        break;
+      case "viewport":
+        this.sendDrawerState(message.viewport);
+        break;
+      case "selectBox":
+        this.selectPoints(message.points);
+    }
   }
 
-  sendDrawerState() {
-    this.drawer.receiveState({ ...this.getState() });
+  sendDrawerState(viewport) {
+    this.drawer.receiveState({ ...viewport });
   }
 
   forceDrawerRender() {
-    this.drawer.render();
+    this.drawer.render({ ...this.mouseReader.getViewport() });
   }
 
   sendToDrawerBuffer(responseData) {
@@ -81,6 +91,14 @@ class Handler {
 
   clearDrawerBuffers() {
     this.drawer.clearBuffers();
+  }
+
+  buildDataProcessor(data) {
+    this.dataProcessor = new DataProcessor(data);
+  }
+
+  selectPoints(points) {
+    console.log(this.dataProcessor.selectBox(points));
   }
 }
 

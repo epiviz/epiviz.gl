@@ -25,6 +25,6 @@ self.onmessage = (message) => {
       self.drawer.clearBuffers();
       break;
     default:
-      console.error(`Received unknown message type: ${e}`);
+      console.error(`Received unknown message type: ${message.type}`);
   }
 };

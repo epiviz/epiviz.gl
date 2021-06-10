@@ -9,7 +9,10 @@ require("../data/tsne_hundreth.csv");
 
 document.addEventListener("DOMContentLoaded", () => {
   const handler = new OffscreenHandler();
-  handler.addToDOM(new Worker("./offscreen-webgl-worker.js"));
+  handler.addToDOM(
+    new Worker("./offscreen-webgl-worker.js"),
+    new Worker("./data-processor-worker.js")
+  );
 
   handler.forceDrawerRender();
 });
