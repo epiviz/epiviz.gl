@@ -9375,7 +9375,7 @@ function () {
   }, {
     key: "selectPoints",
     value: function selectPoints(points) {
-      console.log(this.dataProcessor.selectBox(points));
+      this.dataProcessor.selectBox(points);
     }
   }]);
 
@@ -9523,13 +9523,7 @@ function (_Handler) {
 
 var _default = OffscreenHandler;
 exports.default = _default;
-},{"./handler":"../scripts/handler.js","./mouse-reader":"../scripts/mouse-reader.js"}],"../data/tsne.csv":[function(require,module,exports) {
-module.exports = "/tsne.728ce760.csv";
-},{}],"../data/tsne_tenth.csv":[function(require,module,exports) {
-module.exports = "/tsne_tenth.fa425058.csv";
-},{}],"../data/tsne_hundreth.csv":[function(require,module,exports) {
-module.exports = "/tsne_hundreth.8d42cc5c.csv";
-},{}],"../scripts/index.js":[function(require,module,exports) {
+},{"./handler":"../scripts/handler.js","./mouse-reader":"../scripts/mouse-reader.js"}],"../scripts/index.js":[function(require,module,exports) {
 "use strict";
 
 require("@fortawesome/fontawesome-free/js/all.js");
@@ -9539,18 +9533,15 @@ var _offscreenHandler = _interopRequireDefault(require("./offscreen-handler"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Explicitly include these for parcel
-require("../data/tsne.csv");
-
-require("../data/tsne_tenth.csv");
-
-require("../data/tsne_hundreth.csv");
-
+// require("../data/tsne.csv");
+// require("../data/tsne_tenth.csv");
+// require("../data/tsne_hundreth.csv");
 document.addEventListener("DOMContentLoaded", function () {
   var handler = new _offscreenHandler.default();
   handler.addToDOM(new Worker("/offscreen-webgl-worker.4f81ebb2.js"), new Worker("/data-processor-worker.6b2453d3.js"));
   handler.forceDrawerRender();
 });
-},{"@fortawesome/fontawesome-free/js/all.js":"../../node_modules/@fortawesome/fontawesome-free/js/all.js","./offscreen-handler":"../scripts/offscreen-handler.js","../data/tsne.csv":"../data/tsne.csv","../data/tsne_tenth.csv":"../data/tsne_tenth.csv","../data/tsne_hundreth.csv":"../data/tsne_hundreth.csv","./offscreen-webgl-worker.js":[["offscreen-webgl-worker.4f81ebb2.js","../scripts/offscreen-webgl-worker.js"],"offscreen-webgl-worker.4f81ebb2.js.map","../scripts/offscreen-webgl-worker.js"],"./data-processor-worker.js":[["data-processor-worker.6b2453d3.js","../scripts/data-processor-worker.js"],"data-processor-worker.6b2453d3.js.map","../scripts/data-processor-worker.js"]}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@fortawesome/fontawesome-free/js/all.js":"../../node_modules/@fortawesome/fontawesome-free/js/all.js","./offscreen-handler":"../scripts/offscreen-handler.js","./offscreen-webgl-worker.js":[["offscreen-webgl-worker.4f81ebb2.js","../scripts/offscreen-webgl-worker.js"],"offscreen-webgl-worker.4f81ebb2.js.map","../scripts/offscreen-webgl-worker.js"],"./data-processor-worker.js":[["data-processor-worker.6b2453d3.js","../scripts/data-processor-worker.js"],"data-processor-worker.6b2453d3.js.map","../scripts/data-processor-worker.js"]}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
