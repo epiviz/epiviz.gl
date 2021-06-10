@@ -48,6 +48,12 @@ canvas,
   z-index: 1;
 }
 
+#lasso-select-container {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+}
+
 #box-select {
   position: absolute;
   top: -10000px;

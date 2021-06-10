@@ -15,13 +15,20 @@ class MouseReader {
     this.currentYRange = [-10, 10];
 
     this._boxSelectMarker = document.getElementById("box-select");
+    this._lassoSelectMarker = document.getElementById("lasso-select");
+    this._lassoSelectContainer = document.getElementById(
+      "lasso-select-container"
+    );
     this._currentSelectionPoints = [];
   }
 
   init() {
     this.width = this.element.getBoundingClientRect().width;
     this.height = this.element.getBoundingClientRect().height;
-    // this.width, this.height
+
+    this._lassoSelectContainer.setAttribute("width", this.width);
+    this._lassoSelectContainer.setAttribute("height", this.height);
+
     this.element.addEventListener("wheel", this._onWheel.bind(this), false);
 
     let mouseDown = false;
@@ -188,6 +195,7 @@ class MouseReader {
 
       this._boxSelectMarker.style.width = "0";
       this._boxSelectMarker.style.height = "0";
+      return;
     }
 
     const boundingRect = this.element.getBoundingClientRect();
@@ -228,7 +236,33 @@ class MouseReader {
     this._boxSelectMarker.style.height = `${Math.abs(height)}px`;
   }
 
-  _updateLassoSelectView() {}
+  _updateLassoSelectView() {
+    if (this._currentSelectionPoints.length < 6) {
+      // Clicked away selection box
+      this._lassoSelectMarker.style.left = "-100px";
+      this._lassoSelectMarker.style.top = "-100px";
+
+      this._lassoSelectMarker.style.width = "0";
+      this._lassoSelectMarker.style.height = "0";
+      return;
+    }
+
+    const boundingRect = this.element.getBoundingClientRect();
+
+    this._lassoSelectContainer.style.top = boundingRect.top;
+    this._lassoSelectContainer.style.left = boundingRect.left;
+
+    let pointAttr = "";
+    for (let i = 0; i < this._currentSelectionPoints.length; i += 2) {
+      const asCanvasPoint = this._calculateViewportSpotInverse(
+        this._currentSelectionPoints[i],
+        this._currentSelectionPoints[i + 1]
+      );
+      pointAttr += `${asCanvasPoint[0]}, ${asCanvasPoint[1]} `;
+    }
+
+    this._lassoSelectMarker.setAttribute("points", pointAttr);
+  }
 
   _onBoxSelect() {
     this.messenger({ type: "selectBox", points: this._currentSelectionPoints });
