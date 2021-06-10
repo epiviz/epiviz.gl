@@ -9321,7 +9321,7 @@ function () {
     value: function loadCsv(path) {
       var _this2 = this;
 
-      axios.get(require(path)).then(function (response) {
+      axios.get(path).then(function (response) {
         _this2.buildDataProcessor(response.data);
 
         _this2.clearDrawerBuffers();
