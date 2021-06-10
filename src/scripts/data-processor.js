@@ -28,10 +28,15 @@ class DataProcessor {
     console.log("Data ready.");
   }
 
-  selectBox(bbox, zoom = 16) {
-    console.log(bbox);
-    console.log(this.index.getClusters(bbox, zoom));
-    // return this.index.getClusters(bbox, zoom);
+  selectBox(points, zoom = 16) {
+    const smallerX = Math.min(points[0], points[2]);
+    const smallerY = Math.min(points[1], points[3]);
+    const largerX = Math.max(points[0], points[2]);
+    const largerY = Math.max(points[1], points[3]);
+
+    console.log(
+      this.index.getClusters([smallerX, smallerY, largerX, largerY], zoom)
+    );
   }
 
   selectLasso(data, zoom = 16) {}

@@ -98,7 +98,7 @@ class Handler {
   }
 
   selectPoints(points) {
-    console.log(this.dataProcessor.selectBox(points));
+    this.dataProcessor.selectBox(points);
   }
 }
 
