@@ -142,8 +142,6 @@
           return;
         }
         this.positions.push(this.xTSNEScale(x), this.yTSNEScale(y));
-        console.log(parts);
-        console.log(this.sampleColors.get(parts[0]));
         this.colors.push(...this.sampleColors.get(parts[0]));
       });
     }
@@ -241,4 +239,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.3905f97a.js.map
+//# sourceMappingURL=offscreen-webgl-worker.de52ed19.js.map
