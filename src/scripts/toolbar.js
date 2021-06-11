@@ -54,10 +54,10 @@ class Toolbar {
     document.querySelector(
       ".selection-window"
     ).textContent = `[${currentXRange[0].toFixed(
-      2
-    )}, ${currentXRange[1].toFixed(2)}] x [${currentYRange[0].toFixed(
-      2
-    )}, ${currentYRange[1].toFixed(2)}]`;
+      4
+    )}, ${currentXRange[1].toFixed(4)}] x [${currentYRange[0].toFixed(
+      4
+    )}, ${currentYRange[1].toFixed(4)}]`;
   }
 
   determineDatasetPath(dataset) {

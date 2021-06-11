@@ -1,38 +1,33 @@
-const vertexShader = `
+const varyingColorsVertexShader = `
+  uniform lowp float pointSize;
+  uniform lowp float opacity;
+
   attribute vec4 aVertexPosition;
-
-  void main() {
-      gl_Position = aVertexPosition;
-  }
-`;
-
-const squaresFragmentShader = `
-  precision mediump float;
-  uniform float uGridSize;
-  uniform vec4 viewport;
-  void main() {
-    vec4 ndcPos;
-    // Reverse calculations from window space to clip space (normalized device coordinates)
-    ndcPos.xy = ((2.0 * gl_FragCoord.xy) - (2.0 * viewport.xy)) / (viewport.zw) - 1.0;
-    ndcPos.xy = ndcPos.xy - mod(ndcPos.xy, 1.0 / uGridSize);
-    gl_FragColor = vec4(ndcPos.x/2.0 + 0.5 , 0, ndcPos.y/2.0 + 0.5, 1.0);
-  }
-`;
-
-const colorPointsVertexShader = `
-  attribute vec4 aVertexPosition;
-  attribute vec4 aVertexColor;
+  attribute float aVertexColor;
 
   varying lowp vec4 vColor;
 
+  vec3 unpackColor(float f) {
+    vec3 color;
+    color.r = floor(f / 65536.0);
+    color.g = floor((f - color.r * 65536.0) / 256.0);
+    color.b = floor(f - color.r * 65536.0 - color.g * 256.0);
+    return color / 256.0;
+  }
+
   void main(void) {
     gl_Position = aVertexPosition;
-    vColor = aVertexColor;
-    gl_PointSize = 1.0;
+    vec3 unpackedValues = unpackColor(aVertexColor);
+
+    vColor = vec4(
+      unpackedValues.rgb,
+      opacity
+    );
+    gl_PointSize = pointSize;
   }
 `;
 
-const colorPointsFragmentShader = `
+const varyingColorsFragmentShader = `
   varying lowp vec4 vColor;
 
   void main(void) {
@@ -40,9 +35,4 @@ const colorPointsFragmentShader = `
   }
 `;
 
-export {
-  vertexShader,
-  squaresFragmentShader,
-  colorPointsVertexShader,
-  colorPointsFragmentShader,
-};
+export { varyingColorsVertexShader, varyingColorsFragmentShader };

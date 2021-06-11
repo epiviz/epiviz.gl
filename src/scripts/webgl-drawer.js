@@ -1,6 +1,9 @@
 import Drawer from "./drawer";
-import { scale, initShaderProgram } from "./utilities";
-import { colorPointsVertexShader, colorPointsFragmentShader } from "./webgl.js";
+import { scale, initShaderProgram, rgbToHex } from "./utilities";
+import {
+  varyingColorsVertexShader,
+  varyingColorsFragmentShader,
+} from "./webgl.js";
 
 // Largely taken from
 // https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample2/webgl-demo.js
@@ -22,7 +25,11 @@ class WebGLCanvasDrawer extends Drawer {
         .split("")
         .map((letter) => [
           letter,
-          [Math.random(), Math.random(), Math.random(), 0.01],
+          rgbToHex(
+            Math.floor(Math.random() * 255),
+            Math.floor(Math.random() * 255),
+            Math.floor(Math.random() * 255)
+          ),
         ])
     );
 
@@ -55,7 +62,21 @@ class WebGLCanvasDrawer extends Drawer {
     const toReturnX = scaleXWindowSpace(this.currentXRange[0]);
     const toReturnY = scaleYWindowSpace(this.currentYRange[0]);
 
-    return [toReturnX, toReturnY, displayAsIfThisWide, displayAsIfThisHigh];
+    const pointSize = Math.max(
+      1,
+      Math.min(
+        -Math.log2(windowWidth / (this.maxX - this.minX)),
+        -Math.log2(windowHeight / (this.maxY - this.minY))
+      )
+    );
+
+    return [
+      toReturnX,
+      toReturnY,
+      displayAsIfThisWide,
+      displayAsIfThisHigh,
+      pointSize,
+    ];
   }
 
   populateBuffers(data) {
@@ -70,7 +91,7 @@ class WebGLCanvasDrawer extends Drawer {
       }
 
       this.positions.push(this.xTSNEScale(x), this.yTSNEScale(y));
-      this.colors.push(...this.sampleColors.get(parts[0]));
+      this.colors.push(this.sampleColors.get(parts[0]));
     });
   }
 
@@ -98,6 +119,8 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 
+    this.gl.uniform1f(this.programInfo.uniformLocations.pointSize, viewport[4]);
+
     this.gl.drawArrays(
       this.gl.POINTS,
       0, // stride
@@ -114,8 +137,8 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.shaderProgram = initShaderProgram(
       this.gl,
-      colorPointsVertexShader,
-      colorPointsFragmentShader
+      varyingColorsVertexShader,
+      varyingColorsFragmentShader
     );
 
     this.programInfo = {
@@ -129,6 +152,10 @@ class WebGLCanvasDrawer extends Drawer {
           this.shaderProgram,
           "aVertexColor"
         ),
+      },
+      uniformLocations: {
+        pointSize: this.gl.getUniformLocation(this.shaderProgram, "pointSize"),
+        opacity: this.gl.getUniformLocation(this.shaderProgram, "opacity"),
       },
     };
 
@@ -166,7 +193,7 @@ class WebGLCanvasDrawer extends Drawer {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
     this.gl.vertexAttribPointer(
       this.programInfo.attribLocations.vertexColor,
-      4, // numComponents
+      1, // numComponents
       this.gl.FLOAT, // type
       false, // normalize
       0, // stride
@@ -178,9 +205,8 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.gl.useProgram(this.programInfo.program);
 
-    if (this.lastFrame) {
-      cancelAnimationFrame(this.lastFrame);
-    }
+    this.gl.uniform1f(this.programInfo.uniformLocations.opacity, 0.1);
+
     this.needsAnimation = true;
     this.animate();
   }

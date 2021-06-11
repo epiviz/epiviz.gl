@@ -42,16 +42,8 @@ function initShaderProgram(gl, vertexSource, fragmentSource) {
   return shaderProgram;
 }
 
-function componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(r, g, b) {
-  return parseInt(
-    Number("0x" + componentToHex(r) + componentToHex(g) + componentToHex(b)),
-    10
-  );
+function rgbToHex(red, green, blue) {
+  return (red << 16) | (green << 8) | (blue << 0);
 }
 
 export { scale, initShaderProgram, loadShader, rgbToHex };
