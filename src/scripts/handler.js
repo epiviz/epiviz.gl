@@ -55,7 +55,7 @@ class Handler {
   }
 
   loadCsv(path) {
-    axios.get(require(path)).then((response) => {
+    axios.get(path).then((response) => {
       this.buildDataProcessor(response.data);
 
       this.clearDrawerBuffers();

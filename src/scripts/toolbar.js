@@ -59,11 +59,11 @@ class Toolbar {
   determineDatasetPath(dataset) {
     switch (dataset) {
       case "tsne":
-        return "../data/tsne.csv";
+        return "data/tsne.csv";
       case "tsne-10":
-        return "../data/tsne_tenth.csv";
+        return "data/tsne_tenth.csv";
       case "tsne-100":
-        return "../data/tsne_hundreth.csv";
+        return "data/tsne_hundreth.csv";
       default:
         console.error(`Did not recognize dataset: ${dataset}`);
     }
