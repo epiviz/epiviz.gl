@@ -14,7 +14,7 @@
 
 .controls {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
 }
 
 .controls img {

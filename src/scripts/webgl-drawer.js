@@ -40,15 +40,34 @@ class WebGLCanvasDrawer extends Drawer {
     this.colors = [];
   }
 
+  receiveState(data) {
+    super.receiveState(data);
+
+    if (this.programInfo) {
+      const viewport = this.getWebGLViewport();
+
+      this.gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+
+      this.gl.uniform1f(
+        this.programInfo.uniformLocations.pointSize,
+        viewport[4]
+      );
+    }
+  }
+
   getWebGLViewport() {
     // Calculate appropriate webgl viewport given current selection window
     const windowWidth = this.currentXRange[1] - this.currentXRange[0];
     const windowHeight = this.currentYRange[1] - this.currentYRange[0];
 
-    const displayAsIfThisWide =
-      ((this.maxX - this.minX) / windowWidth) * this.width;
-    const displayAsIfThisHigh =
-      ((this.maxY - this.minY) / windowHeight) * this.height;
+    const displayAsIfThisWide = Math.min(
+      ((this.maxX - this.minX) / windowWidth) * this.width,
+      this.maxWidth
+    );
+    const displayAsIfThisHigh = Math.min(
+      ((this.maxY - this.minY) / windowHeight) * this.height,
+      this.maxHeight
+    );
 
     const scaleXWindowSpace = scale(
       [this.minX, this.maxX],
@@ -115,12 +134,6 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-    const viewport = this.getWebGLViewport();
-
-    this.gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-
-    this.gl.uniform1f(this.programInfo.uniformLocations.pointSize, viewport[4]);
-
     this.gl.drawArrays(
       this.gl.POINTS,
       0, // stride
@@ -134,6 +147,9 @@ class WebGLCanvasDrawer extends Drawer {
 
   render() {
     super.render();
+
+    this.maxWidth = this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS)[0];
+    this.maxHeight = this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS)[1];
 
     this.shaderProgram = initShaderProgram(
       this.gl,
