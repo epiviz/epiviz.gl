@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel serve src/pages/index.html src/data/* --open",
-    "build": "parcel build --no-minify src/pages/index.html src/data/* --public-url ./",
+    "build": "rm -rf dist && parcel build --no-minify src/pages/index.html src/data/* --public-url ./",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d dist",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET"
