@@ -1,11 +1,6 @@
 import Drawer from "./drawer";
 import { scale, initShaderProgram } from "./utilities";
-import {
-  vertexShader,
-  squaresFragmentShader,
-  colorPointsVertexShader,
-  colorPointsFragmentShader,
-} from "./webgl.js";
+import { colorPointsVertexShader, colorPointsFragmentShader } from "./webgl.js";
 
 // Largely taken from
 // https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample2/webgl-demo.js
@@ -66,7 +61,6 @@ class WebGLCanvasDrawer extends Drawer {
   populateBuffers(data) {
     // Given raw data, populate the buffers
     // Specific to t-SNE data
-
     data.split("\n").forEach((line) => {
       const parts = line.split(",");
       const x = parseFloat(parts[1]);

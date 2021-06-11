@@ -1,3 +1,7 @@
+import csv1 from "url:../data/tsne.csv";
+import csv10 from "url:../data/tsne_tenth.csv";
+import csv100 from "url:../data/tsne_hundreth.csv";
+
 class Toolbar {
   constructor(messenger) {
     this.messenger = messenger;
@@ -59,11 +63,11 @@ class Toolbar {
   determineDatasetPath(dataset) {
     switch (dataset) {
       case "tsne":
-        return "data/tsne.csv";
+        return csv1;
       case "tsne-10":
-        return "data/tsne_tenth.csv";
+        return csv10;
       case "tsne-100":
-        return "data/tsne_hundreth.csv";
+        return csv100;
       default:
         console.error(`Did not recognize dataset: ${dataset}`);
     }
