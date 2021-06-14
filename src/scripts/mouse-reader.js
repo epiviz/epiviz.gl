@@ -45,6 +45,8 @@ class MouseReader {
               event.layerX,
               event.layerY
             );
+            this._updateBoxSelectView();
+            this._updateLassoSelectView();
             break;
         }
       },
@@ -107,7 +109,6 @@ class MouseReader {
     this.element.addEventListener("mouseleave", () => {
       switch (this.toolbar.mouseAction) {
         case "pan":
-          this._isPanning = false;
           break;
         case "box":
           break;
@@ -126,7 +127,7 @@ class MouseReader {
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
-      if (this.currentXRange[1] < this.currentXRange[0]) {
+      if (!this._validateXRange()) {
         // Zoom in limit
         this.currentXRange = previousX;
       }
@@ -139,7 +140,7 @@ class MouseReader {
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
-      if (this.currentYRange[1] < this.currentYRange[0]) {
+      if (!this._validateYRange()) {
         // Zoom in limit
         this.currentYRange = previousY;
       }
@@ -163,7 +164,7 @@ class MouseReader {
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
-      if (this.currentXRange[1] < this.currentXRange[0]) {
+      if (!this._validateXRange()) {
         this.currentXRange = previousX;
       }
     }
@@ -175,7 +176,7 @@ class MouseReader {
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
-      if (this.currentYRange[1] < this.currentYRange[0]) {
+      if (!this._validateYRange()) {
         this.currentYRange = previousY;
       }
     }
@@ -184,6 +185,26 @@ class MouseReader {
     this.toolbar.updateSelectionWindowDisplay(
       this.currentXRange,
       this.currentYRange
+    );
+  }
+
+  _validateXRange() {
+    const windowWidth = this.currentXRange[1] - this.currentXRange[0];
+    const displayAsIfThisWide =
+      ((this.maxX - this.minX) / windowWidth) * this.width;
+    return (
+      this.currentXRange[1] >= this.currentXRange[0] &&
+      displayAsIfThisWide <= 16384
+    );
+  }
+
+  _validateYRange() {
+    const windowHeight = this.currentYRange[1] - this.currentYRange[0];
+    const displayAsIfThisHigh =
+      ((this.maxY - this.minY) / windowHeight) * this.height;
+    return (
+      this.currentYRange[1] >= this.currentYRange[0] &&
+      displayAsIfThisHigh <= 16384
     );
   }
 
@@ -239,11 +260,9 @@ class MouseReader {
   _updateLassoSelectView() {
     if (this._currentSelectionPoints.length < 6) {
       // Clicked away selection box
-      this._lassoSelectMarker.style.left = "-100px";
-      this._lassoSelectMarker.style.top = "-100px";
+      this._lassoSelectContainer.style.left = "-10000px";
+      this._lassoSelectContainer.style.top = "-10000px";
 
-      this._lassoSelectMarker.style.width = "0";
-      this._lassoSelectMarker.style.height = "0";
       return;
     }
 

@@ -1,6 +1,7 @@
 import Supercluster from "supercluster";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon } from "@turf/helpers";
+import simplify from "@turf/simplify";
 
 class DataProcessor {
   constructor(data) {
@@ -61,13 +62,19 @@ class DataProcessor {
       [smallestX, smallestY, largestX, largestY],
       zoom
     );
+
     const boundingPolygon = polygon([polygonPoints]);
+
+    const simplifiedBoundingPolygon = simplify(boundingPolygon, {
+      tolerance: 0.01,
+      highQuality: false,
+    });
 
     console.log(
       candidatePoints.filter((point) => {
         return booleanPointInPolygon(
           point.geometry.coordinates,
-          boundingPolygon
+          simplifiedBoundingPolygon
         );
       })
     );
