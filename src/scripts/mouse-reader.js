@@ -1,25 +1,49 @@
+import {
+  addSelectionPoint,
+  clearSelectionPoints,
+  setViewport,
+  setSecondSelectionPoint,
+} from "./state/reducers";
 import { scale } from "./utilities";
 
 class MouseReader {
-  constructor(element, toolbar, messenger) {
+  constructor(element, dispatch) {
     this.element = element;
-    this.toolbar = toolbar;
-    this.messenger = messenger;
+    this.dispatch = dispatch;
+
+    this.lockedX = false;
+    this.lockedY = false;
+
+    this._currentSelectionPoints = [];
 
     this.minX = -10;
-    this.maxX = 10;
     this.minY = -10;
+    this.maxX = 10;
     this.maxY = 10;
-
-    this.currentXRange = [-10, 10];
-    this.currentYRange = [-10, 10];
-
+    this.currentXRange = [-5, 5];
+    this.currentYRange = [-5, 5];
+    this.tool = "pan";
     this._boxSelectMarker = document.getElementById("box-select");
     this._lassoSelectMarker = document.getElementById("lasso-select");
     this._lassoSelectContainer = document.getElementById(
       "lasso-select-container"
     );
-    this._currentSelectionPoints = [];
+  }
+
+  receiveState(state) {
+    this.lockedX = state.controls.lockedX;
+    this.lockedY = state.controls.lockedY;
+
+    this.minX = state.controls.viewport.minX;
+    this.minY = state.controls.viewport.minY;
+    this.maxX = state.controls.viewport.maxX;
+    this.maxY = state.controls.viewport.maxY;
+
+    this.currentXRange = Array.from(state.controls.viewport.xRange);
+    this.currentYRange = Array.from(state.controls.viewport.yRange);
+
+    this.tool = state.controls.tool;
+    this._currentSelectionPoints = state.controls.selectionPoints;
   }
 
   init() {
@@ -36,14 +60,16 @@ class MouseReader {
       "mousedown",
       (event) => {
         mouseDown = true;
-        switch (this.toolbar.mouseAction) {
+        switch (this.tool) {
           case "pan":
             break;
           case "box":
           case "lasso":
-            this._currentSelectionPoints = this._calculateViewportSpot(
-              event.layerX,
-              event.layerY
+            this.dispatch(clearSelectionPoints());
+            this.dispatch(
+              addSelectionPoint(
+                this._calculateViewportSpot(event.layerX, event.layerY)
+              )
             );
             this._updateBoxSelectView();
             this._updateLassoSelectView();
@@ -59,37 +85,39 @@ class MouseReader {
         if (!mouseDown) {
           return;
         }
-        switch (this.toolbar.mouseAction) {
+        switch (this.tool) {
           case "pan":
             this._onPan(event);
-            this._updateBoxSelectView();
-            this._updateLassoSelectView();
             break;
           case "box":
-            this._currentSelectionPoints = this._currentSelectionPoints
-              .slice(0, 2)
-              .concat(this._calculateViewportSpot(event.layerX, event.layerY));
-            this._updateBoxSelectView();
+            this.dispatch(
+              setSecondSelectionPoint(
+                this._calculateViewportSpot(event.layerX, event.layerY)
+              )
+            );
             break;
           case "lasso":
-            this._currentSelectionPoints.push(
-              ...this._calculateViewportSpot(event.layerX, event.layerY)
+            this.dispatch(
+              addSelectionPoint(
+                this._calculateViewportSpot(event.layerX, event.layerY)
+              )
             );
-            this._updateLassoSelectView();
             break;
         }
+        this._updateBoxSelectView();
+        this._updateLassoSelectView();
       },
       false
     );
 
     this.element.addEventListener("mouseup", (event) => {
       mouseDown = false;
-      switch (this.toolbar.mouseAction) {
+      switch (this.tool) {
         case "pan":
           break;
         case "box":
           if (this._currentSelectionPoints.length !== 4) {
-            this._currentSelectionPoints = [];
+            this.dispatch(clearSelectionPoints());
             this._updateBoxSelectView();
             return;
           }
@@ -97,7 +125,7 @@ class MouseReader {
           break;
         case "lasso":
           if (this._currentSelectionPoints.length < 6) {
-            this._currentSelectionPoints = [];
+            this.dispatch(clearSelectionPoints());
             this._updateLassoSelectView();
             return;
           }
@@ -107,8 +135,9 @@ class MouseReader {
     });
 
     this.element.addEventListener("mouseleave", () => {
-      switch (this.toolbar.mouseAction) {
+      switch (this.tool) {
         case "pan":
+          mouseDown = false;
           break;
         case "box":
           break;
@@ -120,7 +149,7 @@ class MouseReader {
 
   _onWheel(event) {
     event.preventDefault();
-    if (!this.toolbar.lockedX) {
+    if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
       this.currentXRange[0] -= event.wheelDelta / 500;
       this.currentXRange[1] += event.wheelDelta / 500;
@@ -133,7 +162,7 @@ class MouseReader {
       }
     }
 
-    if (!this.toolbar.lockedY) {
+    if (!this.lockedY) {
       const previousY = [...this.currentYRange];
       this.currentYRange[0] -= event.wheelDelta / 500;
       this.currentYRange[1] += event.wheelDelta / 500;
@@ -146,18 +175,14 @@ class MouseReader {
       }
     }
 
-    this.toolbar.updateSelectionWindowDisplay(
-      this.currentXRange,
-      this.currentYRange
-    );
-    this.messenger({ type: "viewport", viewport: this.getViewport() });
+    this.dispatch(setViewport(this.getViewport()));
     this._updateBoxSelectView();
     this._updateLassoSelectView();
     return false;
   }
 
   _onPan(event) {
-    if (!this.toolbar.lockedX) {
+    if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
       this.currentXRange[0] -= event.movementX / 50;
       this.currentXRange[1] -= event.movementX / 50;
@@ -169,7 +194,7 @@ class MouseReader {
       }
     }
 
-    if (!this.toolbar.lockedY) {
+    if (!this.lockedY) {
       const previousY = [...this.currentYRange];
       this.currentYRange[0] += event.movementY / 50;
       this.currentYRange[1] += event.movementY / 50;
@@ -181,11 +206,7 @@ class MouseReader {
       }
     }
 
-    this.messenger({ type: "viewport", viewport: this.getViewport() });
-    this.toolbar.updateSelectionWindowDisplay(
-      this.currentXRange,
-      this.currentYRange
-    );
+    this.dispatch(setViewport(this.getViewport()));
   }
 
   _validateXRange() {
@@ -284,14 +305,11 @@ class MouseReader {
   }
 
   _onBoxSelect() {
-    this.messenger({ type: "selectBox", points: this._currentSelectionPoints });
+    console.log(this._currentSelectionPoints);
   }
 
   _onLassoSelect() {
-    this.messenger({
-      type: "selectLasso",
-      points: this._currentSelectionPoints,
-    });
+    console.log(this._currentSelectionPoints);
   }
 
   _calculateViewportSpot(canvasX, canvasY) {
@@ -315,8 +333,8 @@ class MouseReader {
       maxX: this.maxX,
       minY: this.minY,
       maxY: this.maxY,
-      currentXRange: this.currentXRange,
-      currentYRange: this.currentYRange,
+      xRange: Array.from(this.currentXRange),
+      yRange: Array.from(this.currentYRange),
     };
   }
 }

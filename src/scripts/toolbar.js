@@ -1,38 +1,31 @@
+import { setDataset, setScroll, setTool } from "./state/reducers";
+
 import csv1 from "url:../data/tsne.csv";
 import csv10 from "url:../data/tsne_tenth.csv";
 import csv100 from "url:../data/tsne_hundreth.csv";
 
 class Toolbar {
-  constructor(messenger) {
-    this.messenger = messenger;
-
-    this.lockedX = false;
-    this.lockedY = false;
+  constructor(dispatch) {
+    this.dispatch = dispatch;
     this.mouseAction = "pan";
     this.dataset = "tsne-10";
   }
 
   init() {
     document.getElementById("lock-x").addEventListener("change", (event) => {
-      this.lockedX = event.target.checked;
+      this.dispatch(setScroll({ axis: "x", checked: event.target.checked }));
     });
 
     document.getElementById("lock-y").addEventListener("change", (event) => {
-      this.lockedY = event.target.checked;
+      this.dispatch(setScroll({ axis: "y", checked: event.target.checked }));
     });
 
     document.getElementById("dataset").value = this.dataset;
-    this.messenger({
-      type: "load",
-      path: this.determineDatasetPath(this.dataset),
-    });
+    this.dispatch(setDataset(this.determineDatasetPath(this.dataset)));
 
     document.getElementById("dataset").addEventListener("change", (event) => {
       this.dataset = event.target.value;
-      this.messenger({
-        type: "load",
-        path: this.determineDatasetPath(this.dataset),
-      });
+      this.dispatch(setDataset(this.determineDatasetPath(this.dataset)));
     });
 
     this.prevIcon = null; // force only 1 icon to have selected class
@@ -43,6 +36,7 @@ class Toolbar {
           this.prevIcon.classList.remove("selected");
         }
         this.mouseAction = icon.alt.substring(0, icon.alt.indexOf(" "));
+        this.dispatch(setTool(this.mouseAction));
         icon.classList.add("selected");
         this.prevIcon = icon;
       });

@@ -71,7 +71,6 @@ class WebGLCanvasDrawer extends Drawer {
       displayAsIfThisWide > this.maxWidth ||
       displayAsIfThisHigh > this.maxHeight
     ) {
-      console.log("epdojwp");
       return;
     }
 

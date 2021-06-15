@@ -14,6 +14,7 @@
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "@turf/boolean-point-in-polygon": "^6.3.0",
     "@turf/helpers": "^6.3.0",
     "@turf/simplify": "6.3.0",

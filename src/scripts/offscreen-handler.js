@@ -2,14 +2,13 @@ import Handler from "./handler";
 import MouseReader from "./mouse-reader";
 
 class OffscreenHandler extends Handler {
-  constructor() {
-    super();
+  constructor(store) {
+    super(store);
 
     // Create a div for reading mouse events
     this.mouseReader = new MouseReader(
       document.createElement("div"),
-      this.toolbar,
-      this.handleMessage.bind(this)
+      this.store.dispatch
     );
 
     // Ensure div is directly on top of canvas
@@ -20,8 +19,6 @@ class OffscreenHandler extends Handler {
   addToDOM(worker, dataWorker) {
     this.content.appendChild(this.canvas);
     this.content.appendChild(this.mouseReader.element);
-    // Reinit controls with new mouse reader
-    this.mouseReader.init();
 
     this.offscreenCanvas = this.canvas.transferControlToOffscreen();
 
@@ -42,10 +39,14 @@ class OffscreenHandler extends Handler {
     };
 
     this.dataWorker = dataWorker;
+
+    // Reinit controls with new mouse reader
+    this.mouseReader.init();
+    this.toolbar.init();
   }
 
   sendDrawerState(viewport) {
-    this.worker.postMessage({ type: "state", ...viewport });
+    this.worker.postMessage({ type: "viewport", ...viewport });
   }
 
   forceDrawerRender() {

@@ -2,29 +2,44 @@ import "fpsmeter";
 import DataProcessor from "./data-processor";
 import MouseReader from "./mouse-reader";
 import Toolbar from "./toolbar";
+import { getIfChangedReducer } from "./state/store";
 
 const axios = require("axios");
 
 class Handler {
-  constructor() {
+  constructor(store) {
+    this.store = store;
+    this.store.subscribe(this.storeSubscription.bind(this));
+    this.controlsChecker = getIfChangedReducer("controls");
+
     this.content = document.querySelector(".rendering-container");
     this.canvas = document.createElement("canvas");
+
+    this.toolbar = new Toolbar(this.store.dispatch);
+    this.mouseReader = new MouseReader(this.canvas, this.store.dispatch);
 
     this.width = Math.min(this.content.clientWidth, 1000);
     this.height = this.content.clientHeight * 0.9; // needs to match CSS canvas height
     this.canvas.width = this.width;
     this.canvas.height = this.height;
 
-    // Very poor state management here, best to use redux or flux
-    this.toolbar = new Toolbar(this.handleMessage.bind(this));
-    this.mouseReader = new MouseReader(
-      this.canvas,
-      this.toolbar,
-      this.handleMessage.bind(this)
+    this.initFpsmeter();
+  }
+
+  storeSubscription() {
+    const currState = this.store.getState();
+    const dataset = this.controlsChecker("dataset");
+    if (dataset) {
+      this.loadCsv(currState.controls.dataset);
+    }
+    this.mouseReader.receiveState(currState);
+
+    this.toolbar.updateSelectionWindowDisplay(
+      currState.controls.viewport.xRange,
+      currState.controls.viewport.yRange
     );
 
-    this.initFpsmeter();
-    this.toolbar.init();
+    this.sendDrawerState(currState.controls.viewport);
   }
 
   addToDOM(Drawer, extraArgs) {
@@ -40,6 +55,7 @@ class Handler {
     this.drawer.tick = () => this.meter.tick();
     this.content.appendChild(this.canvas);
     this.mouseReader.init();
+    this.toolbar.init();
   }
 
   initFpsmeter() {
@@ -62,23 +78,6 @@ class Handler {
       this.sendToDrawerBuffer(response.data);
       this.forceDrawerRender();
     });
-  }
-
-  handleMessage(message) {
-    switch (message.type) {
-      case "load":
-        this.loadCsv(message.path);
-        break;
-      case "viewport":
-        this.sendDrawerState(message.viewport);
-        break;
-      case "selectBox":
-        this.selectPoints(message.points);
-        break;
-      case "selectLasso":
-        this.selectPoints(message.points);
-        break;
-    }
   }
 
   sendDrawerState(viewport) {

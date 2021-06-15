@@ -11,7 +11,7 @@ self.onmessage = (message) => {
     case "init":
       self.drawer = new OffscreenWebGLDrawer(message.data);
       break;
-    case "state":
+    case "viewport":
       self.drawer.receiveState(message.data);
       break;
     case "render":
