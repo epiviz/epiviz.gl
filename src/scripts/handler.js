@@ -1,61 +1,98 @@
 import "fpsmeter";
-import DataProcessor from "./data-processor";
 import MouseReader from "./mouse-reader";
-import Toolbar from "./toolbar";
-import { getIfChangedReducer } from "./state/store";
-
-const axios = require("axios");
+import serialize from "serialize-javascript";
 
 class Handler {
-  constructor(store) {
-    this.store = store;
-    this.store.subscribe(this.storeSubscription.bind(this));
-    this.controlsChecker = getIfChangedReducer("controls");
+  POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
+    "lockedX",
+    "lockedY",
+    "tool",
+    "viewport",
+    "currentXRange",
+    "currentYRange",
+  ]);
 
-    this.content = document.querySelector(".rendering-container");
+  constructor(parent) {
+    this.parent = parent;
     this.canvas = document.createElement("canvas");
 
-    this.toolbar = new Toolbar(this.store.dispatch);
-    this.mouseReader = new MouseReader(this.canvas, this.store.dispatch);
+    this.mouseReader = new MouseReader(document.createElement("div"), this);
 
-    this.width = Math.min(this.content.clientWidth, 1000);
-    this.height = this.content.clientHeight * 0.9; // needs to match CSS canvas height
+    this.width = Math.min(this.parent.clientWidth, 1000);
+    this.height = this.parent.clientHeight * 0.9; // needs to match CSS canvas height
     this.canvas.width = this.width;
     this.canvas.height = this.height;
+
+    this.canvas.style.position = "absolute";
 
     this.initFpsmeter();
   }
 
-  storeSubscription() {
-    const currState = this.store.getState();
-    const dataset = this.controlsChecker("dataset");
-    if (dataset) {
-      this.loadCsv(currState.controls.dataset);
-    }
-    this.mouseReader.receiveState(currState);
+  setData(data, mapPointToSpace, mapPointToColor) {
+    this.clearDrawerBuffers();
+    this.sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor);
+    this.buildDataProcessor(data, mapPointToSpace);
 
-    this.toolbar.updateSelectionWindowDisplay(
-      currState.controls.viewport.xRange,
-      currState.controls.viewport.yRange
-    );
-
-    this.sendDrawerState(currState.controls.viewport);
+    this.forceDrawerRender();
   }
 
-  addToDOM(Drawer, extraArgs) {
-    this.drawer = new Drawer(
+  setOptions(options) {
+    /*
+      Configurable options for the webgl drawer:
+      lockedX (bool): x-axis controls
+      lockedY (bool): lock y-axis controls
+      tool ("pan"|"boxSelect"|"lassoSelect"|"zoom"|"tooltip"): active tool on the drawer
+      viewport [minX, maxX, minY, maxY]: the bounding box around all of your data
+      currentXRange [lowX, highX]: set the window to display this range of values on the x-axis
+      currentYRange [lowY, highY]: set the window to display this range of values on the y-axis
+    */
+    for (const option of this.POSSIBLE_MOUSE_READER_OPTIONS) {
+      if (option in options) {
+        this.mouseReader[option] = options[option];
+      }
+    }
+    if (
+      this.webglWorker &&
+      ("currentXRange" in options || "currentYRange" in options)
+    ) {
+      this.sendDrawerState(this.mouseReader.getViewport());
+    }
+  }
+
+  addToDOM() {
+    this.parent.appendChild(this.canvas);
+    this.parent.appendChild(this.mouseReader.element);
+
+    this.offscreenCanvas = this.canvas.transferControlToOffscreen();
+
+    this.webglWorker = new Worker(
+      new URL("./offscreen-webgl-worker.js", import.meta.url)
+    );
+    this.webglWorker.postMessage(
       {
-        canvas: this.canvas,
+        type: "init",
+        canvas: this.offscreenCanvas,
         ...this.mouseReader.getViewport(),
       },
-      extraArgs
+      [this.offscreenCanvas]
     );
 
-    // Set tick for fps meter, allows drawer to have no knowledge of handler
-    this.drawer.tick = () => this.meter.tick();
-    this.content.appendChild(this.canvas);
+    this.webglWorker.onmessage = (e) => {
+      if (e.data.type === "tick") {
+        this.meter.tick();
+      }
+    };
+
+    this.dataWorkerStream = [];
+    this.dataWorker = new Worker(
+      new URL("./data-processor-worker.js", import.meta.url)
+    );
+    this.dataWorker.onmessage = (message) => {
+      this.dataWorkerStream.push(message);
+      console.log(this.dataWorkerStream);
+    };
+
     this.mouseReader.init();
-    this.toolbar.init();
   }
 
   initFpsmeter() {
@@ -70,42 +107,50 @@ class Handler {
     });
   }
 
-  loadCsv(path) {
-    axios.get(path).then((response) => {
-      this.buildDataProcessor(response.data);
-
-      this.clearDrawerBuffers();
-      this.sendToDrawerBuffer(response.data);
-      this.forceDrawerRender();
-    });
-  }
-
+  // Communication with drawer
   sendDrawerState(viewport) {
-    this.drawer.receiveState({ ...viewport });
+    this.webglWorker.postMessage({ type: "viewport", ...viewport });
   }
 
   forceDrawerRender() {
-    this.drawer.render({ ...this.mouseReader.getViewport() });
-  }
-
-  sendToDrawerBuffer(responseData) {
-    this.drawer.populateBuffers(responseData);
+    this.webglWorker.postMessage({
+      type: "render",
+      ...this.mouseReader.getViewport(),
+    });
   }
 
   clearDrawerBuffers() {
-    this.drawer.clearBuffers();
+    this.webglWorker.postMessage({ type: "clearBuffers" });
   }
 
-  buildDataProcessor(data) {
-    this.dataProcessor = new DataProcessor(data);
+  sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor) {
+    this.webglWorker.postMessage({
+      type: "buffer",
+      data,
+      mapPointToSpace: serialize(mapPointToSpace),
+      mapPointToColor: serialize(mapPointToColor),
+    });
+  }
+
+  // Communication with data processor
+  buildDataProcessor(data, mapPointToSpace) {
+    this.dataWorker.postMessage({
+      type: "init",
+      data,
+      mapPointToSpace: serialize(mapPointToSpace),
+    });
   }
 
   selectPoints(points) {
     if (points.length === 4) {
-      this.dataProcessor.selectBox(points);
+      this.dataWorker.postMessage({ type: "selectBox", points });
     } else if (points.length >= 6) {
-      this.dataProcessor.selectLasso(points);
+      this.dataWorker.postMessage({ type: "selectLasso", points });
     }
+  }
+
+  getClosestPoint(point) {
+    this.dataWorker.postMessage({ type: "getClosestPoint", point });
   }
 }
 

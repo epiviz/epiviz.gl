@@ -1,57 +1,45 @@
-import {
-  addSelectionPoint,
-  clearSelectionPoints,
-  setViewport,
-  setSecondSelectionPoint,
-} from "./state/reducers";
 import { scale } from "./utilities";
 
 class MouseReader {
-  constructor(element, dispatch) {
+  constructor(element, handler) {
     this.element = element;
-    this.dispatch = dispatch;
+    this.element.id = "mouse-reader";
 
-    this.lockedX = false;
-    this.lockedY = false;
+    this.handler = handler;
 
     this._currentSelectionPoints = [];
 
-    this.minX = -10;
-    this.minY = -10;
-    this.maxX = 10;
-    this.maxY = 10;
-    this.currentXRange = [-5, 5];
-    this.currentYRange = [-5, 5];
-    this.tool = "pan";
-    this._boxSelectMarker = document.getElementById("box-select");
-    this._lassoSelectMarker = document.getElementById("lasso-select");
-    this._lassoSelectContainer = document.getElementById(
-      "lasso-select-container"
+    this.tool = "box";
+
+    this._selectContainer = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
     );
+    this._selectContainer.id = "select-container";
+
+    this._selectMarker = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "polygon"
+    );
+    this._selectMarker.setAttribute("fill", "rgba(124, 124, 247, 0.3)");
+    this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
+    this._selectMarker.setAttribute("stroke-width", 1);
+    this._selectMarker.setAttribute("stroke-dasharray", "5,5");
   }
 
-  receiveState(state) {
-    this.lockedX = state.controls.lockedX;
-    this.lockedY = state.controls.lockedY;
-
-    this.minX = state.controls.viewport.minX;
-    this.minY = state.controls.viewport.minY;
-    this.maxX = state.controls.viewport.maxX;
-    this.maxY = state.controls.viewport.maxY;
-
-    this.currentXRange = Array.from(state.controls.viewport.xRange);
-    this.currentYRange = Array.from(state.controls.viewport.yRange);
-
-    this.tool = state.controls.tool;
-    this._currentSelectionPoints = state.controls.selectionPoints;
+  set viewport(toSet) {
+    this.minX = toSet[0];
+    this.maxX = toSet[1];
+    this.minY = toSet[2];
+    this.maxY = toSet[3];
   }
 
   init() {
-    this.width = this.element.getBoundingClientRect().width;
-    this.height = this.element.getBoundingClientRect().height;
+    this.width = this.element.clientWidth;
+    this.height = this.element.clientHeight;
 
-    this._lassoSelectContainer.setAttribute("width", this.width);
-    this._lassoSelectContainer.setAttribute("height", this.height);
+    this.element.appendChild(this._selectContainer);
+    this._selectContainer.appendChild(this._selectMarker);
 
     this.element.addEventListener("wheel", this._onWheel.bind(this), false);
 
@@ -65,14 +53,9 @@ class MouseReader {
             break;
           case "box":
           case "lasso":
-            this.dispatch(clearSelectionPoints());
-            this.dispatch(
-              addSelectionPoint(
-                this._calculateViewportSpot(event.layerX, event.layerY)
-              )
-            );
-            this._updateBoxSelectView();
-            this._updateLassoSelectView();
+            this._currentSelectionPoints = [
+              ...this._calculateViewportSpot(event.layerX, event.layerY),
+            ];
             break;
         }
       },
@@ -90,22 +73,19 @@ class MouseReader {
             this._onPan(event);
             break;
           case "box":
-            this.dispatch(
-              setSecondSelectionPoint(
-                this._calculateViewportSpot(event.layerX, event.layerY)
-              )
-            );
+            this._currentSelectionPoints = this._currentSelectionPoints
+              .slice(0, 2)
+              .concat(this._calculateViewportSpot(event.layerX, event.layerY));
             break;
           case "lasso":
-            this.dispatch(
-              addSelectionPoint(
-                this._calculateViewportSpot(event.layerX, event.layerY)
-              )
+            this._currentSelectionPoints.push(
+              ...this._calculateViewportSpot(event.layerX, event.layerY)
             );
             break;
+          case "tooltip":
+            break;
         }
-        this._updateBoxSelectView();
-        this._updateLassoSelectView();
+        this._updateSelectView();
       },
       false
     );
@@ -117,19 +97,18 @@ class MouseReader {
           break;
         case "box":
           if (this._currentSelectionPoints.length !== 4) {
-            this.dispatch(clearSelectionPoints());
-            this._updateBoxSelectView();
+            this._currentSelectionPoints = [];
             return;
           }
-          this._onBoxSelect();
+          this._onSelect();
           break;
         case "lasso":
           if (this._currentSelectionPoints.length < 6) {
-            this.dispatch(clearSelectionPoints());
-            this._updateLassoSelectView();
+            this._currentSelectionPoints = [];
+            this._updateSelectView();
             return;
           }
-          this._onLassoSelect();
+          this._onSelect();
           break;
       }
     });
@@ -142,6 +121,9 @@ class MouseReader {
         case "box":
           break;
         case "lasso":
+          break;
+        case "tooltip":
+          // this.dispatch(setTooltipAnchor(null));
           break;
       }
     });
@@ -175,9 +157,8 @@ class MouseReader {
       }
     }
 
-    this.dispatch(setViewport(this.getViewport()));
-    this._updateBoxSelectView();
-    this._updateLassoSelectView();
+    this.handler.sendDrawerState(this.getViewport());
+    this._updateSelectView();
     return false;
   }
 
@@ -206,7 +187,8 @@ class MouseReader {
       }
     }
 
-    this.dispatch(setViewport(this.getViewport()));
+    this.handler.sendDrawerState(this.getViewport());
+    this._updateSelectView();
   }
 
   _validateXRange() {
@@ -231,66 +213,36 @@ class MouseReader {
 
   _updateBoxSelectView() {
     if (this._currentSelectionPoints.length !== 4) {
-      // Clicked away selection box
-      this._boxSelectMarker.style.left = "-100px";
-      this._boxSelectMarker.style.top = "-100px";
-
-      this._boxSelectMarker.style.width = "0";
-      this._boxSelectMarker.style.height = "0";
       return;
     }
 
-    const boundingRect = this.element.getBoundingClientRect();
-    const canvasTopLeft = this._calculateViewportSpotInverse(
+    const topLeftCorner = this._calculateViewportSpotInverse(
       this._currentSelectionPoints[0],
       this._currentSelectionPoints[1]
     );
-    const canvasBottomRight = this._calculateViewportSpotInverse(
+
+    const bottomRightCorner = this._calculateViewportSpotInverse(
       this._currentSelectionPoints[2],
       this._currentSelectionPoints[3]
     );
 
-    const width = canvasBottomRight[0] - canvasTopLeft[0];
-    const height = canvasBottomRight[1] - canvasTopLeft[1];
-
-    // Check if user drags from bottom right to top left
-    if (width < 0) {
-      this._boxSelectMarker.style.left = `${
-        boundingRect.left + canvasTopLeft[0] + width
-      }px`;
-    } else {
-      this._boxSelectMarker.style.left = `${
-        boundingRect.left + canvasTopLeft[0]
-      }px`;
-    }
-
-    if (height < 0) {
-      this._boxSelectMarker.style.top = `${
-        boundingRect.top + canvasTopLeft[1] + height
-      }px`;
-    } else {
-      this._boxSelectMarker.style.top = `${
-        boundingRect.top + canvasTopLeft[1]
-      }px`;
-    }
-
-    this._boxSelectMarker.style.width = `${Math.abs(width)}px`;
-    this._boxSelectMarker.style.height = `${Math.abs(height)}px`;
+    let pointAttr = `${topLeftCorner[0]},${topLeftCorner[1]} 
+                     ${topLeftCorner[0]},${bottomRightCorner[1]}, 
+                     ${bottomRightCorner[0]},${bottomRightCorner[1]}
+                     ${bottomRightCorner[0]},${topLeftCorner[1]}
+                     `;
+    this._selectMarker.setAttribute("points", pointAttr);
   }
 
-  _updateLassoSelectView() {
-    if (this._currentSelectionPoints.length < 6) {
-      // Clicked away selection box
-      this._lassoSelectContainer.style.left = "-10000px";
-      this._lassoSelectContainer.style.top = "-10000px";
-
+  _updateSelectView() {
+    if (this._currentSelectionPoints.length === 4) {
+      this._updateBoxSelectView();
       return;
     }
-
-    const boundingRect = this.element.getBoundingClientRect();
-
-    this._lassoSelectContainer.style.top = boundingRect.top;
-    this._lassoSelectContainer.style.left = boundingRect.left;
+    if (this._currentSelectionPoints.length < 6) {
+      this._selectMarker.setAttribute("points", "");
+      return;
+    }
 
     let pointAttr = "";
     for (let i = 0; i < this._currentSelectionPoints.length; i += 2) {
@@ -301,15 +253,11 @@ class MouseReader {
       pointAttr += `${asCanvasPoint[0]}, ${asCanvasPoint[1]} `;
     }
 
-    this._lassoSelectMarker.setAttribute("points", pointAttr);
+    this._selectMarker.setAttribute("points", pointAttr);
   }
 
-  _onBoxSelect() {
-    console.log(this._currentSelectionPoints);
-  }
-
-  _onLassoSelect() {
-    console.log(this._currentSelectionPoints);
+  _onSelect() {
+    this.handler.selectPoints(this._currentSelectionPoints);
   }
 
   _calculateViewportSpot(canvasX, canvasY) {

@@ -6,13 +6,13 @@ class Drawer {
     this.receiveState(data);
   }
 
-  receiveState(data) {
-    this.minX = data.minX;
-    this.maxX = data.maxX;
-    this.minY = data.minY;
-    this.maxY = data.maxY;
-    this.currentXRange = Array.from(data.xRange);
-    this.currentYRange = Array.from(data.yRange);
+  receiveState(viewportData) {
+    this.minX = viewportData.minX;
+    this.maxX = viewportData.maxX;
+    this.minY = viewportData.minY;
+    this.maxY = viewportData.maxY;
+    this.currentXRange = Array.from(viewportData.xRange);
+    this.currentYRange = Array.from(viewportData.yRange);
 
     this.needsAnimation = true;
   }

@@ -48,18 +48,11 @@ canvas,
   z-index: 1;
 }
 
-#lasso-select-container {
+#select-container {
+  width: 100%;
+  height: 100%;
   position: absolute;
   z-index: 1000;
-  pointer-events: none;
-}
-
-#box-select {
-  position: absolute;
-  top: -10000px;
-  z-index: 1000;
-  background: rgba(124, 124, 247, 0.3);
-  border: 1px rgb(136, 128, 247) dashed;
   pointer-events: none;
 }
 

@@ -46,4 +46,9 @@ function rgbToHex(red, green, blue) {
   return (red << 16) | (green << 8) | (blue << 0);
 }
 
-export { scale, initShaderProgram, loadShader, rgbToHex };
+// Recommended by serialize-js https://github.com/yahoo/serialize-javascript#deserializing
+function deserialize(serializedJavascript) {
+  return eval("(" + serializedJavascript + ")");
+}
+
+export { scale, initShaderProgram, loadShader, rgbToHex, deserialize };

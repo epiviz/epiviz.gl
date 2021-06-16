@@ -1,22 +1,13 @@
-import { combineReducers, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import csv10 from "url:../../data/tsne_tenth.csv";
 
 const controlsSlice = createSlice({
-  name: "controls",
+  name: "webglControls",
   initialState: {
     tool: "pan",
     dataset: csv10,
     lockedX: false,
     lockedY: false,
-    viewport: {
-      minX: -10,
-      maxX: 10,
-      minY: -10,
-      maxY: 10,
-      xRange: [-5, 5],
-      yRange: [-5, 5],
-    },
-    selectionPoints: [],
   },
   reducers: {
     setDataset(state, action) {
@@ -34,24 +25,6 @@ const controlsSlice = createSlice({
         state.lockedY = action.payload.checked;
       }
     },
-
-    setViewport(state, action) {
-      state.viewport = action.payload;
-    },
-
-    clearSelectionPoints(state) {
-      state.selectionPoints = [];
-    },
-
-    addSelectionPoint(state, action) {
-      state.selectionPoints.push(...action.payload);
-    },
-
-    setSecondSelectionPoint(state, action) {
-      state.selectionPoints = state.selectionPoints
-        .slice(0, 2)
-        .concat(action.payload);
-    },
   },
 });
 
@@ -63,10 +36,8 @@ export const {
   addSelectionPoint,
   clearSelectionPoints,
   setSecondSelectionPoint,
+  setSelectionQueried,
+  setTooltipAnchor,
 } = controlsSlice.actions;
 
-const rootReducer = combineReducers({
-  controls: controlsSlice.reducer,
-});
-
-export default rootReducer;
+export default controlsSlice.reducer;

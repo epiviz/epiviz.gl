@@ -1,5 +1,5 @@
 import Drawer from "./drawer";
-import { scale, initShaderProgram, rgbToHex } from "./utilities";
+import { scale, initShaderProgram, deserialize } from "./utilities";
 import {
   varyingColorsVertexShader,
   varyingColorsFragmentShader,
@@ -9,8 +9,8 @@ import {
 // https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample2/webgl-demo.js
 
 class WebGLCanvasDrawer extends Drawer {
-  constructor(data) {
-    super(data);
+  constructor(viewportData) {
+    super(viewportData);
 
     this.gl = this.canvas.getContext("webgl");
 
@@ -19,42 +19,14 @@ class WebGLCanvasDrawer extends Drawer {
       return;
     }
 
-    // Specific to t-SNE Dataset
-    this.sampleColors = new Map( // Create colors for sample type
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ012"
-        .split("")
-        .map((letter) => [
-          letter,
-          rgbToHex(
-            Math.floor(Math.random() * 255),
-            Math.floor(Math.random() * 255),
-            Math.floor(Math.random() * 255)
-          ),
-        ])
-    );
-
-    this.xTSNEScale = scale([-10, 10], [-1, 1]);
-    this.yTSNEScale = scale([-10, 10], [-1, 1]);
-
     this.positions = [];
     this.colors = [];
   }
 
-  receiveState(data) {
-    super.receiveState(data);
-
-    if (this.programInfo) {
-      const viewport = this.getWebGLViewport();
-
-      if (viewport) {
-        this.gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-
-        this.gl.uniform1f(
-          this.programInfo.uniformLocations.pointSize,
-          viewport[4]
-        );
-      }
-    }
+  receiveState(viewportData) {
+    super.receiveState(viewportData);
+    this.xScale = scale([this.minX, this.maxX], [-1, 1]);
+    this.yScale = scale([this.minY, this.maxY], [-1, 1]);
   }
 
   getWebGLViewport() {
@@ -105,17 +77,14 @@ class WebGLCanvasDrawer extends Drawer {
 
   populateBuffers(data) {
     // Given raw data, populate the buffers
-    // Specific to t-SNE data
-    data.split("\n").forEach((line) => {
-      const parts = line.split(",");
-      const x = parseFloat(parts[1]);
-      const y = parseFloat(parts[2]);
-      if (!parts[0] || !x || !y) {
-        return; // skip bad rows
-      }
 
-      this.positions.push(this.xTSNEScale(x), this.yTSNEScale(y));
-      this.colors.push(this.sampleColors.get(parts[0]));
+    const mapPointToSpace = deserialize(data.mapPointToSpace);
+    const mapPointToColor = deserialize(data.mapPointToColor);
+    data.data.forEach((row) => {
+      const inSpace = mapPointToSpace(row);
+      const asColor = mapPointToColor(row);
+      this.positions.push(this.xScale(inSpace[0]), this.yScale(inSpace[1]));
+      this.colors.push(asColor);
     });
   }
 
@@ -129,6 +98,15 @@ class WebGLCanvasDrawer extends Drawer {
       this.lastFrame = requestAnimationFrame(this.animate.bind(this));
       this.tick();
       return;
+    }
+
+    const viewport = this.getWebGLViewport();
+    if (viewport) {
+      this.gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+      this.gl.uniform1f(
+        this.programInfo.uniformLocations.pointSize,
+        viewport[4]
+      );
     }
 
     this.gl.enable(this.gl.BLEND);

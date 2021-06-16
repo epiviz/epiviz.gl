@@ -2,25 +2,21 @@ import Supercluster from "supercluster";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon } from "@turf/helpers";
 import simplify from "@turf/simplify";
+import { deserialize } from "./utilities";
 
 class DataProcessor {
-  constructor(data) {
+  // Can currently only handle data in a [-180, 180] x [-90, 90] range
+  constructor(data, mapPointToSpace) {
     this.index = new Supercluster();
     this.points = [];
-    // specific to t-SNE
+
+    const mapper = deserialize(mapPointToSpace);
 
     console.log("Reading data...");
-    data.split("\n").forEach((line) => {
-      const parts = line.split(",");
-      const x = parseFloat(parts[1]);
-      const y = parseFloat(parts[2]);
-      if (!parts[0] || isNaN(x) || isNaN(y)) {
-        return;
-      }
+    data.forEach((row) => {
       this.points.push({
         geometry: {
-          coordinates: [x, y],
-          sample: parts[0],
+          coordinates: mapper(row),
         },
       });
     });
@@ -31,15 +27,34 @@ class DataProcessor {
     console.log("Data ready.");
   }
 
+  getClosestPoint(point, zoom = 16) {
+    const candidatePoints = this.index.getClusters(
+      [point[0] - 0.01, point[1] - 0.01, point[0] + 0.01, point[1] + 0.01],
+      zoom
+    );
+
+    let closestPoint;
+    let distanceToClosestPoint;
+    for (const candidate of candidatePoints) {
+      const dist =
+        (candidate.geometry.coordinates[0] - point[0]) ** 2 +
+        (candidate.geometry.coordinates[1] - point[1]) ** 2;
+      if (!closestPoint || dist < distanceToClosestPoint) {
+        closestPoint = candidate;
+        distanceToClosestPoint = dist;
+      }
+    }
+
+    return closestPoint;
+  }
+
   selectBox(points, zoom = 16) {
     const smallerX = Math.min(points[0], points[2]);
     const smallerY = Math.min(points[1], points[3]);
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    console.log(
-      this.index.getClusters([smallerX, smallerY, largerX, largerY], zoom)
-    );
+    return this.index.getClusters([smallerX, smallerY, largerX, largerY], zoom);
   }
 
   selectLasso(points, zoom = 16) {
@@ -70,14 +85,12 @@ class DataProcessor {
       highQuality: false,
     });
 
-    console.log(
-      candidatePoints.filter((point) => {
-        return booleanPointInPolygon(
-          point.geometry.coordinates,
-          simplifiedBoundingPolygon
-        );
-      })
-    );
+    return candidatePoints.filter((point) => {
+      return booleanPointInPolygon(
+        point.geometry.coordinates,
+        simplifiedBoundingPolygon
+      );
+    });
   }
 }
 

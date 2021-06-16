@@ -19,7 +19,7 @@ self.onmessage = (message) => {
       self.drawer.render();
       break;
     case "buffer":
-      self.drawer.populateBuffers(message.data.responseData);
+      self.drawer.populateBuffers(message.data);
       break;
     case "clearBuffers":
       self.drawer.clearBuffers();
