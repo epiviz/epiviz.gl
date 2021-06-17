@@ -1,5 +1,5 @@
 import Drawer from "./drawer";
-import { scale, initShaderProgram, deserialize } from "./utilities";
+import { scale, initShaderProgram, deserialize, rgbToHex } from "./utilities";
 import {
   varyingColorsVertexShader,
   varyingColorsFragmentShader,
@@ -77,14 +77,35 @@ class WebGLCanvasDrawer extends Drawer {
 
   populateBuffers(data) {
     // Given raw data, populate the buffers
-
     const mapPointToSpace = deserialize(data.mapPointToSpace);
     const mapPointToColor = deserialize(data.mapPointToColor);
+
+    if (data.options && data.options.colorMapIsCategorical) {
+      let colorMap = new Map();
+      data.data.forEach((row) => {
+        const colorCategory = mapPointToColor(row);
+        if (!colorMap.has(colorCategory)) {
+          colorMap.set(
+            colorCategory,
+            rgbToHex(
+              Math.floor(255 * Math.random()),
+              Math.floor(255 * Math.random()),
+              Math.floor(255 * Math.random())
+            )
+          );
+        }
+        this.colors.push(colorMap.get(colorCategory));
+      });
+    } else {
+      data.data.forEach((row) => {
+        const asColor = mapPointToColor(row);
+        this.colors.push(asColor);
+      });
+    }
+
     data.data.forEach((row) => {
       const inSpace = mapPointToSpace(row);
-      const asColor = mapPointToColor(row);
       this.positions.push(this.xScale(inSpace[0]), this.yScale(inSpace[1]));
-      this.colors.push(asColor);
     });
   }
 

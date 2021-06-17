@@ -14,10 +14,12 @@ class DataProcessor {
 
     console.log("Reading data...");
     data.forEach((row) => {
+      const mapped = mapper(row);
       this.points.push({
         geometry: {
-          coordinates: mapper(row),
+          coordinates: mapped.slice(0, 2),
         },
+        ...mapped[2],
       });
     });
 

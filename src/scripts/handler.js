@@ -28,10 +28,10 @@ class Handler {
     this.initFpsmeter();
   }
 
-  setData(data, mapPointToSpace, mapPointToColor) {
+  setData(data, mapPointToSpace, mapPointToColor, options) {
     this.clearDrawerBuffers();
-    this.sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor);
-    this.buildDataProcessor(data, mapPointToSpace);
+    this.sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor, options);
+    this.buildDataProcessor(data, mapPointToSpace, options);
 
     this.forceDrawerRender();
   }
@@ -123,12 +123,13 @@ class Handler {
     this.webglWorker.postMessage({ type: "clearBuffers" });
   }
 
-  sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor) {
+  sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor, options) {
     this.webglWorker.postMessage({
       type: "buffer",
       data,
       mapPointToSpace: serialize(mapPointToSpace),
       mapPointToColor: serialize(mapPointToColor),
+      options,
     });
   }
 

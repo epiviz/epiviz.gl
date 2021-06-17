@@ -36,18 +36,24 @@ class App {
     const currState = this.store.getState();
     const dataset = getIfChanged("dataset");
     if (dataset) {
+      // Dataset has changed, need to reload
       console.log(`Loading ${dataset} ...`);
       axios.get(dataset).then((response) => {
         console.log("Loaded");
         this.handler.setData(
           response.data
             .split("\n")
-            .slice(1)
+            .slice(1) // Remove header
             .map((csvStr) => csvStr.split(",")),
           (row) =>
-            // row is a single element of the array passed above, users choose what row looks like by passing the array in the format they wish
-            [parseFloat(row[1]), parseFloat(row[2])],
-          (row) => 16777215 // mapping row to color should return hex code as integer
+            // row is a single element of the array passed above,
+            // users choose what row looks like by passing the array
+            // in the format they wish
+            // third element is metadata for row
+            [parseFloat(row[1]), parseFloat(row[2]), { sample: row[0] }],
+          // mapping row to color should return hex code as integer, or a hashable type if colorMapIsCategorical is true
+          (row) => row[0],
+          { colorMapIsCategorical: true }
         );
       });
     }
