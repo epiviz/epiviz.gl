@@ -1,9 +1,10 @@
 @import "./font.css";
 @import "./toolbar.css";
-@import "./scatterplot.css";
 
 .content {
   padding: 1em;
+  border: 2px solid black;
+  height: 75%;
 }
 
 html,

@@ -13,7 +13,7 @@ class App {
       The App class is meant to emulate an app that may use the webgl scatterplot as a component
   */
   constructor() {
-    this.container = document.querySelector(".rendering-container");
+    this.container = document.querySelector(".content");
 
     this.scatterplot = new Scatterplot(this.container);
     this.scatterplot.setOptions({

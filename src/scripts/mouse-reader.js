@@ -8,6 +8,10 @@ class MouseReader {
    */
   constructor(element, handler) {
     this.element = element;
+    this.element.style.position = "absolute";
+    this.element.style.width = "100%";
+    this.element.style.height = "100%";
+
     this.element.id = "mouse-reader";
 
     this.handler = handler;
@@ -21,7 +25,11 @@ class MouseReader {
       "http://www.w3.org/2000/svg",
       "svg"
     );
-    this._selectContainer.id = "select-container";
+    this._selectContainer.style.width = "100%";
+    this._selectContainer.style.height = "100%";
+    this._selectContainer.style.position = "absolute";
+    this._selectContainer.style.zIndex = "1000";
+    this._selectContainer.style.pointerEvents = "none";
 
     this._selectMarker = document.createElementNS(
       "http://www.w3.org/2000/svg",

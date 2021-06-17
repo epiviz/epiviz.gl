@@ -15,22 +15,18 @@ class Scatterplot {
   /**
    * A class meant to display a scatterplot using webgl.
    *
-   * @param {HTMLElement} parent <div> or other container element meant to contain the scatterplot and its sibling components
+   * @param {HTMLElement} container <div> or other container element meant to contain the scatterplot and its components
    */
-  constructor(parent) {
-    this.parent = parent;
-    this.canvas = document.createElement("canvas");
-
+  constructor(container) {
+    this.container = container;
     this.mouseReader = new MouseReader(document.createElement("div"), this);
 
-    this.width = Math.min(this.parent.clientWidth, 1000);
-    this.height = this.parent.clientHeight * 0.9; // needs to match CSS canvas height
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+    this.parent = document.createElement("div");
+    this.parent.style.position = "relative";
+    this.parent.style.width = "100%";
+    this.parent.style.height = "100%";
 
-    this.canvas.style.position = "absolute";
-
-    this.initFpsmeter();
+    this.canvas = document.createElement("canvas");
   }
 
   /**
@@ -87,6 +83,17 @@ class Scatterplot {
    * Also initializes WebWorkers for internal use.
    */
   addToDOM() {
+    this.container.appendChild(this.parent);
+
+    this.width = Math.min(this.parent.clientWidth, 1000);
+    this.height = this.parent.clientHeight;
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+
+    this.canvas.style.position = "absolute";
+
+    this.initFpsmeter();
+
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
 
@@ -120,6 +127,7 @@ class Scatterplot {
       console.log(this.dataWorkerStream);
     };
 
+    // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
     this.mouseReader.init();
   }
 
