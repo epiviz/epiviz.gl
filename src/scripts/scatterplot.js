@@ -85,7 +85,7 @@ class Scatterplot {
   addToDOM() {
     this.container.appendChild(this.parent);
 
-    this.width = Math.min(this.parent.clientWidth, 1000);
+    this.width = this.parent.clientWidth;
     this.height = this.parent.clientHeight;
     this.canvas.width = this.width;
     this.canvas.height = this.height;
