@@ -28,16 +28,6 @@ const controlsSlice = createSlice({
   },
 });
 
-export const {
-  setDataset,
-  setTool,
-  setScroll,
-  setViewport,
-  addSelectionPoint,
-  clearSelectionPoints,
-  setSecondSelectionPoint,
-  setSelectionQueried,
-  setTooltipAnchor,
-} = controlsSlice.actions;
+export const { setDataset, setTool, setScroll } = controlsSlice.actions;
 
 export default controlsSlice.reducer;

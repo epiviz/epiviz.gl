@@ -1,6 +1,11 @@
 import { scale } from "./utilities";
 
 class MouseReader {
+  /**
+   *
+   * @param {HTMLElement} element meant to read mouse events, necessary since OffscreenCanvas cannot read DOM events
+   * @param {Handler} handler that is using
+   */
   constructor(element, handler) {
     this.element = element;
     this.element.id = "mouse-reader";
@@ -11,6 +16,7 @@ class MouseReader {
 
     this.tool = "box";
 
+    // Initializing elements to show user their current selection
     this._selectContainer = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "svg"
@@ -27,13 +33,26 @@ class MouseReader {
     this._selectMarker.setAttribute("stroke-dasharray", "5,5");
   }
 
+  /**
+   * Set the viewport in the format mouseReader.viewport = [minX, maxX, minY, maxY].
+   * Mostly used to make Scatterplot.setOptions simpler.
+   */
   set viewport(toSet) {
     this.minX = toSet[0];
     this.maxX = toSet[1];
     this.minY = toSet[2];
     this.maxY = toSet[3];
+
+    this._wheelDampenX = (this.maxX - this.minX) / 1000;
+    this._wheelDampenY = (this.maxY - this.minY) / 1000;
+
+    this._panDampenX = (this.maxX - this.minX) / 1000;
+    this._panDampenY = (this.maxY - this.minY) / 1000;
   }
 
+  /**
+   * Init the mouse reader by adding its elements to DOM and adding event handlers
+   */
   init() {
     this.width = this.element.clientWidth;
     this.height = this.element.clientHeight;
@@ -115,7 +134,7 @@ class MouseReader {
 
     this.element.addEventListener("mouseleave", () => {
       switch (this.tool) {
-        case "pan":
+        case "pan": // Ensures panning does not continue if user leaves canvas
           mouseDown = false;
           break;
         case "box":
@@ -123,18 +142,38 @@ class MouseReader {
         case "lasso":
           break;
         case "tooltip":
-          // this.dispatch(setTooltipAnchor(null));
           break;
       }
     });
   }
 
+  /**
+   * Get current viewport info such as min/max bounds and current ranges
+   *
+   * @returns Current viewport information the mouse reader has calculated
+   */
+  getViewport() {
+    return {
+      minX: this.minX,
+      maxX: this.maxX,
+      minY: this.minY,
+      maxY: this.maxY,
+      xRange: Array.from(this.currentXRange),
+      yRange: Array.from(this.currentYRange),
+    };
+  }
+
+  /**
+   * Method to handle wheel events for zooming in and out of canvas
+   *
+   * @param {WheelEvent} event
+   */
   _onWheel(event) {
     event.preventDefault();
     if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
-      this.currentXRange[0] -= event.wheelDelta / 500;
-      this.currentXRange[1] += event.wheelDelta / 500;
+      this.currentXRange[0] -= event.wheelDelta * this._wheelDampenX;
+      this.currentXRange[1] += event.wheelDelta * this._wheelDampenX;
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
@@ -146,8 +185,8 @@ class MouseReader {
 
     if (!this.lockedY) {
       const previousY = [...this.currentYRange];
-      this.currentYRange[0] -= event.wheelDelta / 500;
-      this.currentYRange[1] += event.wheelDelta / 500;
+      this.currentYRange[0] -= event.wheelDelta * this._wheelDampenY;
+      this.currentYRange[1] += event.wheelDelta * this._wheelDampenY;
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
@@ -159,14 +198,18 @@ class MouseReader {
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSelectView();
-    return false;
   }
 
+  /**
+   * Method to handle a clicked mouse moving around canvas to pan around canvas.
+   *
+   * @param {MouseEvent} event from "mousemove" event
+   */
   _onPan(event) {
     if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
-      this.currentXRange[0] -= event.movementX / 50;
-      this.currentXRange[1] -= event.movementX / 50;
+      this.currentXRange[0] -= event.movementX * this._panDampenX;
+      this.currentXRange[1] -= event.movementX * this._panDampenX;
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
@@ -177,8 +220,8 @@ class MouseReader {
 
     if (!this.lockedY) {
       const previousY = [...this.currentYRange];
-      this.currentYRange[0] += event.movementY / 50;
-      this.currentYRange[1] += event.movementY / 50;
+      this.currentYRange[0] += event.movementY * this._panDampenY;
+      this.currentYRange[1] += event.movementY * this._panDampenY;
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
@@ -191,6 +234,12 @@ class MouseReader {
     this._updateSelectView();
   }
 
+  /**
+   * Checks if this.currentXRange is valid with first element less than second
+   * and if viewport zoom is not above webgl max zoom.
+   *
+   * @return true if range is valid, false otherwise
+   */
   _validateXRange() {
     const windowWidth = this.currentXRange[1] - this.currentXRange[0];
     const displayAsIfThisWide =
@@ -201,6 +250,12 @@ class MouseReader {
     );
   }
 
+  /**
+   * Checks if this.currentYRange is valid with first element less than second
+   * and if viewport zoom is not above webgl max zoom.
+   *
+   * @return true if range is valid, false otherwise
+   */
   _validateYRange() {
     const windowHeight = this.currentYRange[1] - this.currentYRange[0];
     const displayAsIfThisHigh =
@@ -211,6 +266,9 @@ class MouseReader {
     );
   }
 
+  /**
+   * Updates user selection view if they have selected a box
+   */
   _updateBoxSelectView() {
     if (this._currentSelectionPoints.length !== 4) {
       return;
@@ -234,6 +292,10 @@ class MouseReader {
     this._selectMarker.setAttribute("points", pointAttr);
   }
 
+  /**
+   * Updates the DOM component used to show user selection.
+   * If user has only 2 selection points calls {@link MouseReader#_updateBoxSelectView}
+   */
   _updateSelectView() {
     if (this._currentSelectionPoints.length === 4) {
       this._updateBoxSelectView();
@@ -256,10 +318,20 @@ class MouseReader {
     this._selectMarker.setAttribute("points", pointAttr);
   }
 
+  /**
+   * Executes when user has confirmed selection points (typically by releasing mouse)
+   */
   _onSelect() {
     this.handler.selectPoints(this._currentSelectionPoints);
   }
 
+  /**
+   * Calculate the location on the real coordinate space a point on the canvas corresponds to.
+   *
+   * @param {Float} canvasX likely from event.layerX
+   * @param {Float} canvasY likely from event.layerY
+   * @returns viewport coordinate as array
+   */
   _calculateViewportSpot(canvasX, canvasY) {
     const scaleX = scale([0, this.width], this.currentXRange);
     // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
@@ -267,23 +339,19 @@ class MouseReader {
     return [scaleX(canvasX), scaleY(canvasY)];
   }
 
+  /**
+   * Calculate the location on the canvas a real coordniate corresponds to.
+   *
+   * @param {Float} viewportX x coordinate of data space
+   * @param {Float} viewportY y coordniate of data space
+   * @returns canvas coordindate as array
+   */
   _calculateViewportSpotInverse(viewportX, viewportY) {
     const inverseScaleX = scale(this.currentXRange, [0, this.width]);
     // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
     const inverseScaleY = scale(this.currentYRange, [this.height, 0]);
 
     return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
-  }
-
-  getViewport() {
-    return {
-      minX: this.minX,
-      maxX: this.maxX,
-      minY: this.minY,
-      maxY: this.maxY,
-      xRange: Array.from(this.currentXRange),
-      yRange: Array.from(this.currentYRange),
-    };
   }
 }
 

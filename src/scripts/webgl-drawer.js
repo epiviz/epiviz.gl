@@ -1,5 +1,5 @@
 import Drawer from "./drawer";
-import { scale, initShaderProgram, deserialize, rgbToHex } from "./utilities";
+import { scale, initShaderProgram, rgbToHex } from "./utilities";
 import {
   varyingColorsVertexShader,
   varyingColorsFragmentShader,
@@ -23,12 +23,17 @@ class WebGLCanvasDrawer extends Drawer {
     this.colors = [];
   }
 
-  receiveState(viewportData) {
-    super.receiveState(viewportData);
+  receiveViewport(viewportData) {
+    super.receiveViewport(viewportData);
     this.xScale = scale([this.minX, this.maxX], [-1, 1]);
     this.yScale = scale([this.minY, this.maxY], [-1, 1]);
   }
 
+  /**
+   * Calculates the viewport for this.gl.viewport to control zooming. Also calculates point size.
+   * @returns Array of 5 elements, first 4 are viewport parameters, last is pointSize:
+   *   [xOffset, yOffset, displayAsIfThisWide, displayAsIfThisHigh, pointSize]
+   */
   getWebGLViewport() {
     // Calculate appropriate webgl viewport given current selection window
     const windowWidth = this.currentXRange[1] - this.currentXRange[0];
@@ -75,10 +80,15 @@ class WebGLCanvasDrawer extends Drawer {
     ];
   }
 
+  /**
+   * Populates the buffers needed for rendering points.
+   *
+   * @param {Object} data with keys for data, mapPointToSpace, mapPointToColor
+   */
   populateBuffers(data) {
     // Given raw data, populate the buffers
-    const mapPointToSpace = deserialize(data.mapPointToSpace);
-    const mapPointToColor = deserialize(data.mapPointToColor);
+    const mapPointToSpace = data.mapPointToSpace;
+    const mapPointToColor = data.mapPointToColor;
 
     if (data.options && data.options.colorMapIsCategorical) {
       let colorMap = new Map();
@@ -109,11 +119,17 @@ class WebGLCanvasDrawer extends Drawer {
     });
   }
 
+  /**
+   * Clear the rendering buffers.
+   */
   clearBuffers() {
     this.positions = [];
     this.colors = [];
   }
 
+  /**
+   * Animates the frames by setting viewport, blending, clearing, and calling webgl draw.
+   */
   animate() {
     if (!this.needsAnimation) {
       this.lastFrame = requestAnimationFrame(this.animate.bind(this));
@@ -149,6 +165,10 @@ class WebGLCanvasDrawer extends Drawer {
     this.tick();
   }
 
+  /**
+   * Prepares animation by compiling shaders, setting uniforms, constructing buffers,
+   * and handling additional boilerplate.
+   */
   render() {
     super.render();
 

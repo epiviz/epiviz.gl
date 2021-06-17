@@ -1,4 +1,10 @@
 @import "./font.css";
+@import "./toolbar.css";
+@import "./scatterplot.css";
+
+.content {
+  padding: 1em;
+}
 
 html,
 body {
@@ -54,4 +60,28 @@ h1 {
 h1 > * {
   font-size: 0.7em;
   margin-right: 0.25em;
+}
+
+a.github {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 6px 8px 6px 34px;
+  border: none;
+  color: #333;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+a.github:before {
+  position: absolute;
+  content: "";
+  background-image: url("../assets/github.png");
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  top: 4px;
+  left: 6px;
+}
+a.github:hover {
+  border-color: #333;
 }

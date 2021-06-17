@@ -1,3 +1,6 @@
+/**
+ * A vertex shader meant to take in positions and colors.
+ */
 const varyingColorsVertexShader = `
   uniform lowp float pointSize;
   uniform lowp float opacity;
@@ -27,6 +30,9 @@ const varyingColorsVertexShader = `
   }
 `;
 
+/**
+ * A fragment shader which chooses color simply passed to by vertex shader.
+ */
 const varyingColorsFragmentShader = `
   varying lowp vec4 vColor;
 

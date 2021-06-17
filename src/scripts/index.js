@@ -1,5 +1,5 @@
 import Toolbar from "./toolbar";
-import Handler from "./handler";
+import Scatterplot from "./scatterplot";
 import store, { getIfChanged } from "./state/store";
 
 import csv100 from "url:../data/tsne_hundreth.csv";
@@ -10,19 +10,19 @@ const axios = require("axios");
 
 class App {
   /*
-      The App class is meant to emulate an app that may use the webgl canvas as a component
+      The App class is meant to emulate an app that may use the webgl scatterplot as a component
   */
   constructor() {
     this.container = document.querySelector(".rendering-container");
 
-    this.handler = new Handler(this.container);
-    this.handler.setOptions({
+    this.scatterplot = new Scatterplot(this.container);
+    this.scatterplot.setOptions({
       viewport: [-10, 10, -10, 10],
       currentXRange: [-5, 5],
       currentYRange: [-5, 5],
     });
 
-    this.handler.addToDOM();
+    this.scatterplot.addToDOM();
 
     this.store = store;
     this.store.subscribe(this.subscription.bind(this));
@@ -32,6 +32,11 @@ class App {
     this.toolbar.init();
   }
 
+  /**
+   * The webgl visualization components are meant to leave application
+   * state up to the developers, and this subscription is an example of
+   * using redux to update the plot.
+   */
   subscription() {
     const currState = this.store.getState();
     const dataset = getIfChanged("dataset");
@@ -40,7 +45,7 @@ class App {
       console.log(`Loading ${dataset} ...`);
       axios.get(dataset).then((response) => {
         console.log("Loaded");
-        this.handler.setData(
+        this.scatterplot.setData(
           response.data
             .split("\n")
             .slice(1) // Remove header
@@ -58,7 +63,7 @@ class App {
       });
     }
 
-    this.handler.setOptions({ ...currState });
+    this.scatterplot.setOptions({ ...currState });
   }
 }
 

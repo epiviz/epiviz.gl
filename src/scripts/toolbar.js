@@ -5,12 +5,19 @@ import csv10 from "url:../data/tsne_tenth.csv";
 import csv100 from "url:../data/tsne_hundreth.csv";
 
 class Toolbar {
+  /**
+   * A class meant to handle changing options on the scatter plot
+   * @param {Function} dispatch method from store to dispatch redux actions
+   */
   constructor(dispatch) {
     this.dispatch = dispatch;
     this.mouseAction = "pan";
     this.dataset = "tsne-10";
   }
 
+  /**
+   * Initializes the tool bar by adding event listeners
+   */
   init() {
     document.getElementById("lock-x").addEventListener("change", (event) => {
       this.dispatch(setScroll({ axis: "x", checked: event.target.checked }));
@@ -43,6 +50,12 @@ class Toolbar {
     });
   }
 
+  /**
+   * Sets the display for the current selection window in the toolbar
+   *
+   * @param {Array} currentXRange array of length 2 with current X range
+   * @param {Array} currentYRange array of length 2 with current Y range
+   */
   updateSelectionWindowDisplay(currentXRange, currentYRange) {
     // This may slow down the rendering since it needs to call the DOM before animating, may need to remove for true benchmark
     document.querySelector(
@@ -54,6 +67,12 @@ class Toolbar {
     )}, ${currentYRange[1].toFixed(4)}]`;
   }
 
+  /**
+   * Maps selection box values to dataset paths.
+   *
+   * @param {String} dataset name from selection box
+   * @returns path to dataset
+   */
   determineDatasetPath(dataset) {
     switch (dataset) {
       case "tsne":

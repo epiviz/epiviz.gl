@@ -1,0 +1,29 @@
+.rendering-container {
+  position: relative;
+  width: 100%;
+  height: 80%;
+}
+
+canvas,
+#mouse-reader {
+  margin-top: 1em;
+}
+
+canvas,
+#mouse-reader {
+  height: 90%;
+  width: 100%;
+}
+
+#mouse-reader {
+  position: absolute;
+  z-index: 1;
+}
+
+#select-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+}

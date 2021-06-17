@@ -2,7 +2,7 @@ import "fpsmeter";
 import MouseReader from "./mouse-reader";
 import serialize from "serialize-javascript";
 
-class Handler {
+class Scatterplot {
   POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
     "lockedX",
     "lockedY",
@@ -12,6 +12,11 @@ class Handler {
     "currentYRange",
   ]);
 
+  /**
+   * A class meant to display a scatterplot using webgl.
+   *
+   * @param {HTMLElement} parent <div> or other container element meant to contain the scatterplot and its sibling components
+   */
   constructor(parent) {
     this.parent = parent;
     this.canvas = document.createElement("canvas");
@@ -28,6 +33,16 @@ class Handler {
     this.initFpsmeter();
   }
 
+  /**
+   * Set the data for the scatterplot to display
+   *
+   * @param {Array} data where each element is expected to be passed to mapPointToSpace and mapPointToColor
+   * @param {*} mapPointToSpace maps an element from data to an array of 3 elements, the first two are
+   *   coordinates of the data point, the third is extra metadata from the data point
+   * @param {*} mapPointToColor maps an from data to a color, should map to a hex code as an integer
+   *   OR a hashable type if options.colorMapIsCategorical is true
+   * @param {*} options to send to workers for processing
+   */
   setData(data, mapPointToSpace, mapPointToColor, options) {
     this.clearDrawerBuffers();
     this.sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor, options);
@@ -36,15 +51,23 @@ class Handler {
     this.forceDrawerRender();
   }
 
+  /**
+   * Set the options for the webgl drawer
+   *
+   * {
+   *   lockedX (bool): x-axis controls
+   *   lockedY (bool): lock y-axis controls
+   *   tool ("pan"|"boxSelect"|"lassoSelect"|"zoom"|"tooltip"): active tool on the drawer
+   *   viewport [minX, maxX, minY, maxY]: the bounding box around all of your data
+   *   currentXRange [lowX, highX]: set the window to display this range of values on the x-axis
+   *   currentYRange [lowY, highY]: set the window to display this range of values on the y-axis
+   * }
+   * @param {Object} options outlined above
+   */
   setOptions(options) {
     /*
       Configurable options for the webgl drawer:
-      lockedX (bool): x-axis controls
-      lockedY (bool): lock y-axis controls
-      tool ("pan"|"boxSelect"|"lassoSelect"|"zoom"|"tooltip"): active tool on the drawer
-      viewport [minX, maxX, minY, maxY]: the bounding box around all of your data
-      currentXRange [lowX, highX]: set the window to display this range of values on the x-axis
-      currentYRange [lowY, highY]: set the window to display this range of values on the y-axis
+      
     */
     for (const option of this.POSSIBLE_MOUSE_READER_OPTIONS) {
       if (option in options) {
@@ -59,6 +82,10 @@ class Handler {
     }
   }
 
+  /**
+   * After constructing the scatterplot, add it and its sibling elements to DOM.
+   * Also initializes WebWorkers for internal use.
+   */
   addToDOM() {
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
@@ -77,6 +104,7 @@ class Handler {
       [this.offscreenCanvas]
     );
 
+    // Allow OffScreenWebGLDrawer to tick FPS meter
     this.webglWorker.onmessage = (e) => {
       if (e.data.type === "tick") {
         this.meter.tick();
@@ -95,6 +123,9 @@ class Handler {
     this.mouseReader.init();
   }
 
+  /**
+   * Initializes the FPS meter.
+   */
   initFpsmeter() {
     this.meter = new window.FPSMeter(document.querySelector("footer"), {
       graph: 1,
@@ -107,11 +138,22 @@ class Handler {
     });
   }
 
+  ////////////////////////////
   // Communication with drawer
+  ////////////////////////////
+
+  /**
+   * Send the viewport to the drawer.
+   *
+   * @param {Object} viewport likely from this.mouseReader.getViewport()
+   */
   sendDrawerState(viewport) {
     this.webglWorker.postMessage({ type: "viewport", ...viewport });
   }
 
+  /**
+   * Calls render in the drawer.
+   */
   forceDrawerRender() {
     this.webglWorker.postMessage({
       type: "render",
@@ -119,10 +161,22 @@ class Handler {
     });
   }
 
+  /**
+   * Clears the drawer buffers causing blank canvas to render.
+   */
   clearDrawerBuffers() {
     this.webglWorker.postMessage({ type: "clearBuffers" });
   }
 
+  /**
+   * Send data to drawer to place into buffers for rendering.
+   *
+   * @param {Array} data to process
+   * @param {Function} mapPointToSpace function to map element in data to 2D space and metadata.
+   * @param {Function} mapPointToColor maps an from data to a color, should map to a hex code as an integer
+   *   OR a hashable type if options.colorMapIsCategorical is true
+   * @param {Object} options to send to worker for processing
+   */
   sendToDrawerBuffer(data, mapPointToSpace, mapPointToColor, options) {
     this.webglWorker.postMessage({
       type: "buffer",
@@ -133,7 +187,16 @@ class Handler {
     });
   }
 
+  ////////////////////////////////////
   // Communication with data processor
+  ////////////////////////////////////
+
+  /**
+   * Utility method to call constructor of {@link DataProcessor}.
+   *
+   * @param {Array} data to process
+   * @param {Function} mapPointToSpace function to map element in data to 2D space and metadata.
+   */
   buildDataProcessor(data, mapPointToSpace) {
     this.dataWorker.postMessage({
       type: "init",
@@ -142,6 +205,13 @@ class Handler {
     });
   }
 
+  /**
+   * Utility method to have data worker call {@link DataProcessor#selectBox} or
+   * {@link DataProcessor#selectLasso}.
+   *
+   * Does not return, posts result to this.dataWorkerStream.
+   * @param {Array} points array in format [x1,y1,x2,y2,x3,y3,...]
+   */
   selectPoints(points) {
     if (points.length === 4) {
       this.dataWorker.postMessage({ type: "selectBox", points });
@@ -150,9 +220,15 @@ class Handler {
     }
   }
 
+  /**
+   * Utility method to have data worker call {@link DataProcessor#getClosestPoint}.
+   * Does not return, posts result to this.dataWorkerStream.
+   *
+   * @param {Array} point to get closest point to
+   */
   getClosestPoint(point) {
     this.dataWorker.postMessage({ type: "getClosestPoint", point });
   }
 }
 
-export default Handler;
+export default Scatterplot;

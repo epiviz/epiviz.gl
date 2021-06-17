@@ -1,12 +1,23 @@
 class Drawer {
-  constructor(data) {
-    this.canvas = data.canvas;
-    this.width = data.canvas.width;
-    this.height = data.canvas.height;
-    this.receiveState(data);
+  /**
+   * An interface for drawing on a canvas.
+   *
+   * @param {Object} drawingData object containing keys for {@link Drawer#receiveViewport}
+   *  and canvas key used for drawing.
+   */
+  constructor(drawingData) {
+    this.canvas = drawingData.canvas;
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;
+    this.receiveViewport(drawingData);
   }
 
-  receiveState(viewportData) {
+  /**
+   * Method to set the viewport for the drawer.
+   *
+   * @param {Object} viewportData object containing minX,maxX,minY,maxY,xRange,yRange viewport data for drawer
+   */
+  receiveViewport(viewportData) {
     this.minX = viewportData.minX;
     this.maxX = viewportData.maxX;
     this.minY = viewportData.minY;
@@ -17,10 +28,20 @@ class Drawer {
     this.needsAnimation = true;
   }
 
+  /**
+   * Method to implement which signifies a frame has been processed. Used to
+   * display FPS meter.
+   */
   tick() {}
 
+  /**
+   * Method to implement animating a frame.
+   */
   animate() {}
 
+  /**
+   * Method to implement preprocessing for rendering frames.
+   */
   render() {
     if (this.lastFrame) {
       // Avoid overlapping animation requests
