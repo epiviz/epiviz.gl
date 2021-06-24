@@ -87,7 +87,7 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   addMarkToBuffers(mark) {
-    this.positions.push(this.xScale(mark.x), this.xScale(mark.y));
+    this.positions.push(this.xScale(mark.x), this.yScale(mark.y));
     this.colors.push(mark.color);
   }
 
