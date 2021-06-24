@@ -1,10 +1,11 @@
+import SchemaProcessor from "./schema-processor";
+
 import Supercluster from "supercluster";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon } from "@turf/helpers";
 import simplify from "@turf/simplify";
 
 class DataProcessor {
-  // Can currently only handle data in a [-180, 180] x [-90, 90] range
   /**
    * A class meant to handle processing of data used in the scatterplot.
    *
@@ -12,30 +13,46 @@ class DataProcessor {
    * to use of {@link Supercluster}. May need to switch to KDBush at some point.
    *
    * @param {Array} data the processor is meant to handle and index
-   * @param {Function} mapPointToSpace a function that takes an element
-   *  from the data and maps it to an array with three elements such that
-   *  the first two elements correspond to a coordinate in 2D space, and
-   *  the third element is an object containing item metadata.
    */
-  constructor(data, mapPointToSpace) {
-    this.index = new Supercluster();
+  constructor(schema) {
+    this.schema = this.index = new Supercluster();
+
+    console.log("Loading data...");
+
+    new SchemaProcessor(schema, this.indexData.bind(this));
+  }
+
+  indexData(schemaHelper) {
     this.points = [];
 
     console.log("Reading data...");
-    data.forEach((row) => {
-      const mapped = mapPointToSpace(row);
-      this.points.push({
-        geometry: {
-          coordinates: mapped.slice(0, 2),
-        },
-        ...mapped[2],
+
+    if (schemaHelper.data) {
+      for (let track of schemaHelper.tracks) {
+        if (!track.hasOwnData) {
+          let currentPoint = track.getNextDataPoint();
+          while (currentPoint) {
+            this.points.push(currentPoint);
+            currentPoint = track.getNextDataPoint();
+          }
+          break;
+        }
+      }
+    }
+    schemaHelper.tracks
+      .filter((track) => track.hasOwnData)
+      .forEach((track) => {
+        let currentPoint = track.getNextDataPoint();
+        while (currentPoint) {
+          this.points.push(currentPoint);
+          currentPoint = track.getNextDataPoint();
+        }
       });
-    });
 
     console.log("Indexing data...");
     this.index.load(this.points);
 
-    console.log("Data ready.");
+    console.log(this.points);
   }
 
   /**
@@ -93,10 +110,10 @@ class DataProcessor {
    * @returns points inside lasso
    */
   selectLasso(points, zoom = 16) {
-    let smallestX = Number.MAX_VALUE;
-    let largestX = Number.MIN_VALUE;
-    let smallestY = Number.MAX_VALUE;
-    let largestY = Number.MIN_VALUE;
+    let smallestX = Number.POSITIVE_INFINITY;
+    let largestX = Number.NEGATIVE_INFINITY;
+    let smallestY = Number.POSITIVE_INFINITY;
+    let largestY = Number.NEGATIVE_INFINITY;
     const polygonPoints = [];
     for (let i = 0; i < points.length; i += 2) {
       if (points[i] < smallestX) smallestX = points[i];

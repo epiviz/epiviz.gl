@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import csv10 from "url:../../data/tsne_tenth.csv";
+import csv10 from "../../examples/tsne10";
 
 const controlsSlice = createSlice({
   name: "webglControls",
   initialState: {
     tool: "pan",
-    dataset: csv10,
+    schema: csv10,
     lockedX: false,
     lockedY: false,
   },
   reducers: {
-    setDataset(state, action) {
-      state.dataset = action.payload;
+    setSchema(state, action) {
+      state.schema = action.payload;
     },
 
     setTool(state, action) {
@@ -28,6 +28,6 @@ const controlsSlice = createSlice({
   },
 });
 
-export const { setDataset, setTool, setScroll } = controlsSlice.actions;
+export const { setSchema, setTool, setScroll } = controlsSlice.actions;
 
 export default controlsSlice.reducer;

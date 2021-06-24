@@ -51,6 +51,9 @@ class MouseReader {
     this.minY = toSet[2];
     this.maxY = toSet[3];
 
+    this.currentXRange = [this.minX, this.maxX];
+    this.currentYRange = [this.minY, this.maxY];
+
     this._wheelDampenX = (this.maxX - this.minX) / 1000;
     this._wheelDampenY = (this.maxY - this.minY) / 1000;
 
@@ -166,8 +169,8 @@ class MouseReader {
       maxX: this.maxX,
       minY: this.minY,
       maxY: this.maxY,
-      xRange: Array.from(this.currentXRange),
-      yRange: Array.from(this.currentYRange),
+      xRange: this.currentXRange,
+      yRange: this.currentYRange,
     };
   }
 

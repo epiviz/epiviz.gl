@@ -41,4 +41,10 @@ const varyingColorsFragmentShader = `
   }
 `;
 
+class VertexShaderBuilder {
+  constructor(options) {
+    this.shader = "";
+  }
+}
+
 export { varyingColorsVertexShader, varyingColorsFragmentShader };

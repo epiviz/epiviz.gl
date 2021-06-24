@@ -22,8 +22,8 @@ class Drawer {
     this.maxX = viewportData.maxX;
     this.minY = viewportData.minY;
     this.maxY = viewportData.maxY;
-    this.currentXRange = Array.from(viewportData.xRange);
-    this.currentYRange = Array.from(viewportData.yRange);
+    this.currentXRange = viewportData.xRange;
+    this.currentYRange = viewportData.yRange;
 
     this.needsAnimation = true;
   }

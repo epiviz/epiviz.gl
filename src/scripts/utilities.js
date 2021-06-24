@@ -76,14 +76,42 @@ function rgbToHex(red, green, blue) {
   return (red << 16) | (green << 8) | (blue << 0);
 }
 
-/**
- * Recommended by serialize-js https://github.com/yahoo/serialize-javascript#deserializing
- *
- * @param {String} serializedJavascript from "serialize-js"
- * @returns deserialized JavaScript
- */
-function deserialize(serializedJavascript) {
-  return eval("(" + serializedJavascript + ")");
+function rgbStringToHex(rgb) {
+  const colorVals = rgb.substring(4, rgb.length - 1).split(",");
+  return rgbToHex(...colorVals.map((asStr) => parseInt(asStr)));
 }
 
-export { scale, initShaderProgram, loadShader, rgbToHex, deserialize };
+function schemaViewport(schema) {
+  let smallestX = Number.POSITIVE_INFINITY;
+  let largestX = Number.NEGATIVE_INFINITY;
+  let smallestY = Number.POSITIVE_INFINITY;
+  let largestY = Number.NEGATIVE_INFINITY;
+
+  schema.tracks.forEach((track) => {
+    let xDomain = track.x.domain;
+    let yDomain = track.y.domain;
+    if (xDomain) {
+      smallestX = xDomain[0] < smallestX ? xDomain[0] : smallestX;
+      largestX = xDomain[1] > largestX ? xDomain[1] : largestX;
+    }
+    if (yDomain) {
+      smallestY = yDomain[0] < smallestY ? yDomain[0] : smallestY;
+      largestY = yDomain[1] > largestY ? yDomain[1] : largestY;
+    }
+  });
+  smallestX = smallestX === Number.POSITIVE_INFINITY ? -1 : smallestX;
+  largestX = largestX === Number.NEGATIVE_INFINITY ? 1 : largestX;
+  smallestY = smallestY === Number.POSITIVE_INFINITY ? -1 : smallestY;
+  largestY = largestY === Number.NEGATIVE_INFINITY ? 1 : largestY;
+
+  return [smallestX, largestX, smallestY, largestY];
+}
+
+export {
+  scale,
+  initShaderProgram,
+  loadShader,
+  rgbToHex,
+  rgbStringToHex,
+  schemaViewport,
+};

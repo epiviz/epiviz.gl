@@ -1,5 +1,6 @@
 import Drawer from "./drawer";
-import { scale, initShaderProgram, rgbToHex } from "./utilities";
+import SchemaProcessor from "./schema-processor";
+import { scale, initShaderProgram } from "./utilities";
 import {
   varyingColorsVertexShader,
   varyingColorsFragmentShader,
@@ -31,8 +32,8 @@ class WebGLCanvasDrawer extends Drawer {
 
   /**
    * Calculates the viewport for this.gl.viewport to control zooming. Also calculates point size.
-   * @returns Array of 5 elements, first 4 are viewport parameters, last is pointSize:
-   *   [xOffset, yOffset, displayAsIfThisWide, displayAsIfThisHigh, pointSize]
+   * @returns Array of 5 elements, first 4 are viewport parameters, last is pointSizeMultiplier:
+   *   [xOffset, yOffset, displayAsIfThisWide, displayAsIfThisHigh, pointSizeMultiplier]
    */
   getWebGLViewport() {
     // Calculate appropriate webgl viewport given current selection window
@@ -80,43 +81,28 @@ class WebGLCanvasDrawer extends Drawer {
     ];
   }
 
-  /**
-   * Populates the buffers needed for rendering points.
-   *
-   * @param {Object} data with keys for data, mapPointToSpace, mapPointToColor
-   */
-  populateBuffers(data) {
-    // Given raw data, populate the buffers
-    const mapPointToSpace = data.mapPointToSpace;
-    const mapPointToColor = data.mapPointToColor;
+  setSchema(schema) {
+    this.clearBuffers();
+    new SchemaProcessor(schema, this.populateBuffers.bind(this));
+  }
 
-    if (data.options && data.options.colorMapIsCategorical) {
-      let colorMap = new Map();
-      data.data.forEach((row) => {
-        const colorCategory = mapPointToColor(row);
-        if (!colorMap.has(colorCategory)) {
-          colorMap.set(
-            colorCategory,
-            rgbToHex(
-              Math.floor(255 * Math.random()),
-              Math.floor(255 * Math.random()),
-              Math.floor(255 * Math.random())
-            )
-          );
-        }
-        this.colors.push(colorMap.get(colorCategory));
-      });
-    } else {
-      data.data.forEach((row) => {
-        const asColor = mapPointToColor(row);
-        this.colors.push(asColor);
-      });
+  addMarkToBuffers(mark) {
+    this.positions.push(this.xScale(mark.x), this.xScale(mark.y));
+    this.colors.push(mark.color);
+  }
+
+  populateBuffers(schemaHelper) {
+    let currentTrack = schemaHelper.getNextTrack();
+    while (currentTrack) {
+      let currentMark = currentTrack.getNextMark();
+      while (currentMark) {
+        this.addMarkToBuffers(currentMark);
+        currentMark = currentTrack.getNextMark();
+      }
+      currentTrack = schemaHelper.getNextTrack();
     }
 
-    data.data.forEach((row) => {
-      const inSpace = mapPointToSpace(row);
-      this.positions.push(this.xScale(inSpace[0]), this.yScale(inSpace[1]));
-    });
+    this.render();
   }
 
   /**
@@ -146,6 +132,7 @@ class WebGLCanvasDrawer extends Drawer {
       );
     }
 
+    // Set the blending function
     this.gl.enable(this.gl.BLEND);
     this.gl.blendFunc(this.gl.SRC_COLOR, this.gl.DST_COLOR);
 

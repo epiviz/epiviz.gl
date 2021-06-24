@@ -4,6 +4,7 @@
   grid-template-columns: auto auto auto;
   background: #ccc;
   box-shadow: 0 0 10px black;
+  height: 10%;
 }
 
 .controls {

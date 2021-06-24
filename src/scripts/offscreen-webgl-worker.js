@@ -4,7 +4,6 @@
  * passed are containing the new viewport information for the drawer to process.
  */
 import WebGLDrawer from "./webgl-drawer";
-import { deserialize } from "./utilities";
 
 class OffscreenWebGLDrawer extends WebGLDrawer {
   tick() {
@@ -24,12 +23,8 @@ self.onmessage = (message) => {
       self.drawer.receiveViewport(message.data);
       self.drawer.render();
       break;
-    case "buffer":
-      self.drawer.populateBuffers({
-        ...message.data,
-        mapPointToSpace: deserialize(message.data.mapPointToSpace),
-        mapPointToColor: deserialize(message.data.mapPointToColor),
-      });
+    case "schema":
+      self.drawer.setSchema(message.data.schema);
       break;
     case "clearBuffers":
       self.drawer.clearBuffers();

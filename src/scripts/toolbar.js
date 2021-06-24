@@ -1,8 +1,28 @@
-import { setDataset, setScroll, setTool } from "./state/reducers";
+import { setSchema, setScroll, setTool } from "./state/reducers";
 
-import csv1 from "url:../data/tsne.csv";
-import csv10 from "url:../data/tsne_tenth.csv";
-import csv100 from "url:../data/tsne_hundreth.csv";
+import areaChart from "../examples/area-chart";
+import doubleLinePlot from "../examples/double-line-plot";
+import linePlot from "../examples/line-plot";
+import stackedAreaChart from "../examples/stacked-area-chart";
+import tickChart from "../examples/tick-chart";
+import tsne from "../examples/tsne";
+import tsne10 from "../examples/tsne10";
+import tsne100 from "../examples/tsne100";
+import inlineData from "../examples/inline-data";
+import doubleInlineData from "../examples/double-inline-data";
+
+const exampleMap = new Map([
+  ["area-chart", areaChart],
+  ["double-line-plot", doubleLinePlot],
+  ["line-plot", linePlot],
+  ["stacked-area-chart", stackedAreaChart],
+  ["tick-chart", tickChart],
+  ["tsne", tsne],
+  ["tsne-10", tsne10],
+  ["tsne-100", tsne100],
+  ["inline-data", inlineData],
+  ["double-inline-data", doubleInlineData],
+]);
 
 class Toolbar {
   /**
@@ -12,7 +32,7 @@ class Toolbar {
   constructor(dispatch) {
     this.dispatch = dispatch;
     this.mouseAction = "pan";
-    this.dataset = "tsne-10";
+    this.schema = "csv10";
   }
 
   /**
@@ -27,13 +47,16 @@ class Toolbar {
       this.dispatch(setScroll({ axis: "y", checked: event.target.checked }));
     });
 
-    document.getElementById("dataset").value = this.dataset;
-    this.dispatch(setDataset(this.determineDatasetPath(this.dataset)));
+    document.getElementById("schema-select").value = this.schema;
+    this.dispatch(setSchema(exampleMap.get(this.schema)));
 
-    document.getElementById("dataset").addEventListener("change", (event) => {
-      this.dataset = event.target.value;
-      this.dispatch(setDataset(this.determineDatasetPath(this.dataset)));
-    });
+    document
+      .getElementById("schema-select")
+      .addEventListener("change", (event) => {
+        this.schema = event.target.value;
+        console.log(this.schema);
+        this.dispatch(setSchema(exampleMap.get(this.schema)));
+      });
 
     this.prevIcon = null; // force only 1 icon to have selected class
     document.querySelectorAll(".controls img").forEach((icon) => {
@@ -68,13 +91,13 @@ class Toolbar {
   }
 
   /**
-   * Maps selection box values to dataset paths.
+   * Maps selection box values to schema paths.
    *
-   * @param {String} dataset name from selection box
-   * @returns path to dataset
+   * @param {String} schema name from selection box
+   * @returns path to schema
    */
-  determineDatasetPath(dataset) {
-    switch (dataset) {
+  determineSchemaPath(schema) {
+    switch (schema) {
       case "tsne":
         return csv1;
       case "tsne-10":
@@ -82,7 +105,7 @@ class Toolbar {
       case "tsne-100":
         return csv100;
       default:
-        console.error(`Did not recognize dataset: ${dataset}`);
+        console.error(`Did not recognize schema: ${schema}`);
     }
   }
 }

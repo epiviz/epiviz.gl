@@ -1,10 +1,16 @@
 @import "./font.css";
 @import "./toolbar.css";
+@import "./editor.css";
 
 .content {
   padding: 1em;
   border: 2px solid black;
-  height: 75%;
+}
+
+.panes {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  height: 85%;
 }
 
 html,

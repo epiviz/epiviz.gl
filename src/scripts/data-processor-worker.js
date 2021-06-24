@@ -7,15 +7,11 @@
  */
 
 import DataProcessor from "./data-processor";
-import { deserialize } from "./utilities";
 
 self.onmessage = (message) => {
   switch (message.data.type) {
     case "init":
-      self.processor = new DataProcessor(
-        message.data.data,
-        deserialize(message.data.mapPointToSpace)
-      );
+      self.processor = new DataProcessor(message.data.schema);
       break;
     case "selectBox":
       postMessage({

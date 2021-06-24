@@ -13,9 +13,16 @@
   <body>
     <main>
       <div class="toolbar">
-        <div class="dataset">
-          <label for="dataset">To render:</label>
-          <select name="dataset" id="dataset">
+        <div class="schema-select">
+          <label for="schema-select">To render:</label>
+          <select name="schema-select" id="schema-select">
+            <option value="line-plot">Line Plot</option>
+            <option value="double-line-plot">Double Line Plot</option>
+            <option value="area-chart">Area Chart</option>
+            <option value="stacked-area-chart">Stacked Area Chart</option>
+            <option value="tick-chart">Tick Chart</option>
+            <option value="inline-data">Inline Data</option>
+            <option value="double-inline-data">Double Inline Data</option>
             <option value="tsne-100">t-SNE Dataset (1/100)</option>
             <option value="tsne-10">t-SNE Dataset (1/10)</option>
             <option value="tsne">t-SNE Dataset</option>
@@ -41,7 +48,14 @@
           <span class="y-range"></span>
         </div>
       </div>
-      <div class="content"></div>
+      <div class="panes">
+        <div class="json-editor">
+          <label for="schema-editor">Visualization Schema</label>
+          <textarea id="schema-editor" name="schema-editor"></textarea>
+          <button id="refresh-schema">Show</button>
+        </div>
+        <div class="content"></div>
+      </div>
     </main>
     <footer>
       <a
