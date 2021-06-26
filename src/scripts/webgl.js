@@ -10,6 +10,9 @@ const varyingColorsVertexShader = `
   uniform lowp float pointSize;
   uniform lowp float opacity;
 
+  // [x1, y1,x2, y2] of viewing window
+  uniform vec4 viewport;
+
   attribute vec4 aVertexPosition;
   attribute float aVertexColor;
 
@@ -24,7 +27,14 @@ const varyingColorsVertexShader = `
   }
 
   void main(void) {
-    gl_Position = aVertexPosition;
+    // Subtract each vertex by midpoint of the viewport 
+    // window to center points. Then scale by ratio of max window size to window size
+    gl_Position = vec4(
+       (aVertexPosition.x - (viewport.z + viewport.x)/2.0) * 2.0/(viewport.z - viewport.x),
+       (aVertexPosition.y - (viewport.w + viewport.y)/2.0) * 2.0/(viewport.w - viewport.y),
+        0,
+        1
+    );
     vec3 unpackedValues = unpackColor(aVertexColor);
 
     vColor = vec4(

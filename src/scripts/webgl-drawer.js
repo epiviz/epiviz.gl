@@ -37,46 +37,30 @@ class WebGLCanvasDrawer extends Drawer {
    */
   getWebGLViewport() {
     // Calculate appropriate webgl viewport given current selection window
-    const windowWidth = this.currentXRange[1] - this.currentXRange[0];
-    const windowHeight = this.currentYRange[1] - this.currentYRange[0];
 
-    const displayAsIfThisWide =
-      ((this.maxX - this.minX) / windowWidth) * this.width;
-    const displayAsIfThisHigh =
-      ((this.maxY - this.minY) / windowHeight) * this.height;
+    // Transform current data coordinates to GPU cordinates
+    const scaleXWindowSpace = scale([this.minX, this.maxX], [-1, 1]);
+    const scaleYWindowSpace = scale([this.minY, this.maxY], [-1, 1]);
 
-    if (
-      displayAsIfThisWide > this.maxWidth ||
-      displayAsIfThisHigh > this.maxHeight
-    ) {
-      return;
-    }
-
-    const scaleXWindowSpace = scale(
-      [this.minX, this.maxX],
-      [0, -displayAsIfThisWide]
-    );
-    const scaleYWindowSpace = scale(
-      [this.minY, this.maxY],
-      [0, -displayAsIfThisHigh]
-    );
-
-    const toReturnX = scaleXWindowSpace(this.currentXRange[0]);
-    const toReturnY = scaleYWindowSpace(this.currentYRange[0]);
-
+    // Multiply point size by the ratio of max dimension and current width
     const pointSize = Math.max(
       1,
       Math.min(
-        -Math.log2(windowWidth / (this.maxX - this.minX)),
-        -Math.log2(windowHeight / (this.maxY - this.minY))
+        1 /
+          (scaleXWindowSpace(this.currentXRange[1]) -
+            scaleXWindowSpace(this.currentXRange[0])),
+        1 /
+          (scaleYWindowSpace(this.currentYRange[1]) -
+            scaleYWindowSpace(this.currentYRange[0]))
       )
     );
-
+    // Return [x1, y1, x2, y2] and pointsize, camera corners coordinates in GPU space
+    // Which becomes uniform in vertex shader
     return [
-      toReturnX,
-      toReturnY,
-      displayAsIfThisWide,
-      displayAsIfThisHigh,
+      scaleXWindowSpace(this.currentXRange[0]),
+      scaleYWindowSpace(this.currentYRange[0]),
+      scaleXWindowSpace(this.currentXRange[1]),
+      scaleYWindowSpace(this.currentYRange[1]),
       pointSize,
     ];
   }
@@ -125,7 +109,11 @@ class WebGLCanvasDrawer extends Drawer {
 
     const viewport = this.getWebGLViewport();
     if (viewport) {
-      this.gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+      this.gl.uniform4fv(
+        this.programInfo.uniformLocations.viewport,
+        new Float32Array(viewport.slice(0, 4))
+      );
+
       this.gl.uniform1f(
         this.programInfo.uniformLocations.pointSize,
         viewport[4]
@@ -183,6 +171,7 @@ class WebGLCanvasDrawer extends Drawer {
       uniformLocations: {
         pointSize: this.gl.getUniformLocation(this.shaderProgram, "pointSize"),
         opacity: this.gl.getUniformLocation(this.shaderProgram, "opacity"),
+        viewport: this.gl.getUniformLocation(this.shaderProgram, "viewport"),
       },
     };
 
@@ -233,7 +222,6 @@ class WebGLCanvasDrawer extends Drawer {
     this.gl.useProgram(this.programInfo.program);
 
     this.gl.uniform1f(this.programInfo.uniformLocations.opacity, 0.1);
-
     this.needsAnimation = true;
     this.animate();
   }

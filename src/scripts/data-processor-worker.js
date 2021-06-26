@@ -17,12 +17,14 @@ self.onmessage = (message) => {
       postMessage({
         type: message.data.type,
         selection: self.processor.selectBox(message.data.points),
+        bounds: message.data.points,
       });
       break;
     case "selectLasso":
       postMessage({
         type: message.data.type,
         selection: self.processor.selectLasso(message.data.points),
+        bounds: message.data.points,
       });
       break;
     case "getClosestPoint":
