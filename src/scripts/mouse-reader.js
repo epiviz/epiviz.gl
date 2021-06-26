@@ -249,13 +249,7 @@ class MouseReader {
    * @return true if range is valid, false otherwise
    */
   _validateXRange() {
-    const windowWidth = this.currentXRange[1] - this.currentXRange[0];
-    const displayAsIfThisWide =
-      ((this.maxX - this.minX) / windowWidth) * this.width;
-    return (
-      this.currentXRange[1] >= this.currentXRange[0] &&
-      displayAsIfThisWide <= 16384
-    );
+    return this.currentXRange[1] >= this.currentXRange[0];
   }
 
   /**
@@ -265,13 +259,7 @@ class MouseReader {
    * @return true if range is valid, false otherwise
    */
   _validateYRange() {
-    const windowHeight = this.currentYRange[1] - this.currentYRange[0];
-    const displayAsIfThisHigh =
-      ((this.maxY - this.minY) / windowHeight) * this.height;
-    return (
-      this.currentYRange[1] >= this.currentYRange[0] &&
-      displayAsIfThisHigh <= 16384
-    );
+    return this.currentYRange[1] >= this.currentYRange[0];
   }
 
   /**
