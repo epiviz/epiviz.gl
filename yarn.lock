@@ -6153,6 +6153,11 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
+twgl.js@^4.19.1:
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/twgl.js/-/twgl.js-4.19.1.tgz#bf7216ae4d6aff333c5511b612e674b7672b2ea2"
+  integrity sha512-zI28+xIQskBXpnoX9rsJ2n6zrx0AN3yFZASyp4u1IBscndUKlzRBwNtnD17BoO+RzQieuJksPzJKy8H6lRa97A==
+
 type-check@~0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"

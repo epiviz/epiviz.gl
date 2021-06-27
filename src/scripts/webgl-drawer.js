@@ -1,10 +1,13 @@
 import Drawer from "./drawer";
 import SchemaProcessor from "./schema-processor";
-import { scale, initShaderProgram } from "./utilities";
+import { scale } from "./utilities";
+
 import {
   varyingColorsVertexShader,
   varyingColorsFragmentShader,
 } from "./webgl.js";
+
+const twgl = require("twgl.js");
 
 // Largely taken from
 // https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample2/webgl-demo.js
@@ -109,15 +112,9 @@ class WebGLCanvasDrawer extends Drawer {
 
     const viewport = this.getWebGLViewport();
     if (viewport) {
-      this.gl.uniform4fv(
-        this.programInfo.uniformLocations.viewport,
-        new Float32Array(viewport.slice(0, 4))
-      );
-
-      this.gl.uniform1f(
-        this.programInfo.uniformLocations.pointSize,
-        viewport[4]
-      );
+      this.uniforms.viewport = new Float32Array(viewport.slice(0, 4));
+      this.uniforms.pointSize = viewport[4];
+      twgl.setUniforms(this.programInfo, this.uniforms);
     }
 
     // Set the blending function
@@ -129,10 +126,11 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-    this.gl.drawArrays(
+    twgl.drawBufferInfo(
+      this.gl,
+      this.bufferInfo,
       this.gl.POINTS,
-      0, // stride
-      this.vertexCount // vertex count
+      this.positions.length / 2
     );
 
     this.needsAnimation = false;
@@ -147,81 +145,26 @@ class WebGLCanvasDrawer extends Drawer {
   render() {
     super.render();
 
-    this.maxWidth = this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS)[0];
-    this.maxHeight = this.gl.getParameter(this.gl.MAX_VIEWPORT_DIMS)[1];
-
-    this.shaderProgram = initShaderProgram(
-      this.gl,
+    this.programInfo = twgl.createProgramInfo(this.gl, [
       varyingColorsVertexShader,
-      varyingColorsFragmentShader
-    );
+      varyingColorsFragmentShader,
+    ]);
 
-    this.programInfo = {
-      program: this.shaderProgram,
-      attribLocations: {
-        vertexPosition: this.gl.getAttribLocation(
-          this.shaderProgram,
-          "aVertexPosition"
-        ),
-        vertexColor: this.gl.getAttribLocation(
-          this.shaderProgram,
-          "aVertexColor"
-        ),
-      },
-      uniformLocations: {
-        pointSize: this.gl.getUniformLocation(this.shaderProgram, "pointSize"),
-        opacity: this.gl.getUniformLocation(this.shaderProgram, "opacity"),
-        viewport: this.gl.getUniformLocation(this.shaderProgram, "viewport"),
-      },
+    this.bufferInfo = twgl.createBufferInfoFromArrays(this.gl, {
+      aVertexPosition: { numComponents: 2, data: this.positions },
+      aVertexColor: { numComponents: 1, data: this.colors },
+    });
+
+    this.uniforms = {
+      pointSize: 1,
+      opacity: 0.05,
+      viewport: new Float32Array([-1, -1, 1, 1]),
     };
 
-    // this.positions and this.colors populated by populateBuffers method used in Handler
-    this.vertexCount = this.positions.length / 2;
-    this.positionBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(this.positions),
-      this.gl.STATIC_DRAW
-    );
-
-    this.colorBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(this.colors),
-      this.gl.STATIC_DRAW
-    );
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-    this.gl.vertexAttribPointer(
-      this.programInfo.attribLocations.vertexPosition,
-      2, // numComponents
-      this.gl.FLOAT, // type
-      false, // normalize
-      0, // stride
-      0 // offset
-    );
-    this.gl.enableVertexAttribArray(
-      this.programInfo.attribLocations.vertexPosition
-    );
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
-    this.gl.vertexAttribPointer(
-      this.programInfo.attribLocations.vertexColor,
-      1, // numComponents
-      this.gl.FLOAT, // type
-      false, // normalize
-      0, // stride
-      0 // offset
-    );
-    this.gl.enableVertexAttribArray(
-      this.programInfo.attribLocations.vertexColor
-    );
-
     this.gl.useProgram(this.programInfo.program);
+    twgl.setBuffersAndAttributes(this.gl, this.programInfo, this.bufferInfo);
 
-    this.gl.uniform1f(this.programInfo.uniformLocations.opacity, 0.1);
+    twgl.setUniforms(this.programInfo, this.uniforms);
     this.needsAnimation = true;
     this.animate();
   }
