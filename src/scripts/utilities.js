@@ -13,58 +13,6 @@ function scale(domain, range) {
 }
 
 /**
- * Loads a shader.
- *
- * @param {WebGLRenderingContext} gl webgl rendering context
- * @param {gl.VERTEX_SHADER or gl.FRAGMENT_SHADER} type of shader
- * @param {String} source of the shader
- * @returns compiled shader
- */
-function loadShader(gl, type, source) {
-  const shader = gl.createShader(type);
-
-  gl.shaderSource(shader, source);
-
-  gl.compileShader(shader);
-
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(`Could not compile shader: ${gl.getShaderInfoLog(shader)}`);
-    gl.deleteShader(shader);
-    return null;
-  }
-  return shader;
-}
-
-/**
- * Initialize a shader program.
- *
- * @param {WebGLRenderingContext} gl webgl rendering context
- * @param {String} vertexSource source of the vertex shader
- * @param {String} fragmentSource source of the fragment shader
- * @returns a complete shader program
- */
-function initShaderProgram(gl, vertexSource, fragmentSource) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexSource);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
-
-  const shaderProgram = gl.createProgram();
-  gl.attachShader(shaderProgram, vertexShader);
-  gl.attachShader(shaderProgram, fragmentShader);
-  gl.linkProgram(shaderProgram);
-
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    console.error(
-      `Unable to initialize the shader program: ${gl.getProgramInfoLog(
-        shaderProgram
-      )}`
-    );
-    return null;
-  }
-
-  return shaderProgram;
-}
-
-/**
  * Maps RGB values to integer for webgl buffer.
  *
  * @param {Integer} red value from 0 to 255
@@ -86,4 +34,4 @@ function deserialize(serializedJavascript) {
   return eval("(" + serializedJavascript + ")");
 }
 
-export { scale, initShaderProgram, loadShader, rgbToHex, deserialize };
+export { scale, rgbToHex, deserialize };
