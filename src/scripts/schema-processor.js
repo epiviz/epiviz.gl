@@ -3,13 +3,38 @@ import { rgbStringToHex, scale } from "./utilities";
 const d3 = require("d3-scale-chromatic");
 const axios = require("axios");
 
+// Default channel values of schema which is passed to webgl drawer
 const DEFAULT_CHANNELS = Object.freeze({
-  size: 2,
-  color: 0,
-  x: 0,
-  y: 0,
-  opacity: 1,
-  shape: 0,
+  size: {
+    value: 1,
+    numComponents: 1,
+    type: "float",
+  },
+  color: {
+    value: 255 ** 3,
+    numComponents: 1,
+    type: "float",
+  },
+  x: {
+    value: 0,
+    numComponents: 2,
+    type: "vec2",
+  },
+  y: {
+    value: 0,
+    numComponents: 2,
+    type: "vec2",
+  },
+  opacity: {
+    value: 1,
+    numComponents: 1,
+    type: "float",
+  },
+  shape: {
+    value: "dot",
+    numComponents: null,
+    type: null, // Will not interact with shader code
+  },
 });
 
 const DEFAULT_MAX_SIZE = 20;
@@ -143,7 +168,7 @@ class Track {
         return (row) => attrMapper(row[attributeIndex]);
       }
     } else {
-      return () => DEFAULT_CHANNELS[channel];
+      return () => DEFAULT_CHANNELS[channel].value;
     }
   };
 }
@@ -217,3 +242,5 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
   };
 };
 export default SchemaProcessor;
+
+export { DEFAULT_CHANNELS };

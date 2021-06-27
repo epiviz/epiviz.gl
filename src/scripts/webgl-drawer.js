@@ -2,10 +2,7 @@ import Drawer from "./drawer";
 import SchemaProcessor from "./schema-processor";
 import { scale } from "./utilities";
 
-import {
-  varyingColorsVertexShader,
-  varyingColorsFragmentShader,
-} from "./webgl.js";
+import { VertexShaderBuilder, varyingColorsFragmentShader } from "./webgl.js";
 
 const twgl = require("twgl.js");
 
@@ -22,9 +19,6 @@ class WebGLCanvasDrawer extends Drawer {
       console.error("Unable to initialize WebGL!");
       return;
     }
-
-    this.positions = [];
-    this.colors = [];
   }
 
   receiveViewport(viewportData) {
@@ -69,16 +63,27 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   setSchema(schema) {
-    this.clearBuffers();
-    new SchemaProcessor(schema, this.populateBuffers.bind(this));
+    this.positions = [];
+
+    // Populate buffers needs a schemaShader built to know what buffers to fill and uniforms to set
+    this.schemaShader = VertexShaderBuilder.fromSchema(schema)[0];
+
+    new SchemaProcessor(schema, this.populateBuffersAndSetUniforms.bind(this));
   }
 
   addMarkToBuffers(mark) {
-    this.positions.push(this.xScale(mark.x), this.yScale(mark.y));
-    this.colors.push(mark.color);
+    for (const channel of Object.keys(mark)) {
+      if (channel === "y" || channel === "shape") {
+        continue; // y is handled during "x" case and shape is not seen by shader
+      } else if (channel === "x") {
+        this.positions.push(this.xScale(mark.x), this.yScale(mark.y));
+      } else if (channel in this.schemaShader.attributes) {
+        this.schemaShader.attributes[channel].data.push(mark[channel]);
+      }
+    }
   }
 
-  populateBuffers(schemaHelper) {
+  populateBuffersAndSetUniforms(schemaHelper) {
     let currentTrack = schemaHelper.getNextTrack();
     while (currentTrack) {
       let currentMark = currentTrack.getNextMark();
@@ -88,16 +93,12 @@ class WebGLCanvasDrawer extends Drawer {
       }
       currentTrack = schemaHelper.getNextTrack();
     }
+    console.log(this.schemaShader);
+    // for (const channel of Object.keys(this.schemaShader.uniforms)) {
+    //   this.schemaShader.uniforms[channel] = mark[channel];
+    // }
 
     this.render();
-  }
-
-  /**
-   * Clear the rendering buffers.
-   */
-  clearBuffers() {
-    this.positions = [];
-    this.colors = [];
   }
 
   /**
@@ -111,11 +112,12 @@ class WebGLCanvasDrawer extends Drawer {
     }
 
     const viewport = this.getWebGLViewport();
-    if (viewport) {
-      this.uniforms.viewport = new Float32Array(viewport.slice(0, 4));
-      this.uniforms.pointSize = viewport[4];
-      twgl.setUniforms(this.programInfo, this.uniforms);
-    }
+
+    twgl.setUniforms(this.programInfo, {
+      viewport: new Float32Array(viewport.slice(0, 4)),
+      pointSizeModifier: viewport[4],
+      ...this.schemaShader.uniforms,
+    });
 
     // Set the blending function
     this.gl.enable(this.gl.BLEND);
@@ -145,26 +147,31 @@ class WebGLCanvasDrawer extends Drawer {
   render() {
     super.render();
 
+    console.log(this.schemaShader);
     this.programInfo = twgl.createProgramInfo(this.gl, [
-      varyingColorsVertexShader,
+      this.schemaShader.buildShader(),
       varyingColorsFragmentShader,
     ]);
 
-    this.bufferInfo = twgl.createBufferInfoFromArrays(this.gl, {
+    this.attributes = {
       aVertexPosition: { numComponents: 2, data: this.positions },
-      aVertexColor: { numComponents: 1, data: this.colors },
-    });
-
-    this.uniforms = {
-      pointSize: 1,
-      opacity: 0.05,
-      viewport: new Float32Array([-1, -1, 1, 1]),
+      ...this.schemaShader.attributes,
     };
 
+    this.uniforms = {
+      ...this.schemaShader.uniforms,
+      viewport: new Float32Array([-1, -1, 1, 1]),
+      pointsModifier: 1,
+    };
+
+    console.log(this.uniforms);
+
+    this.bufferInfo = twgl.createBufferInfoFromArrays(this.gl, this.attributes);
+
     this.gl.useProgram(this.programInfo.program);
+
     twgl.setBuffersAndAttributes(this.gl, this.programInfo, this.bufferInfo);
 
-    twgl.setUniforms(this.programInfo, this.uniforms);
     this.needsAnimation = true;
     this.animate();
   }
