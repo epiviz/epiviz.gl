@@ -1,3 +1,5 @@
+const d3 = require("d3-color");
+
 /**
  * Returns a linear scale to map elements in domain to elements in range.
  * @param {Array} domain array of length two containing minimum and maximum values
@@ -29,6 +31,15 @@ function rgbStringToHex(rgb) {
   return rgbToHex(...colorVals.map((asStr) => parseInt(asStr)));
 }
 
+function colorSpecifierToHex(specifier) {
+  if (!isNaN(specifier)) {
+    // Specifier is already a hex value
+    return Math.floor(specifier);
+  }
+  const asColor = d3.color(specifier);
+  return rgbToHex(asColor.r, asColor.g, asColor.b);
+}
+
 function schemaViewport(schema) {
   let smallestX = Number.POSITIVE_INFINITY;
   let largestX = Number.NEGATIVE_INFINITY;
@@ -55,9 +66,4 @@ function schemaViewport(schema) {
   return [smallestX, largestX, smallestY, largestY];
 }
 
-export {
-  scale,
-  rgbToHex,
-  rgbStringToHex,
-  schemaViewport,
-};
+export { scale, rgbToHex, rgbStringToHex, schemaViewport, colorSpecifierToHex };

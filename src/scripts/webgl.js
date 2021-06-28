@@ -1,4 +1,5 @@
 import { DEFAULT_CHANNELS } from "./schema-processor";
+import { colorSpecifierToHex } from "./utilities";
 
 /**
  * A vertex shader meant to take in positions and colors.
@@ -17,11 +18,11 @@ const baseVertexShader = `
 
 const vertexShaderSuffix = `
   vec3 unpackColor(float f) {
-    vec3 color;
-    color.r = floor(f / 65536.0);
-    color.g = floor((f - color.r * 65536.0) / 256.0);
-    color.b = floor(f - color.r * 65536.0 - color.g * 256.0);
-    return color / 256.0;
+    vec3 colorVec;
+    colorVec.r = floor(f / 65536.0);
+    colorVec.g = floor((f - colorVec.r * 65536.0) / 256.0);
+    colorVec.b = floor(f - colorVec.r * 65536.0 - colorVec.g * 256.0);
+    return colorVec / 256.0;
   }
 
   void main(void) {
@@ -83,8 +84,6 @@ class VertexShaderBuilder {
     return this.shader;
   }
 
-  getShaderDetails() {}
-
   static fromSchema(schema) {
     // Returns one per track
     return schema.tracks.map(VertexShaderBuilder.fromTrack);
@@ -103,6 +102,9 @@ class VertexShaderBuilder {
         // Schema specifies channel
         if (track[channel].value) {
           // Channel has default value
+          if (channel === "color") {
+            track[channel].value = colorSpecifierToHex(track[channel].value);
+          }
           vsBuilder.setChannelUniform(channel, track[channel].value);
         } else {
           // Set Channel as attribute, x and y will always reach here

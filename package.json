@@ -19,6 +19,7 @@
     "@turf/helpers": "^6.3.0",
     "@turf/simplify": "6.3.0",
     "axios": "0.21.1",
+    "d3-color": "^3.0.1",
     "d3-scale-chromatic": "3.0.0",
     "fpsmeter": "0.3.1",
     "supercluster": "^7.1.3",

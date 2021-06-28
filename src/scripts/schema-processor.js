@@ -1,4 +1,4 @@
-import { rgbStringToHex, scale } from "./utilities";
+import { rgbStringToHex, scale, colorSpecifierToHex } from "./utilities";
 
 const d3 = require("d3-scale-chromatic");
 const axios = require("axios");
@@ -155,6 +155,9 @@ class Track {
     if (channel in this.track) {
       const channelInfo = this.track[channel];
       if ("value" in channelInfo) {
+        if (channel === "color") {
+          channelInfo.value = colorSpecifierToHex(channelInfo.value);
+        }
         return () => channelInfo.value;
       } else {
         const attributeIndex = this.headers.indexOf(channelInfo.attribute);
