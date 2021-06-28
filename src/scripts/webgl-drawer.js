@@ -13,7 +13,12 @@ class WebGLCanvasDrawer extends Drawer {
   constructor(viewportData) {
     super(viewportData);
 
-    this.gl = this.canvas.getContext("webgl");
+    this.gl = this.canvas.getContext("webgl2", {
+      // Setting these to false makes webgl handle more like opengl
+      // Source: https://webglfundamentals.org/webgl/lessons/webgl-and-alpha.html
+      alpha: false,
+      premultipliedAlpha: false,
+    });
 
     if (!this.gl) {
       console.error("Unable to initialize WebGL!");
@@ -93,10 +98,6 @@ class WebGLCanvasDrawer extends Drawer {
       }
       currentTrack = schemaHelper.getNextTrack();
     }
-    console.log(this.schemaShader);
-    // for (const channel of Object.keys(this.schemaShader.uniforms)) {
-    //   this.schemaShader.uniforms[channel] = mark[channel];
-    // }
 
     this.render();
   }
@@ -119,12 +120,15 @@ class WebGLCanvasDrawer extends Drawer {
       ...this.schemaShader.uniforms,
     });
 
-    // Set the blending function
-    this.gl.enable(this.gl.BLEND);
-    this.gl.blendFunc(this.gl.SRC_COLOR, this.gl.DST_COLOR);
-
     // Clear the canvas before we start drawing on it.
-    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    this.gl.clearColor(1, 1, 1, 1);
+
+    // Set the blending function
+    // Blend functions are weird, play with them:
+    // https://mrdoob.github.io/webgl-blendfunctions/blendfunc.html
+    // http://www.andersriggelsen.dk/glblendfunc.php
+    this.gl.enable(this.gl.BLEND);
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
@@ -147,7 +151,6 @@ class WebGLCanvasDrawer extends Drawer {
   render() {
     super.render();
 
-    console.log(this.schemaShader);
     this.programInfo = twgl.createProgramInfo(this.gl, [
       this.schemaShader.buildShader(),
       varyingColorsFragmentShader,
@@ -163,8 +166,6 @@ class WebGLCanvasDrawer extends Drawer {
       viewport: new Float32Array([-1, -1, 1, 1]),
       pointsModifier: 1,
     };
-
-    console.log(this.uniforms);
 
     this.bufferInfo = twgl.createBufferInfoFromArrays(this.gl, this.attributes);
 
