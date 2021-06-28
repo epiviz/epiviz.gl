@@ -10,6 +10,7 @@ import tsne10 from "../examples/tsne10";
 import tsne100 from "../examples/tsne100";
 import inlineData from "../examples/inline-data";
 import doubleInlineData from "../examples/double-inline-data";
+import tinyScatter from "../examples/tiny-scatter";
 
 const exampleMap = new Map([
   ["area-chart", areaChart],
@@ -22,6 +23,7 @@ const exampleMap = new Map([
   ["tsne-100", tsne100],
   ["inline-data", inlineData],
   ["double-inline-data", doubleInlineData],
+  ["tiny-scatter", tinyScatter],
 ]);
 
 class Toolbar {

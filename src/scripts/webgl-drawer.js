@@ -1,6 +1,7 @@
 import Drawer from "./drawer";
 import SchemaProcessor from "./schema-processor";
 import { scale } from "./utilities";
+import calculateVerticesForMark from "./vertex-calculator";
 
 import { VertexShaderBuilder, varyingColorsFragmentShader } from "./webgl.js";
 
@@ -68,35 +69,69 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   setSchema(schema) {
-    this.positions = [];
-
-    // Populate buffers needs a schemaShader built to know what buffers to fill and uniforms to set
-    this.schemaShader = VertexShaderBuilder.fromSchema(schema)[0];
+    // Populate buffers needs a trackShader built to know what buffers to fill and uniforms to set
+    this.trackShaders = VertexShaderBuilder.fromSchema(schema);
+    this.trackShaders.forEach(
+      // Add position buffers here since x and y channels don't map nicely to shader code
+      (trackShader) =>
+        (trackShader.attributes.aVertexPosition = {
+          numComponents: 2,
+          data: [],
+        })
+    );
 
     new SchemaProcessor(schema, this.populateBuffersAndSetUniforms.bind(this));
   }
 
-  addMarkToBuffers(mark) {
+  addMarkToBuffers(mark, markType, trackShader) {
+    const vertices = calculateVerticesForMark(
+      mark,
+      markType,
+      trackShader.drawMode,
+      this.lastMark
+    );
+
+    let isX = false; // alternatively map vertex coordinates to clip space
+    trackShader.attributes.aVertexPosition.data.push(
+      ...vertices.map((coord) => {
+        isX = !isX;
+        if (isX) return this.xScale(coord);
+        return this.yScale(coord);
+      })
+    );
+
     for (const channel of Object.keys(mark)) {
-      if (channel === "y" || channel === "shape") {
-        continue; // y is handled during "x" case and shape is not seen by shader
-      } else if (channel === "x") {
-        this.positions.push(this.xScale(mark.x), this.yScale(mark.y));
-      } else if (channel in this.schemaShader.attributes) {
-        this.schemaShader.attributes[channel].data.push(mark[channel]);
+      if (channel === "x" || channel === "y" || channel === "shape") {
+        continue; // x and y is handled above and shape is not seen by shader
+      } else if (channel in trackShader.attributes) {
+        // If we are adding triangles, they will need these attributes set for each vertex
+        for (let i = 0; i < vertices.length / 2; i++) {
+          trackShader.attributes[channel].data.push(mark[channel]);
+        }
       }
     }
+    this.lastMark = mark;
   }
 
   populateBuffersAndSetUniforms(schemaHelper) {
     let currentTrack = schemaHelper.getNextTrack();
+    let currenttrackShaderIndex = 0;
+
     while (currentTrack) {
       let currentMark = currentTrack.getNextMark();
+
       while (currentMark) {
-        this.addMarkToBuffers(currentMark);
+        this.addMarkToBuffers(
+          currentMark,
+          currentTrack.track.mark,
+          this.trackShaders[currenttrackShaderIndex]
+        );
+
         currentMark = currentTrack.getNextMark();
       }
+
       currentTrack = schemaHelper.getNextTrack();
+      currenttrackShaderIndex++;
     }
 
     this.render();
@@ -113,11 +148,16 @@ class WebGLCanvasDrawer extends Drawer {
     }
 
     const viewport = this.getWebGLViewport();
+    this.globalUniforms.viewport = new Float32Array(viewport.slice(0, 4));
+    this.globalUniforms.pointSizeModifier = viewport[4];
 
-    twgl.setUniforms(this.programInfo, {
-      viewport: new Float32Array(viewport.slice(0, 4)),
-      pointSizeModifier: viewport[4],
-      ...this.schemaShader.uniforms,
+    this.trackShaders.forEach((trackShader, index) => {
+      this.gl.useProgram(this.programInfos[index].program);
+
+      twgl.setUniforms(this.programInfos[index], {
+        ...this.globalUniforms,
+        ...trackShader.uniforms,
+      });
     });
 
     // Clear the canvas before we start drawing on it.
@@ -132,12 +172,20 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-    twgl.drawBufferInfo(
-      this.gl,
-      this.bufferInfo,
-      this.gl.POINTS,
-      this.positions.length / 2
-    );
+    this.trackShaders.forEach((trackShader, index) => {
+      this.gl.useProgram(this.programInfos[index].program);
+      twgl.setBuffersAndAttributes(
+        this.gl,
+        this.programInfos[index],
+        this.bufferInfos[index]
+      );
+      twgl.drawBufferInfo(
+        this.gl,
+        this.bufferInfos[index],
+        this.gl[trackShader.drawMode],
+        trackShader.attributes.aVertexPosition.data.length / 2
+      );
+    });
 
     this.needsAnimation = false;
     this.lastFrame = requestAnimationFrame(this.animate.bind(this));
@@ -151,27 +199,21 @@ class WebGLCanvasDrawer extends Drawer {
   render() {
     super.render();
 
-    this.programInfo = twgl.createProgramInfo(this.gl, [
-      this.schemaShader.buildShader(),
-      varyingColorsFragmentShader,
-    ]);
+    this.programInfos = this.trackShaders.map((trackShader) =>
+      twgl.createProgramInfo(this.gl, [
+        trackShader.buildShader(),
+        varyingColorsFragmentShader,
+      ])
+    );
 
-    this.attributes = {
-      aVertexPosition: { numComponents: 2, data: this.positions },
-      ...this.schemaShader.attributes,
-    };
-
-    this.uniforms = {
-      ...this.schemaShader.uniforms,
+    this.globalUniforms = {
       viewport: new Float32Array([-1, -1, 1, 1]),
-      pointsModifier: 1,
+      pointSizeModifier: 1,
     };
 
-    this.bufferInfo = twgl.createBufferInfoFromArrays(this.gl, this.attributes);
-
-    this.gl.useProgram(this.programInfo.program);
-
-    twgl.setBuffersAndAttributes(this.gl, this.programInfo, this.bufferInfo);
+    this.bufferInfos = this.trackShaders.map((trackShader) =>
+      twgl.createBufferInfoFromArrays(this.gl, trackShader.attributes)
+    );
 
     this.needsAnimation = true;
     this.animate();

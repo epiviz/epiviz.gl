@@ -6,7 +6,7 @@ const axios = require("axios");
 // Default channel values of schema which is passed to webgl drawer
 const DEFAULT_CHANNELS = Object.freeze({
   size: {
-    value: 1,
+    value: 5,
     numComponents: 1,
     type: "float",
   },
@@ -39,7 +39,8 @@ const DEFAULT_CHANNELS = Object.freeze({
 
 const DEFAULT_MAX_SIZE = 20;
 const DEFAULT_COLOR_SCHEME = "interpolateBrBG";
-const MAX_SHAPE_COUNT = 4;
+
+const SHAPES = ["dot", "triangle", "circle", "diamond"];
 
 class SchemaProcessor {
   constructor(schema, callback) {
@@ -181,7 +182,7 @@ const buildMapperForQuantitiveChannel = (channel, channelInfo) => {
     case "x":
     case "y":
       // Map x and y to itself, but we need a function to do it
-      return (coord) => coord;
+      return (coord) => parseFloat(coord);
     case "opacity":
       return scale(channelInfo.domain, [0, 1]);
     case "size":
@@ -220,7 +221,7 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
         [0, channelInfo.maxSize || DEFAULT_MAX_SIZE]
       );
     case "shape":
-      channelScale = (categoryId) => categoryId % MAX_SHAPE_COUNT;
+      channelScale = (categoryId) => SHAPES[categoryId % SHAPES.length];
     case "color":
       let d3colorScale =
         !channelInfo.colorScheme || !(channelInfo.colorScheme in d3)

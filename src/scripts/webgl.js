@@ -62,6 +62,26 @@ class VertexShaderBuilder {
     this.attributes = {};
   }
 
+  setDrawMode(track) {
+    switch (track.mark) {
+      case "line":
+        this.drawMode = "LINE_STRIP";
+        break;
+      case "point":
+        if (track.shape && track.shape.value !== "dot") {
+          this.drawMode = "TRIANGLES";
+        } else {
+          this.drawMode = "POINTS";
+        }
+        break;
+      case "bar":
+      case "rect":
+      case "area":
+        this.drawMode = "TRIANGLES";
+        break;
+    }
+  }
+
   addChannelBuffer(channel, numComponents = 1) {
     this.attributes[channel] = { numComponents, data: [] };
     this.shader += `attribute float ${channel};\n`;
@@ -93,6 +113,7 @@ class VertexShaderBuilder {
     // Given a track produce attributes and uniforms that describe a webgl drawing
 
     const vsBuilder = new VertexShaderBuilder();
+    vsBuilder.setDrawMode(track);
     for (let channel of Object.keys(DEFAULT_CHANNELS)) {
       if (channel === "shape") {
         // Changes vertex positions and draw mode, does not change shader code
