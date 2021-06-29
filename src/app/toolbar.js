@@ -1,4 +1,4 @@
-import { setSchema, setScroll, setTool } from "./state/reducers";
+import { setSchema, setScroll, setTool } from "./reducers";
 
 import areaChart from "../examples/area-chart";
 import doubleLinePlot from "../examples/double-line-plot";

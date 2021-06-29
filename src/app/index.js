@@ -1,6 +1,6 @@
 import Toolbar from "./toolbar";
-import WebGLVis from "./webgl-vis";
-import store, { getIfChanged } from "./state/store";
+import WebGLVis from "../epiviz.gl/webgl-vis";
+import store, { getIfChanged } from "./store";
 
 class App {
   /*
