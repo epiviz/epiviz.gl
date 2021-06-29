@@ -11,7 +11,8 @@
     "build": "rm -rf dist/ && parcel build src/pages/index.html --no-optimize --public-url ./",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d dist",
-    "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET"
+    "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
@@ -26,6 +27,7 @@
     "twgl.js": "^4.19.1"
   },
   "devDependencies": {
+    "cypress": "^7.6.0",
     "gh-pages": "^3.2.0",
     "parcel": "2.0.0-beta.2"
   }
