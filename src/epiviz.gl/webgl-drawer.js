@@ -69,6 +69,8 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   setSchema(schema) {
+    super.render(); // Cancels current animation frame
+
     // Populate buffers needs a trackShader built to know what buffers to fill and uniforms to set
     this.trackShaders = VertexShaderBuilder.fromSchema(schema);
     this.trackShaders.forEach(
@@ -116,6 +118,7 @@ class WebGLCanvasDrawer extends Drawer {
   populateBuffersAndSetUniforms(schemaHelper) {
     let currentTrack = schemaHelper.getNextTrack();
     let currenttrackShaderIndex = 0;
+    this.lastMark = undefined; // Used by area charts, needs to note we are in a new schema
 
     while (currentTrack) {
       let currentMark = currentTrack.getNextMark();
