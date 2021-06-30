@@ -17,8 +17,31 @@ const visualization = {
     },
     defaultData: {
       type: ["string", "array"],
+      items: {
+        type: "string",
+        pattern: ",",
+      },
     },
   },
+
+  allOf: [
+    {
+      // Require tracks to have data defined if there is no default data
+      if: {
+        not: { required: ["defaultData"] },
+      },
+      then: {
+        properties: {
+          tracks: {
+            items: {
+              required: ["data"],
+            },
+          },
+        },
+      },
+      else: {},
+    },
+  ],
 };
 
 const track = {
@@ -29,6 +52,13 @@ const track = {
   type: "object",
   required: ["mark", "x", "y"],
   properties: {
+    data: {
+      type: ["string", "array"],
+      items: {
+        type: "string",
+        pattern: ",",
+      },
+    },
     mark: {
       enum: ["point", "line", "area", "rect", "bar"],
     },
@@ -136,18 +166,50 @@ const channel = {
   },
   anyOf: [
     {
-      properties: {
-        type: { const: "quantitative" },
+      if: {
+        properties: {
+          value: {
+            type: "null",
+          },
+        },
       },
-      required: ["domain"],
-      not: { required: ["categorical"] },
-    },
-    {
-      properties: {
-        type: { const: "categorical" },
+      then: {
+        // value is not defined, therefore an attribute is required
+        required: ["attribute"],
+        oneOf: [
+          {
+            properties: {
+              type: { const: "quantitative" },
+            },
+            required: ["domain"],
+            not: { required: ["cardinality", "value"] },
+          },
+          {
+            properties: {
+              type: { const: "categorical" },
+            },
+            required: ["cardinality"],
+            not: { required: ["domain", "value"] },
+          },
+        ],
       },
-      required: ["cardinality"],
-      not: { required: ["domain"] },
+      else: {
+        // value is defined, cannot coexist with other base attributes
+        allOf: [
+          {
+            not: { required: ["attribute"] },
+          },
+          {
+            not: { required: ["type"] },
+          },
+          {
+            not: { required: ["domain"] },
+          },
+          {
+            not: { required: ["cardinality"] },
+          },
+        ],
+      },
     },
   ],
 };

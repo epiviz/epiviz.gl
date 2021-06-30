@@ -75,6 +75,14 @@ describe("Visualization Schema Validation", function () {
         validate({
           type: "quantitative",
           attribute: "attr",
+          domain: [0, "high"],
+        })
+      ).to.eq(false);
+
+      expect(
+        validate({
+          type: "quantitative",
+          attribute: "attr",
           domain: "a lot",
         })
       ).to.eq(false);
@@ -430,7 +438,6 @@ describe("Visualization Schema Validation", function () {
     it("can require tracks property", function () {
       expect(isJSONValid(baseValidVisualization)).to.eq(true);
       expect(isJSONValid({})).to.eq(false);
-      expect(isJSONValid(undefined)).to.eq(false);
     });
 
     it("can reject if a track is not valid", function () {
