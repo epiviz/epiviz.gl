@@ -29,6 +29,11 @@ self.onmessage = (message) => {
     case "clearBuffers":
       self.drawer.clearBuffers();
       break;
+    case "resize":
+      self.drawer.canvas.width = message.data.width;
+      self.drawer.canvas.height = message.data.height;
+      self.drawer.gl.viewport(0, 0, message.data.width, message.data.height);
+      break;
     default:
       console.error(`Received unknown message type: ${message.type}`);
   }

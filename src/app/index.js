@@ -16,6 +16,11 @@ class App {
 
     const toolbar = new Toolbar(this.store.dispatch);
     toolbar.init();
+
+    document.getElementById("refresh-schema").onclick =
+      this.onSchemaSubmit.bind(this);
+
+    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 
   /**
@@ -38,11 +43,15 @@ class App {
     const schema = JSON.parse(schemaAsString);
     this.visualization.setSchema(schema);
   }
+
+  onWindowResize() {
+    this.visualization.setCanvasSize(
+      this.visualization.parent.clientWidth,
+      this.visualization.parent.clientHeight
+    );
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const app = new App();
-
-  document.getElementById("refresh-schema").onclick =
-    app.onSchemaSubmit.bind(app);
+  window.app = new App(); // Add to window for testing purposes
 });

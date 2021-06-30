@@ -29,6 +29,17 @@ class WebGLVis {
     this.canvas = document.createElement("canvas");
   }
 
+  setCanvasSize(width, height) {
+    this.webglWorker.postMessage({
+      type: "resize",
+      width,
+      height,
+    });
+    this.mouseReader.width = width;
+    this.mouseReader.height = height;
+    this.sendDrawerState(this.mouseReader.getViewport());
+  }
+
   addToDom() {
     this.container.appendChild(this.parent);
 
