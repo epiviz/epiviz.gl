@@ -1,6 +1,7 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
 import { schemaViewport } from "./utilities";
+import isJSONValid from "./schema-validation";
 
 class WebGLVis {
   POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
@@ -97,6 +98,9 @@ class WebGLVis {
   }
 
   setSchema(schema) {
+    if (!isJSONValid(schema)) {
+      return;
+    }
     this.mouseReader.viewport = schemaViewport(schema);
     this.sendDrawerState(this.mouseReader.getViewport());
     this.webglWorker.postMessage({ type: "schema", schema });

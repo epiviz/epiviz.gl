@@ -56,7 +56,6 @@ class Toolbar {
       .getElementById("schema-select")
       .addEventListener("change", (event) => {
         this.schema = event.target.value;
-        console.log(this.schema);
         this.dispatch(setSchema(exampleMap.get(this.schema)));
       });
 

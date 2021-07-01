@@ -218,7 +218,13 @@ const v = new Validator();
 v.addSchema(channel, "/channel");
 v.addSchema(track, "/track");
 
-const isJSONValid = (json) => v.validate(json, visualization).valid;
+const isJSONValid = (json) => {
+  const validation = v.validate(json, visualization);
+  if (!validation.valid) {
+    console.error(validation.errors);
+  }
+  return validation.valid;
+};
 
 export default isJSONValid;
 
