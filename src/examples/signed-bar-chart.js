@@ -1,0 +1,46 @@
+export default JSON.stringify(
+  {
+    defaultData: [
+      "x,y,type",
+      "1,10,a",
+      "2,-10,b",
+      "3,5,c",
+      "4,15,b",
+      "5,-15,a",
+      "6,-1,c",
+      "7,1,b",
+      "8,15,c",
+    ],
+
+    tracks: [
+      {
+        tooltips: 1,
+        mark: "bar",
+        layout: "linear",
+        x: {
+          attribute: "x",
+          type: "quantitative",
+          domain: [0, 10],
+          axis: "bottom",
+        },
+        y: {
+          attribute: "y",
+          type: "quantitative",
+          domain: [-20, 20],
+          axis: "left",
+          scale: "linear",
+        },
+        color: {
+          attribute: "type",
+          type: "categorical",
+          cardinality: 3,
+        },
+        width: {
+          value: 1,
+        },
+      },
+    ],
+  },
+  null,
+  2
+);

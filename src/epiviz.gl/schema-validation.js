@@ -60,7 +60,7 @@ const track = {
       },
     },
     mark: {
-      enum: ["point", "line", "area", "rect"],
+      enum: ["point", "line", "area", "rect", "bar"],
     },
     tooltips: {
       type: "number",

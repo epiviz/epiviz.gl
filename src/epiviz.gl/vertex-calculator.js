@@ -26,6 +26,10 @@ class VertexCalculator {
       return this._getVerticesForRect(mark);
     }
 
+    if (markType === "bar") {
+      return this._getVerticesForBar(mark);
+    }
+
     switch (mark.shape) {
       case "dot":
         if (drawingMode === "POINTS") {
@@ -154,6 +158,31 @@ class VertexCalculator {
       center[0] + (mark.width / 2) * SIZE_UNITS,
       center[1] - (mark.height / 2) * SIZE_UNITS,
     ];
+  }
+
+  _getVerticesForBar(mark) {
+    //  2------------1,4
+    //  |        /    |
+    //  |    /        |
+    // 3,5------------6
+
+    // TODO Allow parameter to specify zero line
+    // TODO make width correspond to gpu space here
+
+    return this._mapToGPUSpace([
+      mark.x + mark.width,
+      mark.y,
+      mark.x,
+      mark.y,
+      mark.x,
+      0,
+      mark.x + mark.width,
+      mark.y,
+      mark.x,
+      0,
+      mark.x + mark.width,
+      0,
+    ]);
   }
 }
 
