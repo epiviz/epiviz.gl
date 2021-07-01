@@ -4,7 +4,7 @@ import { scale } from "./utilities";
 // e.g. if the canvas is 1000x1000 pixels, and the size value for a mark
 // is 10, then that mark takes up 10/200 = 1/20 of the clip space which
 // is equal to 50 pixels
-const SIZE_UNITS = 1 / 200;
+const SIZE_UNITS = 1 / 100;
 
 class VertexCalculator {
   constructor(xDomain, yDomain) {
@@ -20,6 +20,10 @@ class VertexCalculator {
     }
     if (markType === "line") {
       return this._getVertexForDot(mark);
+    }
+
+    if (markType === "rect") {
+      return this._getVerticesForRect(mark);
     }
 
     switch (mark.shape) {
@@ -115,10 +119,10 @@ class VertexCalculator {
   _getVerticesForSquare(mark) {
     const center = this._mapToGPUSpace([mark.x, mark.y]);
     return [
-      center[0] + (mark.size / 2) * SIZE_UNITS, // 2------1,4
-      center[1] + (mark.size / 2) * SIZE_UNITS, // |    /  |
-      center[0] - (mark.size / 2) * SIZE_UNITS, // |  /    |
-      center[1] + (mark.size / 2) * SIZE_UNITS, // 3,5-----6
+      center[0] + (mark.size / 2) * SIZE_UNITS, //  2------1,4
+      center[1] + (mark.size / 2) * SIZE_UNITS, //  |    /  |
+      center[0] - (mark.size / 2) * SIZE_UNITS, //  |  /    |
+      center[1] + (mark.size / 2) * SIZE_UNITS, // 3,5------6
       center[0] - (mark.size / 2) * SIZE_UNITS,
       center[1] - (mark.size / 2) * SIZE_UNITS,
       center[0] + (mark.size / 2) * SIZE_UNITS,
@@ -129,6 +133,30 @@ class VertexCalculator {
       center[1] - (mark.size / 2) * SIZE_UNITS,
     ];
   }
+
+  _getVerticesForRect(mark) {
+    //  2------------1,4
+    //  |        /    |
+    //  |    /        |
+    // 3,5------------6
+    const center = this._mapToGPUSpace([mark.x, mark.y]);
+    return [
+      center[0] + (mark.width / 2) * SIZE_UNITS,
+      center[1] + (mark.height / 2) * SIZE_UNITS,
+      center[0] - (mark.width / 2) * SIZE_UNITS,
+      center[1] + (mark.height / 2) * SIZE_UNITS,
+      center[0] - (mark.width / 2) * SIZE_UNITS,
+      center[1] - (mark.height / 2) * SIZE_UNITS,
+      center[0] + (mark.width / 2) * SIZE_UNITS,
+      center[1] + (mark.height / 2) * SIZE_UNITS,
+      center[0] - (mark.width / 2) * SIZE_UNITS,
+      center[1] - (mark.height / 2) * SIZE_UNITS,
+      center[0] + (mark.width / 2) * SIZE_UNITS,
+      center[1] - (mark.height / 2) * SIZE_UNITS,
+    ];
+  }
 }
 
 export default VertexCalculator;
+
+export { SIZE_UNITS };

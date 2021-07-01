@@ -60,7 +60,7 @@ const track = {
       },
     },
     mark: {
-      enum: ["point", "line", "area", "rect", "bar"],
+      enum: ["point", "line", "area", "rect"],
     },
     tooltips: {
       type: "number",
@@ -106,6 +106,39 @@ const track = {
       type: "object",
       properties: {
         maxSize: {
+          type: "number",
+        },
+        minSize: {
+          type: "number",
+        },
+        value: {
+          type: "number",
+        },
+      },
+      allOf: [{ $ref: "/channel" }],
+    },
+    width: {
+      type: "object",
+      properties: {
+        maxWidth: {
+          type: "number",
+        },
+        minWidth: {
+          type: "number",
+        },
+        value: {
+          type: "number",
+        },
+      },
+      allOf: [{ $ref: "/channel" }],
+    },
+    height: {
+      type: "object",
+      properties: {
+        maxHeight: {
+          type: "number",
+        },
+        minHeight: {
           type: "number",
         },
         value: {

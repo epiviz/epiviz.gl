@@ -12,6 +12,7 @@ import inlineData from "../examples/inline-data";
 import doubleInlineData from "../examples/double-inline-data";
 import tinyScatter from "../examples/tiny-scatter";
 import scatterGrid from "../examples/scatter-grid";
+import heatmap from "../examples/heatmap";
 
 const exampleMap = new Map([
   ["area-chart", areaChart],
@@ -26,6 +27,7 @@ const exampleMap = new Map([
   ["double-inline-data", doubleInlineData],
   ["tiny-scatter", tinyScatter],
   ["scatter-grid", scatterGrid],
+  ["heatmap", heatmap],
 ]);
 
 class Toolbar {

@@ -1,4 +1,5 @@
 import { rgbStringToHex, scale, colorSpecifierToHex } from "./utilities";
+import { SIZE_UNITS } from "./vertex-calculator";
 
 const d3 = require("d3-scale-chromatic");
 const axios = require("axios");
@@ -35,9 +36,28 @@ const DEFAULT_CHANNELS = Object.freeze({
     numComponents: null,
     type: null, // Will not interact with shader code
   },
+  width: {
+    value: 30,
+    numComponents: 1,
+    type: "float",
+  },
+
+  height: {
+    value: 30,
+    numComponents: 1,
+    type: "float",
+  },
 });
 
-const DEFAULT_MAX_SIZE = 20;
+const DEFAULT_MAX_SIZE = 100;
+const DEFAULT_MIN_SIZE = 0;
+const DEFAULT_MIN_OPACITY = 0;
+
+const DEFAULT_MIN_WIDTH = 0;
+const DEFAULT_MIN_HEIGHT = 0;
+const DEFAULT_MAX_WIDTH = 1 / SIZE_UNITS;
+const DEFAULT_MAX_HEIGHT = 1 / SIZE_UNITS;
+
 const DEFAULT_COLOR_SCHEME = "interpolateBrBG";
 
 const SHAPES = ["dot", "triangle", "circle", "diamond"];
@@ -184,10 +204,13 @@ const buildMapperForQuantitiveChannel = (channel, channelInfo) => {
       // Map x and y to itself, but we need a function to do it
       return (coord) => parseFloat(coord);
     case "opacity":
-      return scale(channelInfo.domain, [0, 1]);
+      return scale(channelInfo.domain, [
+        channelInfo.minOpacity || DEFAULT_MIN_OPACITY,
+        1,
+      ]);
     case "size":
       return scale(channelInfo.domain, [
-        0,
+        channelInfo.minSize || DEFAULT_MIN_SIZE,
         channelInfo.maxSize || DEFAULT_MAX_SIZE,
       ]);
     case "color":
@@ -198,6 +221,16 @@ const buildMapperForQuantitiveChannel = (channel, channelInfo) => {
       const zeroToOneScale = scale(channelInfo.domain, [0, 1]);
       return (attrValue) =>
         rgbStringToHex(d3colorScale(zeroToOneScale(attrValue)));
+    case "width":
+      return scale(channelInfo.domain, [
+        channelInfo.minWidth || DEFAULT_MIN_WIDTH,
+        channelInfo.maxWidth || DEFAULT_MAX_WIDTH,
+      ]);
+    case "height":
+      return scale(channelInfo.domain, [
+        channelInfo.minHeight || DEFAULT_MIN_HEIGHT,
+        channelInfo.maxHeight || DEFAULT_MAX_WIDTH,
+      ]);
     default:
       console.error(
         `${channel} is not a supported channel for quantitative attributes!`
@@ -214,14 +247,26 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
       channelScale = scale([0, channelInfo.cardinality], [-1, 1]);
       break;
     case "opacity":
-      channelScale = scale([0, channelInfo.cardinality], [0, 1]);
-    case "size":
-      channel = scale(
-        [0, channelInfo.cardinality],
-        [0, channelInfo.maxSize || DEFAULT_MAX_SIZE]
+      channelScale = scale(
+        [
+          channelInfo.minOpacity || DEFAULT_MIN_OPACITY,
+          channelInfo.cardinality,
+        ],
+        [0, 1]
       );
+      break;
+    case "size":
+      channelScale = scale(
+        [0, channelInfo.cardinality],
+        [
+          channelInfo.minSize || DEFAULT_MIN_SIZE,
+          channelInfo.maxSize || DEFAULT_MAX_SIZE,
+        ]
+      );
+      break;
     case "shape":
       channelScale = (categoryId) => SHAPES[categoryId % SHAPES.length];
+      break;
     case "color":
       let d3colorScale =
         !channelInfo.colorScheme || !(channelInfo.colorScheme in d3)
@@ -236,11 +281,34 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
       const zeroToOneScale = scale([0, channelInfo.cardinality], [0, 1]);
       channelScale = (categoryId) =>
         rgbStringToHex(d3colorScale(zeroToOneScale(categoryId)));
+      break;
+    case "width":
+      channelScale = scale(
+        [0, channelInfo.cardinality],
+        [
+          channelInfo.minWidth || DEFAULT_MIN_WIDTH,
+          channelInfo.maxWidth || DEFAULT_MAX_WIDTH,
+        ]
+      );
+      break;
+    case "height":
+      channelScale = scale(
+        [0, channelInfo.cardinality],
+        [
+          channelInfo.minHeight || DEFAULT_MIN_HEIGHT,
+          channelInfo.maxHeight || DEFAULT_MAX_HEIGHT,
+        ]
+      );
+      break;
+    default:
+      console.error(
+        `${channel} is not a supported channel for categorical attributes!`
+      );
   }
 
   return (attrValue) => {
     if (!categoryTracker.has(attrValue)) {
-      categoryTracker.set(attrValue, categoryTracker.size + 1);
+      categoryTracker.set(attrValue, categoryTracker.size + 0.5);
     }
     return channelScale(categoryTracker.get(attrValue));
   };
