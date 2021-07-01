@@ -2,10 +2,6 @@
 @import "./toolbar.css";
 @import "./editor.css";
 
-canvas {
-  border: 1px solid slategrey;
-}
-
 .content {
   padding: 1em;
   border: 2px solid black;

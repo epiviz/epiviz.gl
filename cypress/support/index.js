@@ -14,7 +14,38 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+const expectCanvasToLookLike = (presetName, wait = 100) => {
+  cy.wait(wait); // wait for drawing
+  cy.get("canvas")
+    .then(($c) => {
+      return $c[0].toDataURL("image/png").replace("data:image/png;base64,", "");
+    })
+    .then((canvasData) => {
+      cy.readFile(
+        `cypress/integration/test-images/${presetName}.png`,
+        "base64"
+      ).then((correctImage) => {
+        try {
+          expect(canvasData).to.eq(correctImage);
+        } catch (err) {
+          cy.writeFile(
+            `cypress/integration/failed-test-images/${presetName}.png`,
+            canvasData,
+            "base64"
+          ).then(() => {
+            expect(0).to.eq(
+              1,
+              `${presetName} did not produce the correct test image!`
+            );
+          });
+        }
+      });
+    });
+};
+
+export { expectCanvasToLookLike };
