@@ -1,98 +1,134 @@
-const calculateVerticesForMark = (mark, markType, drawingMode, lastMark) => {
-  if (markType === "area") {
-    return getVerticesForAreaSection(mark, lastMark);
-  }
-  if (markType === "line") {
-    return getVertexForDot(mark);
-  }
+import { scale } from "./utilities";
 
-  switch (mark.shape) {
-    case "dot":
-      if (drawingMode === "POINTS") {
-        return getVertexForDot(mark);
-      } else {
-        return getVerticesForSquare(mark);
-      }
-    case "triangle":
-      return getVerticesForTriangle(mark);
-    case "diamond":
-      return getVerticesForPolygon(mark, 4);
-    case "pentagon":
-      return getVerticesForPolygon(mark, 5);
-    case "hexagon":
-      return getVerticesForPolygon(mark, 6);
-    case "circle":
-      return getVerticesForPolygon(mark, 16);
-    case "cross":
-      return getVerticesForCross(mark);
-  }
-};
+// Each size value refers to 1/200 of the clip space
+// e.g. if the canvas is 1000x1000 pixels, and the size value for a mark
+// is 10, then that mark takes up 10/200 = 1/20 of the clip space which
+// is equal to 50 pixels
+const SIZE_UNITS = 1 / 200;
 
-const getVerticesForAreaSection = (mark, lastMark) => {
-  if (!lastMark) {
-    return []; // May need to have a check higher up the call stack
+class VertexCalculator {
+  constructor(xDomain, yDomain) {
+    this.xScale = scale(xDomain, [-1, 1]);
+    this.yScale = scale(yDomain, [-1, 1]);
   }
 
-  return [
-    mark.x,
-    mark.y,
-    lastMark.x,
-    lastMark.y,
-    mark.x,
-    0, // TODO: Replace 0 to let area charts center around some other number
-    lastMark.x,
-    lastMark.y,
-    lastMark.x,
-    0,
-    mark.x,
-    0,
-  ];
-};
+  calculateForMark(mark, markType, drawingMode) {
+    if (markType === "area") {
+      const toReturn = this._getVerticesForAreaSection(mark);
+      this.lastMark = mark;
+      return toReturn;
+    }
+    if (markType === "line") {
+      return this._getVertexForDot(mark);
+    }
 
-const getVerticesForPolygon = (mark, sides) => {
-  const vertices = [];
-  for (let theta = 0; theta < 2 * Math.PI; theta += (2 * Math.PI) / sides) {
-    vertices.push(
+    switch (mark.shape) {
+      case "dot":
+        if (drawingMode === "POINTS") {
+          return this._getVertexForDot(mark);
+        } else {
+          return this._getVerticesForSquare(mark);
+        }
+      case "triangle":
+        return this._getVerticesForTriangle(mark);
+      case "diamond":
+        return this._getVerticesForPolygon(mark, 4);
+      case "pentagon":
+        return this._getVerticesForPolygon(mark, 5);
+      case "hexagon":
+        return this._getVerticesForPolygon(mark, 6);
+      case "circle":
+        return this._getVerticesForPolygon(mark, 16);
+      case "cross":
+        return this._getVerticesForCross(mark);
+    }
+  }
+
+  _mapToGPUSpace(vertices) {
+    let isX = false;
+    return vertices.map((coord) => {
+      isX = !isX;
+      return isX ? this.xScale(coord) : this.yScale(coord);
+    });
+  }
+
+  _getVerticesForAreaSection(mark) {
+    if (!this.lastMark) {
+      return [];
+    }
+
+    return this._mapToGPUSpace([
       mark.x,
       mark.y,
-      mark.x + (mark.size / 2) * Math.cos(theta),
-      mark.y + (mark.size / 2) * Math.sin(theta),
-      mark.x + (mark.size / 2) * Math.cos(theta + (2 * Math.PI) / sides),
-      mark.y + (mark.size / 2) * Math.sin(theta + (2 * Math.PI) / sides)
-    );
+      this.lastMark.x,
+      this.lastMark.y,
+      mark.x,
+      0, // TODO: Replace 0 to let area charts center around some other number
+      this.lastMark.x,
+      this.lastMark.y,
+      this.lastMark.x,
+      0,
+      mark.x,
+      0,
+    ]);
   }
-  return vertices;
-};
 
-const getVerticesForTriangle = (mark) => [
-  //     1
-  //    / \
-  //   2---3
-  mark.x,
-  mark.y + mark.size / 2,
-  mark.x - mark.size / 2,
-  mark.y - mark.size / 2,
-  mark.x + mark.size / 2,
-  mark.y - mark.size / 2,
-];
+  _getVerticesForPolygon(mark, sides) {
+    const center = this._mapToGPUSpace([mark.x, mark.y]);
+    const vertices = [];
 
-const getVertexForDot = (mark) => [mark.x, mark.y];
+    for (let theta = 0; theta < 2 * Math.PI; theta += (2 * Math.PI) / sides) {
+      vertices.push(
+        center[0],
+        center[1],
+        center[0] + (mark.size / 2) * Math.cos(theta) * SIZE_UNITS,
+        center[1] + (mark.size / 2) * Math.sin(theta) * SIZE_UNITS,
+        center[0] +
+          (mark.size / 2) *
+            Math.cos(theta + (2 * Math.PI) / sides) *
+            SIZE_UNITS,
+        center[1] +
+          (mark.size / 2) * Math.sin(theta + (2 * Math.PI) / sides) * SIZE_UNITS
+      );
+    }
+    return vertices;
+  }
 
-const getVerticesForSquare = (mark) => [
-  mark.x + mark.size / 2, // 2------1,4
-  mark.y + mark.size / 2, // |    /  |
-  mark.x - mark.size / 2, // |  /    |
-  mark.y + mark.size / 2, // 3,5-----6
-  mark.x - mark.size / 2,
-  mark.y - mark.size / 2,
-  mark.x + mark.size / 2,
-  mark.y + mark.size / 2,
-  mark.x - mark.size / 2,
-  mark.y - mark.size / 2,
-  mark.x + mark.size / 2,
-  mark.y - mark.size / 2,
-];
+  _getVerticesForTriangle(mark) {
+    //     1
+    //    / \
+    //   2---3
+    const center = this._mapToGPUSpace([mark.x, mark.y]);
 
-const getVerticesForCross = (mark) => [];
+    return [
+      center[0],
+      center[1] + (mark.size / 2) * SIZE_UNITS,
+      center[0] - (mark.size / 2) * SIZE_UNITS,
+      center[1] - (mark.size / 2) * SIZE_UNITS,
+      center[0] + (mark.size / 2) * SIZE_UNITS,
+      center[1] - (mark.size / 2) * SIZE_UNITS,
+    ];
+  }
 
-export default calculateVerticesForMark;
+  _getVertexForDot = (mark) => this._mapToGPUSpace([mark.x, mark.y]);
+
+  _getVerticesForSquare(mark) {
+    const center = this._mapToGPUSpace([mark.x, mark.y]);
+    return [
+      center[0] + (mark.size / 2) * SIZE_UNITS, // 2------1,4
+      center[1] + (mark.size / 2) * SIZE_UNITS, // |    /  |
+      center[0] - (mark.size / 2) * SIZE_UNITS, // |  /    |
+      center[1] + (mark.size / 2) * SIZE_UNITS, // 3,5-----6
+      center[0] - (mark.size / 2) * SIZE_UNITS,
+      center[1] - (mark.size / 2) * SIZE_UNITS,
+      center[0] + (mark.size / 2) * SIZE_UNITS,
+      center[1] + (mark.size / 2) * SIZE_UNITS,
+      center[0] - (mark.size / 2) * SIZE_UNITS,
+      center[1] - (mark.size / 2) * SIZE_UNITS,
+      center[0] + (mark.size / 2) * SIZE_UNITS,
+      center[1] - (mark.size / 2) * SIZE_UNITS,
+    ];
+  }
+}
+
+export default VertexCalculator;

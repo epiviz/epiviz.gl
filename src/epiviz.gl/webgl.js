@@ -55,11 +55,39 @@ const varyingColorsFragmentShader = `
   }
 `;
 
-class VertexShaderBuilder {
+class VertexShader {
   constructor() {
     this.shader = baseVertexShader;
     this.uniforms = {};
-    this.attributes = {};
+
+    // Add position buffers here since x and y channels don't map nicely to shader code
+    this.attributes = {
+      aVertexPosition: {
+        numComponents: 2,
+        data: [],
+      },
+    };
+  }
+
+  addMarkToBuffers(mark, markType, vertexCalculator) {
+    const vertices = vertexCalculator.calculateForMark(
+      mark,
+      markType,
+      this.drawMode
+    );
+    this.attributes.aVertexPosition.data.push(...vertices);
+
+    for (const channel of Object.keys(this.attributes)) {
+      if (channel === "aVertexPosition") {
+        continue;
+      }
+
+      for (let i = 0; i < vertices.length / 2; i++) {
+        this.attributes[channel].data.push(mark[channel]);
+      }
+    }
+
+    this.lastMark = mark;
   }
 
   setDrawMode(track) {
@@ -106,14 +134,15 @@ class VertexShaderBuilder {
 
   static fromSchema(schema) {
     // Returns one per track
-    return schema.tracks.map(VertexShaderBuilder.fromTrack);
+    return schema.tracks.map(VertexShader.fromTrack);
   }
 
   static fromTrack(track) {
     // Given a track produce attributes and uniforms that describe a webgl drawing
 
-    const vsBuilder = new VertexShaderBuilder();
+    const vsBuilder = new VertexShader();
     vsBuilder.setDrawMode(track);
+
     for (let channel of Object.keys(DEFAULT_CHANNELS)) {
       if (channel === "shape") {
         // Changes vertex positions and draw mode, does not change shader code
@@ -130,7 +159,7 @@ class VertexShaderBuilder {
         } else {
           // Set Channel as attribute, x and y will always reach here
           if (channel === "y" || channel === "x") {
-            // Skip for x and y as handled in the webgl-drawer
+            // Skip for x and y as handled in constructor
             continue;
           }
           vsBuilder.addChannelBuffer(
@@ -148,4 +177,4 @@ class VertexShaderBuilder {
   }
 }
 
-export { varyingColorsFragmentShader, VertexShaderBuilder };
+export { varyingColorsFragmentShader, VertexShader };

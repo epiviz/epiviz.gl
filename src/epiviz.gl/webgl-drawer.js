@@ -1,9 +1,9 @@
 import Drawer from "./drawer";
 import SchemaProcessor from "./schema-processor";
 import { scale } from "./utilities";
-import calculateVerticesForMark from "./vertex-calculator";
+import VertexCalculator from "./vertex-calculator";
 
-import { VertexShaderBuilder, varyingColorsFragmentShader } from "./webgl.js";
+import { VertexShader, varyingColorsFragmentShader } from "./webgl.js";
 
 const twgl = require("twgl.js");
 
@@ -25,12 +25,6 @@ class WebGLCanvasDrawer extends Drawer {
       console.error("Unable to initialize WebGL!");
       return;
     }
-  }
-
-  receiveViewport(viewportData) {
-    super.receiveViewport(viewportData);
-    this.xScale = scale([this.minX, this.maxX], [-1, 1]);
-    this.yScale = scale([this.minY, this.maxY], [-1, 1]);
   }
 
   /**
@@ -71,70 +65,37 @@ class WebGLCanvasDrawer extends Drawer {
   setSchema(schema) {
     super.render(); // Cancels current animation frame
 
-    // Populate buffers needs a trackShader built to know what buffers to fill and uniforms to set
-    this.trackShaders = VertexShaderBuilder.fromSchema(schema);
-    this.trackShaders.forEach(
-      // Add position buffers here since x and y channels don't map nicely to shader code
-      (trackShader) =>
-        (trackShader.attributes.aVertexPosition = {
-          numComponents: 2,
-          data: [],
-        })
-    );
+    // Populate buffers needs a trackShader built to know what buffers to fill
+    this.trackShaders = VertexShader.fromSchema(schema);
 
-    new SchemaProcessor(schema, this.populateBuffersAndSetUniforms.bind(this));
+    new SchemaProcessor(schema, this.populateBuffers.bind(this));
   }
 
-  addMarkToBuffers(mark, markType, trackShader) {
-    const vertices = calculateVerticesForMark(
-      mark,
-      markType,
-      trackShader.drawMode,
-      this.lastMark
-    );
-
-    let isX = false; // alternatively map vertex coordinates to clip space
-    trackShader.attributes.aVertexPosition.data.push(
-      ...vertices.map((coord) => {
-        isX = !isX;
-        if (isX) return this.xScale(coord);
-        return this.yScale(coord);
-      })
-    );
-
-    for (const channel of Object.keys(mark)) {
-      if (channel === "x" || channel === "y" || channel === "shape") {
-        continue; // x and y is handled above and shape is not seen by shader
-      } else if (channel in trackShader.attributes) {
-        // If we are adding triangles, they will need these attributes set for each vertex
-        for (let i = 0; i < vertices.length / 2; i++) {
-          trackShader.attributes[channel].data.push(mark[channel]);
-        }
-      }
-    }
-    this.lastMark = mark;
-  }
-
-  populateBuffersAndSetUniforms(schemaHelper) {
+  populateBuffers(schemaHelper) {
     let currentTrack = schemaHelper.getNextTrack();
-    let currenttrackShaderIndex = 0;
-    this.lastMark = undefined; // Used by area charts, needs to note we are in a new schema
+    let currentTrackShaderIndex = 0;
 
     while (currentTrack) {
+      // Construct calculator in track loop as calculator keeps internal state for each track
+      let vertexCalculator = new VertexCalculator(
+        [this.minX, this.maxX],
+        [this.minY, this.maxY]
+      );
+
       let currentMark = currentTrack.getNextMark();
 
       while (currentMark) {
-        this.addMarkToBuffers(
+        this.trackShaders[currentTrackShaderIndex].addMarkToBuffers(
           currentMark,
           currentTrack.track.mark,
-          this.trackShaders[currenttrackShaderIndex]
+          vertexCalculator
         );
 
         currentMark = currentTrack.getNextMark();
       }
 
       currentTrack = schemaHelper.getNextTrack();
-      currenttrackShaderIndex++;
+      currentTrackShaderIndex++;
     }
 
     this.render();
