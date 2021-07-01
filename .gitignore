@@ -7,4 +7,4 @@ dist
 .parcel-cache
 yarn-error.log
 
-cypress/integration/failed-test-images
+cypress/fixtures/failed-test-images

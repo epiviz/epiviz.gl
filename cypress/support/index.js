@@ -27,7 +27,7 @@ const expectCanvasToLookLike = (presetName, wait = 100) => {
     })
     .then((canvasData) => {
       cy.readFile(
-        `cypress/integration/test-images/${presetName}.png`,
+        `cypress/fixtures/test-images/${presetName}.png`,
         "base64"
       ).then((correctImage) => {
         try {

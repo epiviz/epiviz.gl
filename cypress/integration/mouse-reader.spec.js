@@ -85,6 +85,29 @@ describe("The mouse reader should handle zooming and panning", function () {
     cy.get("#mouse-reader").trigger("mouseup");
     assertMouseReaderWindowIs([0.2, 1.0], [0, 0.8]);
   });
+
+  it("can lock the x and y axis", () => {
+    cy.window().then((win) => {
+      win.app.visualization.setViewOptions({ lockedX: true, lockedY: false });
+    });
+    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    assertMouseReaderWindowIs([0, 1], [0.1, 0.9]);
+
+    cy.window().then((win) => {
+      win.app.visualization.setViewOptions({ lockedX: false, lockedY: true });
+    });
+    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    assertMouseReaderWindowIs([0.1, 0.9], [0.1, 0.9]);
+    expectCanvasToLookLike("scatter-grid-zoomed");
+
+    cy.window().then((win) => {
+      win.app.visualization.setViewOptions({ lockedX: false, lockedY: false });
+    });
+    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: 100 });
+
+    assertMouseReaderWindowIs([0, 1], [0, 1]);
+    expectCanvasToLookLike("scatter-grid");
+  });
 });
 
 describe("The mouse reader should select points appropriately", () => {
@@ -108,6 +131,14 @@ describe("The mouse reader should select points appropriately", () => {
     cy.get("#schema-select").select("scatter-grid");
     cy.get("#refresh-schema").click();
     cy.wait(1000); // Wait for drawing to occur
+  });
+
+  beforeEach(() => {
+    cy.window().then((win) => {
+      mouseReader.currentXRange = [0, 1];
+      mouseReader.currentYRange = [0, 1];
+      win.app.visualization.sendDrawerState(mouseReader.getViewport());
+    });
   });
 
   it("selects points with a box", () => {
@@ -160,5 +191,60 @@ describe("The mouse reader should select points appropriately", () => {
     });
     cy.get("#mouse-reader").trigger("mouseup");
     expectThisManyPointsSelected(2);
+  });
+
+  it("selects points with a box when zoomed in", () => {
+    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get(".controls > img:nth-child(2)").click();
+    cy.get("#mouse-reader").trigger("mousedown", { layerX: 0, layerY: 0 });
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 200,
+      layerY: 200,
+    });
+    cy.get("#mouse-reader").trigger("mouseup");
+    expectThisManyPointsSelected(16);
+
+    cy.get("#mouse-reader").trigger("mousedown", { layerX: 30, layerY: 30 });
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 170,
+      layerY: 170,
+    });
+    cy.get("#mouse-reader").trigger("mouseup");
+    expectThisManyPointsSelected(4);
+  });
+
+  it("selects points with a lasso when zoomed in", () => {
+    cy.get(".controls > img:nth-child(3)").click();
+    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+
+    cy.get("#mouse-reader").trigger("mousedown", { layerX: 20, layerY: 20 });
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 180,
+      layerY: 20,
+    });
+
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 180,
+      layerY: 180,
+    });
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 20,
+      layerY: 50,
+    });
+
+    cy.get("#mouse-reader").trigger("mouseup");
+    expectThisManyPointsSelected(10);
+
+    cy.get("#mouse-reader").trigger("mousedown", { layerX: 100, layerY: 75 });
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 175,
+      layerY: 175,
+    });
+    cy.get("#mouse-reader").trigger("mousemove", {
+      layerX: 100,
+      layerY: 125,
+    });
+    cy.get("#mouse-reader").trigger("mouseup");
+    expectThisManyPointsSelected(1);
   });
 });
