@@ -95,6 +95,9 @@ class VertexShader {
       case "line":
         this.drawMode = "LINE_STRIP";
         break;
+      case "tick":
+        this.drawMode = "LINES";
+        break;
       case "point":
         if (track.shape && track.shape.value !== "dot") {
           this.drawMode = "TRIANGLES";

@@ -145,14 +145,6 @@ describe("Visualization Schema Validation", function () {
     });
 
     it("can accept a value", function () {
-      console.log(
-        channelValidator.validate(
-          {
-            value: 10,
-          },
-          channel
-        )
-      );
       expect(
         validate({
           value: 10,
@@ -238,7 +230,7 @@ describe("Visualization Schema Validation", function () {
       ).to.eq(false);
     });
 
-    it("can force x and y to be attributes", function () {
+    it("can allow x and y to be attributes or values", function () {
       expect(
         validate({
           mark: "point",
@@ -247,7 +239,7 @@ describe("Visualization Schema Validation", function () {
             value: 10,
           },
         })
-      ).to.eq(false);
+      ).to.eq(true);
       expect(
         validate({
           mark: "point",
@@ -256,7 +248,7 @@ describe("Visualization Schema Validation", function () {
           },
           y: baseValidTrack.y,
         })
-      ).to.eq(false);
+      ).to.eq(true);
     });
 
     it("can expect tooltips to be between 0 and 1", function () {

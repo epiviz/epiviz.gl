@@ -60,7 +60,7 @@ const track = {
       },
     },
     mark: {
-      enum: ["point", "line", "area", "rect", "bar"],
+      enum: ["point", "line", "area", "rect", "bar", "tick"],
     },
     tooltips: {
       type: "number",
@@ -78,7 +78,6 @@ const track = {
         },
       },
       allOf: [{ $ref: "/channel" }],
-      not: { required: ["value"] },
     },
     y: {
       type: "object",
@@ -91,7 +90,6 @@ const track = {
         },
       },
       allOf: [{ $ref: "/channel" }],
-      not: { required: ["value"] },
     },
     color: {
       type: "object",

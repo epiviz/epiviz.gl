@@ -6,7 +6,7 @@ export default JSON.stringify(
     tracks: [
       {
         tooltips: 1,
-        mark: "point",
+        mark: "tick",
         layout: "linear",
         x: {
           attribute: "time",
@@ -17,7 +17,7 @@ export default JSON.stringify(
         y: {
           attribute: "sample",
           type: "categorical",
-          cardinality: "3",
+          cardinality: 3,
           axis: "left",
         },
         color: {
@@ -26,7 +26,9 @@ export default JSON.stringify(
           domain: [0, 1],
           colorScheme: "interpolateCool",
         },
-        shape: { value: "tick" },
+        height: {
+          value: 10,
+        },
       },
     ],
   },

@@ -7,9 +7,10 @@ import { scale } from "./utilities";
 const SIZE_UNITS = 1 / 100;
 
 class VertexCalculator {
-  constructor(xDomain, yDomain) {
+  constructor(xDomain, yDomain, track) {
     this.xScale = scale(xDomain, [-1, 1]);
     this.yScale = scale(yDomain, [-1, 1]);
+    this.track = track;
   }
 
   calculateForMark(mark, markType, drawingMode) {
@@ -18,6 +19,11 @@ class VertexCalculator {
       this.lastMark = mark;
       return toReturn;
     }
+
+    if (markType === "tick") {
+      return this._getVerticesForTick(mark);
+    }
+
     if (markType === "line") {
       return this._getVertexForDot(mark);
     }
@@ -166,7 +172,6 @@ class VertexCalculator {
     //  |    /        |
     // 3,5------------6
 
-    // TODO Allow parameter to specify zero line
     // TODO make width correspond to gpu space here
 
     return this._mapToGPUSpace([
@@ -183,6 +188,32 @@ class VertexCalculator {
       mark.x + mark.width,
       0,
     ]);
+  }
+
+  _getVerticesForTick(mark) {
+    const center = this._mapToGPUSpace([mark.x, mark.y]);
+    // 1----2
+    if (this.track.width) {
+      return [
+        center[0] + (mark.width / 2) * SIZE_UNITS,
+        center[1],
+        center[0] - (mark.width / 2) * SIZE_UNITS,
+        center[1],
+      ];
+    }
+
+    // 1
+    // |
+    // 2
+    if (mark.height) {
+      // default to mark value which has default if height never specified in track
+      return [
+        center[0],
+        center[1] + (mark.height / 2) * SIZE_UNITS,
+        center[0],
+        center[1] - (mark.height / 2) * SIZE_UNITS,
+      ];
+    }
   }
 }
 

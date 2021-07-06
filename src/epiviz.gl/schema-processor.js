@@ -18,13 +18,13 @@ const DEFAULT_CHANNELS = Object.freeze({
   },
   x: {
     value: 0,
-    numComponents: 2,
-    type: "vec2",
+    numComponents: null, // x and y are placed in an attribute vector in the shader that is already handled
+    type: null, // i.e. calls to numComponents or type should not happen as it would break the shader
   },
   y: {
     value: 0,
-    numComponents: 2,
-    type: "vec2",
+    numComponents: null,
+    type: null,
   },
   opacity: {
     value: 1,
@@ -37,13 +37,13 @@ const DEFAULT_CHANNELS = Object.freeze({
     type: null, // Will not interact with shader code
   },
   width: {
-    value: 30,
+    value: 1,
     numComponents: 1,
     type: "float",
   },
 
   height: {
-    value: 30,
+    value: 1,
     numComponents: 1,
     type: "float",
   },
