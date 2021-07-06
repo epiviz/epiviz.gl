@@ -327,7 +327,7 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
 
   return (attrValue) => {
     if (!categoryTracker.has(attrValue)) {
-      categoryTracker.set(attrValue, categoryTracker.size + 0.5);
+      categoryTracker.set(attrValue, categoryTracker.size);
     }
     return channelScale(categoryTracker.get(attrValue));
   };
