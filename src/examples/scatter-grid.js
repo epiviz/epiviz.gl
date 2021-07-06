@@ -25,6 +25,9 @@ export default JSON.stringify(
           type: "quantitative",
           domain: [0, 1],
         },
+        size: {
+          value: 5,
+        },
       },
     ],
   },

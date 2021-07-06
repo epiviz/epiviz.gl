@@ -7,7 +7,7 @@ const axios = require("axios");
 // Default channel values of schema which is passed to webgl drawer
 const DEFAULT_CHANNELS = Object.freeze({
   size: {
-    value: 5,
+    value: 1,
     numComponents: 1,
     type: "float",
   },
