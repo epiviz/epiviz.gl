@@ -34,7 +34,7 @@ const expectCanvasToLookLike = (presetName, wait = 100) => {
           expect(canvasData).to.eq(correctImage);
         } catch (err) {
           cy.writeFile(
-            `cypress/integration/failed-test-images/${presetName}.png`,
+            `cypress/fixtures/failed-test-images/${presetName}.png`,
             canvasData,
             "base64"
           ).then(() => {
