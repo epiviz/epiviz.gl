@@ -3,16 +3,30 @@
     <title>WebGL Points Demo</title>
     <meta name="title" content="WebGL Points Demo">
     <meta name="description" content="A demo of an interactive point visualization using WebGL">
-    <link rel="stylesheet" href="index.cf1ec4d0.css">
+    <link rel="stylesheet" href="index.fcf9371d.css">
     <link rel="icon" href="favicon.0961d3ce.ico" type="image/x-icon">
-    <script src="index.dc12603f.js"></script><script src="index.d239f54b.js"></script>
+    <script src="index.7b80ae4b.js"></script>
   </head>
   <body>
     <main>
       <div class="toolbar">
-        <div class="dataset">
-          <label for="dataset">To render:</label>
-          <select name="dataset" id="dataset">
+        <div class="schema-select">
+          <label for="schema-select">To render:</label>
+          <select name="schema-select" id="schema-select">
+            <option value="line-plot">Line Plot</option>
+            <option value="double-line-plot">Double Line Plot</option>
+            <option value="area-chart">Area Chart</option>
+            <option value="stacked-area-chart">Stacked Area Chart</option>
+            <option value="tick-chart">Tick Chart</option>
+            <option value="inline-data">Inline Data</option>
+            <option value="double-inline-data">Double Inline Data</option>
+            <option value="scatter-grid">Grid Scatter Plot</option>
+            <option value="tiny-scatter">Tiny Scatter Plot</option>
+            <option value="heatmap">Heatmap</option>
+            <option value="signed-bar-chart">Signed Bar Chart</option>
+            <option value="vertical-signed-bar-chart">
+              Vertical Signed Bar Chart
+            </option>
             <option value="tsne-100">t-SNE Dataset (1/100)</option>
             <option value="tsne-10">t-SNE Dataset (1/10)</option>
             <option value="tsne">t-SNE Dataset</option>
@@ -22,6 +36,8 @@
           <img src="pan_tool_black_24dp.809514b8.svg" alt="pan tool">
           <img src="highlight_alt_black_24dp.115f99d7.svg" alt="box select">
           <img src="gesture_black_24dp.d0be24a4.svg" alt="lasso select">
+          <img src="zoom_in_black_24dp.5a11330d.svg" alt="zoom in">
+          <img src="touch_app_black_24dp.6f0cca5f.svg" alt="tooltip examine">
         </div>
 
         <div class="scroll-state">
@@ -36,17 +52,14 @@
           <span class="y-range"></span>
         </div>
       </div>
-      <div class="content">
-        <div class="rendering-container"></div>
+      <div class="panes">
+        <div class="json-editor">
+          <label for="schema-editor">Visualization Schema</label>
+          <textarea id="schema-editor" name="schema-editor"></textarea>
+          <button id="refresh-schema">Show</button>
+        </div>
+        <div class="content"></div>
       </div>
-      <div id="box-select"></div>
-      <svg id="lasso-select-container">
-        <polygon id="lasso-select" style="
-            fill: rgba(124, 124, 247, 0.3);
-            border: 1px rgb(136, 128, 247) dashed;
-          
-"></polygon>
-      </svg>
     </main>
     <footer>
       <a class="github" href="https://github.com/SamGRosen/webgl-point-interactivity-demo">
