@@ -18,30 +18,29 @@ export default JSON.stringify(
         mark: "rect",
         layout: "linear",
         x: {
-          attribute: "x",
-          type: "quantitative",
-          domain: [0, 10],
+          value: 0,
           axis: "bottom",
         },
         y: {
-          value: 0,
+          attribute: "x",
+          type: "quantitative",
+          domain: [0, 10],
           axis: "left",
-          scale: "linear",
         },
         color: {
           attribute: "type",
           type: "categorical",
           cardinality: 3,
         },
-        width: {
+        height: {
           value: 10,
         },
-        height: {
+        width: {
           attribute: "y",
           type: "quantitative",
           domain: [-20, 20],
-          minHeight: -100,
-          maxHeight: 100,
+          minWidth: -100,
+          maxWidth: 100,
         },
       },
     ],

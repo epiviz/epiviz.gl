@@ -34,10 +34,6 @@ class VertexCalculator {
       return this._getVerticesForRect(mark);
     }
 
-    if (this.track.mark === "bar") {
-      return this._getVerticesForBar(mark);
-    }
-
     switch (mark.shape) {
       case "dot":
         if (this.drawMode === "POINTS") {
@@ -153,43 +149,19 @@ class VertexCalculator {
     // 3,5------------6
     const center = this._mapToGPUSpace([mark.x, mark.y]);
     return [
-      center[0] + (mark.width / 2) * SIZE_UNITS,
-      center[1] + (mark.height / 2) * SIZE_UNITS,
-      center[0] - (mark.width / 2) * SIZE_UNITS,
-      center[1] + (mark.height / 2) * SIZE_UNITS,
-      center[0] - (mark.width / 2) * SIZE_UNITS,
-      center[1] - (mark.height / 2) * SIZE_UNITS,
-      center[0] + (mark.width / 2) * SIZE_UNITS,
-      center[1] + (mark.height / 2) * SIZE_UNITS,
-      center[0] - (mark.width / 2) * SIZE_UNITS,
-      center[1] - (mark.height / 2) * SIZE_UNITS,
-      center[0] + (mark.width / 2) * SIZE_UNITS,
-      center[1] - (mark.height / 2) * SIZE_UNITS,
+      center[0] + mark.width * SIZE_UNITS,
+      center[1] + mark.height * SIZE_UNITS,
+      center[0],
+      center[1] + mark.height * SIZE_UNITS,
+      center[0],
+      center[1],
+      center[0] + mark.width * SIZE_UNITS,
+      center[1] + mark.height * SIZE_UNITS,
+      center[0] + mark.width * SIZE_UNITS,
+      center[1],
+      center[0],
+      center[1],
     ];
-  }
-
-  _getVerticesForBar(mark) {
-    //  2------------1,4
-    //  |        /    |
-    //  |    /        |
-    // 3,5------------6
-
-    // TODO make width correspond to gpu space here
-
-    return this._mapToGPUSpace([
-      mark.x + mark.width,
-      mark.y,
-      mark.x,
-      mark.y,
-      mark.x,
-      0,
-      mark.x + mark.width,
-      mark.y,
-      mark.x,
-      0,
-      mark.x + mark.width,
-      0,
-    ]);
   }
 
   _getVerticesForTick(mark) {
