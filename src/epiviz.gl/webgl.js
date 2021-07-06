@@ -1,4 +1,4 @@
-import { DEFAULT_CHANNELS } from "./schema-processor";
+import { DEFAULT_CHANNELS, getDrawModeForTrack } from "./schema-processor";
 import { colorSpecifierToHex } from "./utilities";
 
 /**
@@ -69,12 +69,8 @@ class VertexShader {
     };
   }
 
-  addMarkToBuffers(mark, markType, vertexCalculator) {
-    const vertices = vertexCalculator.calculateForMark(
-      mark,
-      markType,
-      this.drawMode
-    );
+  addMarkToBuffers(mark, vertexCalculator) {
+    const vertices = vertexCalculator.calculateForMark(mark);
     this.attributes.aVertexPosition.data.push(...vertices);
 
     for (const channel of Object.keys(this.attributes)) {
@@ -90,27 +86,8 @@ class VertexShader {
     this.lastMark = mark;
   }
 
-  setDrawMode(track) {
-    switch (track.mark) {
-      case "line":
-        this.drawMode = "LINE_STRIP";
-        break;
-      case "tick":
-        this.drawMode = "LINES";
-        break;
-      case "point":
-        if (track.shape && track.shape.value !== "dot") {
-          this.drawMode = "TRIANGLES";
-        } else {
-          this.drawMode = "POINTS";
-        }
-        break;
-      case "bar":
-      case "rect":
-      case "area":
-        this.drawMode = "TRIANGLES";
-        break;
-    }
+  setDrawMode(drawMode) {
+    this.drawMode = drawMode;
   }
 
   addChannelBuffer(channel, numComponents = 1) {
@@ -144,7 +121,7 @@ class VertexShader {
     // Given a track produce attributes and uniforms that describe a webgl drawing
 
     const vsBuilder = new VertexShader();
-    vsBuilder.setDrawMode(track);
+    vsBuilder.setDrawMode(getDrawModeForTrack(track));
 
     for (let channel of Object.keys(DEFAULT_CHANNELS)) {
       if (channel === "shape") {

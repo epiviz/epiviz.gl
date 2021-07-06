@@ -62,6 +62,25 @@ const DEFAULT_COLOR_SCHEME = "interpolateBrBG";
 
 const SHAPES = ["dot", "triangle", "circle", "diamond"];
 
+const getDrawModeForTrack = (track) => {
+  switch (track.mark) {
+    case "line":
+      return "LINE_STRIP";
+    case "tick":
+      return "LINES";
+    case "point":
+      if (track.shape && track.shape.value !== "dot") {
+        return "TRIANGLES";
+      } else {
+        return "POINTS";
+      }
+    case "bar":
+    case "rect":
+    case "area":
+      return "TRIANGLES";
+  }
+};
+
 class SchemaProcessor {
   constructor(schema, callback) {
     this.index = 0;
@@ -315,4 +334,4 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
 };
 export default SchemaProcessor;
 
-export { DEFAULT_CHANNELS };
+export { DEFAULT_CHANNELS, getDrawModeForTrack };

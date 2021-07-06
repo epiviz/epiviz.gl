@@ -88,7 +88,6 @@ class WebGLCanvasDrawer extends Drawer {
       while (currentMark) {
         this.trackShaders[currentTrackShaderIndex].addMarkToBuffers(
           currentMark,
-          currentTrack.track.mark,
           vertexCalculator
         );
 

@@ -1,4 +1,5 @@
 import { scale } from "./utilities";
+import { getDrawModeForTrack } from "./schema-processor";
 
 // Each size value refers to 1/200 of the clip space
 // e.g. if the canvas is 1000x1000 pixels, and the size value for a mark
@@ -11,34 +12,35 @@ class VertexCalculator {
     this.xScale = scale(xDomain, [-1, 1]);
     this.yScale = scale(yDomain, [-1, 1]);
     this.track = track;
+    this.drawMode = getDrawModeForTrack(track);
   }
 
-  calculateForMark(mark, markType, drawingMode) {
-    if (markType === "area") {
+  calculateForMark(mark) {
+    if (this.track.mark === "area") {
       const toReturn = this._getVerticesForAreaSection(mark);
       this.lastMark = mark;
       return toReturn;
     }
 
-    if (markType === "tick") {
+    if (this.track.mark === "tick") {
       return this._getVerticesForTick(mark);
     }
 
-    if (markType === "line") {
+    if (this.track.mark === "line") {
       return this._getVertexForDot(mark);
     }
 
-    if (markType === "rect") {
+    if (this.track.mark === "rect") {
       return this._getVerticesForRect(mark);
     }
 
-    if (markType === "bar") {
+    if (this.track.mark === "bar") {
       return this._getVerticesForBar(mark);
     }
 
     switch (mark.shape) {
       case "dot":
-        if (drawingMode === "POINTS") {
+        if (this.drawMode === "POINTS") {
           return this._getVertexForDot(mark);
         } else {
           return this._getVerticesForSquare(mark);
