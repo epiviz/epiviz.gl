@@ -16,7 +16,7 @@ class WebGLVis {
   /**
    * A class meant to display a visualization based off a given schema using webgl.
    *
-   * @param {HTMLElement} container <div> or other container element meant to contain the scatterplot and its components
+   * @param {HTMLElement} container <div> or other container element meant to contain the visualization and its mousereader
    */
   constructor(container) {
     this.container = container;
@@ -30,6 +30,12 @@ class WebGLVis {
     this.canvas = document.createElement("canvas");
   }
 
+  /**
+   * Resize the canvas to a particular size and rerender the data
+   *
+   * @param {Number} width in pixels to resize the canvas to
+   * @param {Number} height in pixels to resize the canvas to
+   */
   setCanvasSize(width, height) {
     this.webglWorker.postMessage({
       type: "resize",
@@ -41,6 +47,13 @@ class WebGLVis {
     this.sendDrawerState(this.mouseReader.getViewport());
   }
 
+  /**
+   * This method does three things, and should only be called once. If changing the schema
+   * use setSchema.
+   *  1. Add the canvas and mousereader to the DOM for use.
+   *  2. Creates the WebWorkers that render and process the data.
+   *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
+   */
   addToDom() {
     this.container.appendChild(this.parent);
 
@@ -89,14 +102,34 @@ class WebGLVis {
     this.mouseReader.init();
   }
 
+  /**
+   * The main method for changing the state of the visualization, such as active tool,
+   * viewport, locking axis, or changing the zoom.
+   *
+   * The format of the options:
+   *   lockedX: boolean
+   *   lockedY: boolean
+   *   viewport: [minX, maxX, minY, maxY] (all Numbers)
+   *   currentXRange: [x1, x2] (Numbers that should be within the viewport minX and maxX)
+   *   currentYRange: [y1, y2] (Numbers that should be within the viewport minY and maxY)
+   *   tool: one of ["pan", "box", "lasso"]
+   *
+   * @param {Object} options with keys under WebGLVis.POSSIBLE_MOUSE_READER_OPTIONS
+   */
   setViewOptions(options) {
     for (const option of this.POSSIBLE_MOUSE_READER_OPTIONS) {
       if (option in options) {
         this.mouseReader[option] = options[option];
       }
     }
+    this.sendDrawerState(this.mouseReader.getViewport());
   }
 
+  /**
+   * Set the schema of the visualization, and then render it.
+   *
+   * @param {Object} schema describing visualization
+   */
   setSchema(schema) {
     if (!isJSONValid(schema)) {
       return;
@@ -108,7 +141,7 @@ class WebGLVis {
   }
 
   /**
-   * Send the viewport to the drawer.
+   * Send the viewport to the drawer. Use setViewOptions to change the viewport.
    *
    * @param {Object} viewport likely from this.mouseReader.getViewport()
    */
@@ -126,20 +159,14 @@ class WebGLVis {
     });
   }
 
-  buildDataProcessor(data, options) {
-    this.dataWorker.postMessage({
-      type: "init",
-      data,
-      options,
-    });
-  }
-
   /**
    * Utility method to have data worker call {@link DataProcessor#selectBox} or
    * {@link DataProcessor#selectLasso}.
    *
    * Does not return, posts result to this.dataWorkerStream.
    * @param {Array} points array in format [x1,y1,x2,y2,x3,y3,...]
+   *  if points.length == 4, does a box select, if points.length >= 6 does a lasso select
+   *    using points as a polygon
    */
   selectPoints(points) {
     if (points.length === 4) {
