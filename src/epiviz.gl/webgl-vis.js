@@ -129,15 +129,17 @@ class WebGLVis {
    * Set the schema of the visualization, and then render it.
    *
    * @param {Object} schema describing visualization
+   * @returns boolean on whether the schema was accepted
    */
   setSchema(schema) {
     if (!isJSONValid(schema)) {
-      return;
+      return false;
     }
     this.mouseReader.viewport = schemaViewport(schema);
     this.sendDrawerState(this.mouseReader.getViewport());
     this.webglWorker.postMessage({ type: "schema", schema });
     this.dataWorker.postMessage({ type: "init", schema });
+    return true;
   }
 
   /**
