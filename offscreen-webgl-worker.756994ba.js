@@ -462,11 +462,34 @@
   });
   // ASSET: src/epiviz.gl/vertex-calculator.js
   var $6d3e717fed031fdb2ee2c357e03764b6$exports = {};
-  // Each size value refers to 1/200 of the clip space
+  // Each size unit refers to 1/200 of the clip space
   // e.g. if the canvas is 1000x1000 pixels, and the size value for a mark
   // is 10, then that mark takes up 10/200 = 1/20 of the clip space which
   // is equal to 50 pixels
   const $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS = 1 / 100;
+  const $6d3e717fed031fdb2ee2c357e03764b6$var$transformGenomicMarkToStandard = mark => {
+    let x, y, width, height;
+    if (Array.isArray(mark.x)) {
+      x = mark.x[0];
+      width = (mark.x[1] - mark.x[0]) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+    } else {
+      x = mark.x;
+      width = mark.width;
+    }
+    if (Array.isArray(mark.y)) {
+      y = mark.y[0];
+      height = (mark.y[1] - mark.y[0]) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+    } else {
+      y = mark.y;
+      height = mark.height;
+    }
+    return {
+      x,
+      y,
+      width,
+      height
+    };
+  };
   class $6d3e717fed031fdb2ee2c357e03764b6$export$default {
     constructor(xDomain, yDomain, track) {
       this.xScale = $794bbb298c1fc0cc3157526701549b8c$export$scale(xDomain, [-1, 1]);
@@ -475,6 +498,12 @@
       this.drawMode = $647b390bbe26a1e6bbc6a8c9e19f41d2$export$getDrawModeForTrack(track);
     }
     calculateForMark(mark) {
+      if (this.track.x.type === "genomicRange" || this.track.y.type === "genomicRange") {
+        return this._calculateForMark($6d3e717fed031fdb2ee2c357e03764b6$var$transformGenomicMarkToStandard(mark));
+      }
+      return this._calculateForMark(mark);
+    }
+    _calculateForMark(mark) {
       if (this.track.mark === "area") {
         const toReturn = this._getVerticesForAreaSection(mark);
         this.lastMark = mark;
@@ -1012,7 +1041,6 @@
   $parcel$export($c5987a6c12d3d7b5522038cb2a81673f$exports, "interpolateViridis", function () {
     return $1f00eb975f725d678d6cd4a75976fc88$export$default;
   });
-  const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$d3 = $c5987a6c12d3d7b5522038cb2a81673f$exports;
   // ASSET: node_modules/axios/index.js
   var $9a6acbaf99b7f614537e1f05bbe68696$exports = {};
   // ASSET: node_modules/axios/lib/axios.js
@@ -2593,6 +2621,63 @@
   // Allow use of default import syntax in TypeScript
   $ea182a60f6c3729931fdb5051f0fed05$exports.default = $ea182a60f6c3729931fdb5051f0fed05$export$default;
   $9a6acbaf99b7f614537e1f05bbe68696$exports = $ea182a60f6c3729931fdb5051f0fed05$exports;
+  const $2e9e6b6c3378724b336406626f99a6bc$var$arraySum = arr => arr.reduce((a, b) => a + b, 0);
+  const $2e9e6b6c3378724b336406626f99a6bc$var$createPairMapperToGenome = genomeId => {
+    let chrSizes = $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId];
+    let chrStarts = new Map(chrSizes.slice(0, chrSizes.length - 2).// exclude X and Y chromosomes
+    map((_, index) => [(index + 1).toString(), // treat chromosomes as string to avoid having X and Y be special cases
+    $2e9e6b6c3378724b336406626f99a6bc$var$arraySum(chrSizes.slice(0, index))]));
+    chrStarts.set("X", chrStarts.get(chrStarts.size.toString()) + chrSizes[chrStarts.size - 1]);
+    chrStarts.set("Y", chrStarts.get("X") + chrSizes[chrStarts.size - 1]);
+    // Assumes X and Y have been translated to appropriate index
+    return (chr, pairNum) => {
+      return chrStarts.get(chr) + pairNum;
+    };
+  };
+  const $2e9e6b6c3378724b336406626f99a6bc$export$getGenomeScale = (genomeId, domain) => {
+    let chrSizes = $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId];
+    if (chrSizes === undefined) {
+      console.error(`${genomeId} is not a recognized genome!`);
+    }
+    const mapPairToNumber = $2e9e6b6c3378724b336406626f99a6bc$var$createPairMapperToGenome(genomeId);
+    let [startChr, startPair] = domain[0].substring(3).// Remove chr
+    split(":");
+    // split chromesome and pair number
+    startPair = parseInt(startPair);
+    let [endChr, endPair] = domain[1].substring(3).split(":");
+    endPair = parseInt(endPair);
+    const firstPairInDomain = mapPairToNumber(startChr, startPair);
+    const lastPairInDomain = mapPairToNumber(endChr, endPair);
+    const genomeScale = $794bbb298c1fc0cc3157526701549b8c$export$scale([firstPairInDomain, lastPairInDomain], [-1, 1]);
+    return (chr, gene) => genomeScale(mapPairToNumber(chr, gene));
+  };
+  const $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes = {
+    hg38: Object.freeze([248956422, // chr1
+    242193529, // chr2
+    198295559, // ...
+    190214555, 181538259, 170805979, 159345973, 145138636, 138394717, 135086622, 133797422, 133275309, 114364328, 107043718, 101991189, 90338345, 83257441, 80373285, 58617616, 64444167, // ...
+    46709983, // chr21
+    50818468, // chr22
+    156040895, // chrX
+    57227415]),
+    hg19: Object.freeze([249250621, // chr1
+    243199373, // chr2
+    198022430, // ...
+    191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 133851895, 115169878, 107349540, 102531392, 90354753, 81195210, 78077248, 59128983, 63025520, // ...
+    48129895, // chr21
+    51304566, // chr22
+    155270560, // chrX
+    59373566]),
+    mm39: Object.freeze([195154279, // chr1
+    181755017, // chr2
+    159745316, // ...
+    156860686, 151758149, 149588044, 144995196, 130127694, 124359700, 130530862, 121973369, 120092757, 120883175, 125139656, 104073951, 98008968, 95294699, // ...
+    90720763, // chr18
+    61420004, // chr19
+    169476592, // chrX
+    91455967])
+  };
+  const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$d3 = $c5987a6c12d3d7b5522038cb2a81673f$exports;
   // Default channel values of schema which is passed to webgl drawer
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$export$DEFAULT_CHANNELS = Object.freeze({
     size: {
@@ -2704,7 +2789,7 @@
       } else if (typeof track.data === "string") {
         // Track has its own data to GET
         this.dataPromise = $9a6acbaf99b7f614537e1f05bbe68696$exports.get(track.data).then(response => {
-          this.data = response.data.split("\n");
+          this.data = response.data.split(/[\n\r]+/);
           this.processHeadersAndMappers();
           this.hasOwnData = true;
         });
@@ -2745,8 +2830,10 @@
       this.headers.forEach((header, index) => {
         toReturn[header] = splitted[index];
       });
-      toReturn.geometry.coordinates.push(this.channelMaps.get("x")(splitted));
-      toReturn.geometry.coordinates.push(this.channelMaps.get("y")(splitted));
+      const x = this.channelMaps.get("x")(splitted);
+      const y = this.channelMaps.get("y")(splitted);
+      toReturn.geometry.coordinates.push(Array.isArray(x) ? x[0] : x);
+      toReturn.geometry.coordinates.push(Array.isArray(y) ? y[0] : y);
       return toReturn;
     }
     getNextMark() {
@@ -2772,10 +2859,23 @@
         } else {
           const attributeIndex = this.headers.indexOf(channelInfo.attribute);
           let attrMapper;
-          if (channelInfo.type === "quantitative") {
-            attrMapper = $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForQuantitiveChannel(channel, channelInfo);
-          } else if (channelInfo.type === "categorical") {
-            attrMapper = $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForCategoricalChannel(channel, channelInfo);
+          switch (channelInfo.type) {
+            case "quantitative":
+              attrMapper = $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForQuantitiveChannel(channel, channelInfo);
+              break;
+            case "categorical":
+              attrMapper = $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForCategoricalChannel(channel, channelInfo);
+              break;
+            case "genomic":
+              const chrAttributeIndex = this.headers.indexOf(channelInfo.chrAttribute);
+              const geneAttributeIndex = this.headers.indexOf(channelInfo.geneAttribute);
+              attrMapper = $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicChannel(channel, channelInfo);
+              return row => attrMapper(row[chrAttributeIndex], row[geneAttributeIndex]);
+            case "genomicRange":
+              const genomicAttributeIndices = [this.headers.indexOf(channelInfo.chrAttribute), this.headers.indexOf(channelInfo.startAttribute), this.headers.indexOf(channelInfo.endAttribute)];
+              attrMapper = $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicRangeChannel(channel, channelInfo);
+              return row => // Pass in values for the genomic attributes to mapper
+              attrMapper(...genomicAttributeIndices.map(index => row[index]));
           }
           return row => attrMapper(row[attributeIndex]);
         }
@@ -2784,6 +2884,12 @@
       }
     };
   }
+  /**
+  * Build a function which maps a numerical value for an attribute to a property of a mark
+  * @param {*} channel the name of the quantitative channel to map
+  * @param {*} channelInfo the object containing info for this channel from the schema
+  * @returns a function that maps a data attribute value to a channel value
+  */
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForQuantitiveChannel = (channel, channelInfo) => {
     switch (channel) {
       case "x":
@@ -2806,6 +2912,13 @@
         console.error(`${channel} is not a supported channel for quantitative attributes!`);
     }
   };
+  /**
+  * Build a function which maps a discrete (integers are possible) value for an attribute
+  * to a property of a mark
+  * @param {*} channel the name of the categorical channel to map
+  * @param {*} channelInfo the object containing info for this channel from the schema
+  * @returns a function that maps a data attribute value to a channel value
+  */
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForCategoricalChannel = (channel, channelInfo) => {
     const categoryTracker = new Map();
     let channelScale;
@@ -2848,6 +2961,46 @@
       return channelScale(categoryTracker.get(attrValue));
     };
   };
+  /**
+  * Build a function which maps a genome chr, gene, to a location in the data space
+  * @param {*} channel either x or y
+  * @param {*} channelInfo the object containing info for this channel from the schema
+  * @returns a function that maps (genomeChr, geneLoc) -> [-1, 1]
+  */
+  const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicChannel = (channel, channelInfo) => {
+    switch (channel) {
+      case "x":
+      case "y":
+        const genomeScale = $2e9e6b6c3378724b336406626f99a6bc$export$getGenomeScale(channelInfo.genome, channelInfo.domain);
+        return (chr, gene) => {
+          let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
+          return genomeScale(chrId, parseInt(gene));
+        };
+      default:
+        console.error(`${channel} is not a supported channel for genomic attributes!`);
+    }
+  };
+  /**
+  * Build a function which maps a genome chr, start, and end for to a location in the data space
+  * @param {*} channel either x or y
+  * @param {*} channelInfo the object containing info for this channel from the schema
+  * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
+  *  format: [in the range [-1, 1], in the range [-1, 1] (> first element)}
+  *  ex: [-0.5, 0.2]
+  */
+  const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
+    switch (channel) {
+      case "x":
+      case "y":
+        const genomeScale = $2e9e6b6c3378724b336406626f99a6bc$export$getGenomeScale(channelInfo.genome, channelInfo.domain);
+        return (chr, genomeStart, genomeEnd) => {
+          let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
+          return [genomeScale(chrId, parseInt(genomeStart)), genomeScale(chrId, parseInt(genomeEnd))];
+        };
+      default:
+        console.error(`${channel} is not a supported channel for genomic attributes!`);
+    }
+  };
   $parcel$export($647b390bbe26a1e6bbc6a8c9e19f41d2$exports, "default", function () {
     return $647b390bbe26a1e6bbc6a8c9e19f41d2$export$default;
   });
@@ -2871,4 +3024,4 @@
   parcelRequire.register("3k8Hq", $6d3e717fed031fdb2ee2c357e03764b6$init);
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.e83368c3.js.map
+//# sourceMappingURL=offscreen-webgl-worker.756994ba.js.map

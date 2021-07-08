@@ -1,5 +1,5 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.e83368c3.js");
+  importScripts("./offscreen-webgl-worker.756994ba.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
@@ -60,7 +60,7 @@
   * A vertex shader meant to take in positions and colors.
   */
   const $5aa01963e4773c466fc995fbb6f57ffb$var$baseVertexShader = `
-  precision mediump float;
+  precision highp float;
 
   attribute vec2 aVertexPosition;
 
@@ -9396,4 +9396,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.d45ee18a.js.map
+//# sourceMappingURL=offscreen-webgl-worker.4755d593.js.map

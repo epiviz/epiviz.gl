@@ -24,7 +24,7 @@
     return dest;
   }
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $1d2de42445546f9d0d441595fb07915f$exports = {};
+  var $fb847892d5877609066c0791eda58cce$exports = {};
   var $7d806a7a603c235ec027b73d847f4d95$var$mapping = {};
   function $7d806a7a603c235ec027b73d847f4d95$var$register(pairs) {
     var keys = Object.keys(pairs);
@@ -41,7 +41,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.7b80ae4b.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"1Utg0\":\"offscreen-webgl-worker.d45ee18a.js\",\"1S3Hi\":\"data-processor-worker.0193ab32.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.df37118f.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.4755d593.js\",\"1S3Hi\":\"data-processor-worker.2410f098.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3793,7 +3793,66 @@
       }
     }]
   }, null, 2);
-  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default]]);
+  // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
+  var $4ba204665ead0e711ea03dbeb63addd3$exports = {};
+  $4ba204665ead0e711ea03dbeb63addd3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "3hl2O");
+  var $4ba204665ead0e711ea03dbeb63addd3$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ba204665ead0e711ea03dbeb63addd3$exports);
+  var $a45e353aa6a197e52ec53fe3a27eca5c$export$default = JSON.stringify({
+    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
+    tracks: [{
+      tooltips: 1,
+      mark: "rect",
+      layout: "linear",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "chr",
+        startAttribute: "start",
+        endAttribute: "end",
+        domain: ["chr2:3049800", "chr2:9001000"],
+        genome: "hg38"
+      },
+      y: {
+        value: 0
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "score",
+        domain: [0, 8],
+        colorScheme: "interpolateBlues"
+      }
+    }]
+  }, null, 2);
+  var $58b5cda6e30b83a6e54733d3e1a14e9d$export$default = JSON.stringify({
+    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
+    tracks: [{
+      tooltips: 1,
+      mark: "line",
+      layout: "linear",
+      x: {
+        type: "genomic",
+        chrAttribute: "chr",
+        geneAttribute: "start",
+        domain: ["chr2:3049800", "chr2:9001000"],
+        genome: "hg38"
+      },
+      y: {
+        type: "quantitative",
+        attribute: "score",
+        domain: [0, 10],
+        colorScheme: "interpolateBlues"
+      },
+      color: {
+        type: "quantitative",
+        attribute: "score",
+        domain: [0, 8],
+        colorScheme: "interpolateBlues"
+      }
+    }]
+  }, null, 2);
+  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default]]);
   class $9e70f4d5b36c39388b117fee7d542725$export$default {
     /**
     * A class meant to handle changing options on the scatter plot
@@ -8297,7 +8356,7 @@
     type: "object",
     properties: {
       type: {
-        enum: ["quantitative", "categorical", "genomic"]
+        enum: ["quantitative", "categorical", "genomic", "genomicRange"]
       },
       attribute: {
         type: "string"
@@ -8306,52 +8365,138 @@
         type: ["string", "number", "boolean"]
       },
       domain: {
-        type: "array",
-        items: [{
-          type: "number"
-        }, {
-          type: "number"
-        }]
+        type: "array"
       },
       cardinality: {
         type: "integer"
+      },
+      chrAttribute: {
+        type: "string"
+      },
+      startAttribute: {
+        type: "string"
+      },
+      endAttribute: {
+        type: "string"
+      },
+      genome: {
+        enum: ["hg38", "hg19", "mm39"]
       }
     },
-    anyOf: [{
-      if: {
+    allOf: [// Allows all of the requirements below to occur
+    {
+      anyOf: [// If type is genomic, require genomic attributes and forbid regular attributes
+      {
+        not: {
+          properties: {
+            type: {
+              const: "genomic"
+            }
+          },
+          required: ["type"]
+        }
+      }, {
+        required: ["chrAttribute", "geneAttribute", "genome"],
+        not: {
+          required: ["attribute", "startAttribute", "endAttribute"]
+        },
         properties: {
-          value: {
-            type: "null"
+          domain: {
+            items: [{
+              type: "string",
+              pattern: "chr(\\d{1,2}|[XY]):\\d+"
+            }, {
+              type: "string",
+              pattern: "chr(\\d{1,2}|[XY]):\\d+"
+            }]
           }
         }
-      },
-      then: {
-        // value is not defined, therefore an attribute is required
-        required: ["attribute"],
-        oneOf: [{
+      }]
+    }, {
+      anyOf: [// If type is genomicRange, require genomicRange attributes and forbid regular attribute
+      {
+        not: {
+          properties: {
+            type: {
+              const: "genomicRange"
+            }
+          },
+          required: ["type"]
+        }
+      }, {
+        required: ["chrAttribute", "startAttribute", "endAttribute", "genome"],
+        not: {
+          required: ["attribute", "geneAttribute"]
+        },
+        properties: {
+          domain: {
+            items: [{
+              type: "string",
+              pattern: "chr(\\d{1,2}|[XY]):\\d+"
+            }, {
+              type: "string",
+              pattern: "chr(\\d{1,2}|[XY]):\\d+"
+            }]
+          }
+        }
+      }]
+    }, {
+      anyOf: [// If type is quantitative, require domain and forbid cardinality
+      {
+        not: {
           properties: {
             type: {
               const: "quantitative"
             }
           },
-          required: ["domain"],
-          not: {
-            required: ["cardinality", "value"]
+          required: ["type"]
+        }
+      }, {
+        required: ["domain"],
+        properties: {
+          domain: {
+            items: [{
+              type: "number"
+            }, {
+              type: "number"
+            }]
           }
-        }, {
+        },
+        not: {
+          required: ["cardinality"]
+        }
+      }]
+    }, {
+      anyOf: [// If type is categorical, require cardinality and forbid domain
+      {
+        not: {
           properties: {
             type: {
               const: "categorical"
             }
           },
-          required: ["cardinality"],
-          not: {
-            required: ["domain", "value"]
-          }
-        }]
-      },
-      else: {
-        // value is defined, cannot coexist with other base attributes
+          required: ["type"]
+        }
+      }, {
+        required: ["cardinality"],
+        not: {
+          required: ["domain"]
+        }
+      }]
+    }, {
+      anyOf: [// If value is defined, disallow other attributes
+      {
+        not: {
+          properties: {
+            value: {
+              not: {
+                type: "null"
+              }
+            }
+          },
+          required: ["value"]
+        }
+      }, {
         allOf: [{
           not: {
             required: ["attribute"]
@@ -8369,7 +8514,24 @@
             required: ["cardinality"]
           }
         }]
-      }
+      }]
+    }, {
+      anyOf: [// If value is not defined, require attribute or genomic attributes
+      {
+        not: {
+          properties: {
+            value: {
+              type: "null"
+            }
+          }
+        }
+      }, {
+        oneOf: [{
+          required: ["attribute"]
+        }, {
+          required: ["chrAttribute", "genome"]
+        }]
+      }]
     }]
   };
   const $c8f06cc078f97a945737a566c0b1ac42$var$v = new $0cb2a726714ab9e25f66a914aaf55a06$export$Validator();
@@ -8387,7 +8549,7 @@
     /**
     * A class meant to display a visualization based off a given schema using webgl.
     *
-    * @param {HTMLElement} container <div> or other container element meant to contain the scatterplot and its components
+    * @param {HTMLElement} container <div> or other container element meant to contain the visualization and its mousereader
     */
     constructor(container) {
       this.container = container;
@@ -8398,6 +8560,12 @@
       this.parent.style.height = "100%";
       this.canvas = document.createElement("canvas");
     }
+    /**
+    * Resize the canvas to a particular size and rerender the data
+    *
+    * @param {Number} width in pixels to resize the canvas to
+    * @param {Number} height in pixels to resize the canvas to
+    */
     setCanvasSize(width, height) {
       this.webglWorker.postMessage({
         type: "resize",
@@ -8408,6 +8576,13 @@
       this.mouseReader.height = height;
       this.sendDrawerState(this.mouseReader.getViewport());
     }
+    /**
+    * This method does three things, and should only be called once. If changing the schema
+    * use setSchema.
+    *  1. Add the canvas and mousereader to the DOM for use.
+    *  2. Creates the WebWorkers that render and process the data.
+    *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
+    */
     addToDom() {
       this.container.appendChild(this.parent);
       this.width = this.parent.clientWidth;
@@ -8439,16 +8614,37 @@
       // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
       this.mouseReader.init();
     }
+    /**
+    * The main method for changing the state of the visualization, such as active tool,
+    * viewport, locking axis, or changing the zoom.
+    *
+    * The format of the options:
+    *   lockedX: boolean
+    *   lockedY: boolean
+    *   viewport: [minX, maxX, minY, maxY] (all Numbers)
+    *   currentXRange: [x1, x2] (Numbers that should be within the viewport minX and maxX)
+    *   currentYRange: [y1, y2] (Numbers that should be within the viewport minY and maxY)
+    *   tool: one of ["pan", "box", "lasso"]
+    *
+    * @param {Object} options with keys under WebGLVis.POSSIBLE_MOUSE_READER_OPTIONS
+    */
     setViewOptions(options) {
       for (const option of this.POSSIBLE_MOUSE_READER_OPTIONS) {
         if ((option in options)) {
           this.mouseReader[option] = options[option];
         }
       }
+      this.sendDrawerState(this.mouseReader.getViewport());
     }
+    /**
+    * Set the schema of the visualization, and then render it.
+    *
+    * @param {Object} schema describing visualization
+    * @returns boolean on whether the schema was accepted
+    */
     setSchema(schema) {
       if (!$c8f06cc078f97a945737a566c0b1ac42$export$default(schema)) {
-        return;
+        return false;
       }
       this.mouseReader.viewport = $794bbb298c1fc0cc3157526701549b8c$export$schemaViewport(schema);
       this.sendDrawerState(this.mouseReader.getViewport());
@@ -8460,9 +8656,10 @@
         type: "init",
         schema
       });
+      return true;
     }
     /**
-    * Send the viewport to the drawer.
+    * Send the viewport to the drawer. Use setViewOptions to change the viewport.
     *
     * @param {Object} viewport likely from this.mouseReader.getViewport()
     */
@@ -8481,19 +8678,14 @@
         ...this.mouseReader.getViewport()
       });
     }
-    buildDataProcessor(data, options) {
-      this.dataWorker.postMessage({
-        type: "init",
-        data,
-        options
-      });
-    }
     /**
     * Utility method to have data worker call {@link DataProcessor#selectBox} or
     * {@link DataProcessor#selectLasso}.
     *
     * Does not return, posts result to this.dataWorkerStream.
     * @param {Array} points array in format [x1,y1,x2,y2,x3,y3,...]
+    *  if points.length == 4, does a box select, if points.length >= 6 does a lasso select
+    *    using points as a polygon
     */
     selectPoints(points) {
       if (points.length === 4) {
@@ -8607,4 +8799,4 @@
   });
 })();
 
-//# sourceMappingURL=index.7b80ae4b.js.map
+//# sourceMappingURL=index.df37118f.js.map
