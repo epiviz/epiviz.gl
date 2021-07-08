@@ -179,7 +179,7 @@ const channel = {
   type: "object",
   properties: {
     type: {
-      enum: ["quantitative", "categorical", "genomic"],
+      enum: ["quantitative", "categorical", "genomic", "genomicRange"],
     },
     attribute: {
       type: "string",
@@ -189,58 +189,164 @@ const channel = {
     },
     domain: {
       type: "array",
-      items: [{ type: "number" }, { type: "number" }],
     },
     cardinality: {
       type: "integer",
     },
+    chrAttribute: {
+      type: "string",
+    },
+    startAttribute: {
+      type: "string",
+    },
+    endAttribute: {
+      type: "string",
+    },
+    genome: {
+      enum: ["hg38", "hg19", "mm39"],
+    },
   },
-  anyOf: [
+  allOf: [
+    // Allows all of the requirements below to occur
     {
-      if: {
-        properties: {
-          value: {
-            type: "null",
+      anyOf: [
+        // If type is genomic, require genomic attributes and forbid regular attributes
+        {
+          not: {
+            properties: { type: { const: "genomic" } },
+            required: ["type"],
           },
         },
-      },
-      then: {
-        // value is not defined, therefore an attribute is required
-        required: ["attribute"],
-        oneOf: [
-          {
-            properties: {
-              type: { const: "quantitative" },
+        {
+          required: ["chrAttribute", "geneAttribute", "genome"],
+          not: { required: ["attribute", "startAttribute", "endAttribute"] },
+          properties: {
+            domain: {
+              items: [
+                { type: "string", pattern: "chr(\\d{1,2}|[XY]):\\d+" },
+                { type: "string", pattern: "chr(\\d{1,2}|[XY]):\\d+" },
+              ],
             },
-            required: ["domain"],
-            not: { required: ["cardinality", "value"] },
           },
-          {
-            properties: {
-              type: { const: "categorical" },
+        },
+      ],
+    },
+    {
+      anyOf: [
+        // If type is genomicRange, require genomicRange attributes and forbid regular attribute
+        {
+          not: {
+            properties: { type: { const: "genomicRange" } },
+            required: ["type"],
+          },
+        },
+        {
+          required: [
+            "chrAttribute",
+            "startAttribute",
+            "endAttribute",
+            "genome",
+          ],
+          not: { required: ["attribute", "geneAttribute"] },
+          properties: {
+            domain: {
+              items: [
+                { type: "string", pattern: "chr(\\d{1,2}|[XY]):\\d+" },
+                { type: "string", pattern: "chr(\\d{1,2}|[XY]):\\d+" },
+              ],
             },
+          },
+        },
+      ],
+    },
+    {
+      anyOf: [
+        // If type is quantitative, require domain and forbid cardinality
+        {
+          not: {
+            properties: { type: { const: "quantitative" } },
+            required: ["type"],
+          },
+        },
+        {
+          required: ["domain"],
+          properties: {
+            domain: {
+              items: [{ type: "number" }, { type: "number" }],
+            },
+          },
+          not: {
             required: ["cardinality"],
-            not: { required: ["domain", "value"] },
           },
-        ],
-      },
-      else: {
-        // value is defined, cannot coexist with other base attributes
-        allOf: [
-          {
-            not: { required: ["attribute"] },
+        },
+      ],
+    },
+
+    {
+      anyOf: [
+        // If type is categorical, require cardinality and forbid domain
+        {
+          not: {
+            properties: { type: { const: "categorical" } },
+            required: ["type"],
           },
-          {
-            not: { required: ["type"] },
+        },
+        {
+          required: ["cardinality"],
+          not: {
+            required: ["domain"],
           },
-          {
-            not: { required: ["domain"] },
+        },
+      ],
+    },
+
+    {
+      anyOf: [
+        // If value is defined, disallow other attributes
+        {
+          not: {
+            properties: { value: { not: { type: "null" } } },
+            required: ["value"],
           },
-          {
-            not: { required: ["cardinality"] },
+        },
+        {
+          allOf: [
+            {
+              not: { required: ["attribute"] },
+            },
+            {
+              not: { required: ["type"] },
+            },
+            {
+              not: { required: ["domain"] },
+            },
+            {
+              not: { required: ["cardinality"] },
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      anyOf: [
+        // If value is not defined, require attribute or genomic attributes
+        {
+          not: {
+            properties: { value: { type: "null" } },
           },
-        ],
-      },
+        },
+        {
+          oneOf: [
+            {
+              required: ["attribute"],
+            },
+            {
+              required: ["chrAttribute", "genome"],
+            },
+          ],
+        },
+      ],
     },
   ],
 };

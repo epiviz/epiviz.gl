@@ -1,11 +1,36 @@
 import { scale } from "./utilities";
 import { getDrawModeForTrack } from "./schema-processor";
 
-// Each size value refers to 1/200 of the clip space
+// Each size unit refers to 1/200 of the clip space
 // e.g. if the canvas is 1000x1000 pixels, and the size value for a mark
 // is 10, then that mark takes up 10/200 = 1/20 of the clip space which
 // is equal to 50 pixels
 const SIZE_UNITS = 1 / 100;
+
+const transformGenomicMarkToStandard = (mark) => {
+  let x, y, width, height;
+  if (Array.isArray(mark.x)) {
+    x = mark.x[0];
+    width = (mark.x[1] - mark.x[0]) / SIZE_UNITS;
+  } else {
+    x = mark.x;
+    width = mark.width;
+  }
+
+  if (Array.isArray(mark.y)) {
+    y = mark.y[0];
+    height = (mark.y[1] - mark.y[0]) / SIZE_UNITS;
+  } else {
+    y = mark.y;
+    height = mark.height;
+  }
+  return {
+    x,
+    y,
+    width,
+    height,
+  };
+};
 
 class VertexCalculator {
   constructor(xDomain, yDomain, track) {
@@ -16,6 +41,16 @@ class VertexCalculator {
   }
 
   calculateForMark(mark) {
+    if (
+      this.track.x.type === "genomicRange" ||
+      this.track.y.type === "genomicRange"
+    ) {
+      return this._calculateForMark(transformGenomicMarkToStandard(mark));
+    }
+    return this._calculateForMark(mark);
+  }
+
+  _calculateForMark(mark) {
     if (this.track.mark === "area") {
       const toReturn = this._getVerticesForAreaSection(mark);
       this.lastMark = mark;

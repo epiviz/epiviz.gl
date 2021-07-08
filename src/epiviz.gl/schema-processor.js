@@ -1,5 +1,6 @@
 import { rgbStringToHex, scale, colorSpecifierToHex } from "./utilities";
 import { SIZE_UNITS } from "./vertex-calculator";
+import { getGenomeScale } from "./genome-sizes";
 
 const d3 = require("d3-scale-chromatic");
 const axios = require("axios");
@@ -127,7 +128,7 @@ class Track {
     } else if (typeof track.data === "string") {
       // Track has its own data to GET
       this.dataPromise = axios.get(track.data).then((response) => {
-        this.data = response.data.split("\n");
+        this.data = response.data.split(/[\n\r]+/);
         this.processHeadersAndMappers();
         this.hasOwnData = true;
       });
@@ -171,8 +172,10 @@ class Track {
       toReturn[header] = splitted[index];
     });
 
-    toReturn.geometry.coordinates.push(this.channelMaps.get("x")(splitted));
-    toReturn.geometry.coordinates.push(this.channelMaps.get("y")(splitted));
+    const x = this.channelMaps.get("x")(splitted);
+    const y = this.channelMaps.get("y")(splitted);
+    toReturn.geometry.coordinates.push(Array.isArray(x) ? x[0] : x);
+    toReturn.geometry.coordinates.push(Array.isArray(y) ? y[0] : y);
     return toReturn;
   }
 
@@ -203,10 +206,37 @@ class Track {
         const attributeIndex = this.headers.indexOf(channelInfo.attribute);
         let attrMapper;
 
-        if (channelInfo.type === "quantitative") {
-          attrMapper = buildMapperForQuantitiveChannel(channel, channelInfo);
-        } else if (channelInfo.type === "categorical") {
-          attrMapper = buildMapperForCategoricalChannel(channel, channelInfo);
+        switch (channelInfo.type) {
+          case "quantitative":
+            attrMapper = buildMapperForQuantitiveChannel(channel, channelInfo);
+            break;
+          case "categorical":
+            attrMapper = buildMapperForCategoricalChannel(channel, channelInfo);
+            break;
+          case "genomic":
+            const chrAttributeIndex = this.headers.indexOf(
+              channelInfo.chrAttribute
+            );
+            const geneAttributeIndex = this.headers.indexOf(
+              channelInfo.geneAttribute
+            );
+            attrMapper = buildMapperForGenomicChannel(channel, channelInfo);
+            return (row) =>
+              attrMapper(row[chrAttributeIndex], row[geneAttributeIndex]);
+          case "genomicRange":
+            const genomicAttributeIndices = [
+              this.headers.indexOf(channelInfo.chrAttribute),
+              this.headers.indexOf(channelInfo.startAttribute),
+              this.headers.indexOf(channelInfo.endAttribute),
+            ];
+            attrMapper = buildMapperForGenomicRangeChannel(
+              channel,
+              channelInfo
+            );
+            return (
+              row // Pass in values for the genomic attributes to mapper
+            ) =>
+              attrMapper(...genomicAttributeIndices.map((index) => row[index]));
         }
         return (row) => attrMapper(row[attributeIndex]);
       }
@@ -216,6 +246,12 @@ class Track {
   };
 }
 
+/**
+ * Build a function which maps a numerical value for an attribute to a property of a mark
+ * @param {*} channel the name of the quantitative channel to map
+ * @param {*} channelInfo the object containing info for this channel from the schema
+ * @returns a function that maps a data attribute value to a channel value
+ */
 const buildMapperForQuantitiveChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
@@ -257,6 +293,13 @@ const buildMapperForQuantitiveChannel = (channel, channelInfo) => {
   }
 };
 
+/**
+ * Build a function which maps a discrete (integers are possible) value for an attribute
+ * to a property of a mark
+ * @param {*} channel the name of the categorical channel to map
+ * @param {*} channelInfo the object containing info for this channel from the schema
+ * @returns a function that maps a data attribute value to a channel value
+ */
 const buildMapperForCategoricalChannel = (channel, channelInfo) => {
   const categoryTracker = new Map();
   let channelScale;
@@ -332,6 +375,66 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
     return channelScale(categoryTracker.get(attrValue));
   };
 };
+
+/**
+ * Build a function which maps a genome chr, gene, to a location in the data space
+ * @param {*} channel either x or y
+ * @param {*} channelInfo the object containing info for this channel from the schema
+ * @returns a function that maps (genomeChr, geneLoc) -> [-1, 1]
+ */
+const buildMapperForGenomicChannel = (channel, channelInfo) => {
+  switch (channel) {
+    case "x":
+    case "y":
+      const genomeScale = getGenomeScale(
+        channelInfo.genome,
+        channelInfo.domain
+      );
+
+      return (chr, gene) => {
+        let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
+        return genomeScale(chrId, parseInt(gene));
+      };
+
+    default:
+      console.error(
+        `${channel} is not a supported channel for genomic attributes!`
+      );
+  }
+};
+
+/**
+ * Build a function which maps a genome chr, start, and end for to a location in the data space
+ * @param {*} channel either x or y
+ * @param {*} channelInfo the object containing info for this channel from the schema
+ * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
+ *  format: [in the range [-1, 1], in the range [-1, 1] (> first element)}
+ *  ex: [-0.5, 0.2]
+ */
+const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
+  switch (channel) {
+    case "x":
+    case "y":
+      const genomeScale = getGenomeScale(
+        channelInfo.genome,
+        channelInfo.domain
+      );
+
+      return (chr, genomeStart, genomeEnd) => {
+        let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
+        return [
+          genomeScale(chrId, parseInt(genomeStart)),
+          genomeScale(chrId, parseInt(genomeEnd)),
+        ];
+      };
+
+    default:
+      console.error(
+        `${channel} is not a supported channel for genomic attributes!`
+      );
+  }
+};
+
 export default SchemaProcessor;
 
 export { DEFAULT_CHANNELS, getDrawModeForTrack };

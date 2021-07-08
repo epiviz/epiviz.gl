@@ -15,6 +15,8 @@ import scatterGrid from "../examples/scatter-grid";
 import heatmap from "../examples/heatmap";
 import signedBarChart from "../examples/signed-bar-chart";
 import verticalSignedBarChart from "../examples/vertical-signed-bar-chart";
+import boxTrack from "../examples/box-track";
+import lineTrack from "../examples/line-track";
 
 const exampleMap = new Map([
   ["area-chart", areaChart],
@@ -32,6 +34,8 @@ const exampleMap = new Map([
   ["heatmap", heatmap],
   ["signed-bar-chart", signedBarChart],
   ["vertical-signed-bar-chart", verticalSignedBarChart],
+  ["box-track", boxTrack],
+  ["line-track", lineTrack],
 ]);
 
 class Toolbar {

@@ -207,6 +207,94 @@ describe("Visualization Schema Validation", function () {
         })
       ).to.eq(false);
     });
+
+    it("can allow for three genomicRange attributes when type is genomicRange", function () {
+      expect(
+        validate({
+          type: "genomicRange",
+          domain: ["chr1:1", "chr1:2"],
+          chrAttribute: "chr",
+          startAttribute: "start",
+          endAttribute: "end",
+          genome: "hg38",
+        })
+      ).to.eq(true);
+
+      expect(
+        validate({
+          type: "genomicRange",
+          domain: ["chr1:1", "chr1:2"],
+          startAttribute: "start",
+          endAttribute: "end",
+          genome: "hg38",
+        })
+      ).to.eq(false);
+
+      expect(
+        validate({
+          type: "genomicRange",
+          domain: [0, 1],
+          chrAttribute: "chr",
+          startAttribute: "start",
+          endAttribute: "end",
+          genome: "hg38",
+        })
+      ).to.eq(false);
+
+      expect(
+        validate({
+          type: "genomicRange",
+          domain: ["chr1:1", "chr1:2"],
+          attribute: "chr",
+          chrAttribute: "chr2",
+          startAttribute: "start",
+          endAttribute: "end",
+          genome: "hg38",
+        })
+      ).to.eq(false);
+    });
+
+    it("can allow for two genomic attributes when type is genomic", function () {
+      expect(
+        validate({
+          type: "genomic",
+          domain: ["chr1:1", "chr1:2"],
+          chrAttribute: "chr",
+          geneAttribute: "gene",
+          genome: "hg38",
+        })
+      ).to.eq(true);
+
+      expect(
+        validate({
+          type: "genomic",
+          domain: ["chr1:1", "chr1:2"],
+          geneAttribute: "gene",
+          genome: "hg38",
+        })
+      ).to.eq(false);
+
+      expect(
+        validate({
+          type: "genomic",
+          domain: [0, 1],
+          chrAttribute: "chr",
+          geneAttribute: "gene",
+          genome: "hg38",
+        })
+      ).to.eq(false);
+
+      expect(
+        validate({
+          type: "genomic",
+          domain: ["chr1:1", "chr1:2"],
+          attribute: "chr",
+          chrAttribute: "chr",
+          geneAttribute: "gene",
+          genome: "hg38",
+        })
+      ).to.eq(false);
+    });
   });
 
   context("track validation", function () {

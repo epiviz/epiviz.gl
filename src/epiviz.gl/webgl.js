@@ -5,7 +5,7 @@ import { colorSpecifierToHex } from "./utilities";
  * A vertex shader meant to take in positions and colors.
  */
 const baseVertexShader = `
-  precision mediump float;
+  precision highp float;
 
   attribute vec2 aVertexPosition;
 
