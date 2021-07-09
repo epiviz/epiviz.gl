@@ -72,6 +72,7 @@ class GenomeScale {
         chrLoc = genomeSpot - cumulativeTotal;
         break;
       }
+      cumulativeTotal += pairCount;
     }
 
     if (chrNum === genomeSizes[this.genomeId].length) {

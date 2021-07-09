@@ -73,7 +73,6 @@ class DataProcessor {
             if (modifyGeometry) {
               modifyGeometry(currentPoint);
             }
-            console.log(currentPoint);
             this.points.push(currentPoint);
             currentPoint = track.getNextDataPoint();
           }

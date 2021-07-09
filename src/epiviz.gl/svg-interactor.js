@@ -1,4 +1,4 @@
-import { scale } from "./utilities";
+import { scale, getScaleForSchema } from "./utilities";
 
 const d3Axis = require("d3-axis");
 const d3Scale = require("d3-scale");
@@ -25,8 +25,15 @@ class SVGInteractor {
   }
 
   setSchema(schema) {
-    // this.xAxis = this._calculateAxis("x", schema.xAxis, schema);
-    // this.yAxis = this._calculateAxis("y", schema.yAxis, schema);
+    this.schema = schema;
+    if (this.currentYRange) {
+      this.yAxis = this._calculateAxis(
+        "y",
+        schema.yAxis,
+        schema,
+        getScaleForSchema("y", schema)
+      );
+    }
   }
 
   init() {
@@ -40,6 +47,19 @@ class SVGInteractor {
     this.width = width;
     this.height = height;
 
+    if (this.currentXRange) {
+      this.xAxis = this._calculateAxis(
+        "x",
+        this.schema.xAxis,
+        this.schema,
+        getScaleForSchema("x", this.schema)
+      );
+    }
+
+    if (this.xAxis) {
+      console.log(this.xAxis);
+      this.axisAnchor.call(this.xAxis);
+    }
     // if (this.currentXRange) {
     //   this.axisAnchor.call(
     //     d3Axis
@@ -54,7 +74,7 @@ class SVGInteractor {
     // }
   }
 
-  _calculateAxis(dimension, orientation, schema) {
+  _calculateAxis(dimension, orientation, schema, genomeScale) {
     let axis, domain, range;
     if (dimension === "x") {
       domain = this.currentXRange;
@@ -62,7 +82,7 @@ class SVGInteractor {
       if (orientation === "top") {
         axis = d3Axis.axisTop();
       } else {
-        axis = d3Axis.axisBottom().translate(0, this.height);
+        axis = d3Axis.axisBottom(); //.translate(0, this.height);
       }
     }
 
@@ -76,16 +96,20 @@ class SVGInteractor {
       }
     }
 
-    genomic = false;
+    let genomic = false;
     for (const track of schema.tracks) {
-      if (track[dimension].type.includes("genomic")) {
+      if (track[dimension].type && track[dimension].type.includes("genomic")) {
         genomic = true;
       }
     }
-
     if (!genomic) {
       return axis.scale(d3Scale.scaleLinear().domain(domain).range(range));
     }
+
+    return axis
+      .scale(d3Scale.scaleLinear().domain(domain).range(range))
+      .tickValues([])
+      .tickFormat((d) => genomeScale.inverse(d));
   }
 
   /**
