@@ -1,7 +1,5 @@
 import { scale } from "./utilities";
 
-const arraySum = (arr) => arr.reduce((a, b) => a + b, 0);
-
 const createPairMapperToGenome = (genomeId) => {
   let chrSizes = genomeSizes[genomeId];
 
@@ -20,35 +18,79 @@ const createPairMapperToGenome = (genomeId) => {
   );
 
   chrStarts.set("Y", chrStarts.get("X") + chrSizes[chrStarts.size - 1]);
-  // Assumes X and Y have been translated to appropriate index
   return (chr, pairNum) => {
     return chrStarts.get(chr) + pairNum;
   };
 };
 
-const getGenomeScale = (genomeId, domain) => {
-  let chrSizes = genomeSizes[genomeId];
-  if (chrSizes === undefined) {
-    console.error(`${genomeId} is not a recognized genome!`);
+class GenomeScale {
+  constructor(genomeId, domain) {
+    if (genomeSizes[genomeId] === undefined) {
+      console.error(`${genomeId} is not a recognized genome!`);
+    }
+    this.genomeId = genomeId;
+    this.domain = domain;
+
+    let [startChr, startPair] = domain[0]
+      .substring(3) // Remove chr
+      .split(":"); // split chromesome and pair number
+    startPair = parseInt(startPair);
+
+    let [endChr, endPair] = domain[1].substring(3).split(":");
+    endPair = parseInt(endPair);
+
+    this.mapPairToGenomeIndex = createPairMapperToGenome(genomeId);
+    const firstPairInDomain = this.mapPairToGenomeIndex(startChr, startPair);
+    const lastPairInDomain = this.mapPairToGenomeIndex(endChr, endPair);
+    this.mapGenomeIndexToClipSpace = scale(
+      [firstPairInDomain, lastPairInDomain],
+      [-1, 1]
+    );
+    this.mapGenomeIndexToClipSpaceInverse = scale(
+      [-1, 1],
+      [firstPairInDomain, lastPairInDomain]
+    );
   }
 
-  const mapPairToNumber = createPairMapperToGenome(genomeId);
+  toClipSpaceFromParts(chr, pair) {
+    return this.mapGenomeIndexToClipSpace(this.mapPairToGenomeIndex(chr, pair));
+  }
 
-  let [startChr, startPair] = domain[0]
-    .substring(3) // Remove chr
-    .split(":"); // split chromesome and pair number
-  startPair = parseInt(startPair);
+  toClipSpaceFromString(pairStr) {
+    let [chr, pair] = pairStr.substring(3).split(":");
+    pair = parseInt(pair);
+    return this.toClipSpaceFromParts(chr, pair);
+  }
 
-  let [endChr, endPair] = domain[1].substring(3).split(":");
-  endPair = parseInt(endPair);
+  inverse(num) {
+    let genomeSpot = Math.floor(this.mapGenomeIndexToClipSpaceInverse(num));
+    let chrNum = 1;
+    let chrLoc;
+    let cumulativeTotal = 0;
+    for (const pairCount of genomeSizes[this.genomeId]) {
+      if (cumulativeTotal + pairCount > genomeSpot) {
+        chrLoc = genomeSpot - cumulativeTotal;
+        break;
+      }
+    }
 
-  const firstPairInDomain = mapPairToNumber(startChr, startPair);
-  const lastPairInDomain = mapPairToNumber(endChr, endPair);
+    if (chrNum === genomeSizes[this.genomeId].length) {
+      chrNum = "Y";
+    } else if (chrNum === genomeSizes[this.genomeId].length - 1) {
+      chrNum = "X";
+    }
+    return `chr${chrNum}:${chrLoc}`;
+  }
 
-  const genomeScale = scale([firstPairInDomain, lastPairInDomain], [-1, 1]);
+  static completeScale(genomeId) {
+    const chrSizes = genomeSizes[genomeId];
+    const finalChrSize = chrSizes[chrSizes.length - 1];
 
-  return (chr, gene) => genomeScale(mapPairToNumber(chr, gene));
-};
+    return new GenomeScale(genomeId, ["chr1:1", `chrY:${finalChrSize}`]);
+  }
+}
+
+const arraySum = (arr) => arr.reduce((a, b) => a + b, 0);
 
 const genomeSizes = {
   hg38: Object.freeze([
@@ -130,4 +172,4 @@ const genomeSizes = {
   ]),
 };
 
-export { genomeSizes, getGenomeScale };
+export { genomeSizes, GenomeScale };

@@ -1,6 +1,10 @@
-import { rgbStringToHex, scale, colorSpecifierToHex } from "./utilities";
+import {
+  rgbStringToHex,
+  scale,
+  colorSpecifierToHex,
+  getScaleForSchema,
+} from "./utilities";
 import { SIZE_UNITS } from "./vertex-calculator";
-import { getGenomeScale } from "./genome-sizes";
 
 const d3 = require("d3-scale-chromatic");
 const axios = require("axios");
@@ -102,6 +106,9 @@ class SchemaProcessor {
       allPromises.push(this.dataPromise);
     }
 
+    this.xScale = getScaleForSchema("x", schema);
+    this.yScale = getScaleForSchema("y", schema);
+
     // When all tracks have acquired their data, call the callback
     // TODO: Allow tracks to be processed while waiting for others, need to keep in mind order
     Promise.all(allPromises).then(() => callback(this));
@@ -174,8 +181,7 @@ class Track {
 
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
-    toReturn.geometry.coordinates.push(Array.isArray(x) ? x[0] : x);
-    toReturn.geometry.coordinates.push(Array.isArray(y) ? y[0] : y);
+    toReturn.geometry.coordinates.push(x, y);
     return toReturn;
   }
 
@@ -377,23 +383,19 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
 };
 
 /**
- * Build a function which maps a genome chr, gene, to a location in the data space
+ * Build a function which maps a genome chr, gene, to an object consumable by a GenomeScale
  * @param {*} channel either x or y
  * @param {*} channelInfo the object containing info for this channel from the schema
- * @returns a function that maps (genomeChr, geneLoc) -> [-1, 1]
+ * @returns a function that maps (genomeChr, geneLoc) -> [chrId, geneLocation]
+ *  ex: ["X", 200]
  */
 const buildMapperForGenomicChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
-      const genomeScale = getGenomeScale(
-        channelInfo.genome,
-        channelInfo.domain
-      );
-
       return (chr, gene) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return genomeScale(chrId, parseInt(gene));
+        return [chrId, parseInt(gene)];
       };
 
     default:
@@ -404,28 +406,20 @@ const buildMapperForGenomicChannel = (channel, channelInfo) => {
 };
 
 /**
- * Build a function which maps a genome chr, start, and end for to a location in the data space
+ * Build a function which maps a genome chr, start, and end to an object consumable by a scale
  * @param {*} channel either x or y
  * @param {*} channelInfo the object containing info for this channel from the schema
  * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
- *  format: [in the range [-1, 1], in the range [-1, 1] (> first element)}
- *  ex: [-0.5, 0.2]
+ *  format: [chrId, geneLocation, chrId2, geneLocation2]
+ *  ex: ["1", 1000, "X", 2000]
  */
 const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
-      const genomeScale = getGenomeScale(
-        channelInfo.genome,
-        channelInfo.domain
-      );
-
       return (chr, genomeStart, genomeEnd) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return [
-          genomeScale(chrId, parseInt(genomeStart)),
-          genomeScale(chrId, parseInt(genomeEnd)),
-        ];
+        return [chrId, parseInt(genomeStart), chrId, parseInt(genomeEnd)];
       };
 
     default:

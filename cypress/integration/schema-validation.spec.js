@@ -10,7 +10,6 @@ const baseValidTrack = {
     type: "quantitative",
     domain: [0, 1],
     scale: "linear",
-    axis: "bottom",
   },
   y: {
     attribute: "attr",

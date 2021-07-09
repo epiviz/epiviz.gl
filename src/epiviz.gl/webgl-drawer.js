@@ -78,8 +78,8 @@ class WebGLCanvasDrawer extends Drawer {
     while (currentTrack) {
       // Construct calculator in track loop as calculator keeps internal state for each track
       let vertexCalculator = new VertexCalculator(
-        [this.minX, this.maxX],
-        [this.minY, this.maxY],
+        schemaHelper.xScale,
+        schemaHelper.yScale,
         currentTrack.track // Access actual track schema
       );
 

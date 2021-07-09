@@ -1,4 +1,4 @@
-import { scale } from "./utilities";
+import { GenomeScale } from "./genome-sizes";
 import { getDrawModeForTrack } from "./schema-processor";
 
 // Each size unit refers to 1/200 of the clip space
@@ -7,37 +7,48 @@ import { getDrawModeForTrack } from "./schema-processor";
 // is equal to 50 pixels
 const SIZE_UNITS = 1 / 100;
 
-const transformGenomicMarkToStandard = (mark) => {
-  let x, y, width, height;
-  if (Array.isArray(mark.x)) {
-    x = mark.x[0];
-    width = (mark.x[1] - mark.x[0]) / SIZE_UNITS;
-  } else {
-    x = mark.x;
-    width = mark.width;
-  }
-
-  if (Array.isArray(mark.y)) {
-    y = mark.y[0];
-    height = (mark.y[1] - mark.y[0]) / SIZE_UNITS;
-  } else {
-    y = mark.y;
-    height = mark.height;
-  }
-  return {
-    x,
-    y,
-    width,
-    height,
-  };
-};
-
 class VertexCalculator {
-  constructor(xDomain, yDomain, track) {
-    this.xScale = scale(xDomain, [-1, 1]);
-    this.yScale = scale(yDomain, [-1, 1]);
+  constructor(xScale, yScale, track) {
+    if (xScale instanceof GenomeScale) {
+      this.xScale = (args) => xScale.toClipSpaceFromParts(args[0], args[1]);
+    } else {
+      this.xScale = xScale;
+    }
+
+    if (yScale instanceof GenomeScale) {
+      this.yScale = (args) => yScale.toClipSpaceFromParts(args[0], args[1]);
+    } else {
+      this.yScale = yScale;
+    }
+
     this.track = track;
     this.drawMode = getDrawModeForTrack(track);
+  }
+
+  transformGenomicRangeToStandard(mark) {
+    let x, y, width, height;
+    if (Array.isArray(mark.x)) {
+      let x1 = this.xScale([mark.x[0], mark.x[1]]);
+      x = [mark.x[0], mark.x[1]];
+      width = (this.xScale([mark.x[2], mark.x[3]]) - x1) / SIZE_UNITS;
+    } else {
+      x = mark.x;
+      width = mark.width;
+    }
+
+    if (Array.isArray(mark.y)) {
+      y = this.yScale([mark.y[0], mark.y[1]]);
+      height = (this.yScale([mark.y[2], mark.y[3]]) - y) / SIZE_UNITS;
+    } else {
+      y = mark.y;
+      height = mark.height;
+    }
+    return {
+      x,
+      y,
+      width,
+      height,
+    };
   }
 
   calculateForMark(mark) {
@@ -45,7 +56,7 @@ class VertexCalculator {
       this.track.x.type === "genomicRange" ||
       this.track.y.type === "genomicRange"
     ) {
-      return this._calculateForMark(transformGenomicMarkToStandard(mark));
+      return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
     }
     return this._calculateForMark(mark);
   }

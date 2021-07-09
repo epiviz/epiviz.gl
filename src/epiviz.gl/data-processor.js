@@ -4,6 +4,7 @@ import Supercluster from "supercluster";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon } from "@turf/helpers";
 import simplify from "@turf/simplify";
+import { GenomeScale } from "./genome-sizes";
 
 class DataProcessor {
   /**
@@ -24,6 +25,43 @@ class DataProcessor {
 
   indexData(schemaHelper) {
     this.points = [];
+    let modifyGeometry;
+
+    if (schemaHelper.xScale instanceof GenomeScale) {
+      modifyGeometry = (point) => {
+        point.geometry.coordinates[0] =
+          schemaHelper.xScale.toClipSpaceFromParts(
+            point.geometry.coordinates[0][0],
+            point.geometry.coordinates[0][1]
+          );
+      };
+    }
+
+    if (schemaHelper.yScale instanceof GenomeScale) {
+      if (modifyGeometry) {
+        // x dimension is also a genome scale
+        (point) => {
+          point.geometry.coordinates = [
+            schemaHelper.xScale.toClipSpaceFromParts(
+              point.geometry.coordinates[0][0],
+              point.geometry.coordinates[0][1]
+            ),
+            schemaHelper.yScale.toClipSpaceFromParts(
+              point.geometry.coordinates[0][0],
+              point.geometry.coordinates[0][1]
+            ),
+          ];
+        };
+      } else {
+        modifyGeometry = (point) => {
+          point.geometry.coordinates[1] =
+            schemaHelper.yScale.toClipSpaceFromParts(
+              point.geometry.coordinates[0][0],
+              point.geometry.coordinates[0][1]
+            );
+        };
+      }
+    }
 
     console.log("Reading data...");
 
@@ -32,6 +70,10 @@ class DataProcessor {
         if (!track.hasOwnData) {
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
+            if (modifyGeometry) {
+              modifyGeometry(currentPoint);
+            }
+            console.log(currentPoint);
             this.points.push(currentPoint);
             currentPoint = track.getNextDataPoint();
           }
@@ -44,6 +86,9 @@ class DataProcessor {
       .forEach((track) => {
         let currentPoint = track.getNextDataPoint();
         while (currentPoint) {
+          if (modifyGeometry) {
+            modifyGeometry(currentPoint);
+          }
           this.points.push(currentPoint);
           currentPoint = track.getNextDataPoint();
         }

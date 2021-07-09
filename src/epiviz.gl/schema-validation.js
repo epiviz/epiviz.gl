@@ -8,6 +8,12 @@ const visualization = {
   type: "object",
   required: ["tracks"],
   properties: {
+    xAxis: {
+      enum: ["bottom", "top"],
+    },
+    yAxis: {
+      enum: ["left", "right"],
+    },
     tracks: {
       type: "array",
       items: { $ref: "/track" },
@@ -73,9 +79,6 @@ const track = {
         scale: {
           enum: ["linear", "log", "sqrt"],
         },
-        axis: {
-          enum: ["bottom", "top"],
-        },
       },
       allOf: [{ $ref: "/channel" }],
     },
@@ -84,9 +87,6 @@ const track = {
       properties: {
         scale: {
           enum: ["linear", "log", "sqrt"],
-        },
-        axis: {
-          enum: ["left", "right"],
         },
       },
       allOf: [{ $ref: "/channel" }],

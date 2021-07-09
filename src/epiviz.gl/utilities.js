@@ -1,3 +1,4 @@
+import { GenomeScale } from "./genome-sizes";
 const d3 = require("d3-color");
 
 /**
@@ -40,7 +41,15 @@ function colorSpecifierToHex(specifier) {
   return rgbToHex(asColor.r, asColor.g, asColor.b);
 }
 
-function schemaViewport(schema) {
+/**
+ * Get the VIEWPORT of the schema to be used by the mouseReader.
+ * If all types for a dimension across tracks are categorical or genomic,
+ * will default to [-1, 1] for that dimension for the mouseReader.
+ *
+ * @param {Object} schema of visualization
+ * @returns [smallestX, largestX, smallestY, largestY] of viewport
+ */
+function getViewportForSchema(schema) {
   let smallestX = Number.POSITIVE_INFINITY;
   let largestX = Number.NEGATIVE_INFINITY;
   let smallestY = Number.POSITIVE_INFINITY;
@@ -66,4 +75,66 @@ function schemaViewport(schema) {
   return [smallestX, largestX, smallestY, largestY];
 }
 
-export { scale, rgbToHex, rgbStringToHex, schemaViewport, colorSpecifierToHex };
+/**
+ * Given a schema, return a SCALE to be used for mapping data points to clip space
+ * for the drawer.
+ *
+ * @param {String} dimension either x or y
+ * @param {Object} schema for the visualization
+ * @returns
+ */
+const getScaleForSchema = (dimension, schema) => {
+  if (dimension !== "x" && dimension !== "y") {
+    console.error(`${dimension} is not x or y!`);
+  }
+  let genomic = false;
+  let genome;
+  for (const track of schema.tracks) {
+    if (track[dimension].type && track[dimension].type.includes("genomic")) {
+      genome = track[dimension].genome;
+      genomic = true;
+      break;
+    }
+  }
+
+  if (!genomic) {
+    const viewport = getViewportForSchema(schema);
+    if (dimension === "x") {
+      return scale([viewport[0], viewport[1]], [-1, 1]);
+    }
+    return scale([viewport[2], viewport[3]], [-1, 1]);
+  }
+
+  const geneScale = GenomeScale.completeScale(genome);
+
+  let smallestGene = undefined;
+  let smallestGeneValue = Number.POSITIVE_INFINITY;
+  let largestGene = undefined;
+  let largestGeneValue = Number.NEGATIVE_INFINITY;
+
+  for (const track of schema.tracks) {
+    let xDomain = track[dimension].domain;
+    if (xDomain) {
+      if (geneScale.toClipSpaceFromString(xDomain[0]) < smallestGeneValue) {
+        smallestGeneValue = geneScale.toClipSpaceFromString(xDomain[0]);
+        smallestGene = xDomain[0];
+      }
+
+      if (geneScale.toClipSpaceFromString(xDomain[1]) > largestGeneValue) {
+        largestGeneValue = geneScale.toClipSpaceFromString(xDomain[1]);
+        largestGene = xDomain[1];
+      }
+    }
+  }
+
+  return new GenomeScale(genome, [smallestGene, largestGene]);
+};
+
+export {
+  scale,
+  rgbToHex,
+  rgbStringToHex,
+  getViewportForSchema,
+  colorSpecifierToHex,
+  getScaleForSchema,
+};
