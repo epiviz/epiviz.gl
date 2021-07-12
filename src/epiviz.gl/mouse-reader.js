@@ -1,6 +1,23 @@
 import { scale, getViewportForSchema } from "./utilities";
 import SVGInteractor from "./svg-interactor";
 
+/**
+ * event.layerX and event.layerY are deprecated. We will use them if they are on the event, but
+ * if not we will use a manual calculation.
+ *
+ * @param {Event} event
+ * @returns layerX and layerY, coordinates of event with origin at top right corner of bounding box
+ */
+const getLayerXandYFromEvent = (event) => {
+  if (event.layerX !== undefined && event.layerY !== undefined) {
+    return [event.layerX, event.layerY];
+  }
+  const bbox = event.target.getBoundingClientRect();
+  const x = event.clientX - bbox.left;
+  const y = event.clientY - bbox.top;
+  return [x, y];
+};
+
 class MouseReader {
   /**
    *
@@ -81,7 +98,7 @@ class MouseReader {
           case "box":
           case "lasso":
             this._currentSelectionPoints = [
-              ...this._calculateViewportSpot(event.layerX, event.layerY),
+              ...this._calculateViewportSpot(...getLayerXandYFromEvent(event)),
             ];
             break;
         }
@@ -102,11 +119,13 @@ class MouseReader {
           case "box":
             this._currentSelectionPoints = this._currentSelectionPoints
               .slice(0, 2)
-              .concat(this._calculateViewportSpot(event.layerX, event.layerY));
+              .concat(
+                this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+              );
             break;
           case "lasso":
             this._currentSelectionPoints.push(
-              ...this._calculateViewportSpot(event.layerX, event.layerY)
+              ...this._calculateViewportSpot(...getLayerXandYFromEvent(event))
             );
             break;
           case "tooltip":
@@ -180,8 +199,16 @@ class MouseReader {
     event.preventDefault();
     if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
-      this.currentXRange[0] -= event.wheelDelta * this._wheelDampenX;
-      this.currentXRange[1] += event.wheelDelta * this._wheelDampenX;
+      const t = -event.wheelDelta * this._wheelDampenX;
+      const inDataSpace = this._calculateViewportSpot(
+        ...getLayerXandYFromEvent(event)
+      );
+      this.currentXRange[0] =
+        t * inDataSpace[0] + (1 - t) * this.currentXRange[0];
+
+      this.currentXRange[1] =
+        t * inDataSpace[0] + (1 - t) * this.currentXRange[1];
+
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
@@ -193,8 +220,15 @@ class MouseReader {
 
     if (!this.lockedY) {
       const previousY = [...this.currentYRange];
-      this.currentYRange[0] -= event.wheelDelta * this._wheelDampenY;
-      this.currentYRange[1] += event.wheelDelta * this._wheelDampenY;
+      const t = -event.wheelDelta * this._wheelDampenY;
+      const inDataSpace = this._calculateViewportSpot(
+        ...getLayerXandYFromEvent(event)
+      );
+
+      this.currentYRange[0] =
+        t * inDataSpace[1] + (1 - t) * this.currentYRange[0];
+      this.currentYRange[1] =
+        t * inDataSpace[1] + (1 - t) * this.currentYRange[1];
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
@@ -286,8 +320,8 @@ class MouseReader {
   /**
    * Calculate the location on the real coordinate space a point on the canvas corresponds to.
    *
-   * @param {Float} canvasX likely from event.layerX
-   * @param {Float} canvasY likely from event.layerY
+   * @param {Float} canvasX likely from event.layerX or getLayerXandYFromEvent
+   * @param {Float} canvasY likely from event.layerY or getLayerXandYFromEvent
    * @returns viewport coordinate as array
    */
   _calculateViewportSpot(canvasX, canvasY) {

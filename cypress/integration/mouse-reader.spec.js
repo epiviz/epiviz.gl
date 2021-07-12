@@ -36,11 +36,19 @@ describe("The mouse reader should handle zooming and panning", function () {
   };
 
   it("should zoom in and out", () => {
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -200,
+      layerX: 100,
+      layerY: 100,
+    });
     assertMouseReaderWindowIs([0.1, 0.9], [0.1, 0.9]);
     expectCanvasToLookLike("scatter-grid-zoomed");
 
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: 100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: 2000,
+      layerX: 100,
+      layerY: 100,
+    });
     assertMouseReaderWindowIs([0, 1], [0, 1]);
     expectCanvasToLookLike("scatter-grid");
   });
@@ -52,7 +60,11 @@ describe("The mouse reader should handle zooming and panning", function () {
   });
 
   it("should pan", () => {
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -200,
+      layerX: 100,
+      layerY: 100,
+    });
     assertMouseReaderWindowIs([0.1, 0.9], [0.1, 0.9]);
     expectCanvasToLookLike("scatter-grid-zoomed");
 
@@ -90,23 +102,51 @@ describe("The mouse reader should handle zooming and panning", function () {
     cy.window().then((win) => {
       win.app.visualization.setViewOptions({ lockedX: true, lockedY: false });
     });
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -200,
+      layerX: 100,
+      layerY: 100,
+    });
     assertMouseReaderWindowIs([0, 1], [0.1, 0.9]);
 
     cy.window().then((win) => {
       win.app.visualization.setViewOptions({ lockedX: false, lockedY: true });
     });
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -200,
+      layerX: 100,
+      layerY: 100,
+    });
     assertMouseReaderWindowIs([0.1, 0.9], [0.1, 0.9]);
     expectCanvasToLookLike("scatter-grid-zoomed");
 
     cy.window().then((win) => {
       win.app.visualization.setViewOptions({ lockedX: false, lockedY: false });
     });
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: 100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: 2000,
+      layerX: 100,
+      layerY: 100,
+    });
 
     assertMouseReaderWindowIs([0, 1], [0, 1]);
     expectCanvasToLookLike("scatter-grid");
+  });
+
+  it("can zoom to the mouse position", () => {
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -100,
+      layerX: 0,
+      layerY: 0, // top left corner
+    });
+    assertMouseReaderWindowIs([0, 0.9], [0.1, 1]);
+
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: 150,
+      layerX: 0,
+      layerY: 0, // top left corner
+    });
+    assertMouseReaderWindowIs([0, 1], [0, 1]);
   });
 });
 
@@ -194,7 +234,11 @@ describe("The mouse reader should select points appropriately", () => {
   });
 
   it("selects points with a box when zoomed in", () => {
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -200,
+      layerX: 100,
+      layerY: 100,
+    });
     cy.get(".controls > img:nth-child(2)").click();
     cy.get("#mouse-reader").trigger("mousedown", { layerX: 0, layerY: 0 });
     cy.get("#mouse-reader").trigger("mousemove", {
@@ -215,7 +259,11 @@ describe("The mouse reader should select points appropriately", () => {
 
   it("selects points with a lasso when zoomed in", () => {
     cy.get(".controls > img:nth-child(3)").click();
-    cy.get("#mouse-reader").trigger("wheel", { wheelDelta: -100 });
+    cy.get("#mouse-reader").trigger("wheel", {
+      wheelDelta: -200,
+      layerX: 100,
+      layerY: 100,
+    });
 
     cy.get("#mouse-reader").trigger("mousedown", { layerX: 20, layerY: 20 });
     cy.get("#mouse-reader").trigger("mousemove", {
