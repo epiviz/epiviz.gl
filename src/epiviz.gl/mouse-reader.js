@@ -30,6 +30,7 @@ class MouseReader {
   setSchema(schema) {
     this.viewport = getViewportForSchema(schema);
     this.SVGInteractor.setSchema(schema);
+    this._updateSVG();
   }
 
   /**

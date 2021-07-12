@@ -9,10 +9,10 @@ const visualization = {
   required: ["tracks"],
   properties: {
     xAxis: {
-      enum: ["bottom", "top"],
+      enum: ["bottom", "top", "center"],
     },
     yAxis: {
-      enum: ["left", "right"],
+      enum: ["left", "right", "center"],
     },
     tracks: {
       type: "array",

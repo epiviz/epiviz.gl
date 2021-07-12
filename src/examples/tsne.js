@@ -2,6 +2,8 @@ import csv from "url:../data/tsne.csv";
 
 export default JSON.stringify(
   {
+    xAxis: "center",
+    yAxis: "center",
     defaultData: csv,
     tracks: [
       {
@@ -12,14 +14,12 @@ export default JSON.stringify(
           attribute: "x",
           type: "quantitative",
           domain: [-10, 10],
-          axis: "bottom",
           scale: "linear",
         },
         y: {
           attribute: "y",
           type: "quantitative",
           domain: [-10, 10],
-          axis: "left",
           scale: "linear",
         },
         color: {

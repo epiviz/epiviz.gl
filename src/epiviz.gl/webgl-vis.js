@@ -197,7 +197,7 @@ class WebGLVis {
       theme: "light",
       history: 25,
       top: "-20px",
-      left: `${this.width}px`,
+      left: `${this.width / 2}px`,
       transform: "translateX(-100%)",
     });
   }

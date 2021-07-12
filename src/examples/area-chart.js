@@ -3,6 +3,8 @@ import strawberries from "url:../data/strawberries.csv";
 export default JSON.stringify(
   {
     defaultData: strawberries,
+    xAxis: "bottom",
+    yAxis: "left",
     tracks: [
       {
         tooltips: 1,
@@ -12,13 +14,11 @@ export default JSON.stringify(
           attribute: "day",
           type: "quantitative",
           domain: [1, 10],
-          axis: "bottom",
         },
         y: {
           attribute: "price",
           type: "quantitative",
           domain: [0, 40],
-          axis: "left",
           scale: "linear",
         },
         color: {

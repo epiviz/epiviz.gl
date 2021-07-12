@@ -1,5 +1,7 @@
 export default JSON.stringify(
   {
+    xAxis: "top",
+    yAxis: "right",
     tracks: [
       {
         order: 1,
@@ -11,13 +13,11 @@ export default JSON.stringify(
           attribute: "day",
           type: "quantitative",
           domain: [1, 10],
-          axis: "bottom",
         },
         y: {
           attribute: "price",
           type: "quantitative",
           domain: [0, 40],
-          axis: "left",
           scale: "linear",
         },
         color: {
@@ -37,13 +37,11 @@ export default JSON.stringify(
           attribute: "day",
           type: "quantitative",
           domain: [1, 10],
-          axis: "bottom",
         },
         y: {
           attribute: "price",
           type: "quantitative",
           domain: [0, 40],
-          axis: "left",
           scale: "linear",
         },
         color: {

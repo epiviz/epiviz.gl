@@ -13,6 +13,7 @@ class SVGInteractor {
     this.svg.style.position = "absolute";
     this.svg.style.zIndex = "1000";
     this.svg.style.pointerEvents = "none";
+    this.svg.style.overflow = "visible";
 
     this._selectMarker = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -26,19 +27,12 @@ class SVGInteractor {
 
   setSchema(schema) {
     this.schema = schema;
-    if (this.currentYRange) {
-      this.yAxis = this._calculateAxis(
-        "y",
-        schema.yAxis,
-        schema,
-        getScaleForSchema("y", schema)
-      );
-    }
   }
 
   init() {
     this.svg.appendChild(this._selectMarker);
-    this.axisAnchor = this.d3SVG.append("g");
+    this.xAxisAnchor = this.d3SVG.append("g");
+    this.yAxisAnchor = this.d3SVG.append("g");
   }
 
   updateView(currentXRange, currentYRange, width, height) {
@@ -52,47 +46,69 @@ class SVGInteractor {
         "x",
         this.schema.xAxis,
         this.schema,
-        getScaleForSchema("x", this.schema)
+        getScaleForSchema("x", this.schema),
+        this.xAxisAnchor
       );
     }
 
     if (this.xAxis) {
-      console.log(this.xAxis);
-      this.axisAnchor.call(this.xAxis);
+      this.xAxisAnchor.call(this.xAxis);
     }
-    // if (this.currentXRange) {
-    //   this.axisAnchor.call(
-    //     d3Axis
-    //       .axisBottom()
-    //       .scale(
-    //         d3Scale
-    //           .scaleLinear()
-    //           .domain(this.currentXRange)
-    //           .range([0, this.width])
-    //       )
-    //   );
-    // }
+
+    if (this.currentYRange) {
+      this.yAxis = this._calculateAxis(
+        "y",
+        this.schema.yAxis,
+        this.schema,
+        getScaleForSchema("y", this.schema),
+        this.yAxisAnchor
+      );
+    }
+
+    if (this.yAxis) {
+      this.yAxisAnchor.call(this.yAxis);
+    }
   }
 
-  _calculateAxis(dimension, orientation, schema, genomeScale) {
+  _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
     let axis, domain, range;
     if (dimension === "x") {
       domain = this.currentXRange;
       range = [0, this.width];
-      if (orientation === "top") {
-        axis = d3Axis.axisTop();
-      } else {
-        axis = d3Axis.axisBottom(); //.translate(0, this.height);
+      switch (orientation) {
+        case "top":
+          axis = d3Axis.axisTop();
+          anchor.attr("transform", `translate(0, 0)`);
+          break;
+        case "center":
+          axis = d3Axis.axisBottom();
+          anchor.attr("transform", `translate(0, ${this.height / 2})`);
+          break;
+        case "bottom":
+        default:
+          axis = d3Axis.axisBottom();
+          anchor.attr("transform", `translate(0, ${this.height})`);
+          break;
       }
     }
 
     if (dimension === "y") {
       domain = this.currentYRange;
-      range = [0, this.height];
-      if (orientation === "right") {
-        axis = d3Axis.axisRight().translate(this.width, 0);
-      } else {
-        axis = d3Axis.axisLeft();
+      range = [this.height, 0];
+      switch (orientation) {
+        case "center":
+          axis = d3Axis.axisRight();
+          anchor.attr("transform", `translate(${this.width / 2}, 0)`);
+          break;
+        case "right":
+          axis = d3Axis.axisRight();
+          anchor.attr("transform", `translate(${this.width}, 0)`);
+          break;
+        case "left": // left is default behavior
+        default:
+          axis = d3Axis.axisLeft();
+          anchor.attr("transform", `translate(0, 0)`);
+          break;
       }
     }
 
@@ -102,14 +118,22 @@ class SVGInteractor {
         genomic = true;
       }
     }
+
     if (!genomic) {
       return axis.scale(d3Scale.scaleLinear().domain(domain).range(range));
     }
 
+    let tickInfo;
+    if (dimension === "x") {
+      tickInfo = genomeScale.getTickCoordsAndLabels(domain[0], domain[1]);
+    } else {
+      tickInfo = genomeScale.getTickCoordsAndLabels(range[0], range[1]);
+    }
+
     return axis
       .scale(d3Scale.scaleLinear().domain(domain).range(range))
-      .tickValues([])
-      .tickFormat((d) => genomeScale.inverse(d));
+      .tickValues(tickInfo.tickCoords)
+      .tickFormat((_, index) => tickInfo.tickLabels[index]);
   }
 
   /**
