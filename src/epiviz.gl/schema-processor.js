@@ -1,6 +1,10 @@
-import { rgbStringToHex, scale, colorSpecifierToHex } from "./utilities";
+import {
+  rgbStringToHex,
+  scale,
+  colorSpecifierToHex,
+  getScaleForSchema,
+} from "./utilities";
 import { SIZE_UNITS } from "./vertex-calculator";
-import { getGenomeScale } from "./genome-sizes";
 
 const d3 = require("d3-scale-chromatic");
 const axios = require("axios");
@@ -63,6 +67,12 @@ const DEFAULT_COLOR_SCHEME = "interpolateBrBG";
 
 const SHAPES = ["dot", "triangle", "circle", "diamond"];
 
+/**
+ * Given a track, determine the WebGL draw mode for it
+ *
+ * @param {Object} track from schema
+ * @returns WebGLDrawMode as a string
+ */
 const getDrawModeForTrack = (track) => {
   switch (track.mark) {
     case "line":
@@ -83,6 +93,13 @@ const getDrawModeForTrack = (track) => {
 };
 
 class SchemaProcessor {
+  /**
+   * Process a schema by reading in the data, the channel information, and producing an
+   * iterator like interface with getNextTrack to feed to a drawer.
+   *
+   * @param {Object} schema user defined schema
+   * @param {Function} callback function to call after all the data has been loaded
+   */
   constructor(schema, callback) {
     this.index = 0;
     this.schema = schema;
@@ -102,11 +119,18 @@ class SchemaProcessor {
       allPromises.push(this.dataPromise);
     }
 
+    this.xScale = getScaleForSchema("x", schema);
+    this.yScale = getScaleForSchema("y", schema);
+
     // When all tracks have acquired their data, call the callback
     // TODO: Allow tracks to be processed while waiting for others, need to keep in mind order
     Promise.all(allPromises).then(() => callback(this));
   }
 
+  /**
+   * Get the next track to process
+   * @returns {@link Track}
+   */
   getNextTrack() {
     if (this.index >= this.tracks.length) {
       return null;
@@ -116,6 +140,13 @@ class SchemaProcessor {
 }
 
 class Track {
+  /**
+   * Process a track from a schema by loading data and producing an iterator
+   * like interface with getNextDataPoint or getNextMark.
+   *
+   * @param {Object} schema user defined visualization
+   * @param {Object} track user defined track
+   */
   constructor(schema, track) {
     this.track = track;
     this.index = 1; // Start at 1 to skip headers
@@ -149,6 +180,10 @@ class Track {
     }
   }
 
+  /**
+   * Read the headers from the first row of data and then build functions to map a data row
+   * to a channel value for drawing. Ultimately a method due to clunky constructor.
+   */
   processHeadersAndMappers() {
     // Processing headers
     this.headers = this.data[0].split(",");
@@ -160,8 +195,13 @@ class Track {
     });
   }
 
+  /**
+   * Get the next data point from the track. Returns null when all points have been returned.
+   * @returns A data point with the x and y coordinates and other attributes from the header
+   */
   getNextDataPoint() {
     if (this.index >= this.data.length) {
+      // TODO potentially erase this.data for garbage collection
       return null;
     }
 
@@ -174,11 +214,15 @@ class Track {
 
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
-    toReturn.geometry.coordinates.push(Array.isArray(x) ? x[0] : x);
-    toReturn.geometry.coordinates.push(Array.isArray(y) ? y[0] : y);
+    toReturn.geometry.coordinates.push(x, y);
     return toReturn;
   }
 
+  /**
+   * Get the next mark from the track for the drawer to process. Returns null when all
+   * marks have been returned.
+   * @returns An object containing information used to draw a mark for a row of data.
+   */
   getNextMark() {
     if (this.index >= this.data.length) {
       return null;
@@ -194,6 +238,14 @@ class Track {
     return toReturn;
   }
 
+  /**
+   * Builds a function which maps an attribute value to a channel value for use by the drawer.
+   * The function will return a default if not present in the track, or a constant if
+   * value is defined.
+   *
+   * @param {String} channel one of the channels listed in default channels
+   * @returns the function
+   */
   buildMapperForChannel = (channel) => {
     if (channel in this.track) {
       const channelInfo = this.track[channel];
@@ -377,23 +429,19 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
 };
 
 /**
- * Build a function which maps a genome chr, gene, to a location in the data space
+ * Build a function which maps a genome chr, gene, to an object consumable by a GenomeScale
  * @param {*} channel either x or y
  * @param {*} channelInfo the object containing info for this channel from the schema
- * @returns a function that maps (genomeChr, geneLoc) -> [-1, 1]
+ * @returns a function that maps (genomeChr, geneLoc) -> [chrId, geneLocation]
+ *  ex: ["X", 200]
  */
 const buildMapperForGenomicChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
-      const genomeScale = getGenomeScale(
-        channelInfo.genome,
-        channelInfo.domain
-      );
-
       return (chr, gene) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return genomeScale(chrId, parseInt(gene));
+        return [chrId, parseInt(gene)];
       };
 
     default:
@@ -404,28 +452,20 @@ const buildMapperForGenomicChannel = (channel, channelInfo) => {
 };
 
 /**
- * Build a function which maps a genome chr, start, and end for to a location in the data space
+ * Build a function which maps a genome chr, start, and end to an object consumable by a scale
  * @param {*} channel either x or y
  * @param {*} channelInfo the object containing info for this channel from the schema
  * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
- *  format: [in the range [-1, 1], in the range [-1, 1] (> first element)}
- *  ex: [-0.5, 0.2]
+ *  format: [chrId, geneLocation, chrId2, geneLocation2]
+ *  ex: ["1", 1000, "X", 2000]
  */
 const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
-      const genomeScale = getGenomeScale(
-        channelInfo.genome,
-        channelInfo.domain
-      );
-
       return (chr, genomeStart, genomeEnd) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return [
-          genomeScale(chrId, parseInt(genomeStart)),
-          genomeScale(chrId, parseInt(genomeEnd)),
-        ];
+        return [chrId, parseInt(genomeStart), chrId, parseInt(genomeEnd)];
       };
 
     default:

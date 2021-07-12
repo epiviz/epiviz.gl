@@ -2,6 +2,7 @@ import csv from "url:../data/box-track.csv";
 
 export default JSON.stringify(
   {
+    xAxis: "center",
     defaultData: csv,
     tracks: [
       {

@@ -1,10 +1,11 @@
-import { scale } from "./utilities";
+import { scale, getViewportForSchema } from "./utilities";
+import SVGInteractor from "./svg-interactor";
 
 class MouseReader {
   /**
    *
    * @param {HTMLElement} element meant to read mouse events, necessary since OffscreenCanvas cannot read DOM events
-   * @param {Handler} handler that is using
+   * @param {WebGLVis} handler WebGLVis that is using this mousereader
    */
   constructor(element, handler) {
     this.element = element;
@@ -21,24 +22,19 @@ class MouseReader {
     this.tool = "box";
 
     // Initializing elements to show user their current selection
-    this._selectContainer = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
+    this.SVGInteractor = new SVGInteractor(
+      document.createElementNS("http://www.w3.org/2000/svg", "svg")
     );
-    this._selectContainer.style.width = "100%";
-    this._selectContainer.style.height = "100%";
-    this._selectContainer.style.position = "absolute";
-    this._selectContainer.style.zIndex = "1000";
-    this._selectContainer.style.pointerEvents = "none";
+  }
 
-    this._selectMarker = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "polygon"
-    );
-    this._selectMarker.setAttribute("fill", "rgba(124, 124, 247, 0.3)");
-    this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
-    this._selectMarker.setAttribute("stroke-width", 1);
-    this._selectMarker.setAttribute("stroke-dasharray", "5,5");
+  /**
+   * Set the schema of the mouse reader and the svg interaction
+   * @param {Object} schema
+   */
+  setSchema(schema) {
+    this.viewport = getViewportForSchema(schema);
+    this.SVGInteractor.setSchema(schema);
+    this._updateSVG();
   }
 
   /**
@@ -68,8 +64,9 @@ class MouseReader {
     this.width = this.element.clientWidth;
     this.height = this.element.clientHeight;
 
-    this.element.appendChild(this._selectContainer);
-    this._selectContainer.appendChild(this._selectMarker);
+    this.element.appendChild(this.SVGInteractor.svg);
+    this.SVGInteractor.init();
+    this._updateSVG();
 
     this.element.addEventListener("wheel", this._onWheel.bind(this), false);
 
@@ -115,7 +112,7 @@ class MouseReader {
           case "tooltip":
             break;
         }
-        this._updateSelectView();
+        this._updateSVG();
       },
       false
     );
@@ -135,7 +132,7 @@ class MouseReader {
         case "lasso":
           if (this._currentSelectionPoints.length < 6) {
             this._currentSelectionPoints = [];
-            this._updateSelectView();
+            this._updateSVG();
             return;
           }
           this._onSelect();
@@ -208,7 +205,7 @@ class MouseReader {
     }
 
     this.handler.sendDrawerState(this.getViewport());
-    this._updateSelectView();
+    this._updateSVG();
   }
 
   /**
@@ -242,7 +239,7 @@ class MouseReader {
     }
 
     this.handler.sendDrawerState(this.getViewport());
-    this._updateSelectView();
+    this._updateSVG();
   }
 
   /**
@@ -266,55 +263,17 @@ class MouseReader {
   }
 
   /**
-   * Updates user selection view if they have selected a box
+   * Updates the DOM component used to show user selection or axis.
+   * Calls methods from SVGInteractor.
    */
-  _updateBoxSelectView() {
-    if (this._currentSelectionPoints.length !== 4) {
-      return;
-    }
-
-    const topLeftCorner = this._calculateViewportSpotInverse(
-      this._currentSelectionPoints[0],
-      this._currentSelectionPoints[1]
+  _updateSVG() {
+    this.SVGInteractor.updateView(
+      this.currentXRange,
+      this.currentYRange,
+      this.width,
+      this.height
     );
-
-    const bottomRightCorner = this._calculateViewportSpotInverse(
-      this._currentSelectionPoints[2],
-      this._currentSelectionPoints[3]
-    );
-
-    let pointAttr = `${topLeftCorner[0]},${topLeftCorner[1]} 
-                     ${topLeftCorner[0]},${bottomRightCorner[1]}, 
-                     ${bottomRightCorner[0]},${bottomRightCorner[1]}
-                     ${bottomRightCorner[0]},${topLeftCorner[1]}
-                     `;
-    this._selectMarker.setAttribute("points", pointAttr);
-  }
-
-  /**
-   * Updates the DOM component used to show user selection.
-   * If user has only 2 selection points calls {@link MouseReader#_updateBoxSelectView}
-   */
-  _updateSelectView() {
-    if (this._currentSelectionPoints.length === 4) {
-      this._updateBoxSelectView();
-      return;
-    }
-    if (this._currentSelectionPoints.length < 6) {
-      this._selectMarker.setAttribute("points", "");
-      return;
-    }
-
-    let pointAttr = "";
-    for (let i = 0; i < this._currentSelectionPoints.length; i += 2) {
-      const asCanvasPoint = this._calculateViewportSpotInverse(
-        this._currentSelectionPoints[i],
-        this._currentSelectionPoints[i + 1]
-      );
-      pointAttr += `${asCanvasPoint[0]}, ${asCanvasPoint[1]} `;
-    }
-
-    this._selectMarker.setAttribute("points", pointAttr);
+    this.SVGInteractor.updateSelectView(this._currentSelectionPoints);
   }
 
   /**
@@ -336,21 +295,6 @@ class MouseReader {
     // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
     const scaleY = scale([this.height, 0], this.currentYRange);
     return [scaleX(canvasX), scaleY(canvasY)];
-  }
-
-  /**
-   * Calculate the location on the canvas a real coordniate corresponds to.
-   *
-   * @param {Float} viewportX x coordinate of data space
-   * @param {Float} viewportY y coordniate of data space
-   * @returns canvas coordindate as array
-   */
-  _calculateViewportSpotInverse(viewportX, viewportY) {
-    const inverseScaleX = scale(this.currentXRange, [0, this.width]);
-    // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
-    const inverseScaleY = scale(this.currentYRange, [this.height, 0]);
-
-    return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
   }
 }
 

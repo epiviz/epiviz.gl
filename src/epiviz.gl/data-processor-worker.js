@@ -1,9 +1,9 @@
 /**
  * The data processor worker is meant to be an interface between the main thread
- * containing the {@link Scatterplot} a {@link DataProcessor}. It's main purpose
- * is to receive messages from the Scatterplot, call the appropriate method of
+ * containing the {@link WebGLVis} a {@link DataProcessor}. It's main purpose
+ * is to receive messages from the WebGLVis, call the appropriate method of
  * the DataProcessor, then post a message of the results of the method back to
- * the scatterplot.
+ * the WebGLVis.
  */
 
 import DataProcessor from "./data-processor";

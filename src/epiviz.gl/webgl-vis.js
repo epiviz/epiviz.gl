@@ -1,6 +1,5 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
-import { schemaViewport } from "./utilities";
 import isJSONValid from "./schema-validation";
 
 class WebGLVis {
@@ -135,7 +134,7 @@ class WebGLVis {
     if (!isJSONValid(schema)) {
       return false;
     }
-    this.mouseReader.viewport = schemaViewport(schema);
+    this.mouseReader.setSchema(schema);
     this.sendDrawerState(this.mouseReader.getViewport());
     this.webglWorker.postMessage({ type: "schema", schema });
     this.dataWorker.postMessage({ type: "init", schema });
@@ -198,7 +197,7 @@ class WebGLVis {
       theme: "light",
       history: 25,
       top: "-20px",
-      left: `${this.width}px`,
+      left: `${this.width / 2}px`,
       transform: "translateX(-100%)",
     });
   }

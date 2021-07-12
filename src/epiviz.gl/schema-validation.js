@@ -8,6 +8,12 @@ const visualization = {
   type: "object",
   required: ["tracks"],
   properties: {
+    xAxis: {
+      enum: ["bottom", "top", "center"],
+    },
+    yAxis: {
+      enum: ["left", "right", "center"],
+    },
     tracks: {
       type: "array",
       items: { $ref: "/track" },
@@ -73,9 +79,6 @@ const track = {
         scale: {
           enum: ["linear", "log", "sqrt"],
         },
-        axis: {
-          enum: ["bottom", "top"],
-        },
       },
       allOf: [{ $ref: "/channel" }],
     },
@@ -84,9 +87,6 @@ const track = {
       properties: {
         scale: {
           enum: ["linear", "log", "sqrt"],
-        },
-        axis: {
-          enum: ["left", "right"],
         },
       },
       allOf: [{ $ref: "/channel" }],
@@ -355,6 +355,12 @@ const v = new Validator();
 v.addSchema(channel, "/channel");
 v.addSchema(track, "/track");
 
+/**
+ * Utility method that returns a boolean on whether the json is a valid schema.
+ * console.errors the reason if it is not.
+ * @param {Object} json schema
+ * @returns boolean
+ */
 const isJSONValid = (json) => {
   const validation = v.validate(json, visualization);
   if (!validation.valid) {
