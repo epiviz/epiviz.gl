@@ -97,6 +97,9 @@ class SVGInteractor {
       domain = this.currentXRange;
       range = [0, this.width];
       switch (orientation) {
+        case "none":
+          anchor.attr("transform", `translate(-1000000, -1000000)`);
+          return null;
         case "top":
           axis = d3Axis.axisTop();
           anchor.attr("transform", `translate(0, 0)`);
@@ -117,6 +120,9 @@ class SVGInteractor {
       domain = this.currentYRange;
       range = [this.height, 0];
       switch (orientation) {
+        case "none":
+          anchor.attr("transform", `translate(-1000000, -1000000)`);
+          return null;
         case "center":
           axis = d3Axis.axisRight();
           anchor.attr("transform", `translate(${this.width / 2}, 0)`);
