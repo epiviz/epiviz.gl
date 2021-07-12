@@ -5,6 +5,12 @@ const d3Scale = require("d3-scale");
 const d3Selection = require("d3-selection");
 
 class SVGInteractor {
+  /**
+   * A class used to illustrate state of the visualization on the main thread such as
+   * selection or axis.
+   *
+   * @param {SVGElement} svg container for all svg elements
+   */
   constructor(svg) {
     this.svg = svg;
     this.d3SVG = d3Selection.select(this.svg);
@@ -25,16 +31,31 @@ class SVGInteractor {
     this._selectMarker.setAttribute("stroke-dasharray", "5,5");
   }
 
+  /**
+   * Set the schema for this class to refer to.
+   *
+   * @param {Object} schema
+   */
   setSchema(schema) {
     this.schema = schema;
   }
 
+  /**
+   * Add svg elements to the DOM
+   */
   init() {
     this.svg.appendChild(this._selectMarker);
     this.xAxisAnchor = this.d3SVG.append("g");
     this.yAxisAnchor = this.d3SVG.append("g");
   }
 
+  /**
+   * Update the svg using the new viewport information
+   * @param {Array} currentXRange of mousereader
+   * @param {Array} currentYRange of mousereader
+   * @param {Number} width of mousereader
+   * @param {Number} height of mousereader
+   */
   updateView(currentXRange, currentYRange, width, height) {
     this.currentXRange = currentXRange;
     this.currentYRange = currentYRange;
@@ -163,6 +184,11 @@ class SVGInteractor {
     this._selectMarker.setAttribute("points", pointAttr);
   }
 
+  /**
+   * Update the selection box/lasso with the points as bounds
+   *
+   * @param {Array} points 1D array of coordinates that are used for selection ex. [x1,y1,x2,y2,...]
+   */
   updateSelectView(points) {
     if (points.length === 4) {
       this._updateBoxSelectView(points);

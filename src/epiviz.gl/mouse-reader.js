@@ -27,6 +27,10 @@ class MouseReader {
     );
   }
 
+  /**
+   * Set the schema of the mouse reader and the svg interaction
+   * @param {Object} schema
+   */
   setSchema(schema) {
     this.viewport = getViewportForSchema(schema);
     this.SVGInteractor.setSchema(schema);
@@ -259,8 +263,8 @@ class MouseReader {
   }
 
   /**
-   * Updates the DOM component used to show user selection.
-   * If user has only 2 selection points calls {@link MouseReader#_updateBoxSelectView}
+   * Updates the DOM component used to show user selection or axis.
+   * Calls methods from SVGInteractor.
    */
   _updateSVG() {
     this.SVGInteractor.updateView(

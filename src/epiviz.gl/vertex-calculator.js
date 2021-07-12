@@ -8,6 +8,13 @@ import { getDrawModeForTrack } from "./schema-processor";
 const SIZE_UNITS = 1 / 100;
 
 class VertexCalculator {
+  /**
+   * A class used to construct the vertices of marks that are given to the drawer to draw.
+   *
+   * @param {Function or GenomeScale} xScale maps the x values of the data to clip space [-1, 1]
+   * @param {Function or GenomeScale} yScale maps the y values of the data to clip space [-1, 1]
+   * @param {Object} track from schema
+   */
   constructor(xScale, yScale, track) {
     if (xScale instanceof GenomeScale) {
       this.xScale = (args) => xScale.toClipSpaceFromParts(args[0], args[1]);
@@ -25,6 +32,12 @@ class VertexCalculator {
     this.drawMode = getDrawModeForTrack(track);
   }
 
+  /**
+   * Transform a mark with a range for coordinates into a simpler mark to draw.
+   *
+   * @param {Object} mark that contains ranges for x or y
+   * @returns mark with fixed x and y but with appropriate width and height for drawing
+   */
   transformGenomicRangeToStandard(mark) {
     let x, y, width, height;
     if (Array.isArray(mark.x)) {
@@ -51,6 +64,12 @@ class VertexCalculator {
     };
   }
 
+  /**
+   * Construct the vertices of a mark.
+   *
+   * @param {Object} mark to draw
+   * @returns vertices of mark
+   */
   calculateForMark(mark) {
     if (
       this.track.x.type === "genomicRange" ||

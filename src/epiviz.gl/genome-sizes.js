@@ -1,6 +1,13 @@
 import { scale } from "./utilities";
 import { format, precisionRound } from "d3-format";
 
+/**
+ * Create a function which maps a genome pair to a location in the entire genome
+ *
+ * @param {String} genomeId key from genomeSizes object
+ * @returns a function which maps a (chrId, pairNum) => to
+ *  a number between 1 and total number of genes in the genome
+ */
 const createPairMapperToGenome = (genomeId) => {
   let chrSizes = genomeSizes[genomeId];
 
@@ -17,6 +24,14 @@ const createPairMapperToGenome = (genomeId) => {
 };
 
 class GenomeScale {
+  /**
+   * A scale used to map a genome pair to a location between -1 and 1 for data visualization.
+   * Also contains inverse and utility functions for getting labels for axis.
+   *
+   * @param {String} genomeId key from genomeSizes object
+   * @param {Array} domain array of length 2 containing the start and end of the genome
+   *   for the scale. ex: ["chr2:1000", "chr3:2000"]
+   */
   constructor(genomeId, domain) {
     if (genomeSizes[genomeId] === undefined) {
       console.error(`${genomeId} is not a recognized genome!`);
@@ -45,16 +60,36 @@ class GenomeScale {
     );
   }
 
+  /**
+   * Map a genome pair to [-1, 1] with the parts.
+   *
+   * @param {String} chr id of chromosome in genome
+   * @param {Number} pair location in chromosome
+   * @returns value in [-1, 1] corresponding to genome range location
+   */
   toClipSpaceFromParts(chr, pair) {
     return this.mapGenomeIndexToClipSpace(this.mapPairToGenomeIndex(chr, pair));
   }
 
+  /**
+   * Utility method for calling this.toClipSpaceFromParts.
+   *
+   * @param {String} pairStr in form "chrID:geneNumber" ex: "chr1:1000"
+   * @returns value in [-1, 1] corresponding to genome range location
+   */
   toClipSpaceFromString(pairStr) {
     let [chr, pair] = pairStr.substring(3).split(":");
     pair = parseInt(pair);
     return this.toClipSpaceFromParts(chr, pair);
   }
 
+  /**
+   * Get the gene id from a value between [-1, 1]
+   *
+   * @param {Number} num number between [-1, 1]
+   * @param {String} formatting used for formatting gene number with d3-format
+   * @returns `chr${chrId}:${chrLoc}`
+   */
   inverse(num, formatting = false) {
     let genomeSpot = Math.floor(this.mapGenomeIndexToClipSpaceInverse(num));
     let chrId;
@@ -74,6 +109,13 @@ class GenomeScale {
       : `chr${chrId}:${chrLoc}`;
   }
 
+  /**
+   * Get a sequence of ticks for a range in the genome.
+   *
+   * @param {Number} start number between [-1, 1]
+   * @param {Number} end number between [-1, 1] > start
+   * @returns object with tickCoords and corresponding tickLabels property
+   */
   getTickCoordsAndLabels(start, end) {
     let [startChr, startPair] = this.inverse(start).substring(3).split(":");
     let [endChr, endPair] = this.inverse(end).substring(3).split(":");
@@ -107,6 +149,12 @@ class GenomeScale {
     };
   }
 
+  /**
+   * Utility method for getting a GenomeScale across an entire genome.
+   *
+   * @param {String} genomeId from genomeSizes
+   * @returns a GenomeScale across an entire genome
+   */
   static completeScale(genomeId) {
     const chrSizes = genomeSizes[genomeId];
     const finalEntry = [...chrSizes.entries()][chrSizes.size - 1];
@@ -118,6 +166,10 @@ class GenomeScale {
   }
 }
 
+/**
+ * Available genomes to visualize. Each genome is a map from chromosome id to number of genes in chromosome.
+ * Order matters as maps remember insertion order.
+ */
 const genomeSizes = {
   hg38: new Map([
     ["1", 248956422], // chr1

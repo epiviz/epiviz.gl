@@ -1,7 +1,8 @@
 /**
- * The offscreen webgl worker is meant to communicate from the {@link Scatterplot}
- * by sending data to the drawer to populate its buffers for drawing. Most messages
- * passed are containing the new viewport information for the drawer to process.
+ * The offscreen webgl worker is meant to communicate from the {@link WebGLVis}
+ * by sending a schema data to the drawer for management of shader program and
+ * eventually drawing. Most messages passed are containing the new viewport
+ * information for the drawer to process.
  */
 import WebGLDrawer from "./webgl-drawer";
 

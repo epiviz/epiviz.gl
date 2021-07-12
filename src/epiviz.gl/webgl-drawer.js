@@ -7,9 +7,6 @@ import { VertexShader, varyingColorsFragmentShader } from "./webgl.js";
 
 const twgl = require("twgl.js");
 
-// Largely taken from
-// https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample2/webgl-demo.js
-
 class WebGLCanvasDrawer extends Drawer {
   constructor(viewportData) {
     super(viewportData);
@@ -62,6 +59,14 @@ class WebGLCanvasDrawer extends Drawer {
     ];
   }
 
+  /**
+   * Sets the schema and begins the process of drawing it.
+   *  1. Cancels any current animation
+   *  2. Builds shaders for the tracks
+   *  3. After data is loaded, calls populateBuffers.
+   *
+   * @param {Object} schema of visualization
+   */
   setSchema(schema) {
     super.render(); // Cancels current animation frame
 
@@ -71,6 +76,11 @@ class WebGLCanvasDrawer extends Drawer {
     new SchemaProcessor(schema, this.populateBuffers.bind(this));
   }
 
+  /**
+   * Populate the buffers that are fed to webgl for drawing.
+   *
+   * @param {SchemaProcessor} schemaHelper created in the setSchema method
+   */
   populateBuffers(schemaHelper) {
     let currentTrack = schemaHelper.getNextTrack();
     let currentTrackShaderIndex = 0;
@@ -86,6 +96,7 @@ class WebGLCanvasDrawer extends Drawer {
       let currentMark = currentTrack.getNextMark();
 
       while (currentMark) {
+        // A lot of the heavy lifting occurs in the track shaders, this class is mostly boilerplate for webgl
         this.trackShaders[currentTrackShaderIndex].addMarkToBuffers(
           currentMark,
           vertexCalculator
@@ -102,10 +113,11 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   /**
-   * Animates the frames by setting viewport, blending, clearing, and calling webgl draw.
+   * Animates the frames by setting viewport, uniforms, blending, clearing, and calling webgl draw.
    */
   animate() {
     if (!this.needsAnimation) {
+      // Prevent pointless animation if canvas does not change
       this.lastFrame = requestAnimationFrame(this.animate.bind(this));
       this.tick();
       return;
@@ -136,6 +148,7 @@ class WebGLCanvasDrawer extends Drawer {
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
+    // For each track shader, use their shader program then draw it
     this.trackShaders.forEach((trackShader, index) => {
       this.gl.useProgram(this.programInfos[index].program);
       twgl.setBuffersAndAttributes(

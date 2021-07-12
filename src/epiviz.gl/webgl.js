@@ -2,7 +2,7 @@ import { DEFAULT_CHANNELS, getDrawModeForTrack } from "./schema-processor";
 import { colorSpecifierToHex } from "./utilities";
 
 /**
- * A vertex shader meant to take in positions and colors.
+ * A vertex shader meant to take in positions, colors, and contain uniforms for zooming and panning.
  */
 const baseVertexShader = `
   precision highp float;
@@ -16,6 +16,10 @@ const baseVertexShader = `
   varying vec4 vColor;
 `;
 
+/**
+ * Appended to end of vertex shader. Includes math for zooming and panning,
+ * ability to unpack colors and send to fragment shader.
+ */
 const vertexShaderSuffix = `
   vec3 unpackColor(float f) {
     vec3 colorVec;
@@ -56,6 +60,11 @@ const varyingColorsFragmentShader = `
 `;
 
 class VertexShader {
+  /**
+   * A class meant to contain all the relevant information for a shader program, such as uniforms
+   * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSchema
+   * or fromTrack instead.
+   */
   constructor() {
     this.shader = baseVertexShader;
     this.uniforms = {};
@@ -69,12 +78,20 @@ class VertexShader {
     };
   }
 
+  /**
+   * Add a mark to the buffers by calculating its vertices, then adding its
+   * attributes such as size, color, or opacity to the buffers.
+   *
+   * @param {Object} mark passed in from SchemaHelper in webgl-drawer.js
+   * @param {VertexCalculator} vertexCalculator used to calculate vertices for a track
+   */
   addMarkToBuffers(mark, vertexCalculator) {
     const vertices = vertexCalculator.calculateForMark(mark);
     this.attributes.aVertexPosition.data.push(...vertices);
 
     for (const channel of Object.keys(this.attributes)) {
       if (channel === "aVertexPosition") {
+        // handled above
         continue;
       }
 
@@ -86,21 +103,46 @@ class VertexShader {
     this.lastMark = mark;
   }
 
+  /**
+   * Set the webgl draw mode to use
+   * @param {String} drawMode
+   */
   setDrawMode(drawMode) {
     this.drawMode = drawMode;
   }
 
+  /**
+   * Signify this channel varies from mark to mark, so build buffers to carry this info
+   * for the program. Also add desclaration to shader code.
+   *
+   * @param {String} channel such as opacity, color, size
+   * @param {Number} numComponents number of components of this attribute to pull in, usually 1
+   * @returns this
+   */
   addChannelBuffer(channel, numComponents = 1) {
     this.attributes[channel] = { numComponents, data: [] };
     this.shader += `attribute float ${channel};\n`;
+    return this;
   }
 
+  /**
+   * Signify this channel is the same for every mark, so set a uniform to refer to.
+   *
+   * @param {String} channel such as opacity, color, size
+   * @param {Number} uniform value to set uniform to, must be a float
+   * @returns this
+   */
   setChannelUniform(channel, uniform) {
     this.uniforms[channel] = uniform;
     this.shader += `uniform float ${channel};\n`;
     return this;
   }
 
+  /**
+   * Build the shader code after uniforms and attributes have been finalized.
+   *
+   * @returns shader code to compile
+   */
   buildShader() {
     // Assumes color, opacity, size channels have been used in
     // addChannelBuffer or addChannelUniform
@@ -112,11 +154,23 @@ class VertexShader {
     return this.shader;
   }
 
+  /**
+   * Construct the vertex shaders for each track in the schema.
+   *
+   * @param {Object} schema of visualization
+   * @returns an array of {@link VertexShaders}s
+   */
   static fromSchema(schema) {
     // Returns one per track
     return schema.tracks.map(VertexShader.fromTrack);
   }
 
+  /**
+   * Construct the vertex shader a track including setting attributes, uniforms, drawMode.
+   *
+   * @param {Object} track from schema
+   * @returns a {@link VertexShaders}
+   */
   static fromTrack(track) {
     // Given a track produce attributes and uniforms that describe a webgl drawing
 

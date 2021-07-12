@@ -23,10 +23,19 @@ class DataProcessor {
     new SchemaProcessor(schema, this.indexData.bind(this));
   }
 
+  /**
+   * Callback function that occurs after the schema processor has loaded the appropriate data
+   *
+   * @param {SchemaProcessor} schemaHelper that is built in the constructor
+   */
   indexData(schemaHelper) {
     this.points = [];
     let modifyGeometry;
 
+    // If we are using genome scales, we need to map the coordinates correctly
+    // We build mapping functions based on what needs to occur for each data
+    // point in order to avoid lots of checks in the potentially very long
+    // data loop.
     if (schemaHelper.xScale instanceof GenomeScale) {
       modifyGeometry = (point) => {
         point.geometry.coordinates[0] =
@@ -38,6 +47,8 @@ class DataProcessor {
     }
 
     if (schemaHelper.yScale instanceof GenomeScale) {
+      // This is a way to check if x is also a genome scale, so we don't
+      // include instanceof checks in the data loop
       if (modifyGeometry) {
         // x dimension is also a genome scale
         (point) => {
@@ -65,12 +76,14 @@ class DataProcessor {
 
     console.log("Reading data...");
 
+    // Process the global data in the schema processor
     if (schemaHelper.data) {
       for (let track of schemaHelper.tracks) {
         if (!track.hasOwnData) {
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
             if (modifyGeometry) {
+              // only call if we need to
               modifyGeometry(currentPoint);
             }
             this.points.push(currentPoint);
@@ -80,6 +93,8 @@ class DataProcessor {
         }
       }
     }
+
+    // Process the data that is local to each track
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
       .forEach((track) => {
@@ -96,7 +111,7 @@ class DataProcessor {
     console.log("Indexing data...");
     this.index.load(this.points);
 
-    console.log(this.points);
+    console.log("Data processing complete.");
   }
 
   /**

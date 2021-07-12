@@ -81,7 +81,7 @@ function getViewportForSchema(schema) {
  *
  * @param {String} dimension either x or y
  * @param {Object} schema for the visualization
- * @returns
+ * @returns function which can be used to map to an "x" or "y" value
  */
 const getScaleForSchema = (dimension, schema) => {
   if (dimension !== "x" && dimension !== "y") {
