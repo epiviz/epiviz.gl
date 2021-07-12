@@ -43,6 +43,405 @@
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$exports = {};
   // ASSET: src/epiviz.gl/utilities.js
   var $794bbb298c1fc0cc3157526701549b8c$exports = {};
+  // ASSET: src/epiviz.gl/genome-sizes.js
+  var $2e9e6b6c3378724b336406626f99a6bc$exports = {};
+  var $4d9f046a4b550b4140c040e477bb012c$export$default = function (x) {
+    return Math.abs(x = Math.round(x)) >= 1e21 ? x.toLocaleString("en").replace(/,/g, "") : x.toString(10);
+  };
+  // Computes the decimal coefficient and exponent of the specified number x with
+  // significant digits p, where x is positive and p is in [1, 21] or undefined.
+  // For example, formatDecimalParts(1.23) returns ["123", 0].
+  function $4d9f046a4b550b4140c040e477bb012c$export$formatDecimalParts(x, p) {
+    if ((i = (x = p ? x.toExponential(p - 1) : x.toExponential()).indexOf("e")) < 0) return null;
+    // NaN, ±Infinity
+    var i, coefficient = x.slice(0, i);
+    // The string returned by toExponential either has the form \d\.\d+e[-+]\d+
+    // (e.g., 1.2e+3) or the form \de[-+]\d+ (e.g., 1e+3).
+    return [coefficient.length > 1 ? coefficient[0] + coefficient.slice(2) : coefficient, +x.slice(i + 1)];
+  }
+  var $cb7dec64aa301d089468cdbaade2d4dc$export$default = function (x) {
+    return (x = $4d9f046a4b550b4140c040e477bb012c$export$formatDecimalParts(Math.abs(x)), x ? x[1] : NaN);
+  };
+  var $9c3157138be7d4238945bad8940fa5f0$export$default = function (grouping, thousands) {
+    return function (value, width) {
+      var i = value.length, t = [], j = 0, g = grouping[0], length = 0;
+      while (i > 0 && g > 0) {
+        if (length + g + 1 > width) g = Math.max(1, width - length);
+        t.push(value.substring(i -= g, i + g));
+        if ((length += g + 1) > width) break;
+        g = grouping[j = (j + 1) % grouping.length];
+      }
+      return t.reverse().join(thousands);
+    };
+  };
+  var $2089b68933f94ce986715353aae4a3fa$export$default = function (numerals) {
+    return function (value) {
+      return value.replace(/[0-9]/g, function (i) {
+        return numerals[+i];
+      });
+    };
+  };
+  // [[fill]align][sign][symbol][0][width][,][.precision][~][type]
+  var $a8405862f1d5b262cdb2954a0f30f9f1$var$re = /^(?:(.)?([<>=^]))?([+\-( ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?(~)?([a-z%])?$/i;
+  function $a8405862f1d5b262cdb2954a0f30f9f1$export$default(specifier) {
+    if (!(match = $a8405862f1d5b262cdb2954a0f30f9f1$var$re.exec(specifier))) throw new Error("invalid format: " + specifier);
+    var match;
+    return new $a8405862f1d5b262cdb2954a0f30f9f1$export$FormatSpecifier({
+      fill: match[1],
+      align: match[2],
+      sign: match[3],
+      symbol: match[4],
+      zero: match[5],
+      width: match[6],
+      comma: match[7],
+      precision: match[8] && match[8].slice(1),
+      trim: match[9],
+      type: match[10]
+    });
+  }
+  $a8405862f1d5b262cdb2954a0f30f9f1$export$default.prototype = $a8405862f1d5b262cdb2954a0f30f9f1$export$FormatSpecifier.prototype;
+  // instanceof
+  function $a8405862f1d5b262cdb2954a0f30f9f1$export$FormatSpecifier(specifier) {
+    this.fill = specifier.fill === undefined ? " " : specifier.fill + "";
+    this.align = specifier.align === undefined ? ">" : specifier.align + "";
+    this.sign = specifier.sign === undefined ? "-" : specifier.sign + "";
+    this.symbol = specifier.symbol === undefined ? "" : specifier.symbol + "";
+    this.zero = !!specifier.zero;
+    this.width = specifier.width === undefined ? undefined : +specifier.width;
+    this.comma = !!specifier.comma;
+    this.precision = specifier.precision === undefined ? undefined : +specifier.precision;
+    this.trim = !!specifier.trim;
+    this.type = specifier.type === undefined ? "" : specifier.type + "";
+  }
+  $a8405862f1d5b262cdb2954a0f30f9f1$export$FormatSpecifier.prototype.toString = function () {
+    return this.fill + this.align + this.sign + this.symbol + (this.zero ? "0" : "") + (this.width === undefined ? "" : Math.max(1, this.width | 0)) + (this.comma ? "," : "") + (this.precision === undefined ? "" : "." + Math.max(0, this.precision | 0)) + (this.trim ? "~" : "") + this.type;
+  };
+  // Trims insignificant zeros, e.g., replaces 1.2000k with 1.2k.
+  var $43b5e03d42c019c4ecae054226470b7a$export$default = function (s) {
+    out: for (var n = s.length, i = 1, i0 = -1, i1; i < n; ++i) {
+      switch (s[i]) {
+        case ".":
+          i0 = i1 = i;
+          break;
+        case "0":
+          if (i0 === 0) i0 = i;
+          i1 = i;
+          break;
+        default:
+          if (!+s[i]) break out;
+          if (i0 > 0) i0 = 0;
+          break;
+      }
+    }
+    return i0 > 0 ? s.slice(0, i0) + s.slice(i1 + 1) : s;
+  };
+  var $4f54a6fcbd12acee736587c0a0c51098$export$prefixExponent;
+  var $4f54a6fcbd12acee736587c0a0c51098$export$default = function (x, p) {
+    var d = $4d9f046a4b550b4140c040e477bb012c$export$formatDecimalParts(x, p);
+    if (!d) return x + "";
+    var coefficient = d[0], exponent = d[1], i = exponent - ($4f54a6fcbd12acee736587c0a0c51098$export$prefixExponent = Math.max(-8, Math.min(8, Math.floor(exponent / 3))) * 3) + 1, n = coefficient.length;
+    return i === n ? coefficient : i > n ? coefficient + new Array(i - n + 1).join("0") : i > 0 ? coefficient.slice(0, i) + "." + coefficient.slice(i) : "0." + new Array(1 - i).join("0") + $4d9f046a4b550b4140c040e477bb012c$export$formatDecimalParts(x, Math.max(0, p + i - 1))[0];
+  };
+  var $db37bf71996eec9b1e508e4772d6a00a$export$default = function (x, p) {
+    var d = $4d9f046a4b550b4140c040e477bb012c$export$formatDecimalParts(x, p);
+    if (!d) return x + "";
+    var coefficient = d[0], exponent = d[1];
+    return exponent < 0 ? "0." + new Array(-exponent).join("0") + coefficient : coefficient.length > exponent + 1 ? coefficient.slice(0, exponent + 1) + "." + coefficient.slice(exponent + 1) : coefficient + new Array(exponent - coefficient.length + 2).join("0");
+  };
+  var $f088c751a18ef3f8dc71e733c140fa86$export$default = {
+    "%": (x, p) => (x * 100).toFixed(p),
+    "b": x => Math.round(x).toString(2),
+    "c": x => x + "",
+    "d": $4d9f046a4b550b4140c040e477bb012c$export$default,
+    "e": (x, p) => x.toExponential(p),
+    "f": (x, p) => x.toFixed(p),
+    "g": (x, p) => x.toPrecision(p),
+    "o": x => Math.round(x).toString(8),
+    "p": (x, p) => $db37bf71996eec9b1e508e4772d6a00a$export$default(x * 100, p),
+    "r": $db37bf71996eec9b1e508e4772d6a00a$export$default,
+    "s": $4f54a6fcbd12acee736587c0a0c51098$export$default,
+    "X": x => Math.round(x).toString(16).toUpperCase(),
+    "x": x => Math.round(x).toString(16)
+  };
+  var $01583f1cf82af58ba99b28900d330719$export$default = function (x) {
+    return x;
+  };
+  var $b3ada3f96306fbdafba4b22584a4e750$var$map = Array.prototype.map, $b3ada3f96306fbdafba4b22584a4e750$var$prefixes = ["y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y"];
+  var $b3ada3f96306fbdafba4b22584a4e750$export$default = function (locale) {
+    var group = locale.grouping === undefined || locale.thousands === undefined ? $01583f1cf82af58ba99b28900d330719$export$default : $9c3157138be7d4238945bad8940fa5f0$export$default($b3ada3f96306fbdafba4b22584a4e750$var$map.call(locale.grouping, Number), locale.thousands + ""), currencyPrefix = locale.currency === undefined ? "" : locale.currency[0] + "", currencySuffix = locale.currency === undefined ? "" : locale.currency[1] + "", decimal = locale.decimal === undefined ? "." : locale.decimal + "", numerals = locale.numerals === undefined ? $01583f1cf82af58ba99b28900d330719$export$default : $2089b68933f94ce986715353aae4a3fa$export$default($b3ada3f96306fbdafba4b22584a4e750$var$map.call(locale.numerals, String)), percent = locale.percent === undefined ? "%" : locale.percent + "", minus = locale.minus === undefined ? "−" : locale.minus + "", nan = locale.nan === undefined ? "NaN" : locale.nan + "";
+    function newFormat(specifier) {
+      specifier = $a8405862f1d5b262cdb2954a0f30f9f1$export$default(specifier);
+      var fill = specifier.fill, align = specifier.align, sign = specifier.sign, symbol = specifier.symbol, zero = specifier.zero, width = specifier.width, comma = specifier.comma, precision = specifier.precision, trim = specifier.trim, type = specifier.type;
+      // The "n" type is an alias for ",g".
+      if (type === "n") (comma = true, type = "g"); else // The "" type, and any invalid type, is an alias for ".12~g".
+      if (!$f088c751a18ef3f8dc71e733c140fa86$export$default[type]) (precision === undefined && (precision = 12), trim = true, type = "g");
+      // If zero fill is specified, padding goes after sign and before digits.
+      if (zero || fill === "0" && align === "=") (zero = true, fill = "0", align = "=");
+      // Compute the prefix and suffix.
+      // For SI-prefix, the suffix is lazily computed.
+      var prefix = symbol === "$" ? currencyPrefix : symbol === "#" && (/[boxX]/).test(type) ? "0" + type.toLowerCase() : "", suffix = symbol === "$" ? currencySuffix : (/[%p]/).test(type) ? percent : "";
+      // What format function should we use?
+      // Is this an integer type?
+      // Can this type generate exponential notation?
+      var formatType = $f088c751a18ef3f8dc71e733c140fa86$export$default[type], maybeSuffix = (/[defgprs%]/).test(type);
+      // Set the default precision if not specified,
+      // or clamp the specified precision to the supported range.
+      // For significant precision, it must be in [1, 21].
+      // For fixed precision, it must be in [0, 20].
+      precision = precision === undefined ? 6 : (/[gprs]/).test(type) ? Math.max(1, Math.min(21, precision)) : Math.max(0, Math.min(20, precision));
+      function format(value) {
+        var valuePrefix = prefix, valueSuffix = suffix, i, n, c;
+        if (type === "c") {
+          valueSuffix = formatType(value) + valueSuffix;
+          value = "";
+        } else {
+          value = +value;
+          // Determine the sign. -0 is not less than 0, but 1 / -0 is!
+          var valueNegative = value < 0 || 1 / value < 0;
+          // Perform the initial formatting.
+          value = isNaN(value) ? nan : formatType(Math.abs(value), precision);
+          // Trim insignificant zeros.
+          if (trim) value = $43b5e03d42c019c4ecae054226470b7a$export$default(value);
+          // If a negative value rounds to zero after formatting, and no explicit positive sign is requested, hide the sign.
+          if (valueNegative && +value === 0 && sign !== "+") valueNegative = false;
+          // Compute the prefix and suffix.
+          valuePrefix = (valueNegative ? sign === "(" ? sign : minus : sign === "-" || sign === "(" ? "" : sign) + valuePrefix;
+          valueSuffix = (type === "s" ? $b3ada3f96306fbdafba4b22584a4e750$var$prefixes[8 + $4f54a6fcbd12acee736587c0a0c51098$export$prefixExponent / 3] : "") + valueSuffix + (valueNegative && sign === "(" ? ")" : "");
+          // Break the formatted value into the integer “value” part that can be
+          // grouped, and fractional or exponential “suffix” part that is not.
+          if (maybeSuffix) {
+            (i = -1, n = value.length);
+            while (++i < n) {
+              if ((c = value.charCodeAt(i), 48 > c || c > 57)) {
+                valueSuffix = (c === 46 ? decimal + value.slice(i + 1) : value.slice(i)) + valueSuffix;
+                value = value.slice(0, i);
+                break;
+              }
+            }
+          }
+        }
+        // If the fill character is not "0", grouping is applied before padding.
+        if (comma && !zero) value = group(value, Infinity);
+        // Compute the padding.
+        var length = valuePrefix.length + value.length + valueSuffix.length, padding = length < width ? new Array(width - length + 1).join(fill) : "";
+        // If the fill character is "0", grouping is applied after padding.
+        if (comma && zero) (value = group(padding + value, padding.length ? width - valueSuffix.length : Infinity), padding = "");
+        // Reconstruct the final output based on the desired alignment.
+        switch (align) {
+          case "<":
+            value = valuePrefix + value + valueSuffix + padding;
+            break;
+          case "=":
+            value = valuePrefix + padding + value + valueSuffix;
+            break;
+          case "^":
+            value = padding.slice(0, length = padding.length >> 1) + valuePrefix + value + valueSuffix + padding.slice(length);
+            break;
+          default:
+            value = padding + valuePrefix + value + valueSuffix;
+            break;
+        }
+        return numerals(value);
+      }
+      format.toString = function () {
+        return specifier + "";
+      };
+      return format;
+    }
+    function formatPrefix(specifier, value) {
+      var f = newFormat((specifier = $a8405862f1d5b262cdb2954a0f30f9f1$export$default(specifier), specifier.type = "f", specifier)), e = Math.max(-8, Math.min(8, Math.floor($cb7dec64aa301d089468cdbaade2d4dc$export$default(value) / 3))) * 3, k = Math.pow(10, -e), prefix = $b3ada3f96306fbdafba4b22584a4e750$var$prefixes[8 + e / 3];
+      return function (value) {
+        return f(k * value) + prefix;
+      };
+    }
+    return {
+      format: newFormat,
+      formatPrefix: formatPrefix
+    };
+  };
+  var $c8cf865515e7e5d7357b07df1e313b78$var$locale;
+  var $c8cf865515e7e5d7357b07df1e313b78$export$format;
+  var $c8cf865515e7e5d7357b07df1e313b78$export$formatPrefix;
+  $c8cf865515e7e5d7357b07df1e313b78$export$default({
+    thousands: ",",
+    grouping: [3],
+    currency: ["$", ""]
+  });
+  function $c8cf865515e7e5d7357b07df1e313b78$export$default(definition) {
+    $c8cf865515e7e5d7357b07df1e313b78$var$locale = $b3ada3f96306fbdafba4b22584a4e750$export$default(definition);
+    $c8cf865515e7e5d7357b07df1e313b78$export$format = $c8cf865515e7e5d7357b07df1e313b78$var$locale.format;
+    $c8cf865515e7e5d7357b07df1e313b78$export$formatPrefix = $c8cf865515e7e5d7357b07df1e313b78$var$locale.formatPrefix;
+    return $c8cf865515e7e5d7357b07df1e313b78$var$locale;
+  }
+  var $2b421b5a834cad866fae02fb48790107$export$default = function (step, max) {
+    (step = Math.abs(step), max = Math.abs(max) - step);
+    return Math.max(0, $cb7dec64aa301d089468cdbaade2d4dc$export$default(max) - $cb7dec64aa301d089468cdbaade2d4dc$export$default(step)) + 1;
+  };
+  /**
+  * Create a function which maps a genome pair to a location in the entire genome
+  *
+  * @param {String} genomeId key from genomeSizes object
+  * @returns a function which maps a (chrId, pairNum) => to
+  *  a number between 1 and total number of genes in the genome
+  */
+  const $2e9e6b6c3378724b336406626f99a6bc$var$createPairMapperToGenome = genomeId => {
+    let chrSizes = $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId];
+    let chrStarts = new Map();
+    let cumulativeTotal = 0;
+    chrSizes.forEach((value, key) => {
+      chrStarts.set(key, cumulativeTotal);
+      cumulativeTotal += value;
+    });
+    return (chr, pairNum) => {
+      return chrStarts.get(chr) + pairNum;
+    };
+  };
+  class $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale {
+    /**
+    * A scale used to map a genome pair to a location between -1 and 1 for data visualization.
+    * Also contains inverse and utility functions for getting labels for axis.
+    *
+    * @param {String} genomeId key from genomeSizes object
+    * @param {Array} domain array of length 2 containing the start and end of the genome
+    *   for the scale. ex: ["chr2:1000", "chr3:2000"]
+    */
+    constructor(genomeId, domain) {
+      if ($2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId] === undefined) {
+        console.error(`${genomeId} is not a recognized genome!`);
+      }
+      this.genomeId = genomeId;
+      this.domain = domain;
+      let [startChr, startPair] = domain[0].substring(3).// Remove chr
+      split(":");
+      // split chromesome and pair number
+      startPair = parseInt(startPair);
+      let [endChr, endPair] = domain[1].substring(3).split(":");
+      endPair = parseInt(endPair);
+      this.mapPairToGenomeIndex = $2e9e6b6c3378724b336406626f99a6bc$var$createPairMapperToGenome(genomeId);
+      const firstPairInDomain = this.mapPairToGenomeIndex(startChr, startPair);
+      const lastPairInDomain = this.mapPairToGenomeIndex(endChr, endPair);
+      this.mapGenomeIndexToClipSpace = $794bbb298c1fc0cc3157526701549b8c$export$scale([firstPairInDomain, lastPairInDomain], [-1, 1]);
+      this.mapGenomeIndexToClipSpaceInverse = $794bbb298c1fc0cc3157526701549b8c$export$scale([-1, 1], [firstPairInDomain, lastPairInDomain]);
+    }
+    /**
+    * Map a genome pair to [-1, 1] with the parts.
+    *
+    * @param {String} chr id of chromosome in genome
+    * @param {Number} pair location in chromosome
+    * @returns value in [-1, 1] corresponding to genome range location
+    */
+    toClipSpaceFromParts(chr, pair) {
+      return this.mapGenomeIndexToClipSpace(this.mapPairToGenomeIndex(chr, pair));
+    }
+    /**
+    * Utility method for calling this.toClipSpaceFromParts.
+    *
+    * @param {String} pairStr in form "chrID:geneNumber" ex: "chr1:1000"
+    * @returns value in [-1, 1] corresponding to genome range location
+    */
+    toClipSpaceFromString(pairStr) {
+      let [chr, pair] = pairStr.substring(3).split(":");
+      pair = parseInt(pair);
+      return this.toClipSpaceFromParts(chr, pair);
+    }
+    /**
+    * Get the gene id from a value between [-1, 1]
+    *
+    * @param {Number} num number between [-1, 1]
+    * @param {String} formatting used for formatting gene number with d3-format
+    * @returns `chr${chrId}:${chrLoc}`
+    */
+    inverse(num, formatting = false) {
+      let genomeSpot = Math.floor(this.mapGenomeIndexToClipSpaceInverse(num));
+      let chrId;
+      let chrLoc;
+      let cumulativeTotal = 0;
+      for (const [chrKey, pairCount] of $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[this.genomeId].entries()) {
+        if (cumulativeTotal + pairCount >= genomeSpot) {
+          chrLoc = genomeSpot - cumulativeTotal;
+          chrId = chrKey;
+          break;
+        }
+        cumulativeTotal += pairCount;
+      }
+      return formatting ? `chr${chrId}:${$c8cf865515e7e5d7357b07df1e313b78$export$format(formatting)(chrLoc)}` : `chr${chrId}:${chrLoc}`;
+    }
+    /**
+    * Get a sequence of ticks for a range in the genome.
+    *
+    * @param {Number} start number between [-1, 1]
+    * @param {Number} end number between [-1, 1] > start
+    * @returns object with tickCoords and corresponding tickLabels property
+    */
+    getTickCoordsAndLabels(start, end) {
+      let [startChr, startPair] = this.inverse(start).substring(3).split(":");
+      let [endChr, endPair] = this.inverse(end).substring(3).split(":");
+      const toReturn = [];
+      let suggestedFormat;
+      if (startChr === endChr) {
+        let difference = endPair - startPair;
+        let magnitude = Math.floor(Math.log10(difference));
+        let startingValue = startPair - startPair % 10 ** magnitude;
+        suggestedFormat = $2b421b5a834cad866fae02fb48790107$export$default(10 ** magnitude, startingValue);
+        for (let currValue = startingValue; currValue < endPair; currValue += 10 ** magnitude) {
+          toReturn.push(this.toClipSpaceFromParts(startChr, currValue));
+        }
+      } else {
+        suggestedFormat = "1";
+        for (const chrId of $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[this.genomeId].keys()) {
+          toReturn.push(this.toClipSpaceFromParts(chrId, 1));
+        }
+      }
+      return {
+        tickCoords: toReturn,
+        tickLabels: toReturn.map(coord => this.inverse(coord, $c8cf865515e7e5d7357b07df1e313b78$export$format(`.${suggestedFormat}s`)))
+      };
+    }
+    /**
+    * Utility method for getting a GenomeScale across an entire genome.
+    *
+    * @param {String} genomeId from genomeSizes
+    * @returns a GenomeScale across an entire genome
+    */
+    static completeScale(genomeId) {
+      const chrSizes = $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId];
+      const finalEntry = [...chrSizes.entries()][chrSizes.size - 1];
+      return new $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale(genomeId, ["chr1:1", `chr${finalEntry[0]}:${finalEntry[1]}`]);
+    }
+  }
+  /**
+  * Available genomes to visualize. Each genome is a map from chromosome id to number of genes in chromosome.
+  * Order matters as maps remember insertion order.
+  */
+  const $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes = {
+    hg38: new Map([["1", 248956422], // chr1
+    ["2", 242193529], // chr2
+    ["3", 198295559], // ...
+    ["4", 190214555], ["5", 181538259], ["6", 170805979], ["7", 159345973], ["8", 145138636], ["9", 138394717], ["10", 135086622], ["11", 133797422], ["12", 133275309], ["13", 114364328], ["14", 107043718], ["15", 101991189], ["16", 90338345], ["17", 83257441], ["18", 80373285], ["19", 58617616], ["20", 64444167], // ...
+    ["21", 46709983], // chr21
+    ["22", 50818468], // chr22
+    ["X", 156040895], // chrX
+    ["Y", 57227415]]),
+    hg19: new Map([["1", 249250621], // chr1
+    ["2", 243199373], // chr2
+    ["3", 198022430], // ...
+    ["4", 191154276], ["5", 180915260], ["6", 171115067], ["7", 159138663], ["8", 146364022], ["9", 141213431], ["10", 135534747], ["11", 135006516], ["12", 133851895], ["13", 115169878], ["14", 107349540], ["15", 102531392], ["16", 90354753], ["17", 81195210], ["18", 78077248], ["19", 59128983], ["20", 63025520], // ...
+    ["21", 48129895], // chr21
+    ["22", 51304566], // chr22
+    ["X", 155270560], // chrX
+    ["Y", 59373566]]),
+    mm39: new Map([["1", 195154279], // chr1
+    ["2", 181755017], // chr2
+    ["3", 159745316], // ...
+    ["4", 156860686], ["5", 151758149], ["6", 149588044], ["7", 144995196], ["8", 130127694], ["9", 124359700], ["10", 130530862], ["11", 121973369], ["12", 120092757], ["13", 120883175], ["14", 125139656], ["15", 104073951], ["16", 98008968], ["17", 95294699], // ...
+    ["18", 90720763], // chr18
+    ["19", 61420004], // chr19
+    ["X", 169476592], // chrX
+    ["Y", 91455967]])
+  };
+  $parcel$export($2e9e6b6c3378724b336406626f99a6bc$exports, "GenomeScale", function () {
+    return $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale;
+  });
   var $d62aa320cc500c815d2fd0c000e80e4d$export$default = function (constructor, factory, prototype) {
     constructor.prototype = factory.prototype = prototype;
     prototype.constructor = constructor;
@@ -425,7 +824,15 @@
     const asColor = $af4ad10b60118211d1082e6b107c9493$export$default(specifier);
     return $794bbb298c1fc0cc3157526701549b8c$export$rgbToHex(asColor.r, asColor.g, asColor.b);
   }
-  function $794bbb298c1fc0cc3157526701549b8c$export$schemaViewport(schema) {
+  /**
+  * Get the VIEWPORT of the schema to be used by the mouseReader.
+  * If all types for a dimension across tracks are categorical or genomic,
+  * will default to [-1, 1] for that dimension for the mouseReader.
+  *
+  * @param {Object} schema of visualization
+  * @returns [smallestX, largestX, smallestY, largestY] of viewport
+  */
+  function $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSchema(schema) {
     let smallestX = Number.POSITIVE_INFINITY;
     let largestX = Number.NEGATIVE_INFINITY;
     let smallestY = Number.POSITIVE_INFINITY;
@@ -448,11 +855,62 @@
     largestY = largestY === Number.NEGATIVE_INFINITY ? 1 : largestY;
     return [smallestX, largestX, smallestY, largestY];
   }
+  /**
+  * Given a schema, return a SCALE to be used for mapping data points to clip space
+  * for the drawer.
+  *
+  * @param {String} dimension either x or y
+  * @param {Object} schema for the visualization
+  * @returns
+  */
+  const $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema = (dimension, schema) => {
+    if (dimension !== "x" && dimension !== "y") {
+      console.error(`${dimension} is not x or y!`);
+    }
+    let genomic = false;
+    let genome;
+    for (const track of schema.tracks) {
+      if (track[dimension].type && track[dimension].type.includes("genomic")) {
+        genome = track[dimension].genome;
+        genomic = true;
+        break;
+      }
+    }
+    if (!genomic) {
+      const viewport = $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSchema(schema);
+      if (dimension === "x") {
+        return $794bbb298c1fc0cc3157526701549b8c$export$scale([viewport[0], viewport[1]], [-1, 1]);
+      }
+      return $794bbb298c1fc0cc3157526701549b8c$export$scale([viewport[2], viewport[3]], [-1, 1]);
+    }
+    const geneScale = $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale.completeScale(genome);
+    let smallestGene = undefined;
+    let smallestGeneValue = Number.POSITIVE_INFINITY;
+    let largestGene = undefined;
+    let largestGeneValue = Number.NEGATIVE_INFINITY;
+    for (const track of schema.tracks) {
+      let xDomain = track[dimension].domain;
+      if (xDomain) {
+        if (geneScale.toClipSpaceFromString(xDomain[0]) < smallestGeneValue) {
+          smallestGeneValue = geneScale.toClipSpaceFromString(xDomain[0]);
+          smallestGene = xDomain[0];
+        }
+        if (geneScale.toClipSpaceFromString(xDomain[1]) > largestGeneValue) {
+          largestGeneValue = geneScale.toClipSpaceFromString(xDomain[1]);
+          largestGene = xDomain[1];
+        }
+      }
+    }
+    return new $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale(genome, [smallestGene, largestGene]);
+  };
+  $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getScaleForSchema", function () {
+    return $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema;
+  });
   $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "colorSpecifierToHex", function () {
     return $794bbb298c1fc0cc3157526701549b8c$export$colorSpecifierToHex;
   });
-  $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "schemaViewport", function () {
-    return $794bbb298c1fc0cc3157526701549b8c$export$schemaViewport;
+  $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getViewportForSchema", function () {
+    return $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSchema;
   });
   $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "rgbStringToHex", function () {
     return $794bbb298c1fc0cc3157526701549b8c$export$rgbStringToHex;
@@ -467,39 +925,48 @@
   // is 10, then that mark takes up 10/200 = 1/20 of the clip space which
   // is equal to 50 pixels
   const $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS = 1 / 100;
-  const $6d3e717fed031fdb2ee2c357e03764b6$var$transformGenomicMarkToStandard = mark => {
-    let x, y, width, height;
-    if (Array.isArray(mark.x)) {
-      x = mark.x[0];
-      width = (mark.x[1] - mark.x[0]) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
-    } else {
-      x = mark.x;
-      width = mark.width;
-    }
-    if (Array.isArray(mark.y)) {
-      y = mark.y[0];
-      height = (mark.y[1] - mark.y[0]) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
-    } else {
-      y = mark.y;
-      height = mark.height;
-    }
-    return {
-      x,
-      y,
-      width,
-      height
-    };
-  };
   class $6d3e717fed031fdb2ee2c357e03764b6$export$default {
-    constructor(xDomain, yDomain, track) {
-      this.xScale = $794bbb298c1fc0cc3157526701549b8c$export$scale(xDomain, [-1, 1]);
-      this.yScale = $794bbb298c1fc0cc3157526701549b8c$export$scale(yDomain, [-1, 1]);
+    constructor(xScale, yScale, track) {
+      if (xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale) {
+        this.xScale = args => xScale.toClipSpaceFromParts(args[0], args[1]);
+      } else {
+        this.xScale = xScale;
+      }
+      if (yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale) {
+        this.yScale = args => yScale.toClipSpaceFromParts(args[0], args[1]);
+      } else {
+        this.yScale = yScale;
+      }
       this.track = track;
       this.drawMode = $647b390bbe26a1e6bbc6a8c9e19f41d2$export$getDrawModeForTrack(track);
     }
+    transformGenomicRangeToStandard(mark) {
+      let x, y, width, height;
+      if (Array.isArray(mark.x)) {
+        let x1 = this.xScale([mark.x[0], mark.x[1]]);
+        x = [mark.x[0], mark.x[1]];
+        width = (this.xScale([mark.x[2], mark.x[3]]) - x1) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+      } else {
+        x = mark.x;
+        width = mark.width;
+      }
+      if (Array.isArray(mark.y)) {
+        y = this.yScale([mark.y[0], mark.y[1]]);
+        height = (this.yScale([mark.y[2], mark.y[3]]) - y) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+      } else {
+        y = mark.y;
+        height = mark.height;
+      }
+      return {
+        x,
+        y,
+        width,
+        height
+      };
+    }
     calculateForMark(mark) {
       if (this.track.x.type === "genomicRange" || this.track.y.type === "genomicRange") {
-        return this._calculateForMark($6d3e717fed031fdb2ee2c357e03764b6$var$transformGenomicMarkToStandard(mark));
+        return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
       }
       return this._calculateForMark(mark);
     }
@@ -1041,6 +1508,7 @@
   $parcel$export($c5987a6c12d3d7b5522038cb2a81673f$exports, "interpolateViridis", function () {
     return $1f00eb975f725d678d6cd4a75976fc88$export$default;
   });
+  const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$d3 = $c5987a6c12d3d7b5522038cb2a81673f$exports;
   // ASSET: node_modules/axios/index.js
   var $9a6acbaf99b7f614537e1f05bbe68696$exports = {};
   // ASSET: node_modules/axios/lib/axios.js
@@ -2621,63 +3089,6 @@
   // Allow use of default import syntax in TypeScript
   $ea182a60f6c3729931fdb5051f0fed05$exports.default = $ea182a60f6c3729931fdb5051f0fed05$export$default;
   $9a6acbaf99b7f614537e1f05bbe68696$exports = $ea182a60f6c3729931fdb5051f0fed05$exports;
-  const $2e9e6b6c3378724b336406626f99a6bc$var$arraySum = arr => arr.reduce((a, b) => a + b, 0);
-  const $2e9e6b6c3378724b336406626f99a6bc$var$createPairMapperToGenome = genomeId => {
-    let chrSizes = $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId];
-    let chrStarts = new Map(chrSizes.slice(0, chrSizes.length - 2).// exclude X and Y chromosomes
-    map((_, index) => [(index + 1).toString(), // treat chromosomes as string to avoid having X and Y be special cases
-    $2e9e6b6c3378724b336406626f99a6bc$var$arraySum(chrSizes.slice(0, index))]));
-    chrStarts.set("X", chrStarts.get(chrStarts.size.toString()) + chrSizes[chrStarts.size - 1]);
-    chrStarts.set("Y", chrStarts.get("X") + chrSizes[chrStarts.size - 1]);
-    // Assumes X and Y have been translated to appropriate index
-    return (chr, pairNum) => {
-      return chrStarts.get(chr) + pairNum;
-    };
-  };
-  const $2e9e6b6c3378724b336406626f99a6bc$export$getGenomeScale = (genomeId, domain) => {
-    let chrSizes = $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes[genomeId];
-    if (chrSizes === undefined) {
-      console.error(`${genomeId} is not a recognized genome!`);
-    }
-    const mapPairToNumber = $2e9e6b6c3378724b336406626f99a6bc$var$createPairMapperToGenome(genomeId);
-    let [startChr, startPair] = domain[0].substring(3).// Remove chr
-    split(":");
-    // split chromesome and pair number
-    startPair = parseInt(startPair);
-    let [endChr, endPair] = domain[1].substring(3).split(":");
-    endPair = parseInt(endPair);
-    const firstPairInDomain = mapPairToNumber(startChr, startPair);
-    const lastPairInDomain = mapPairToNumber(endChr, endPair);
-    const genomeScale = $794bbb298c1fc0cc3157526701549b8c$export$scale([firstPairInDomain, lastPairInDomain], [-1, 1]);
-    return (chr, gene) => genomeScale(mapPairToNumber(chr, gene));
-  };
-  const $2e9e6b6c3378724b336406626f99a6bc$export$genomeSizes = {
-    hg38: Object.freeze([248956422, // chr1
-    242193529, // chr2
-    198295559, // ...
-    190214555, 181538259, 170805979, 159345973, 145138636, 138394717, 135086622, 133797422, 133275309, 114364328, 107043718, 101991189, 90338345, 83257441, 80373285, 58617616, 64444167, // ...
-    46709983, // chr21
-    50818468, // chr22
-    156040895, // chrX
-    57227415]),
-    hg19: Object.freeze([249250621, // chr1
-    243199373, // chr2
-    198022430, // ...
-    191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 133851895, 115169878, 107349540, 102531392, 90354753, 81195210, 78077248, 59128983, 63025520, // ...
-    48129895, // chr21
-    51304566, // chr22
-    155270560, // chrX
-    59373566]),
-    mm39: Object.freeze([195154279, // chr1
-    181755017, // chr2
-    159745316, // ...
-    156860686, 151758149, 149588044, 144995196, 130127694, 124359700, 130530862, 121973369, 120092757, 120883175, 125139656, 104073951, 98008968, 95294699, // ...
-    90720763, // chr18
-    61420004, // chr19
-    169476592, // chrX
-    91455967])
-  };
-  const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$d3 = $c5987a6c12d3d7b5522038cb2a81673f$exports;
   // Default channel values of schema which is passed to webgl drawer
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$export$DEFAULT_CHANNELS = Object.freeze({
     size: {
@@ -2765,6 +3176,8 @@
       if (this.dataPromise) {
         allPromises.push(this.dataPromise);
       }
+      this.xScale = $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema("x", schema);
+      this.yScale = $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema("y", schema);
       // When all tracks have acquired their data, call the callback
       // TODO: Allow tracks to be processed while waiting for others, need to keep in mind order
       Promise.all(allPromises).then(() => callback(this));
@@ -2832,8 +3245,7 @@
       });
       const x = this.channelMaps.get("x")(splitted);
       const y = this.channelMaps.get("y")(splitted);
-      toReturn.geometry.coordinates.push(Array.isArray(x) ? x[0] : x);
-      toReturn.geometry.coordinates.push(Array.isArray(y) ? y[0] : y);
+      toReturn.geometry.coordinates.push(x, y);
       return toReturn;
     }
     getNextMark() {
@@ -2962,40 +3374,39 @@
     };
   };
   /**
-  * Build a function which maps a genome chr, gene, to a location in the data space
+  * Build a function which maps a genome chr, gene, to an object consumable by a GenomeScale
   * @param {*} channel either x or y
   * @param {*} channelInfo the object containing info for this channel from the schema
-  * @returns a function that maps (genomeChr, geneLoc) -> [-1, 1]
+  * @returns a function that maps (genomeChr, geneLoc) -> [chrId, geneLocation]
+  *  ex: ["X", 200]
   */
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicChannel = (channel, channelInfo) => {
     switch (channel) {
       case "x":
       case "y":
-        const genomeScale = $2e9e6b6c3378724b336406626f99a6bc$export$getGenomeScale(channelInfo.genome, channelInfo.domain);
         return (chr, gene) => {
           let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-          return genomeScale(chrId, parseInt(gene));
+          return [chrId, parseInt(gene)];
         };
       default:
         console.error(`${channel} is not a supported channel for genomic attributes!`);
     }
   };
   /**
-  * Build a function which maps a genome chr, start, and end for to a location in the data space
+  * Build a function which maps a genome chr, start, and end to an object consumable by a scale
   * @param {*} channel either x or y
   * @param {*} channelInfo the object containing info for this channel from the schema
   * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
-  *  format: [in the range [-1, 1], in the range [-1, 1] (> first element)}
-  *  ex: [-0.5, 0.2]
+  *  format: [chrId, geneLocation, chrId2, geneLocation2]
+  *  ex: ["1", 1000, "X", 2000]
   */
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
     switch (channel) {
       case "x":
       case "y":
-        const genomeScale = $2e9e6b6c3378724b336406626f99a6bc$export$getGenomeScale(channelInfo.genome, channelInfo.domain);
         return (chr, genomeStart, genomeEnd) => {
           let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-          return [genomeScale(chrId, parseInt(genomeStart)), genomeScale(chrId, parseInt(genomeEnd))];
+          return [chrId, parseInt(genomeStart), chrId, parseInt(genomeEnd)];
         };
       default:
         console.error(`${channel} is not a supported channel for genomic attributes!`);
@@ -3016,12 +3427,16 @@
   function $794bbb298c1fc0cc3157526701549b8c$init() {
     return $794bbb298c1fc0cc3157526701549b8c$exports;
   }
+  function $2e9e6b6c3378724b336406626f99a6bc$init() {
+    return $2e9e6b6c3378724b336406626f99a6bc$exports;
+  }
   function $6d3e717fed031fdb2ee2c357e03764b6$init() {
     return $6d3e717fed031fdb2ee2c357e03764b6$exports;
   }
   parcelRequire.register("33BxP", $647b390bbe26a1e6bbc6a8c9e19f41d2$init);
   parcelRequire.register("3GSGc", $794bbb298c1fc0cc3157526701549b8c$init);
+  parcelRequire.register("1pY2N", $2e9e6b6c3378724b336406626f99a6bc$init);
   parcelRequire.register("3k8Hq", $6d3e717fed031fdb2ee2c357e03764b6$init);
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.756994ba.js.map
+//# sourceMappingURL=offscreen-webgl-worker.3ff5d79e.js.map

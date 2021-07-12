@@ -1,8 +1,9 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.756994ba.js");
+  importScripts("./offscreen-webgl-worker.3ff5d79e.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
+  var $2e9e6b6c3378724b336406626f99a6bc$init = parcelRequire("1pY2N");
   $647b390bbe26a1e6bbc6a8c9e19f41d2$init();
   function $2604e7ef843a7459f41771577fc9183c$export$default(ids, coords, nodeSize, left, right, depth) {
     if (right - left <= nodeSize) return;
@@ -2703,6 +2704,7 @@
     // if the last point is the same as the first, it's not a triangle
     return !(ring.length === 3 && ring[2][0] === ring[0][0] && ring[2][1] === ring[0][1]);
   }
+  $2e9e6b6c3378724b336406626f99a6bc$init();
   class $2147282c6e9e52b3312598841166bcdb$export$default {
     /**
     * A class meant to handle processing of data used in the scatterplot.
@@ -2717,14 +2719,48 @@
       console.log("Loading data...");
       new ($647b390bbe26a1e6bbc6a8c9e19f41d2$init().default)(schema, this.indexData.bind(this));
     }
+    /**
+    * Callback function that occurs after the schema processor has loaded the appropriate data
+    *
+    * @param {SchemaProcessor} schemaHelper that is built in the constructor
+    */
     indexData(schemaHelper) {
       this.points = [];
+      let modifyGeometry;
+      // If we are using genome scales, we need to map the coordinates correctly
+      // We build mapping functions based on what needs to occur for each data
+      // point in order to avoid lots of checks in the potentially very long
+      // data loop.
+      if (schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
+        modifyGeometry = point => {
+          point.geometry.coordinates[0] = schemaHelper.xScale.toClipSpaceFromParts(point.geometry.coordinates[0][0], point.geometry.coordinates[0][1]);
+        };
+      }
+      if (schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
+        // This is a way to check if x is also a genome scale, so we don't
+        // include instanceof checks in the data loop
+        if (modifyGeometry) {
+          // x dimension is also a genome scale
+          (point => {
+            point.geometry.coordinates = [schemaHelper.xScale.toClipSpaceFromParts(point.geometry.coordinates[0][0], point.geometry.coordinates[0][1]), schemaHelper.yScale.toClipSpaceFromParts(point.geometry.coordinates[0][0], point.geometry.coordinates[0][1])];
+          });
+        } else {
+          modifyGeometry = point => {
+            point.geometry.coordinates[1] = schemaHelper.yScale.toClipSpaceFromParts(point.geometry.coordinates[0][0], point.geometry.coordinates[0][1]);
+          };
+        }
+      }
       console.log("Reading data...");
+      // Process the global data in the schema processor
       if (schemaHelper.data) {
         for (let track of schemaHelper.tracks) {
           if (!track.hasOwnData) {
             let currentPoint = track.getNextDataPoint();
             while (currentPoint) {
+              if (modifyGeometry) {
+                // only call if we need to
+                modifyGeometry(currentPoint);
+              }
               this.points.push(currentPoint);
               currentPoint = track.getNextDataPoint();
             }
@@ -2732,16 +2768,20 @@
           }
         }
       }
+      // Process the data that is local to each track
       schemaHelper.tracks.filter(track => track.hasOwnData).forEach(track => {
         let currentPoint = track.getNextDataPoint();
         while (currentPoint) {
+          if (modifyGeometry) {
+            modifyGeometry(currentPoint);
+          }
           this.points.push(currentPoint);
           currentPoint = track.getNextDataPoint();
         }
       });
       console.log("Indexing data...");
       this.index.load(this.points);
-      console.log(this.points);
+      console.log("Data processing complete.");
     }
     /**
     * Find the closest point in the data to a given point. Only finds point if it is
@@ -2844,4 +2884,4 @@
   };
 })();
 
-//# sourceMappingURL=data-processor-worker.2410f098.js.map
+//# sourceMappingURL=data-processor-worker.82cb4296.js.map

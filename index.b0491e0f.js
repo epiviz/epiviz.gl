@@ -23,8 +23,10 @@
     });
     return dest;
   }
+  var parcelRequire = $parcel$global.parcelRequire3582;
+  var $794bbb298c1fc0cc3157526701549b8c$init = parcelRequire("3GSGc");
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $fb847892d5877609066c0791eda58cce$exports = {};
+  var $a3ec95f4dee7d6015f5e0e469f993559$exports = {};
   var $7d806a7a603c235ec027b73d847f4d95$var$mapping = {};
   function $7d806a7a603c235ec027b73d847f4d95$var$register(pairs) {
     var keys = Object.keys(pairs);
@@ -41,7 +43,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.df37118f.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.4755d593.js\",\"1S3Hi\":\"data-processor-worker.2410f098.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.b0491e0f.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.b2cf71a4.js\",\"1S3Hi\":\"data-processor-worker.82cb4296.js\",\"20dyd\":\"index.10f1aa48.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3290,6 +3292,8 @@
   var $df282eba898e0e889073ebd022fefed9$$interop$default = /*@__PURE__*/$parcel$interopDefault($df282eba898e0e889073ebd022fefed9$exports);
   var $a9e3c2f2aaebe10b8305f7e3352f7046$export$default = JSON.stringify({
     defaultData: $df282eba898e0e889073ebd022fefed9$$interop$default,
+    xAxis: "bottom",
+    yAxis: "left",
     tracks: [{
       tooltips: 1,
       mark: "area",
@@ -3297,14 +3301,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3488,6 +3490,8 @@
   $8b3efa6c57a63b41bcdaf6541b273229$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "5zI6Y");
   var $8b3efa6c57a63b41bcdaf6541b273229$$interop$default = /*@__PURE__*/$parcel$interopDefault($8b3efa6c57a63b41bcdaf6541b273229$exports);
   var $0a467d28eddc87ce2373b436ddee85da$export$default = JSON.stringify({
+    xAxis: "center",
+    yAxis: "center",
     defaultData: $8b3efa6c57a63b41bcdaf6541b273229$$interop$default,
     tracks: [{
       tooltips: 0.01,
@@ -3497,14 +3501,12 @@
         attribute: "x",
         type: "quantitative",
         domain: [-10, 10],
-        axis: "bottom",
         scale: "linear"
       },
       y: {
         attribute: "y",
         type: "quantitative",
         domain: [-10, 10],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3581,6 +3583,8 @@
     }]
   }, null, 2);
   var $dedc15b93015bb1fb7511bf51cff2788$export$default = JSON.stringify({
+    xAxis: "top",
+    yAxis: "right",
     tracks: [{
       order: 1,
       data: ["day,price", "1,5", "2,15", "3,30"],
@@ -3590,14 +3594,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3615,14 +3617,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3798,6 +3798,7 @@
   $4ba204665ead0e711ea03dbeb63addd3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "3hl2O");
   var $4ba204665ead0e711ea03dbeb63addd3$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ba204665ead0e711ea03dbeb63addd3$exports);
   var $a45e353aa6a197e52ec53fe3a27eca5c$export$default = JSON.stringify({
+    xAxis: "center",
     defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
     tracks: [{
       tooltips: 1,
@@ -4777,20 +4778,203 @@
       }
     });
   })(window, FPSMeter);
-  var $d62aa320cc500c815d2fd0c000e80e4d$export$default = function (constructor, factory, prototype) {
+  $794bbb298c1fc0cc3157526701549b8c$init();
+  $794bbb298c1fc0cc3157526701549b8c$init();
+  var $79ff14590e80d79c1928295831101667$export$default = function (x) {
+    return x;
+  };
+  var $760ea7c5ee2367f072293af450f2641d$var$top = 1, $760ea7c5ee2367f072293af450f2641d$var$right = 2, $760ea7c5ee2367f072293af450f2641d$var$bottom = 3, $760ea7c5ee2367f072293af450f2641d$var$left = 4, $760ea7c5ee2367f072293af450f2641d$var$epsilon = 1e-6;
+  function $760ea7c5ee2367f072293af450f2641d$var$translateX(x) {
+    return "translate(" + x + ",0)";
+  }
+  function $760ea7c5ee2367f072293af450f2641d$var$translateY(y) {
+    return "translate(0," + y + ")";
+  }
+  function $760ea7c5ee2367f072293af450f2641d$var$number(scale) {
+    return d => +scale(d);
+  }
+  function $760ea7c5ee2367f072293af450f2641d$var$center(scale, offset) {
+    offset = Math.max(0, scale.bandwidth() - offset * 2) / 2;
+    if (scale.round()) offset = Math.round(offset);
+    return d => +scale(d) + offset;
+  }
+  function $760ea7c5ee2367f072293af450f2641d$var$entering() {
+    return !this.__axis;
+  }
+  function $760ea7c5ee2367f072293af450f2641d$var$axis(orient, scale) {
+    var tickArguments = [], tickValues = null, tickFormat = null, tickSizeInner = 6, tickSizeOuter = 6, tickPadding = 3, offset = typeof window !== "undefined" && window.devicePixelRatio > 1 ? 0 : 0.5, k = orient === $760ea7c5ee2367f072293af450f2641d$var$top || orient === $760ea7c5ee2367f072293af450f2641d$var$left ? -1 : 1, x = orient === $760ea7c5ee2367f072293af450f2641d$var$left || orient === $760ea7c5ee2367f072293af450f2641d$var$right ? "x" : "y", transform = orient === $760ea7c5ee2367f072293af450f2641d$var$top || orient === $760ea7c5ee2367f072293af450f2641d$var$bottom ? $760ea7c5ee2367f072293af450f2641d$var$translateX : $760ea7c5ee2367f072293af450f2641d$var$translateY;
+    function axis(context) {
+      var values = tickValues == null ? scale.ticks ? scale.ticks.apply(scale, tickArguments) : scale.domain() : tickValues, format = tickFormat == null ? scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments) : $79ff14590e80d79c1928295831101667$export$default : tickFormat, spacing = Math.max(tickSizeInner, 0) + tickPadding, range = scale.range(), range0 = +range[0] + offset, range1 = +range[range.length - 1] + offset, position = (scale.bandwidth ? $760ea7c5ee2367f072293af450f2641d$var$center : $760ea7c5ee2367f072293af450f2641d$var$number)(scale.copy(), offset), selection = context.selection ? context.selection() : context, path = selection.selectAll(".domain").data([null]), tick = selection.selectAll(".tick").data(values, scale).order(), tickExit = tick.exit(), tickEnter = tick.enter().append("g").attr("class", "tick"), line = tick.select("line"), text = tick.select("text");
+      path = path.merge(path.enter().insert("path", ".tick").attr("class", "domain").attr("stroke", "currentColor"));
+      tick = tick.merge(tickEnter);
+      line = line.merge(tickEnter.append("line").attr("stroke", "currentColor").attr(x + "2", k * tickSizeInner));
+      text = text.merge(tickEnter.append("text").attr("fill", "currentColor").attr(x, k * spacing).attr("dy", orient === $760ea7c5ee2367f072293af450f2641d$var$top ? "0em" : orient === $760ea7c5ee2367f072293af450f2641d$var$bottom ? "0.71em" : "0.32em"));
+      if (context !== selection) {
+        path = path.transition(context);
+        tick = tick.transition(context);
+        line = line.transition(context);
+        text = text.transition(context);
+        tickExit = tickExit.transition(context).attr("opacity", $760ea7c5ee2367f072293af450f2641d$var$epsilon).attr("transform", function (d) {
+          return isFinite(d = position(d)) ? transform(d + offset) : this.getAttribute("transform");
+        });
+        tickEnter.attr("opacity", $760ea7c5ee2367f072293af450f2641d$var$epsilon).attr("transform", function (d) {
+          var p = this.parentNode.__axis;
+          return transform((p && isFinite(p = p(d)) ? p : position(d)) + offset);
+        });
+      }
+      tickExit.remove();
+      path.attr("d", orient === $760ea7c5ee2367f072293af450f2641d$var$left || orient === $760ea7c5ee2367f072293af450f2641d$var$right ? tickSizeOuter ? "M" + k * tickSizeOuter + "," + range0 + "H" + offset + "V" + range1 + "H" + k * tickSizeOuter : "M" + offset + "," + range0 + "V" + range1 : tickSizeOuter ? "M" + range0 + "," + k * tickSizeOuter + "V" + offset + "H" + range1 + "V" + k * tickSizeOuter : "M" + range0 + "," + offset + "H" + range1);
+      tick.attr("opacity", 1).attr("transform", function (d) {
+        return transform(position(d) + offset);
+      });
+      line.attr(x + "2", k * tickSizeInner);
+      text.attr(x, k * spacing).text(format);
+      selection.filter($760ea7c5ee2367f072293af450f2641d$var$entering).attr("fill", "none").attr("font-size", 10).attr("font-family", "sans-serif").attr("text-anchor", orient === $760ea7c5ee2367f072293af450f2641d$var$right ? "start" : orient === $760ea7c5ee2367f072293af450f2641d$var$left ? "end" : "middle");
+      selection.each(function () {
+        this.__axis = position;
+      });
+    }
+    axis.scale = function (_) {
+      return arguments.length ? (scale = _, axis) : scale;
+    };
+    axis.ticks = function () {
+      return (tickArguments = Array.from(arguments), axis);
+    };
+    axis.tickArguments = function (_) {
+      return arguments.length ? (tickArguments = _ == null ? [] : Array.from(_), axis) : tickArguments.slice();
+    };
+    axis.tickValues = function (_) {
+      return arguments.length ? (tickValues = _ == null ? null : Array.from(_), axis) : tickValues && tickValues.slice();
+    };
+    axis.tickFormat = function (_) {
+      return arguments.length ? (tickFormat = _, axis) : tickFormat;
+    };
+    axis.tickSize = function (_) {
+      return arguments.length ? (tickSizeInner = tickSizeOuter = +_, axis) : tickSizeInner;
+    };
+    axis.tickSizeInner = function (_) {
+      return arguments.length ? (tickSizeInner = +_, axis) : tickSizeInner;
+    };
+    axis.tickSizeOuter = function (_) {
+      return arguments.length ? (tickSizeOuter = +_, axis) : tickSizeOuter;
+    };
+    axis.tickPadding = function (_) {
+      return arguments.length ? (tickPadding = +_, axis) : tickPadding;
+    };
+    axis.offset = function (_) {
+      return arguments.length ? (offset = +_, axis) : offset;
+    };
+    return axis;
+  }
+  function $760ea7c5ee2367f072293af450f2641d$export$axisTop(scale) {
+    return $760ea7c5ee2367f072293af450f2641d$var$axis($760ea7c5ee2367f072293af450f2641d$var$top, scale);
+  }
+  function $760ea7c5ee2367f072293af450f2641d$export$axisRight(scale) {
+    return $760ea7c5ee2367f072293af450f2641d$var$axis($760ea7c5ee2367f072293af450f2641d$var$right, scale);
+  }
+  function $760ea7c5ee2367f072293af450f2641d$export$axisBottom(scale) {
+    return $760ea7c5ee2367f072293af450f2641d$var$axis($760ea7c5ee2367f072293af450f2641d$var$bottom, scale);
+  }
+  function $760ea7c5ee2367f072293af450f2641d$export$axisLeft(scale) {
+    return $760ea7c5ee2367f072293af450f2641d$var$axis($760ea7c5ee2367f072293af450f2641d$var$left, scale);
+  }
+  var $93dcc64b343c17b81d330e34e98c0b1e$export$default = function (a, b) {
+    return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+  };
+  var $84b994f30d1f1f4024e71e245e769df9$export$default = function (f) {
+    let delta = f;
+    let compare = f;
+    if (f.length === 1) {
+      delta = (d, x) => f(d) - x;
+      compare = $84b994f30d1f1f4024e71e245e769df9$var$ascendingComparator(f);
+    }
+    function left(a, x, lo, hi) {
+      if (lo == null) lo = 0;
+      if (hi == null) hi = a.length;
+      while (lo < hi) {
+        const mid = lo + hi >>> 1;
+        if (compare(a[mid], x) < 0) lo = mid + 1; else hi = mid;
+      }
+      return lo;
+    }
+    function right(a, x, lo, hi) {
+      if (lo == null) lo = 0;
+      if (hi == null) hi = a.length;
+      while (lo < hi) {
+        const mid = lo + hi >>> 1;
+        if (compare(a[mid], x) > 0) hi = mid; else lo = mid + 1;
+      }
+      return lo;
+    }
+    function center(a, x, lo, hi) {
+      if (lo == null) lo = 0;
+      if (hi == null) hi = a.length;
+      const i = left(a, x, lo, hi - 1);
+      return i > lo && delta(a[i - 1], x) > -delta(a[i], x) ? i - 1 : i;
+    }
+    return {
+      left,
+      center,
+      right
+    };
+  };
+  function $84b994f30d1f1f4024e71e245e769df9$var$ascendingComparator(f) {
+    return (d, x) => $93dcc64b343c17b81d330e34e98c0b1e$export$default(f(d), x);
+  }
+  var $e00ed27b35194da1d52d99f8cbf10336$export$default = function (x) {
+    return x === null ? NaN : +x;
+  };
+  const $01d78c3d2ae6fb4b029116fe621bf209$var$ascendingBisect = $84b994f30d1f1f4024e71e245e769df9$export$default($93dcc64b343c17b81d330e34e98c0b1e$export$default);
+  const $01d78c3d2ae6fb4b029116fe621bf209$export$bisectRight = $01d78c3d2ae6fb4b029116fe621bf209$var$ascendingBisect.right;
+  const $01d78c3d2ae6fb4b029116fe621bf209$export$bisectLeft = $01d78c3d2ae6fb4b029116fe621bf209$var$ascendingBisect.left;
+  const $01d78c3d2ae6fb4b029116fe621bf209$export$bisectCenter = $84b994f30d1f1f4024e71e245e769df9$export$default($e00ed27b35194da1d52d99f8cbf10336$export$default).center;
+  var $a2942dec731095d7f46128705285ce75$var$e10 = Math.sqrt(50), $a2942dec731095d7f46128705285ce75$var$e5 = Math.sqrt(10), $a2942dec731095d7f46128705285ce75$var$e2 = Math.sqrt(2);
+  var $a2942dec731095d7f46128705285ce75$export$default = function (start, stop, count) {
+    var reverse, i = -1, n, ticks, step;
+    (stop = +stop, start = +start, count = +count);
+    if (start === stop && count > 0) return [start];
+    if (reverse = stop < start) (n = start, start = stop, stop = n);
+    if ((step = $a2942dec731095d7f46128705285ce75$export$tickIncrement(start, stop, count)) === 0 || !isFinite(step)) return [];
+    if (step > 0) {
+      let r0 = Math.round(start / step), r1 = Math.round(stop / step);
+      if (r0 * step < start) ++r0;
+      if (r1 * step > stop) --r1;
+      ticks = new Array(n = r1 - r0 + 1);
+      while (++i < n) ticks[i] = (r0 + i) * step;
+    } else {
+      step = -step;
+      let r0 = Math.round(start * step), r1 = Math.round(stop * step);
+      if (r0 / step < start) ++r0;
+      if (r1 / step > stop) --r1;
+      ticks = new Array(n = r1 - r0 + 1);
+      while (++i < n) ticks[i] = (r0 + i) / step;
+    }
+    if (reverse) ticks.reverse();
+    return ticks;
+  };
+  function $a2942dec731095d7f46128705285ce75$export$tickIncrement(start, stop, count) {
+    var step = (stop - start) / Math.max(0, count), power = Math.floor(Math.log(step) / Math.LN10), error = step / Math.pow(10, power);
+    return power >= 0 ? (error >= $a2942dec731095d7f46128705285ce75$var$e10 ? 10 : error >= $a2942dec731095d7f46128705285ce75$var$e5 ? 5 : error >= $a2942dec731095d7f46128705285ce75$var$e2 ? 2 : 1) * Math.pow(10, power) : -Math.pow(10, -power) / (error >= $a2942dec731095d7f46128705285ce75$var$e10 ? 10 : error >= $a2942dec731095d7f46128705285ce75$var$e5 ? 5 : error >= $a2942dec731095d7f46128705285ce75$var$e2 ? 2 : 1);
+  }
+  function $a2942dec731095d7f46128705285ce75$export$tickStep(start, stop, count) {
+    var step0 = Math.abs(stop - start) / Math.max(0, count), step1 = Math.pow(10, Math.floor(Math.log(step0) / Math.LN10)), error = step0 / step1;
+    if (error >= $a2942dec731095d7f46128705285ce75$var$e10) step1 *= 10; else if (error >= $a2942dec731095d7f46128705285ce75$var$e5) step1 *= 5; else if (error >= $a2942dec731095d7f46128705285ce75$var$e2) step1 *= 2;
+    return stop < start ? -step1 : step1;
+  }
+  var $b3f93686912a5d2946ef61d8487e6620$export$default = function (constructor, factory, prototype) {
     constructor.prototype = factory.prototype = prototype;
     prototype.constructor = constructor;
   };
-  function $d62aa320cc500c815d2fd0c000e80e4d$export$extend(parent, definition) {
+  function $b3f93686912a5d2946ef61d8487e6620$export$extend(parent, definition) {
     var prototype = Object.create(parent.prototype);
     for (var key in definition) prototype[key] = definition[key];
     return prototype;
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$Color() {}
-  var $af4ad10b60118211d1082e6b107c9493$export$darker = 0.7;
-  var $af4ad10b60118211d1082e6b107c9493$export$brighter = 1 / $af4ad10b60118211d1082e6b107c9493$export$darker;
-  var $af4ad10b60118211d1082e6b107c9493$var$reI = "\\s*([+-]?\\d+)\\s*", $af4ad10b60118211d1082e6b107c9493$var$reN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)\\s*", $af4ad10b60118211d1082e6b107c9493$var$reP = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)%\\s*", $af4ad10b60118211d1082e6b107c9493$var$reHex = /^#([0-9a-f]{3,8})$/, $af4ad10b60118211d1082e6b107c9493$var$reRgbInteger = new RegExp("^rgb\\(" + [$af4ad10b60118211d1082e6b107c9493$var$reI, $af4ad10b60118211d1082e6b107c9493$var$reI, $af4ad10b60118211d1082e6b107c9493$var$reI] + "\\)$"), $af4ad10b60118211d1082e6b107c9493$var$reRgbPercent = new RegExp("^rgb\\(" + [$af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reP] + "\\)$"), $af4ad10b60118211d1082e6b107c9493$var$reRgbaInteger = new RegExp("^rgba\\(" + [$af4ad10b60118211d1082e6b107c9493$var$reI, $af4ad10b60118211d1082e6b107c9493$var$reI, $af4ad10b60118211d1082e6b107c9493$var$reI, $af4ad10b60118211d1082e6b107c9493$var$reN] + "\\)$"), $af4ad10b60118211d1082e6b107c9493$var$reRgbaPercent = new RegExp("^rgba\\(" + [$af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reN] + "\\)$"), $af4ad10b60118211d1082e6b107c9493$var$reHslPercent = new RegExp("^hsl\\(" + [$af4ad10b60118211d1082e6b107c9493$var$reN, $af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reP] + "\\)$"), $af4ad10b60118211d1082e6b107c9493$var$reHslaPercent = new RegExp("^hsla\\(" + [$af4ad10b60118211d1082e6b107c9493$var$reN, $af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reP, $af4ad10b60118211d1082e6b107c9493$var$reN] + "\\)$");
-  var $af4ad10b60118211d1082e6b107c9493$var$named = {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Color() {}
+  var $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$darker = 0.7;
+  var $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$brighter = 1 / $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$darker;
+  var $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI = "\\s*([+-]?\\d+)\\s*", $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reN = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)\\s*", $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP = "\\s*([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)%\\s*", $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reHex = /^#([0-9a-f]{3,8})$/, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbInteger = new RegExp("^rgb\\(" + [$a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI] + "\\)$"), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbPercent = new RegExp("^rgb\\(" + [$a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP] + "\\)$"), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbaInteger = new RegExp("^rgba\\(" + [$a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reI, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reN] + "\\)$"), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbaPercent = new RegExp("^rgba\\(" + [$a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reN] + "\\)$"), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reHslPercent = new RegExp("^hsl\\(" + [$a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reN, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP] + "\\)$"), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reHslaPercent = new RegExp("^hsla\\(" + [$a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reN, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reP, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reN] + "\\)$");
+  var $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$named = {
     aliceblue: 0xf0f8ff,
     antiquewhite: 0xfaebd7,
     aqua: 0x00ffff,
@@ -4940,76 +5124,76 @@
     yellow: 0xffff00,
     yellowgreen: 0x9acd32
   };
-  $d62aa320cc500c815d2fd0c000e80e4d$export$default($af4ad10b60118211d1082e6b107c9493$export$Color, $af4ad10b60118211d1082e6b107c9493$export$default, {
+  $b3f93686912a5d2946ef61d8487e6620$export$default($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Color, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$default, {
     copy: function (channels) {
       return Object.assign(new this.constructor(), this, channels);
     },
     displayable: function () {
       return this.rgb().displayable();
     },
-    hex: $af4ad10b60118211d1082e6b107c9493$var$color_formatHex,
+    hex: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatHex,
     // Deprecated! Use color.formatHex.
-    formatHex: $af4ad10b60118211d1082e6b107c9493$var$color_formatHex,
-    formatHsl: $af4ad10b60118211d1082e6b107c9493$var$color_formatHsl,
-    formatRgb: $af4ad10b60118211d1082e6b107c9493$var$color_formatRgb,
-    toString: $af4ad10b60118211d1082e6b107c9493$var$color_formatRgb
+    formatHex: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatHex,
+    formatHsl: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatHsl,
+    formatRgb: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatRgb,
+    toString: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatRgb
   });
-  function $af4ad10b60118211d1082e6b107c9493$var$color_formatHex() {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatHex() {
     return this.rgb().formatHex();
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$color_formatHsl() {
-    return $af4ad10b60118211d1082e6b107c9493$export$hslConvert(this).formatHsl();
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatHsl() {
+    return $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$hslConvert(this).formatHsl();
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$color_formatRgb() {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$color_formatRgb() {
     return this.rgb().formatRgb();
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$default(format) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$default(format) {
     var m, l;
     format = (format + "").trim().toLowerCase();
-    return (m = $af4ad10b60118211d1082e6b107c9493$var$reHex.exec(format)) ? (l = m[1].length, m = parseInt(m[1], 16), l === 6 ? $af4ad10b60118211d1082e6b107c9493$var$rgbn(m) : // #ff0000
-    l === 3 ? new $af4ad10b60118211d1082e6b107c9493$export$Rgb(m >> 8 & 0xf | m >> 4 & 0xf0, m >> 4 & 0xf | m & 0xf0, (m & 0xf) << 4 | m & 0xf, 1) : // #f00
-    l === 8 ? $af4ad10b60118211d1082e6b107c9493$var$rgba(m >> 24 & 0xff, m >> 16 & 0xff, m >> 8 & 0xff, (m & 0xff) / 0xff) : // #ff000000
-    l === 4 ? $af4ad10b60118211d1082e6b107c9493$var$rgba(m >> 12 & 0xf | m >> 8 & 0xf0, m >> 8 & 0xf | m >> 4 & 0xf0, m >> 4 & 0xf | m & 0xf0, ((m & 0xf) << 4 | m & 0xf) / 0xff) : // #f000
+    return (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reHex.exec(format)) ? (l = m[1].length, m = parseInt(m[1], 16), l === 6 ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgbn(m) : // #ff0000
+    l === 3 ? new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(m >> 8 & 0xf | m >> 4 & 0xf0, m >> 4 & 0xf | m & 0xf0, (m & 0xf) << 4 | m & 0xf, 1) : // #f00
+    l === 8 ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgba(m >> 24 & 0xff, m >> 16 & 0xff, m >> 8 & 0xff, (m & 0xff) / 0xff) : // #ff000000
+    l === 4 ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgba(m >> 12 & 0xf | m >> 8 & 0xf0, m >> 8 & 0xf | m >> 4 & 0xf0, m >> 4 & 0xf | m & 0xf0, ((m & 0xf) << 4 | m & 0xf) / 0xff) : // #f000
     null) : // invalid hex
-    (m = $af4ad10b60118211d1082e6b107c9493$var$reRgbInteger.exec(format)) ? new $af4ad10b60118211d1082e6b107c9493$export$Rgb(m[1], m[2], m[3], 1) : // rgb(255, 0, 0)
-    (m = $af4ad10b60118211d1082e6b107c9493$var$reRgbPercent.exec(format)) ? new $af4ad10b60118211d1082e6b107c9493$export$Rgb(m[1] * 255 / 100, m[2] * 255 / 100, m[3] * 255 / 100, 1) : // rgb(100%, 0%, 0%)
-    (m = $af4ad10b60118211d1082e6b107c9493$var$reRgbaInteger.exec(format)) ? $af4ad10b60118211d1082e6b107c9493$var$rgba(m[1], m[2], m[3], m[4]) : // rgba(255, 0, 0, 1)
-    (m = $af4ad10b60118211d1082e6b107c9493$var$reRgbaPercent.exec(format)) ? $af4ad10b60118211d1082e6b107c9493$var$rgba(m[1] * 255 / 100, m[2] * 255 / 100, m[3] * 255 / 100, m[4]) : // rgb(100%, 0%, 0%, 1)
-    (m = $af4ad10b60118211d1082e6b107c9493$var$reHslPercent.exec(format)) ? $af4ad10b60118211d1082e6b107c9493$var$hsla(m[1], m[2] / 100, m[3] / 100, 1) : // hsl(120, 50%, 50%)
-    (m = $af4ad10b60118211d1082e6b107c9493$var$reHslaPercent.exec(format)) ? $af4ad10b60118211d1082e6b107c9493$var$hsla(m[1], m[2] / 100, m[3] / 100, m[4]) : // hsla(120, 50%, 50%, 1)
-    $af4ad10b60118211d1082e6b107c9493$var$named.hasOwnProperty(format) ? $af4ad10b60118211d1082e6b107c9493$var$rgbn($af4ad10b60118211d1082e6b107c9493$var$named[format]) : // eslint-disable-line no-prototype-builtins
-    format === "transparent" ? new $af4ad10b60118211d1082e6b107c9493$export$Rgb(NaN, NaN, NaN, 0) : null;
+    (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbInteger.exec(format)) ? new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(m[1], m[2], m[3], 1) : // rgb(255, 0, 0)
+    (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbPercent.exec(format)) ? new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(m[1] * 255 / 100, m[2] * 255 / 100, m[3] * 255 / 100, 1) : // rgb(100%, 0%, 0%)
+    (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbaInteger.exec(format)) ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgba(m[1], m[2], m[3], m[4]) : // rgba(255, 0, 0, 1)
+    (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reRgbaPercent.exec(format)) ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgba(m[1] * 255 / 100, m[2] * 255 / 100, m[3] * 255 / 100, m[4]) : // rgb(100%, 0%, 0%, 1)
+    (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reHslPercent.exec(format)) ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsla(m[1], m[2] / 100, m[3] / 100, 1) : // hsl(120, 50%, 50%)
+    (m = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$reHslaPercent.exec(format)) ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsla(m[1], m[2] / 100, m[3] / 100, m[4]) : // hsla(120, 50%, 50%, 1)
+    $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$named.hasOwnProperty(format) ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgbn($a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$named[format]) : // eslint-disable-line no-prototype-builtins
+    format === "transparent" ? new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(NaN, NaN, NaN, 0) : null;
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$rgbn(n) {
-    return new $af4ad10b60118211d1082e6b107c9493$export$Rgb(n >> 16 & 0xff, n >> 8 & 0xff, n & 0xff, 1);
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgbn(n) {
+    return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(n >> 16 & 0xff, n >> 8 & 0xff, n & 0xff, 1);
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$rgba(r, g, b, a) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgba(r, g, b, a) {
     if (a <= 0) r = g = b = NaN;
-    return new $af4ad10b60118211d1082e6b107c9493$export$Rgb(r, g, b, a);
+    return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(r, g, b, a);
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$rgbConvert(o) {
-    if (!(o instanceof $af4ad10b60118211d1082e6b107c9493$export$Color)) o = $af4ad10b60118211d1082e6b107c9493$export$default(o);
-    if (!o) return new $af4ad10b60118211d1082e6b107c9493$export$Rgb();
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgbConvert(o) {
+    if (!(o instanceof $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Color)) o = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$default(o);
+    if (!o) return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb();
     o = o.rgb();
-    return new $af4ad10b60118211d1082e6b107c9493$export$Rgb(o.r, o.g, o.b, o.opacity);
+    return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(o.r, o.g, o.b, o.opacity);
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$rgb(r, g, b, opacity) {
-    return arguments.length === 1 ? $af4ad10b60118211d1082e6b107c9493$export$rgbConvert(r) : new $af4ad10b60118211d1082e6b107c9493$export$Rgb(r, g, b, opacity == null ? 1 : opacity);
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgb(r, g, b, opacity) {
+    return arguments.length === 1 ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgbConvert(r) : new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(r, g, b, opacity == null ? 1 : opacity);
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$Rgb(r, g, b, opacity) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(r, g, b, opacity) {
     this.r = +r;
     this.g = +g;
     this.b = +b;
     this.opacity = +opacity;
   }
-  $d62aa320cc500c815d2fd0c000e80e4d$export$default($af4ad10b60118211d1082e6b107c9493$export$Rgb, $af4ad10b60118211d1082e6b107c9493$export$rgb, $d62aa320cc500c815d2fd0c000e80e4d$export$extend($af4ad10b60118211d1082e6b107c9493$export$Color, {
+  $b3f93686912a5d2946ef61d8487e6620$export$default($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgb, $b3f93686912a5d2946ef61d8487e6620$export$extend($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Color, {
     brighter: function (k) {
-      k = k == null ? $af4ad10b60118211d1082e6b107c9493$export$brighter : Math.pow($af4ad10b60118211d1082e6b107c9493$export$brighter, k);
-      return new $af4ad10b60118211d1082e6b107c9493$export$Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
+      k = k == null ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$brighter : Math.pow($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$brighter, k);
+      return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
     },
     darker: function (k) {
-      k = k == null ? $af4ad10b60118211d1082e6b107c9493$export$darker : Math.pow($af4ad10b60118211d1082e6b107c9493$export$darker, k);
-      return new $af4ad10b60118211d1082e6b107c9493$export$Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
+      k = k == null ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$darker : Math.pow($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$darker, k);
+      return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
     },
     rgb: function () {
       return this;
@@ -5017,33 +5201,33 @@
     displayable: function () {
       return -0.5 <= this.r && this.r < 255.5 && (-0.5 <= this.g && this.g < 255.5) && (-0.5 <= this.b && this.b < 255.5) && (0 <= this.opacity && this.opacity <= 1);
     },
-    hex: $af4ad10b60118211d1082e6b107c9493$var$rgb_formatHex,
+    hex: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgb_formatHex,
     // Deprecated! Use color.formatHex.
-    formatHex: $af4ad10b60118211d1082e6b107c9493$var$rgb_formatHex,
-    formatRgb: $af4ad10b60118211d1082e6b107c9493$var$rgb_formatRgb,
-    toString: $af4ad10b60118211d1082e6b107c9493$var$rgb_formatRgb
+    formatHex: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgb_formatHex,
+    formatRgb: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgb_formatRgb,
+    toString: $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgb_formatRgb
   }));
-  function $af4ad10b60118211d1082e6b107c9493$var$rgb_formatHex() {
-    return "#" + $af4ad10b60118211d1082e6b107c9493$var$hex(this.r) + $af4ad10b60118211d1082e6b107c9493$var$hex(this.g) + $af4ad10b60118211d1082e6b107c9493$var$hex(this.b);
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgb_formatHex() {
+    return "#" + $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hex(this.r) + $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hex(this.g) + $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hex(this.b);
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$rgb_formatRgb() {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$rgb_formatRgb() {
     var a = this.opacity;
     a = isNaN(a) ? 1 : Math.max(0, Math.min(1, a));
     return (a === 1 ? "rgb(" : "rgba(") + Math.max(0, Math.min(255, Math.round(this.r) || 0)) + ", " + Math.max(0, Math.min(255, Math.round(this.g) || 0)) + ", " + Math.max(0, Math.min(255, Math.round(this.b) || 0)) + (a === 1 ? ")" : ", " + a + ")");
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$hex(value) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hex(value) {
     value = Math.max(0, Math.min(255, Math.round(value) || 0));
     return (value < 16 ? "0" : "") + value.toString(16);
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$hsla(h, s, l, a) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsla(h, s, l, a) {
     if (a <= 0) h = s = l = NaN; else if (l <= 0 || l >= 1) h = s = NaN; else if (s <= 0) h = NaN;
-    return new $af4ad10b60118211d1082e6b107c9493$var$Hsl(h, s, l, a);
+    return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(h, s, l, a);
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$hslConvert(o) {
-    if (o instanceof $af4ad10b60118211d1082e6b107c9493$var$Hsl) return new $af4ad10b60118211d1082e6b107c9493$var$Hsl(o.h, o.s, o.l, o.opacity);
-    if (!(o instanceof $af4ad10b60118211d1082e6b107c9493$export$Color)) o = $af4ad10b60118211d1082e6b107c9493$export$default(o);
-    if (!o) return new $af4ad10b60118211d1082e6b107c9493$var$Hsl();
-    if (o instanceof $af4ad10b60118211d1082e6b107c9493$var$Hsl) return o;
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$hslConvert(o) {
+    if (o instanceof $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl) return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(o.h, o.s, o.l, o.opacity);
+    if (!(o instanceof $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Color)) o = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$default(o);
+    if (!o) return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl();
+    if (o instanceof $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl) return o;
     o = o.rgb();
     var r = o.r / 255, g = o.g / 255, b = o.b / 255, min = Math.min(r, g, b), max = Math.max(r, g, b), h = NaN, s = max - min, l = (max + min) / 2;
     if (s) {
@@ -5053,29 +5237,29 @@
     } else {
       s = l > 0 && l < 1 ? 0 : h;
     }
-    return new $af4ad10b60118211d1082e6b107c9493$var$Hsl(h, s, l, o.opacity);
+    return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(h, s, l, o.opacity);
   }
-  function $af4ad10b60118211d1082e6b107c9493$export$hsl(h, s, l, opacity) {
-    return arguments.length === 1 ? $af4ad10b60118211d1082e6b107c9493$export$hslConvert(h) : new $af4ad10b60118211d1082e6b107c9493$var$Hsl(h, s, l, opacity == null ? 1 : opacity);
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$hsl(h, s, l, opacity) {
+    return arguments.length === 1 ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$hslConvert(h) : new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(h, s, l, opacity == null ? 1 : opacity);
   }
-  function $af4ad10b60118211d1082e6b107c9493$var$Hsl(h, s, l, opacity) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(h, s, l, opacity) {
     this.h = +h;
     this.s = +s;
     this.l = +l;
     this.opacity = +opacity;
   }
-  $d62aa320cc500c815d2fd0c000e80e4d$export$default($af4ad10b60118211d1082e6b107c9493$var$Hsl, $af4ad10b60118211d1082e6b107c9493$export$hsl, $d62aa320cc500c815d2fd0c000e80e4d$export$extend($af4ad10b60118211d1082e6b107c9493$export$Color, {
+  $b3f93686912a5d2946ef61d8487e6620$export$default($a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl, $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$hsl, $b3f93686912a5d2946ef61d8487e6620$export$extend($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Color, {
     brighter: function (k) {
-      k = k == null ? $af4ad10b60118211d1082e6b107c9493$export$brighter : Math.pow($af4ad10b60118211d1082e6b107c9493$export$brighter, k);
-      return new $af4ad10b60118211d1082e6b107c9493$var$Hsl(this.h, this.s, this.l * k, this.opacity);
+      k = k == null ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$brighter : Math.pow($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$brighter, k);
+      return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(this.h, this.s, this.l * k, this.opacity);
     },
     darker: function (k) {
-      k = k == null ? $af4ad10b60118211d1082e6b107c9493$export$darker : Math.pow($af4ad10b60118211d1082e6b107c9493$export$darker, k);
-      return new $af4ad10b60118211d1082e6b107c9493$var$Hsl(this.h, this.s, this.l * k, this.opacity);
+      k = k == null ? $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$darker : Math.pow($a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$darker, k);
+      return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$Hsl(this.h, this.s, this.l * k, this.opacity);
     },
     rgb: function () {
       var h = this.h % 360 + (this.h < 0) * 360, s = isNaN(h) || isNaN(this.s) ? 0 : this.s, l = this.l, m2 = l + (l < 0.5 ? l : 1 - l) * s, m1 = 2 * l - m2;
-      return new $af4ad10b60118211d1082e6b107c9493$export$Rgb($af4ad10b60118211d1082e6b107c9493$var$hsl2rgb(h >= 240 ? h - 240 : h + 120, m1, m2), $af4ad10b60118211d1082e6b107c9493$var$hsl2rgb(h, m1, m2), $af4ad10b60118211d1082e6b107c9493$var$hsl2rgb(h < 120 ? h + 240 : h - 120, m1, m2), this.opacity);
+      return new $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$Rgb($a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsl2rgb(h >= 240 ? h - 240 : h + 120, m1, m2), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsl2rgb(h, m1, m2), $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsl2rgb(h < 120 ? h + 240 : h - 120, m1, m2), this.opacity);
     },
     displayable: function () {
       return (0 <= this.s && this.s <= 1 || isNaN(this.s)) && (0 <= this.l && this.l <= 1) && (0 <= this.opacity && this.opacity <= 1);
@@ -5087,106 +5271,1499 @@
     }
   }));
   /*From FvD 13.37, CSS Color Module Level 3*/
-  function $af4ad10b60118211d1082e6b107c9493$var$hsl2rgb(h, m1, m2) {
+  function $a2285a2c0dfeedbc6d83b4b2d0f73dcb$var$hsl2rgb(h, m1, m2) {
     return (h < 60 ? m1 + (m2 - m1) * h / 60 : h < 180 ? m2 : h < 240 ? m1 + (m2 - m1) * (240 - h) / 60 : m1) * 255;
   }
-  const $c178fae7767ea8147bbb573141e780e5$export$radians = Math.PI / 180;
-  const $c178fae7767ea8147bbb573141e780e5$export$degrees = 180 / Math.PI;
-  var $79f190ed402495135fad2dd69bf11529$var$A = -0.14861, $79f190ed402495135fad2dd69bf11529$var$B = +1.78277, $79f190ed402495135fad2dd69bf11529$var$C = -0.29227, $79f190ed402495135fad2dd69bf11529$var$D = -0.90649, $79f190ed402495135fad2dd69bf11529$var$E = +1.97294, $79f190ed402495135fad2dd69bf11529$var$ED = $79f190ed402495135fad2dd69bf11529$var$E * $79f190ed402495135fad2dd69bf11529$var$D, $79f190ed402495135fad2dd69bf11529$var$EB = $79f190ed402495135fad2dd69bf11529$var$E * $79f190ed402495135fad2dd69bf11529$var$B, $79f190ed402495135fad2dd69bf11529$var$BC_DA = $79f190ed402495135fad2dd69bf11529$var$B * $79f190ed402495135fad2dd69bf11529$var$C - $79f190ed402495135fad2dd69bf11529$var$D * $79f190ed402495135fad2dd69bf11529$var$A;
-  function $79f190ed402495135fad2dd69bf11529$var$cubehelixConvert(o) {
-    if (o instanceof $79f190ed402495135fad2dd69bf11529$export$Cubehelix) return new $79f190ed402495135fad2dd69bf11529$export$Cubehelix(o.h, o.s, o.l, o.opacity);
-    if (!(o instanceof $af4ad10b60118211d1082e6b107c9493$export$Rgb)) o = $af4ad10b60118211d1082e6b107c9493$export$rgbConvert(o);
-    var r = o.r / 255, g = o.g / 255, b = o.b / 255, l = ($79f190ed402495135fad2dd69bf11529$var$BC_DA * b + $79f190ed402495135fad2dd69bf11529$var$ED * r - $79f190ed402495135fad2dd69bf11529$var$EB * g) / ($79f190ed402495135fad2dd69bf11529$var$BC_DA + $79f190ed402495135fad2dd69bf11529$var$ED - $79f190ed402495135fad2dd69bf11529$var$EB), bl = b - l, k = ($79f190ed402495135fad2dd69bf11529$var$E * (g - l) - $79f190ed402495135fad2dd69bf11529$var$C * bl) / $79f190ed402495135fad2dd69bf11529$var$D, s = Math.sqrt(k * k + bl * bl) / ($79f190ed402495135fad2dd69bf11529$var$E * l * (1 - l)), // NaN if l=0 or l=1
-    h = s ? Math.atan2(k, bl) * $c178fae7767ea8147bbb573141e780e5$export$degrees - 120 : NaN;
-    return new $79f190ed402495135fad2dd69bf11529$export$Cubehelix(h < 0 ? h + 360 : h, s, l, o.opacity);
+  function $b3629ac24c7f84f6552d4769b71b45d4$export$basis(t1, v0, v1, v2, v3) {
+    var t2 = t1 * t1, t3 = t2 * t1;
+    return ((1 - 3 * t1 + 3 * t2 - t3) * v0 + (4 - 6 * t2 + 3 * t3) * v1 + (1 + 3 * t1 + 3 * t2 - 3 * t3) * v2 + t3 * v3) / 6;
   }
-  function $79f190ed402495135fad2dd69bf11529$export$default(h, s, l, opacity) {
-    return arguments.length === 1 ? $79f190ed402495135fad2dd69bf11529$var$cubehelixConvert(h) : new $79f190ed402495135fad2dd69bf11529$export$Cubehelix(h, s, l, opacity == null ? 1 : opacity);
+  var $b3629ac24c7f84f6552d4769b71b45d4$export$default = function (values) {
+    var n = values.length - 1;
+    return function (t) {
+      var i = t <= 0 ? t = 0 : t >= 1 ? (t = 1, n - 1) : Math.floor(t * n), v1 = values[i], v2 = values[i + 1], v0 = i > 0 ? values[i - 1] : 2 * v1 - v2, v3 = i < n - 1 ? values[i + 2] : 2 * v2 - v1;
+      return $b3629ac24c7f84f6552d4769b71b45d4$export$basis((t - i / n) * n, v0, v1, v2, v3);
+    };
+  };
+  var $fa34298ebe2f66ad55633164d515b080$export$default = function (values) {
+    var n = values.length;
+    return function (t) {
+      var i = Math.floor(((t %= 1) < 0 ? ++t : t) * n), v0 = values[(i + n - 1) % n], v1 = values[i % n], v2 = values[(i + 1) % n], v3 = values[(i + 2) % n];
+      return $b3629ac24c7f84f6552d4769b71b45d4$export$basis((t - i / n) * n, v0, v1, v2, v3);
+    };
+  };
+  var $8eaacdc066acd7b5d27dd172eddf464b$export$default = x => () => x;
+  function $c72aafad51b86a228686ad05536df834$var$linear(a, d) {
+    return function (t) {
+      return a + t * d;
+    };
   }
-  function $79f190ed402495135fad2dd69bf11529$export$Cubehelix(h, s, l, opacity) {
-    this.h = +h;
-    this.s = +s;
-    this.l = +l;
-    this.opacity = +opacity;
-  }
-  $d62aa320cc500c815d2fd0c000e80e4d$export$default($79f190ed402495135fad2dd69bf11529$export$Cubehelix, $79f190ed402495135fad2dd69bf11529$export$default, $d62aa320cc500c815d2fd0c000e80e4d$export$extend($af4ad10b60118211d1082e6b107c9493$export$Color, {
-    brighter: function (k) {
-      k = k == null ? $af4ad10b60118211d1082e6b107c9493$export$brighter : Math.pow($af4ad10b60118211d1082e6b107c9493$export$brighter, k);
-      return new $79f190ed402495135fad2dd69bf11529$export$Cubehelix(this.h, this.s, this.l * k, this.opacity);
-    },
-    darker: function (k) {
-      k = k == null ? $af4ad10b60118211d1082e6b107c9493$export$darker : Math.pow($af4ad10b60118211d1082e6b107c9493$export$darker, k);
-      return new $79f190ed402495135fad2dd69bf11529$export$Cubehelix(this.h, this.s, this.l * k, this.opacity);
-    },
-    rgb: function () {
-      var h = isNaN(this.h) ? 0 : (this.h + 120) * $c178fae7767ea8147bbb573141e780e5$export$radians, l = +this.l, a = isNaN(this.s) ? 0 : this.s * l * (1 - l), cosh = Math.cos(h), sinh = Math.sin(h);
-      return new $af4ad10b60118211d1082e6b107c9493$export$Rgb(255 * (l + a * ($79f190ed402495135fad2dd69bf11529$var$A * cosh + $79f190ed402495135fad2dd69bf11529$var$B * sinh)), 255 * (l + a * ($79f190ed402495135fad2dd69bf11529$var$C * cosh + $79f190ed402495135fad2dd69bf11529$var$D * sinh)), 255 * (l + a * ($79f190ed402495135fad2dd69bf11529$var$E * cosh)), this.opacity);
-    }
-  }));
-  /**
-  * Returns a linear scale to map elements in domain to elements in range.
-  * @param {Array} domain array of length two containing minimum and maximum values
-  * @param {Array} range array of length two containing minimum and maximum values
-  * @returns linear scale mapping domain to range
-  */
-  function $794bbb298c1fc0cc3157526701549b8c$export$scale(domain, range) {
-    const domainLength = domain[1] - domain[0];
-    const rangeLength = range[1] - range[0];
-    const slope = rangeLength / domainLength;
-    const intercept = range[1] - slope * domain[1];
-    return x => slope * x + intercept;
-  }
-  /**
-  * Maps RGB values to integer for webgl buffer.
-  *
-  * @param {Integer} red value from 0 to 255
-  * @param {Integer} green value from 0 to 255
-  * @param {Integer} blue value from 0 to 255
-  * @returns RGB hex value as integer
-  */
-  function $794bbb298c1fc0cc3157526701549b8c$export$rgbToHex(red, green, blue) {
-    return red << 16 | green << 8 | blue << 0;
-  }
-  function $794bbb298c1fc0cc3157526701549b8c$export$rgbStringToHex(rgb) {
-    const colorVals = rgb.substring(4, rgb.length - 1).split(",");
-    return $794bbb298c1fc0cc3157526701549b8c$export$rgbToHex(...colorVals.map(asStr => parseInt(asStr)));
-  }
-  function $794bbb298c1fc0cc3157526701549b8c$export$colorSpecifierToHex(specifier) {
-    if (!isNaN(specifier)) {
-      // Specifier is already a hex value
-      return Math.floor(specifier);
-    }
-    const asColor = $af4ad10b60118211d1082e6b107c9493$export$default(specifier);
-    return $794bbb298c1fc0cc3157526701549b8c$export$rgbToHex(asColor.r, asColor.g, asColor.b);
-  }
-  function $794bbb298c1fc0cc3157526701549b8c$export$schemaViewport(schema) {
-    let smallestX = Number.POSITIVE_INFINITY;
-    let largestX = Number.NEGATIVE_INFINITY;
-    let smallestY = Number.POSITIVE_INFINITY;
-    let largestY = Number.NEGATIVE_INFINITY;
-    schema.tracks.forEach(track => {
-      let xDomain = track.x.domain;
-      let yDomain = track.y.domain;
-      if (xDomain) {
-        smallestX = xDomain[0] < smallestX ? xDomain[0] : smallestX;
-        largestX = xDomain[1] > largestX ? xDomain[1] : largestX;
-      }
-      if (yDomain) {
-        smallestY = yDomain[0] < smallestY ? yDomain[0] : smallestY;
-        largestY = yDomain[1] > largestY ? yDomain[1] : largestY;
-      }
+  function $c72aafad51b86a228686ad05536df834$var$exponential(a, b, y) {
+    return (a = Math.pow(a, y), b = Math.pow(b, y) - a, y = 1 / y, function (t) {
+      return Math.pow(a + t * b, y);
     });
-    smallestX = smallestX === Number.POSITIVE_INFINITY ? -1 : smallestX;
-    largestX = largestX === Number.NEGATIVE_INFINITY ? 1 : largestX;
-    smallestY = smallestY === Number.POSITIVE_INFINITY ? -1 : smallestY;
-    largestY = largestY === Number.NEGATIVE_INFINITY ? 1 : largestY;
-    return [smallestX, largestX, smallestY, largestY];
+  }
+  function $c72aafad51b86a228686ad05536df834$export$gamma(y) {
+    return (y = +y) === 1 ? $c72aafad51b86a228686ad05536df834$export$default : function (a, b) {
+      return b - a ? $c72aafad51b86a228686ad05536df834$var$exponential(a, b, y) : $8eaacdc066acd7b5d27dd172eddf464b$export$default(isNaN(a) ? b : a);
+    };
+  }
+  function $c72aafad51b86a228686ad05536df834$export$default(a, b) {
+    var d = b - a;
+    return d ? $c72aafad51b86a228686ad05536df834$var$linear(a, d) : $8eaacdc066acd7b5d27dd172eddf464b$export$default(isNaN(a) ? b : a);
+  }
+  var $77283672e53d634bd8d69c3a730458d0$export$default = (function rgbGamma(y) {
+    var color = $c72aafad51b86a228686ad05536df834$export$gamma(y);
+    function rgb(start, end) {
+      var r = color((start = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgb(start)).r, (end = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgb(end)).r), g = color(start.g, end.g), b = color(start.b, end.b), opacity = $c72aafad51b86a228686ad05536df834$export$default(start.opacity, end.opacity);
+      return function (t) {
+        start.r = r(t);
+        start.g = g(t);
+        start.b = b(t);
+        start.opacity = opacity(t);
+        return start + "";
+      };
+    }
+    rgb.gamma = rgbGamma;
+    return rgb;
+  })(1);
+  function $77283672e53d634bd8d69c3a730458d0$var$rgbSpline(spline) {
+    return function (colors) {
+      var n = colors.length, r = new Array(n), g = new Array(n), b = new Array(n), i, color;
+      for (i = 0; i < n; ++i) {
+        color = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$rgb(colors[i]);
+        r[i] = color.r || 0;
+        g[i] = color.g || 0;
+        b[i] = color.b || 0;
+      }
+      r = spline(r);
+      g = spline(g);
+      b = spline(b);
+      color.opacity = 1;
+      return function (t) {
+        color.r = r(t);
+        color.g = g(t);
+        color.b = b(t);
+        return color + "";
+      };
+    };
+  }
+  var $77283672e53d634bd8d69c3a730458d0$export$rgbBasis = $77283672e53d634bd8d69c3a730458d0$var$rgbSpline($b3629ac24c7f84f6552d4769b71b45d4$export$default);
+  var $77283672e53d634bd8d69c3a730458d0$export$rgbBasisClosed = $77283672e53d634bd8d69c3a730458d0$var$rgbSpline($fa34298ebe2f66ad55633164d515b080$export$default);
+  var $60edc5d34f05339e5ff8950aab19d258$export$default = function (a, b) {
+    if (!b) b = [];
+    var n = a ? Math.min(b.length, a.length) : 0, c = b.slice(), i;
+    return function (t) {
+      for (i = 0; i < n; ++i) c[i] = a[i] * (1 - t) + b[i] * t;
+      return c;
+    };
+  };
+  function $60edc5d34f05339e5ff8950aab19d258$export$isNumberArray(x) {
+    return ArrayBuffer.isView(x) && !(x instanceof DataView);
+  }
+  function $ada9d9248b7f12bfc8f368b39726b8f5$export$genericArray(a, b) {
+    var nb = b ? b.length : 0, na = a ? Math.min(nb, a.length) : 0, x = new Array(na), c = new Array(nb), i;
+    for (i = 0; i < na; ++i) x[i] = $2d8542a0e5e5e3b796c387e62872bfd8$export$default(a[i], b[i]);
+    for (; i < nb; ++i) c[i] = b[i];
+    return function (t) {
+      for (i = 0; i < na; ++i) c[i] = x[i](t);
+      return c;
+    };
+  }
+  var $8f6068a3d2a86f5d5795534d1c48afd2$export$default = function (a, b) {
+    var d = new Date();
+    return (a = +a, b = +b, function (t) {
+      return (d.setTime(a * (1 - t) + b * t), d);
+    });
+  };
+  var $6a9b02b77c7147fe9b39779cc9577685$export$default = function (a, b) {
+    return (a = +a, b = +b, function (t) {
+      return a * (1 - t) + b * t;
+    });
+  };
+  var $07a9780f56ef22396f91947bbe785a92$export$default = function (a, b) {
+    var i = {}, c = {}, k;
+    if (a === null || typeof a !== "object") a = {};
+    if (b === null || typeof b !== "object") b = {};
+    for (k in b) {
+      if ((k in a)) {
+        i[k] = $2d8542a0e5e5e3b796c387e62872bfd8$export$default(a[k], b[k]);
+      } else {
+        c[k] = b[k];
+      }
+    }
+    return function (t) {
+      for (k in i) c[k] = i[k](t);
+      return c;
+    };
+  };
+  var $1f6652d73b444ad84141d8585326b474$var$reA = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g, $1f6652d73b444ad84141d8585326b474$var$reB = new RegExp($1f6652d73b444ad84141d8585326b474$var$reA.source, "g");
+  function $1f6652d73b444ad84141d8585326b474$var$zero(b) {
+    return function () {
+      return b;
+    };
+  }
+  function $1f6652d73b444ad84141d8585326b474$var$one(b) {
+    return function (t) {
+      return b(t) + "";
+    };
+  }
+  var $1f6652d73b444ad84141d8585326b474$export$default = function (a, b) {
+    var bi = $1f6652d73b444ad84141d8585326b474$var$reA.lastIndex = $1f6652d73b444ad84141d8585326b474$var$reB.lastIndex = 0, // scan index for next number in b
+    am, // current match in a
+    bm, // current match in b
+    bs, // string preceding current number in b, if any
+    i = -1, // index in s
+    s = [], // string constants and placeholders
+    q = [];
+    // number interpolators
+    // Coerce inputs to strings.
+    (a = a + "", b = b + "");
+    // Interpolate pairs of numbers in a & b.
+    while ((am = $1f6652d73b444ad84141d8585326b474$var$reA.exec(a)) && (bm = $1f6652d73b444ad84141d8585326b474$var$reB.exec(b))) {
+      if ((bs = bm.index) > bi) {
+        // a string precedes the next number in b
+        bs = b.slice(bi, bs);
+        if (s[i]) s[i] += bs; else // coalesce with previous string
+        s[++i] = bs;
+      }
+      if ((am = am[0]) === (bm = bm[0])) {
+        // numbers in a & b match
+        if (s[i]) s[i] += bm; else // coalesce with previous string
+        s[++i] = bm;
+      } else {
+        // interpolate non-matching numbers
+        s[++i] = null;
+        q.push({
+          i: i,
+          x: $6a9b02b77c7147fe9b39779cc9577685$export$default(am, bm)
+        });
+      }
+      bi = $1f6652d73b444ad84141d8585326b474$var$reB.lastIndex;
+    }
+    // Add remains of b.
+    if (bi < b.length) {
+      bs = b.slice(bi);
+      if (s[i]) s[i] += bs; else // coalesce with previous string
+      s[++i] = bs;
+    }
+    // Special optimization for only a single match.
+    // Otherwise, interpolate each of the numbers and rejoin the string.
+    return s.length < 2 ? q[0] ? $1f6652d73b444ad84141d8585326b474$var$one(q[0].x) : $1f6652d73b444ad84141d8585326b474$var$zero(b) : (b = q.length, function (t) {
+      for (var i = 0, o; i < b; ++i) s[(o = q[i]).i] = o.x(t);
+      return s.join("");
+    });
+  };
+  var $2d8542a0e5e5e3b796c387e62872bfd8$export$default = function (a, b) {
+    var t = typeof b, c;
+    return b == null || t === "boolean" ? $8eaacdc066acd7b5d27dd172eddf464b$export$default(b) : (t === "number" ? $6a9b02b77c7147fe9b39779cc9577685$export$default : t === "string" ? (c = $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$default(b)) ? (b = c, $77283672e53d634bd8d69c3a730458d0$export$default) : $1f6652d73b444ad84141d8585326b474$export$default : b instanceof $a2285a2c0dfeedbc6d83b4b2d0f73dcb$export$default ? $77283672e53d634bd8d69c3a730458d0$export$default : b instanceof Date ? $8f6068a3d2a86f5d5795534d1c48afd2$export$default : $60edc5d34f05339e5ff8950aab19d258$export$isNumberArray(b) ? $60edc5d34f05339e5ff8950aab19d258$export$default : Array.isArray(b) ? $ada9d9248b7f12bfc8f368b39726b8f5$export$genericArray : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? $07a9780f56ef22396f91947bbe785a92$export$default : $6a9b02b77c7147fe9b39779cc9577685$export$default)(a, b);
+  };
+  var $c548dcd2d1cb470c042d7d732979e94e$export$default = function (a, b) {
+    return (a = +a, b = +b, function (t) {
+      return Math.round(a * (1 - t) + b * t);
+    });
+  };
+  function $26e552f7418ea27ee15655c0a5a0e5f8$export$default(x) {
+    return function () {
+      return x;
+    };
+  }
+  function $3128a411ea54a5b48d7c28c5ac66acb5$export$default(x) {
+    return +x;
+  }
+  var $e57d821abcff74b4635d6b1beb855a2e$var$unit = [0, 1];
+  function $e57d821abcff74b4635d6b1beb855a2e$export$identity(x) {
+    return x;
+  }
+  function $e57d821abcff74b4635d6b1beb855a2e$var$normalize(a, b) {
+    return (b -= a = +a) ? function (x) {
+      return (x - a) / b;
+    } : $26e552f7418ea27ee15655c0a5a0e5f8$export$default(isNaN(b) ? NaN : 0.5);
+  }
+  function $e57d821abcff74b4635d6b1beb855a2e$var$clamper(a, b) {
+    var t;
+    if (a > b) (t = a, a = b, b = t);
+    return function (x) {
+      return Math.max(a, Math.min(b, x));
+    };
+  }
+  // normalize(a, b)(x) takes a domain value x in [a,b] and returns the corresponding parameter t in [0,1].
+  // interpolate(a, b)(t) takes a parameter t in [0,1] and returns the corresponding range value x in [a,b].
+  function $e57d821abcff74b4635d6b1beb855a2e$var$bimap(domain, range, interpolate) {
+    var d0 = domain[0], d1 = domain[1], r0 = range[0], r1 = range[1];
+    if (d1 < d0) (d0 = $e57d821abcff74b4635d6b1beb855a2e$var$normalize(d1, d0), r0 = interpolate(r1, r0)); else (d0 = $e57d821abcff74b4635d6b1beb855a2e$var$normalize(d0, d1), r0 = interpolate(r0, r1));
+    return function (x) {
+      return r0(d0(x));
+    };
+  }
+  function $e57d821abcff74b4635d6b1beb855a2e$var$polymap(domain, range, interpolate) {
+    var j = Math.min(domain.length, range.length) - 1, d = new Array(j), r = new Array(j), i = -1;
+    // Reverse descending domains.
+    if (domain[j] < domain[0]) {
+      domain = domain.slice().reverse();
+      range = range.slice().reverse();
+    }
+    while (++i < j) {
+      d[i] = $e57d821abcff74b4635d6b1beb855a2e$var$normalize(domain[i], domain[i + 1]);
+      r[i] = interpolate(range[i], range[i + 1]);
+    }
+    return function (x) {
+      var i = $01d78c3d2ae6fb4b029116fe621bf209$export$bisectRight(domain, x, 1, j) - 1;
+      return r[i](d[i](x));
+    };
+  }
+  function $e57d821abcff74b4635d6b1beb855a2e$export$copy(source, target) {
+    return target.domain(source.domain()).range(source.range()).interpolate(source.interpolate()).clamp(source.clamp()).unknown(source.unknown());
+  }
+  function $e57d821abcff74b4635d6b1beb855a2e$export$transformer() {
+    var domain = $e57d821abcff74b4635d6b1beb855a2e$var$unit, range = $e57d821abcff74b4635d6b1beb855a2e$var$unit, interpolate = $2d8542a0e5e5e3b796c387e62872bfd8$export$default, transform, untransform, unknown, clamp = $e57d821abcff74b4635d6b1beb855a2e$export$identity, piecewise, output, input;
+    function rescale() {
+      var n = Math.min(domain.length, range.length);
+      if (clamp !== $e57d821abcff74b4635d6b1beb855a2e$export$identity) clamp = $e57d821abcff74b4635d6b1beb855a2e$var$clamper(domain[0], domain[n - 1]);
+      piecewise = n > 2 ? $e57d821abcff74b4635d6b1beb855a2e$var$polymap : $e57d821abcff74b4635d6b1beb855a2e$var$bimap;
+      output = input = null;
+      return scale;
+    }
+    function scale(x) {
+      return x == null || isNaN(x = +x) ? unknown : (output || (output = piecewise(domain.map(transform), range, interpolate)))(transform(clamp(x)));
+    }
+    scale.invert = function (y) {
+      return clamp(untransform((input || (input = piecewise(range, domain.map(transform), $6a9b02b77c7147fe9b39779cc9577685$export$default)))(y)));
+    };
+    scale.domain = function (_) {
+      return arguments.length ? (domain = Array.from(_, $3128a411ea54a5b48d7c28c5ac66acb5$export$default), rescale()) : domain.slice();
+    };
+    scale.range = function (_) {
+      return arguments.length ? (range = Array.from(_), rescale()) : range.slice();
+    };
+    scale.rangeRound = function (_) {
+      return (range = Array.from(_), interpolate = $c548dcd2d1cb470c042d7d732979e94e$export$default, rescale());
+    };
+    scale.clamp = function (_) {
+      return arguments.length ? (clamp = _ ? true : $e57d821abcff74b4635d6b1beb855a2e$export$identity, rescale()) : clamp !== $e57d821abcff74b4635d6b1beb855a2e$export$identity;
+    };
+    scale.interpolate = function (_) {
+      return arguments.length ? (interpolate = _, rescale()) : interpolate;
+    };
+    scale.unknown = function (_) {
+      return arguments.length ? (unknown = _, scale) : unknown;
+    };
+    return function (t, u) {
+      (transform = t, untransform = u);
+      return rescale();
+    };
+  }
+  function $e57d821abcff74b4635d6b1beb855a2e$export$default() {
+    return $e57d821abcff74b4635d6b1beb855a2e$export$transformer()($e57d821abcff74b4635d6b1beb855a2e$export$identity, $e57d821abcff74b4635d6b1beb855a2e$export$identity);
+  }
+  function $5d58990c16c72a5fd4e19d2c9c781c04$export$initRange(domain, range) {
+    switch (arguments.length) {
+      case 0:
+        break;
+      case 1:
+        this.range(domain);
+        break;
+      default:
+        this.range(range).domain(domain);
+        break;
+    }
+    return this;
+  }
+  var $d9a009b644ebb8671dbe7a865ad5a508$export$default = function (x) {
+    return Math.abs(x = Math.round(x)) >= 1e21 ? x.toLocaleString("en").replace(/,/g, "") : x.toString(10);
+  };
+  // Computes the decimal coefficient and exponent of the specified number x with
+  // significant digits p, where x is positive and p is in [1, 21] or undefined.
+  // For example, formatDecimalParts(1.23) returns ["123", 0].
+  function $d9a009b644ebb8671dbe7a865ad5a508$export$formatDecimalParts(x, p) {
+    if ((i = (x = p ? x.toExponential(p - 1) : x.toExponential()).indexOf("e")) < 0) return null;
+    // NaN, ±Infinity
+    var i, coefficient = x.slice(0, i);
+    // The string returned by toExponential either has the form \d\.\d+e[-+]\d+
+    // (e.g., 1.2e+3) or the form \de[-+]\d+ (e.g., 1e+3).
+    return [coefficient.length > 1 ? coefficient[0] + coefficient.slice(2) : coefficient, +x.slice(i + 1)];
+  }
+  var $2f35e9735538a2086f3e7cd659424bfb$export$default = function (x) {
+    return (x = $d9a009b644ebb8671dbe7a865ad5a508$export$formatDecimalParts(Math.abs(x)), x ? x[1] : NaN);
+  };
+  var $67172c2446e2b8429cf6f1e30823c311$export$default = function (grouping, thousands) {
+    return function (value, width) {
+      var i = value.length, t = [], j = 0, g = grouping[0], length = 0;
+      while (i > 0 && g > 0) {
+        if (length + g + 1 > width) g = Math.max(1, width - length);
+        t.push(value.substring(i -= g, i + g));
+        if ((length += g + 1) > width) break;
+        g = grouping[j = (j + 1) % grouping.length];
+      }
+      return t.reverse().join(thousands);
+    };
+  };
+  var $bc2ea8135a49b02aae131070d2aab3a2$export$default = function (numerals) {
+    return function (value) {
+      return value.replace(/[0-9]/g, function (i) {
+        return numerals[+i];
+      });
+    };
+  };
+  // [[fill]align][sign][symbol][0][width][,][.precision][~][type]
+  var $4104f545005be602b1391fa3d72baa4b$var$re = /^(?:(.)?([<>=^]))?([+\-( ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?(~)?([a-z%])?$/i;
+  function $4104f545005be602b1391fa3d72baa4b$export$default(specifier) {
+    if (!(match = $4104f545005be602b1391fa3d72baa4b$var$re.exec(specifier))) throw new Error("invalid format: " + specifier);
+    var match;
+    return new $4104f545005be602b1391fa3d72baa4b$export$FormatSpecifier({
+      fill: match[1],
+      align: match[2],
+      sign: match[3],
+      symbol: match[4],
+      zero: match[5],
+      width: match[6],
+      comma: match[7],
+      precision: match[8] && match[8].slice(1),
+      trim: match[9],
+      type: match[10]
+    });
+  }
+  $4104f545005be602b1391fa3d72baa4b$export$default.prototype = $4104f545005be602b1391fa3d72baa4b$export$FormatSpecifier.prototype;
+  // instanceof
+  function $4104f545005be602b1391fa3d72baa4b$export$FormatSpecifier(specifier) {
+    this.fill = specifier.fill === undefined ? " " : specifier.fill + "";
+    this.align = specifier.align === undefined ? ">" : specifier.align + "";
+    this.sign = specifier.sign === undefined ? "-" : specifier.sign + "";
+    this.symbol = specifier.symbol === undefined ? "" : specifier.symbol + "";
+    this.zero = !!specifier.zero;
+    this.width = specifier.width === undefined ? undefined : +specifier.width;
+    this.comma = !!specifier.comma;
+    this.precision = specifier.precision === undefined ? undefined : +specifier.precision;
+    this.trim = !!specifier.trim;
+    this.type = specifier.type === undefined ? "" : specifier.type + "";
+  }
+  $4104f545005be602b1391fa3d72baa4b$export$FormatSpecifier.prototype.toString = function () {
+    return this.fill + this.align + this.sign + this.symbol + (this.zero ? "0" : "") + (this.width === undefined ? "" : Math.max(1, this.width | 0)) + (this.comma ? "," : "") + (this.precision === undefined ? "" : "." + Math.max(0, this.precision | 0)) + (this.trim ? "~" : "") + this.type;
+  };
+  // Trims insignificant zeros, e.g., replaces 1.2000k with 1.2k.
+  var $2ac16e565bdd7e5b8dc7197518d7a2fe$export$default = function (s) {
+    out: for (var n = s.length, i = 1, i0 = -1, i1; i < n; ++i) {
+      switch (s[i]) {
+        case ".":
+          i0 = i1 = i;
+          break;
+        case "0":
+          if (i0 === 0) i0 = i;
+          i1 = i;
+          break;
+        default:
+          if (!+s[i]) break out;
+          if (i0 > 0) i0 = 0;
+          break;
+      }
+    }
+    return i0 > 0 ? s.slice(0, i0) + s.slice(i1 + 1) : s;
+  };
+  var $b5a12ef5b4cc4599a0e73379c4c442a7$export$prefixExponent;
+  var $b5a12ef5b4cc4599a0e73379c4c442a7$export$default = function (x, p) {
+    var d = $d9a009b644ebb8671dbe7a865ad5a508$export$formatDecimalParts(x, p);
+    if (!d) return x + "";
+    var coefficient = d[0], exponent = d[1], i = exponent - ($b5a12ef5b4cc4599a0e73379c4c442a7$export$prefixExponent = Math.max(-8, Math.min(8, Math.floor(exponent / 3))) * 3) + 1, n = coefficient.length;
+    return i === n ? coefficient : i > n ? coefficient + new Array(i - n + 1).join("0") : i > 0 ? coefficient.slice(0, i) + "." + coefficient.slice(i) : "0." + new Array(1 - i).join("0") + $d9a009b644ebb8671dbe7a865ad5a508$export$formatDecimalParts(x, Math.max(0, p + i - 1))[0];
+  };
+  var $6b03535fb83441e95f314f3fa2070fb0$export$default = function (x, p) {
+    var d = $d9a009b644ebb8671dbe7a865ad5a508$export$formatDecimalParts(x, p);
+    if (!d) return x + "";
+    var coefficient = d[0], exponent = d[1];
+    return exponent < 0 ? "0." + new Array(-exponent).join("0") + coefficient : coefficient.length > exponent + 1 ? coefficient.slice(0, exponent + 1) + "." + coefficient.slice(exponent + 1) : coefficient + new Array(exponent - coefficient.length + 2).join("0");
+  };
+  var $655ed7fe835eba80c6af4359ebd37efb$export$default = {
+    "%": (x, p) => (x * 100).toFixed(p),
+    "b": x => Math.round(x).toString(2),
+    "c": x => x + "",
+    "d": $d9a009b644ebb8671dbe7a865ad5a508$export$default,
+    "e": (x, p) => x.toExponential(p),
+    "f": (x, p) => x.toFixed(p),
+    "g": (x, p) => x.toPrecision(p),
+    "o": x => Math.round(x).toString(8),
+    "p": (x, p) => $6b03535fb83441e95f314f3fa2070fb0$export$default(x * 100, p),
+    "r": $6b03535fb83441e95f314f3fa2070fb0$export$default,
+    "s": $b5a12ef5b4cc4599a0e73379c4c442a7$export$default,
+    "X": x => Math.round(x).toString(16).toUpperCase(),
+    "x": x => Math.round(x).toString(16)
+  };
+  var $056b3e95d458eda20783741615396a44$export$default = function (x) {
+    return x;
+  };
+  var $da61855e18ee7a43ab52c1d246635f05$var$map = Array.prototype.map, $da61855e18ee7a43ab52c1d246635f05$var$prefixes = ["y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y"];
+  var $da61855e18ee7a43ab52c1d246635f05$export$default = function (locale) {
+    var group = locale.grouping === undefined || locale.thousands === undefined ? $056b3e95d458eda20783741615396a44$export$default : $67172c2446e2b8429cf6f1e30823c311$export$default($da61855e18ee7a43ab52c1d246635f05$var$map.call(locale.grouping, Number), locale.thousands + ""), currencyPrefix = locale.currency === undefined ? "" : locale.currency[0] + "", currencySuffix = locale.currency === undefined ? "" : locale.currency[1] + "", decimal = locale.decimal === undefined ? "." : locale.decimal + "", numerals = locale.numerals === undefined ? $056b3e95d458eda20783741615396a44$export$default : $bc2ea8135a49b02aae131070d2aab3a2$export$default($da61855e18ee7a43ab52c1d246635f05$var$map.call(locale.numerals, String)), percent = locale.percent === undefined ? "%" : locale.percent + "", minus = locale.minus === undefined ? "−" : locale.minus + "", nan = locale.nan === undefined ? "NaN" : locale.nan + "";
+    function newFormat(specifier) {
+      specifier = $4104f545005be602b1391fa3d72baa4b$export$default(specifier);
+      var fill = specifier.fill, align = specifier.align, sign = specifier.sign, symbol = specifier.symbol, zero = specifier.zero, width = specifier.width, comma = specifier.comma, precision = specifier.precision, trim = specifier.trim, type = specifier.type;
+      // The "n" type is an alias for ",g".
+      if (type === "n") (comma = true, type = "g"); else // The "" type, and any invalid type, is an alias for ".12~g".
+      if (!$655ed7fe835eba80c6af4359ebd37efb$export$default[type]) (precision === undefined && (precision = 12), trim = true, type = "g");
+      // If zero fill is specified, padding goes after sign and before digits.
+      if (zero || fill === "0" && align === "=") (zero = true, fill = "0", align = "=");
+      // Compute the prefix and suffix.
+      // For SI-prefix, the suffix is lazily computed.
+      var prefix = symbol === "$" ? currencyPrefix : symbol === "#" && (/[boxX]/).test(type) ? "0" + type.toLowerCase() : "", suffix = symbol === "$" ? currencySuffix : (/[%p]/).test(type) ? percent : "";
+      // What format function should we use?
+      // Is this an integer type?
+      // Can this type generate exponential notation?
+      var formatType = $655ed7fe835eba80c6af4359ebd37efb$export$default[type], maybeSuffix = (/[defgprs%]/).test(type);
+      // Set the default precision if not specified,
+      // or clamp the specified precision to the supported range.
+      // For significant precision, it must be in [1, 21].
+      // For fixed precision, it must be in [0, 20].
+      precision = precision === undefined ? 6 : (/[gprs]/).test(type) ? Math.max(1, Math.min(21, precision)) : Math.max(0, Math.min(20, precision));
+      function format(value) {
+        var valuePrefix = prefix, valueSuffix = suffix, i, n, c;
+        if (type === "c") {
+          valueSuffix = formatType(value) + valueSuffix;
+          value = "";
+        } else {
+          value = +value;
+          // Determine the sign. -0 is not less than 0, but 1 / -0 is!
+          var valueNegative = value < 0 || 1 / value < 0;
+          // Perform the initial formatting.
+          value = isNaN(value) ? nan : formatType(Math.abs(value), precision);
+          // Trim insignificant zeros.
+          if (trim) value = $2ac16e565bdd7e5b8dc7197518d7a2fe$export$default(value);
+          // If a negative value rounds to zero after formatting, and no explicit positive sign is requested, hide the sign.
+          if (valueNegative && +value === 0 && sign !== "+") valueNegative = false;
+          // Compute the prefix and suffix.
+          valuePrefix = (valueNegative ? sign === "(" ? sign : minus : sign === "-" || sign === "(" ? "" : sign) + valuePrefix;
+          valueSuffix = (type === "s" ? $da61855e18ee7a43ab52c1d246635f05$var$prefixes[8 + $b5a12ef5b4cc4599a0e73379c4c442a7$export$prefixExponent / 3] : "") + valueSuffix + (valueNegative && sign === "(" ? ")" : "");
+          // Break the formatted value into the integer “value” part that can be
+          // grouped, and fractional or exponential “suffix” part that is not.
+          if (maybeSuffix) {
+            (i = -1, n = value.length);
+            while (++i < n) {
+              if ((c = value.charCodeAt(i), 48 > c || c > 57)) {
+                valueSuffix = (c === 46 ? decimal + value.slice(i + 1) : value.slice(i)) + valueSuffix;
+                value = value.slice(0, i);
+                break;
+              }
+            }
+          }
+        }
+        // If the fill character is not "0", grouping is applied before padding.
+        if (comma && !zero) value = group(value, Infinity);
+        // Compute the padding.
+        var length = valuePrefix.length + value.length + valueSuffix.length, padding = length < width ? new Array(width - length + 1).join(fill) : "";
+        // If the fill character is "0", grouping is applied after padding.
+        if (comma && zero) (value = group(padding + value, padding.length ? width - valueSuffix.length : Infinity), padding = "");
+        // Reconstruct the final output based on the desired alignment.
+        switch (align) {
+          case "<":
+            value = valuePrefix + value + valueSuffix + padding;
+            break;
+          case "=":
+            value = valuePrefix + padding + value + valueSuffix;
+            break;
+          case "^":
+            value = padding.slice(0, length = padding.length >> 1) + valuePrefix + value + valueSuffix + padding.slice(length);
+            break;
+          default:
+            value = padding + valuePrefix + value + valueSuffix;
+            break;
+        }
+        return numerals(value);
+      }
+      format.toString = function () {
+        return specifier + "";
+      };
+      return format;
+    }
+    function formatPrefix(specifier, value) {
+      var f = newFormat((specifier = $4104f545005be602b1391fa3d72baa4b$export$default(specifier), specifier.type = "f", specifier)), e = Math.max(-8, Math.min(8, Math.floor($2f35e9735538a2086f3e7cd659424bfb$export$default(value) / 3))) * 3, k = Math.pow(10, -e), prefix = $da61855e18ee7a43ab52c1d246635f05$var$prefixes[8 + e / 3];
+      return function (value) {
+        return f(k * value) + prefix;
+      };
+    }
+    return {
+      format: newFormat,
+      formatPrefix: formatPrefix
+    };
+  };
+  var $57cdc2c70da2518c2767d94ad36feaf5$var$locale;
+  var $57cdc2c70da2518c2767d94ad36feaf5$export$format;
+  var $57cdc2c70da2518c2767d94ad36feaf5$export$formatPrefix;
+  $57cdc2c70da2518c2767d94ad36feaf5$export$default({
+    thousands: ",",
+    grouping: [3],
+    currency: ["$", ""]
+  });
+  function $57cdc2c70da2518c2767d94ad36feaf5$export$default(definition) {
+    $57cdc2c70da2518c2767d94ad36feaf5$var$locale = $da61855e18ee7a43ab52c1d246635f05$export$default(definition);
+    $57cdc2c70da2518c2767d94ad36feaf5$export$format = $57cdc2c70da2518c2767d94ad36feaf5$var$locale.format;
+    $57cdc2c70da2518c2767d94ad36feaf5$export$formatPrefix = $57cdc2c70da2518c2767d94ad36feaf5$var$locale.formatPrefix;
+    return $57cdc2c70da2518c2767d94ad36feaf5$var$locale;
+  }
+  var $5b62e4668b33c6475c0c54a3e8a67164$export$default = function (step) {
+    return Math.max(0, -$2f35e9735538a2086f3e7cd659424bfb$export$default(Math.abs(step)));
+  };
+  var $46ae8bdafb9a488a7c0412eeccc8e96a$export$default = function (step, value) {
+    return Math.max(0, Math.max(-8, Math.min(8, Math.floor($2f35e9735538a2086f3e7cd659424bfb$export$default(value) / 3))) * 3 - $2f35e9735538a2086f3e7cd659424bfb$export$default(Math.abs(step)));
+  };
+  var $bf3f06d351a4bb63c81b7fb47e7d7efb$export$default = function (step, max) {
+    (step = Math.abs(step), max = Math.abs(max) - step);
+    return Math.max(0, $2f35e9735538a2086f3e7cd659424bfb$export$default(max) - $2f35e9735538a2086f3e7cd659424bfb$export$default(step)) + 1;
+  };
+  function $57c3cf5d999c41e7d1e1b65c49143058$export$default(start, stop, count, specifier) {
+    var step = $a2942dec731095d7f46128705285ce75$export$tickStep(start, stop, count), precision;
+    specifier = $4104f545005be602b1391fa3d72baa4b$export$default(specifier == null ? ",f" : specifier);
+    switch (specifier.type) {
+      case "s":
+        {
+          var value = Math.max(Math.abs(start), Math.abs(stop));
+          if (specifier.precision == null && !isNaN(precision = $46ae8bdafb9a488a7c0412eeccc8e96a$export$default(step, value))) specifier.precision = precision;
+          return $57cdc2c70da2518c2767d94ad36feaf5$export$formatPrefix(specifier, value);
+        }
+      case "":
+      case "e":
+      case "g":
+      case "p":
+      case "r":
+        {
+          if (specifier.precision == null && !isNaN(precision = $bf3f06d351a4bb63c81b7fb47e7d7efb$export$default(step, Math.max(Math.abs(start), Math.abs(stop))))) specifier.precision = precision - (specifier.type === "e");
+          break;
+        }
+      case "f":
+      case "%":
+        {
+          if (specifier.precision == null && !isNaN(precision = $5b62e4668b33c6475c0c54a3e8a67164$export$default(step))) specifier.precision = precision - (specifier.type === "%") * 2;
+          break;
+        }
+    }
+    return $57cdc2c70da2518c2767d94ad36feaf5$export$format(specifier);
+  }
+  function $58645d8f0414d4e672ef41e54377799e$export$linearish(scale) {
+    var domain = scale.domain;
+    scale.ticks = function (count) {
+      var d = domain();
+      return $a2942dec731095d7f46128705285ce75$export$default(d[0], d[d.length - 1], count == null ? 10 : count);
+    };
+    scale.tickFormat = function (count, specifier) {
+      var d = domain();
+      return $57c3cf5d999c41e7d1e1b65c49143058$export$default(d[0], d[d.length - 1], count == null ? 10 : count, specifier);
+    };
+    scale.nice = function (count) {
+      if (count == null) count = 10;
+      var d = domain();
+      var i0 = 0;
+      var i1 = d.length - 1;
+      var start = d[i0];
+      var stop = d[i1];
+      var prestep;
+      var step;
+      var maxIter = 10;
+      if (stop < start) {
+        (step = start, start = stop, stop = step);
+        (step = i0, i0 = i1, i1 = step);
+      }
+      while (maxIter-- > 0) {
+        step = $a2942dec731095d7f46128705285ce75$export$tickIncrement(start, stop, count);
+        if (step === prestep) {
+          d[i0] = start;
+          d[i1] = stop;
+          return domain(d);
+        } else if (step > 0) {
+          start = Math.floor(start / step) * step;
+          stop = Math.ceil(stop / step) * step;
+        } else if (step < 0) {
+          start = Math.ceil(start * step) / step;
+          stop = Math.floor(stop * step) / step;
+        } else {
+          break;
+        }
+        prestep = step;
+      }
+      return scale;
+    };
+    return scale;
+  }
+  function $58645d8f0414d4e672ef41e54377799e$export$default() {
+    var scale = $e57d821abcff74b4635d6b1beb855a2e$export$default();
+    scale.copy = function () {
+      return $e57d821abcff74b4635d6b1beb855a2e$export$copy(scale, $58645d8f0414d4e672ef41e54377799e$export$default());
+    };
+    $5d58990c16c72a5fd4e19d2c9c781c04$export$initRange.apply(scale, arguments);
+    return $58645d8f0414d4e672ef41e54377799e$export$linearish(scale);
+  }
+  function $9ba8c107a08c03df1f81fb0d2e60e976$var$none() {}
+  var $9ba8c107a08c03df1f81fb0d2e60e976$export$default = function (selector) {
+    return selector == null ? $9ba8c107a08c03df1f81fb0d2e60e976$var$none : function () {
+      return this.querySelector(selector);
+    };
+  };
+  var $908fb1bead7f59f20f21532372150794$export$default = function (select) {
+    if (typeof select !== "function") select = $9ba8c107a08c03df1f81fb0d2e60e976$export$default(select);
+    for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
+      for (var group = groups[j], n = group.length, subgroup = subgroups[j] = new Array(n), node, subnode, i = 0; i < n; ++i) {
+        if ((node = group[i]) && (subnode = select.call(node, node.__data__, i, group))) {
+          if (("__data__" in node)) subnode.__data__ = node.__data__;
+          subgroup[i] = subnode;
+        }
+      }
+    }
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(subgroups, this._parents);
+  };
+  // Given something array like (or null), returns something that is strictly an
+  // array. This is used to ensure that array-like objects passed to d3.selectAll
+  // or selection.selectAll are converted into proper arrays when creating a
+  // selection; we don’t ever want to create a selection backed by a live
+  // HTMLCollection or NodeList. However, note that selection.selectAll will use a
+  // static NodeList as a group, since it safely derived from querySelectorAll.
+  function $32b726a9e172d9b6afa48fda3888862c$export$default(x) {
+    return x == null ? [] : Array.isArray(x) ? x : Array.from(x);
+  }
+  function $4b0a7e62ef4ecbdc6399999745169968$var$empty() {
+    return [];
+  }
+  var $4b0a7e62ef4ecbdc6399999745169968$export$default = function (selector) {
+    return selector == null ? $4b0a7e62ef4ecbdc6399999745169968$var$empty : function () {
+      return this.querySelectorAll(selector);
+    };
+  };
+  function $46e7875d08f2c4ec4804e3987899e975$var$arrayAll(select) {
+    return function () {
+      return $32b726a9e172d9b6afa48fda3888862c$export$default(select.apply(this, arguments));
+    };
+  }
+  var $46e7875d08f2c4ec4804e3987899e975$export$default = function (select) {
+    if (typeof select === "function") select = $46e7875d08f2c4ec4804e3987899e975$var$arrayAll(select); else select = $4b0a7e62ef4ecbdc6399999745169968$export$default(select);
+    for (var groups = this._groups, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
+      for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {
+        if (node = group[i]) {
+          subgroups.push(select.call(node, node.__data__, i, group));
+          parents.push(node);
+        }
+      }
+    }
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(subgroups, parents);
+  };
+  var $5c87a98b8b12c84b2f28bc85690d097f$export$default = function (selector) {
+    return function () {
+      return this.matches(selector);
+    };
+  };
+  function $5c87a98b8b12c84b2f28bc85690d097f$export$childMatcher(selector) {
+    return function (node) {
+      return node.matches(selector);
+    };
+  }
+  var $c9fabc4c7ebbdb1c9747492c334a6280$var$find = Array.prototype.find;
+  function $c9fabc4c7ebbdb1c9747492c334a6280$var$childFind(match) {
+    return function () {
+      return $c9fabc4c7ebbdb1c9747492c334a6280$var$find.call(this.children, match);
+    };
+  }
+  function $c9fabc4c7ebbdb1c9747492c334a6280$var$childFirst() {
+    return this.firstElementChild;
+  }
+  var $c9fabc4c7ebbdb1c9747492c334a6280$export$default = function (match) {
+    return this.select(match == null ? $c9fabc4c7ebbdb1c9747492c334a6280$var$childFirst : $c9fabc4c7ebbdb1c9747492c334a6280$var$childFind(typeof match === "function" ? match : $5c87a98b8b12c84b2f28bc85690d097f$export$childMatcher(match)));
+  };
+  var $2e9c5afec4fe89b281814a219074a4b0$var$filter = Array.prototype.filter;
+  function $2e9c5afec4fe89b281814a219074a4b0$var$children() {
+    return Array.from(this.children);
+  }
+  function $2e9c5afec4fe89b281814a219074a4b0$var$childrenFilter(match) {
+    return function () {
+      return $2e9c5afec4fe89b281814a219074a4b0$var$filter.call(this.children, match);
+    };
+  }
+  var $2e9c5afec4fe89b281814a219074a4b0$export$default = function (match) {
+    return this.selectAll(match == null ? $2e9c5afec4fe89b281814a219074a4b0$var$children : $2e9c5afec4fe89b281814a219074a4b0$var$childrenFilter(typeof match === "function" ? match : $5c87a98b8b12c84b2f28bc85690d097f$export$childMatcher(match)));
+  };
+  var $a39371a46beec8ccba9d228853cc617e$export$default = function (match) {
+    if (typeof match !== "function") match = $5c87a98b8b12c84b2f28bc85690d097f$export$default(match);
+    for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
+      for (var group = groups[j], n = group.length, subgroup = subgroups[j] = [], node, i = 0; i < n; ++i) {
+        if ((node = group[i]) && match.call(node, node.__data__, i, group)) {
+          subgroup.push(node);
+        }
+      }
+    }
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(subgroups, this._parents);
+  };
+  var $f84ebfe2a78f6f24ebfebb585af44ab2$export$default = function (update) {
+    return new Array(update.length);
+  };
+  var $7a61e313ec30ad8a56736fb7306b264a$export$default = function () {
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(this._enter || this._groups.map($f84ebfe2a78f6f24ebfebb585af44ab2$export$default), this._parents);
+  };
+  function $7a61e313ec30ad8a56736fb7306b264a$export$EnterNode(parent, datum) {
+    this.ownerDocument = parent.ownerDocument;
+    this.namespaceURI = parent.namespaceURI;
+    this._next = null;
+    this._parent = parent;
+    this.__data__ = datum;
+  }
+  $7a61e313ec30ad8a56736fb7306b264a$export$EnterNode.prototype = {
+    constructor: $7a61e313ec30ad8a56736fb7306b264a$export$EnterNode,
+    appendChild: function (child) {
+      return this._parent.insertBefore(child, this._next);
+    },
+    insertBefore: function (child, next) {
+      return this._parent.insertBefore(child, next);
+    },
+    querySelector: function (selector) {
+      return this._parent.querySelector(selector);
+    },
+    querySelectorAll: function (selector) {
+      return this._parent.querySelectorAll(selector);
+    }
+  };
+  var $ad2d5af9c8e902bd1b8620478be224f2$export$default = function (x) {
+    return function () {
+      return x;
+    };
+  };
+  function $e53a947341b2b7b525592475b0f357c4$var$bindIndex(parent, group, enter, update, exit, data) {
+    var i = 0, node, groupLength = group.length, dataLength = data.length;
+    // Put any non-null nodes that fit into update.
+    // Put any null nodes into enter.
+    // Put any remaining data into enter.
+    for (; i < dataLength; ++i) {
+      if (node = group[i]) {
+        node.__data__ = data[i];
+        update[i] = node;
+      } else {
+        enter[i] = new $7a61e313ec30ad8a56736fb7306b264a$export$EnterNode(parent, data[i]);
+      }
+    }
+    // Put any non-null nodes that don’t fit into exit.
+    for (; i < groupLength; ++i) {
+      if (node = group[i]) {
+        exit[i] = node;
+      }
+    }
+  }
+  function $e53a947341b2b7b525592475b0f357c4$var$bindKey(parent, group, enter, update, exit, data, key) {
+    var i, node, nodeByKeyValue = new Map(), groupLength = group.length, dataLength = data.length, keyValues = new Array(groupLength), keyValue;
+    // Compute the key for each node.
+    // If multiple nodes have the same key, the duplicates are added to exit.
+    for (i = 0; i < groupLength; ++i) {
+      if (node = group[i]) {
+        keyValues[i] = keyValue = key.call(node, node.__data__, i, group) + "";
+        if (nodeByKeyValue.has(keyValue)) {
+          exit[i] = node;
+        } else {
+          nodeByKeyValue.set(keyValue, node);
+        }
+      }
+    }
+    // Compute the key for each datum.
+    // If there a node associated with this key, join and add it to update.
+    // If there is not (or the key is a duplicate), add it to enter.
+    for (i = 0; i < dataLength; ++i) {
+      keyValue = key.call(parent, data[i], i, data) + "";
+      if (node = nodeByKeyValue.get(keyValue)) {
+        update[i] = node;
+        node.__data__ = data[i];
+        nodeByKeyValue.delete(keyValue);
+      } else {
+        enter[i] = new $7a61e313ec30ad8a56736fb7306b264a$export$EnterNode(parent, data[i]);
+      }
+    }
+    // Add any remaining nodes that were not bound to data to exit.
+    for (i = 0; i < groupLength; ++i) {
+      if ((node = group[i]) && nodeByKeyValue.get(keyValues[i]) === node) {
+        exit[i] = node;
+      }
+    }
+  }
+  function $e53a947341b2b7b525592475b0f357c4$var$datum(node) {
+    return node.__data__;
+  }
+  var $e53a947341b2b7b525592475b0f357c4$export$default = function (value, key) {
+    if (!arguments.length) return Array.from(this, $e53a947341b2b7b525592475b0f357c4$var$datum);
+    var bind = key ? $e53a947341b2b7b525592475b0f357c4$var$bindKey : $e53a947341b2b7b525592475b0f357c4$var$bindIndex, parents = this._parents, groups = this._groups;
+    if (typeof value !== "function") value = $ad2d5af9c8e902bd1b8620478be224f2$export$default(value);
+    for (var m = groups.length, update = new Array(m), enter = new Array(m), exit = new Array(m), j = 0; j < m; ++j) {
+      var parent = parents[j], group = groups[j], groupLength = group.length, data = $e53a947341b2b7b525592475b0f357c4$var$arraylike(value.call(parent, parent && parent.__data__, j, parents)), dataLength = data.length, enterGroup = enter[j] = new Array(dataLength), updateGroup = update[j] = new Array(dataLength), exitGroup = exit[j] = new Array(groupLength);
+      bind(parent, group, enterGroup, updateGroup, exitGroup, data, key);
+      // Now connect the enter nodes to their following update node, such that
+      // appendChild can insert the materialized enter node before this node,
+      // rather than at the end of the parent node.
+      for (var i0 = 0, i1 = 0, previous, next; i0 < dataLength; ++i0) {
+        if (previous = enterGroup[i0]) {
+          if (i0 >= i1) i1 = i0 + 1;
+          while (!(next = updateGroup[i1]) && ++i1 < dataLength) ;
+          previous._next = next || null;
+        }
+      }
+    }
+    update = new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(update, parents);
+    update._enter = enter;
+    update._exit = exit;
+    return update;
+  };
+  // Given some data, this returns an array-like view of it: an object that
+  // exposes a length property and allows numeric indexing. Note that unlike
+  // selectAll, this isn’t worried about “live” collections because the resulting
+  // array will only be used briefly while data is being bound. (It is possible to
+  // cause the data to change while iterating by using a key function, but please
+  // don’t; we’d rather avoid a gratuitous copy.)
+  function $e53a947341b2b7b525592475b0f357c4$var$arraylike(data) {
+    return typeof data === "object" && ("length" in data) ? data : // Array, TypedArray, NodeList, array-like
+    Array.from(data);
+  }
+  var $dd5c71f43c48094972500c94630ce87f$export$default = function () {
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(this._exit || this._groups.map($f84ebfe2a78f6f24ebfebb585af44ab2$export$default), this._parents);
+  };
+  var $2118b92a7ea9166c7ae812f49d19f5fc$export$default = function (onenter, onupdate, onexit) {
+    var enter = this.enter(), update = this, exit = this.exit();
+    if (typeof onenter === "function") {
+      enter = onenter(enter);
+      if (enter) enter = enter.selection();
+    } else {
+      enter = enter.append(onenter + "");
+    }
+    if (onupdate != null) {
+      update = onupdate(update);
+      if (update) update = update.selection();
+    }
+    if (onexit == null) exit.remove(); else onexit(exit);
+    return enter && update ? enter.merge(update).order() : update;
+  };
+  var $5e13c2b953bca66c8b13adeef5731e06$export$default = function (context) {
+    var selection = context.selection ? context.selection() : context;
+    for (var groups0 = this._groups, groups1 = selection._groups, m0 = groups0.length, m1 = groups1.length, m = Math.min(m0, m1), merges = new Array(m0), j = 0; j < m; ++j) {
+      for (var group0 = groups0[j], group1 = groups1[j], n = group0.length, merge = merges[j] = new Array(n), node, i = 0; i < n; ++i) {
+        if (node = group0[i] || group1[i]) {
+          merge[i] = node;
+        }
+      }
+    }
+    for (; j < m0; ++j) {
+      merges[j] = groups0[j];
+    }
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(merges, this._parents);
+  };
+  var $890f5c73492eda90478469dd4dd00ff3$export$default = function () {
+    for (var groups = this._groups, j = -1, m = groups.length; ++j < m; ) {
+      for (var group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0; ) {
+        if (node = group[i]) {
+          if (next && node.compareDocumentPosition(next) ^ 4) next.parentNode.insertBefore(node, next);
+          next = node;
+        }
+      }
+    }
+    return this;
+  };
+  var $ecdbecb740644e309843855c8e037e87$export$default = function (compare) {
+    if (!compare) compare = $ecdbecb740644e309843855c8e037e87$var$ascending;
+    function compareNode(a, b) {
+      return a && b ? compare(a.__data__, b.__data__) : !a - !b;
+    }
+    for (var groups = this._groups, m = groups.length, sortgroups = new Array(m), j = 0; j < m; ++j) {
+      for (var group = groups[j], n = group.length, sortgroup = sortgroups[j] = new Array(n), node, i = 0; i < n; ++i) {
+        if (node = group[i]) {
+          sortgroup[i] = node;
+        }
+      }
+      sortgroup.sort(compareNode);
+    }
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(sortgroups, this._parents).order();
+  };
+  function $ecdbecb740644e309843855c8e037e87$var$ascending(a, b) {
+    return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+  }
+  var $c30e715d50450dde96536afacee70bc4$export$default = function () {
+    var callback = arguments[0];
+    arguments[0] = this;
+    callback.apply(null, arguments);
+    return this;
+  };
+  var $ebb62fac56470a5dcf5fe70e99504dca$export$default = function () {
+    return Array.from(this);
+  };
+  var $66be5410f2b027751662d45fa7bc334b$export$default = function () {
+    for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
+      for (var group = groups[j], i = 0, n = group.length; i < n; ++i) {
+        var node = group[i];
+        if (node) return node;
+      }
+    }
+    return null;
+  };
+  var $4faa51486094e7a877c3c13163125b0b$export$default = function () {
+    let size = 0;
+    for (const node of this) ++size;
+    // eslint-disable-line no-unused-vars
+    return size;
+  };
+  var $c4157691487415935f7f8687770475f0$export$default = function () {
+    return !this.node();
+  };
+  var $03e5577617a89961b54b43b49158df63$export$default = function (callback) {
+    for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
+      for (var group = groups[j], i = 0, n = group.length, node; i < n; ++i) {
+        if (node = group[i]) callback.call(node, node.__data__, i, group);
+      }
+    }
+    return this;
+  };
+  var $cb92310024944cb1bdf5419e0148da0c$export$xhtml = "http://www.w3.org/1999/xhtml";
+  var $cb92310024944cb1bdf5419e0148da0c$export$default = {
+    svg: "http://www.w3.org/2000/svg",
+    xhtml: $cb92310024944cb1bdf5419e0148da0c$export$xhtml,
+    xlink: "http://www.w3.org/1999/xlink",
+    xml: "http://www.w3.org/XML/1998/namespace",
+    xmlns: "http://www.w3.org/2000/xmlns/"
+  };
+  var $84bce901ef731659a5a215f54bbb65d4$export$default = function (name) {
+    var prefix = name += "", i = prefix.indexOf(":");
+    if (i >= 0 && (prefix = name.slice(0, i)) !== "xmlns") name = name.slice(i + 1);
+    return $cb92310024944cb1bdf5419e0148da0c$export$default.hasOwnProperty(prefix) ? {
+      space: $cb92310024944cb1bdf5419e0148da0c$export$default[prefix],
+      local: name
+    } : name;
+  };
+  function $d2339f5a21288836db0dbfb70dcab0c7$var$attrRemove(name) {
+    return function () {
+      this.removeAttribute(name);
+    };
+  }
+  function $d2339f5a21288836db0dbfb70dcab0c7$var$attrRemoveNS(fullname) {
+    return function () {
+      this.removeAttributeNS(fullname.space, fullname.local);
+    };
+  }
+  function $d2339f5a21288836db0dbfb70dcab0c7$var$attrConstant(name, value) {
+    return function () {
+      this.setAttribute(name, value);
+    };
+  }
+  function $d2339f5a21288836db0dbfb70dcab0c7$var$attrConstantNS(fullname, value) {
+    return function () {
+      this.setAttributeNS(fullname.space, fullname.local, value);
+    };
+  }
+  function $d2339f5a21288836db0dbfb70dcab0c7$var$attrFunction(name, value) {
+    return function () {
+      var v = value.apply(this, arguments);
+      if (v == null) this.removeAttribute(name); else this.setAttribute(name, v);
+    };
+  }
+  function $d2339f5a21288836db0dbfb70dcab0c7$var$attrFunctionNS(fullname, value) {
+    return function () {
+      var v = value.apply(this, arguments);
+      if (v == null) this.removeAttributeNS(fullname.space, fullname.local); else this.setAttributeNS(fullname.space, fullname.local, v);
+    };
+  }
+  var $d2339f5a21288836db0dbfb70dcab0c7$export$default = function (name, value) {
+    var fullname = $84bce901ef731659a5a215f54bbb65d4$export$default(name);
+    if (arguments.length < 2) {
+      var node = this.node();
+      return fullname.local ? node.getAttributeNS(fullname.space, fullname.local) : node.getAttribute(fullname);
+    }
+    return this.each((value == null ? fullname.local ? $d2339f5a21288836db0dbfb70dcab0c7$var$attrRemoveNS : $d2339f5a21288836db0dbfb70dcab0c7$var$attrRemove : typeof value === "function" ? fullname.local ? $d2339f5a21288836db0dbfb70dcab0c7$var$attrFunctionNS : $d2339f5a21288836db0dbfb70dcab0c7$var$attrFunction : fullname.local ? $d2339f5a21288836db0dbfb70dcab0c7$var$attrConstantNS : $d2339f5a21288836db0dbfb70dcab0c7$var$attrConstant)(fullname, value));
+  };
+  var $cd9234e09fb37d9aa41bebca88b33df1$export$default = function (node) {
+    return node.ownerDocument && node.ownerDocument.defaultView || // node is a Node
+    node.document && node || // node is a Window
+    node.defaultView;
+  };
+  function $956fad25c45e04d774ab6172ee26a78d$var$styleRemove(name) {
+    return function () {
+      this.style.removeProperty(name);
+    };
+  }
+  function $956fad25c45e04d774ab6172ee26a78d$var$styleConstant(name, value, priority) {
+    return function () {
+      this.style.setProperty(name, value, priority);
+    };
+  }
+  function $956fad25c45e04d774ab6172ee26a78d$var$styleFunction(name, value, priority) {
+    return function () {
+      var v = value.apply(this, arguments);
+      if (v == null) this.style.removeProperty(name); else this.style.setProperty(name, v, priority);
+    };
+  }
+  var $956fad25c45e04d774ab6172ee26a78d$export$default = function (name, value, priority) {
+    return arguments.length > 1 ? this.each((value == null ? $956fad25c45e04d774ab6172ee26a78d$var$styleRemove : typeof value === "function" ? $956fad25c45e04d774ab6172ee26a78d$var$styleFunction : $956fad25c45e04d774ab6172ee26a78d$var$styleConstant)(name, value, priority == null ? "" : priority)) : $956fad25c45e04d774ab6172ee26a78d$export$styleValue(this.node(), name);
+  };
+  function $956fad25c45e04d774ab6172ee26a78d$export$styleValue(node, name) {
+    return node.style.getPropertyValue(name) || $cd9234e09fb37d9aa41bebca88b33df1$export$default(node).getComputedStyle(node, null).getPropertyValue(name);
+  }
+  function $976662770b6c16b2cac25b4c0672c49a$var$propertyRemove(name) {
+    return function () {
+      delete this[name];
+    };
+  }
+  function $976662770b6c16b2cac25b4c0672c49a$var$propertyConstant(name, value) {
+    return function () {
+      this[name] = value;
+    };
+  }
+  function $976662770b6c16b2cac25b4c0672c49a$var$propertyFunction(name, value) {
+    return function () {
+      var v = value.apply(this, arguments);
+      if (v == null) delete this[name]; else this[name] = v;
+    };
+  }
+  var $976662770b6c16b2cac25b4c0672c49a$export$default = function (name, value) {
+    return arguments.length > 1 ? this.each((value == null ? $976662770b6c16b2cac25b4c0672c49a$var$propertyRemove : typeof value === "function" ? $976662770b6c16b2cac25b4c0672c49a$var$propertyFunction : $976662770b6c16b2cac25b4c0672c49a$var$propertyConstant)(name, value)) : this.node()[name];
+  };
+  function $8806e16a8de44897b600333b85c77f38$var$classArray(string) {
+    return string.trim().split(/^|\s+/);
+  }
+  function $8806e16a8de44897b600333b85c77f38$var$classList(node) {
+    return node.classList || new $8806e16a8de44897b600333b85c77f38$var$ClassList(node);
+  }
+  function $8806e16a8de44897b600333b85c77f38$var$ClassList(node) {
+    this._node = node;
+    this._names = $8806e16a8de44897b600333b85c77f38$var$classArray(node.getAttribute("class") || "");
+  }
+  $8806e16a8de44897b600333b85c77f38$var$ClassList.prototype = {
+    add: function (name) {
+      var i = this._names.indexOf(name);
+      if (i < 0) {
+        this._names.push(name);
+        this._node.setAttribute("class", this._names.join(" "));
+      }
+    },
+    remove: function (name) {
+      var i = this._names.indexOf(name);
+      if (i >= 0) {
+        this._names.splice(i, 1);
+        this._node.setAttribute("class", this._names.join(" "));
+      }
+    },
+    contains: function (name) {
+      return this._names.indexOf(name) >= 0;
+    }
+  };
+  function $8806e16a8de44897b600333b85c77f38$var$classedAdd(node, names) {
+    var list = $8806e16a8de44897b600333b85c77f38$var$classList(node), i = -1, n = names.length;
+    while (++i < n) list.add(names[i]);
+  }
+  function $8806e16a8de44897b600333b85c77f38$var$classedRemove(node, names) {
+    var list = $8806e16a8de44897b600333b85c77f38$var$classList(node), i = -1, n = names.length;
+    while (++i < n) list.remove(names[i]);
+  }
+  function $8806e16a8de44897b600333b85c77f38$var$classedTrue(names) {
+    return function () {
+      $8806e16a8de44897b600333b85c77f38$var$classedAdd(this, names);
+    };
+  }
+  function $8806e16a8de44897b600333b85c77f38$var$classedFalse(names) {
+    return function () {
+      $8806e16a8de44897b600333b85c77f38$var$classedRemove(this, names);
+    };
+  }
+  function $8806e16a8de44897b600333b85c77f38$var$classedFunction(names, value) {
+    return function () {
+      (value.apply(this, arguments) ? $8806e16a8de44897b600333b85c77f38$var$classedAdd : $8806e16a8de44897b600333b85c77f38$var$classedRemove)(this, names);
+    };
+  }
+  var $8806e16a8de44897b600333b85c77f38$export$default = function (name, value) {
+    var names = $8806e16a8de44897b600333b85c77f38$var$classArray(name + "");
+    if (arguments.length < 2) {
+      var list = $8806e16a8de44897b600333b85c77f38$var$classList(this.node()), i = -1, n = names.length;
+      while (++i < n) if (!list.contains(names[i])) return false;
+      return true;
+    }
+    return this.each((typeof value === "function" ? $8806e16a8de44897b600333b85c77f38$var$classedFunction : value ? $8806e16a8de44897b600333b85c77f38$var$classedTrue : $8806e16a8de44897b600333b85c77f38$var$classedFalse)(names, value));
+  };
+  function $fba00137978ebea003bd3f69b97e83b2$var$textRemove() {
+    this.textContent = "";
+  }
+  function $fba00137978ebea003bd3f69b97e83b2$var$textConstant(value) {
+    return function () {
+      this.textContent = value;
+    };
+  }
+  function $fba00137978ebea003bd3f69b97e83b2$var$textFunction(value) {
+    return function () {
+      var v = value.apply(this, arguments);
+      this.textContent = v == null ? "" : v;
+    };
+  }
+  var $fba00137978ebea003bd3f69b97e83b2$export$default = function (value) {
+    return arguments.length ? this.each(value == null ? $fba00137978ebea003bd3f69b97e83b2$var$textRemove : (typeof value === "function" ? $fba00137978ebea003bd3f69b97e83b2$var$textFunction : $fba00137978ebea003bd3f69b97e83b2$var$textConstant)(value)) : this.node().textContent;
+  };
+  function $6c0a9d5fadf5707a808de076d780889d$var$htmlRemove() {
+    this.innerHTML = "";
+  }
+  function $6c0a9d5fadf5707a808de076d780889d$var$htmlConstant(value) {
+    return function () {
+      this.innerHTML = value;
+    };
+  }
+  function $6c0a9d5fadf5707a808de076d780889d$var$htmlFunction(value) {
+    return function () {
+      var v = value.apply(this, arguments);
+      this.innerHTML = v == null ? "" : v;
+    };
+  }
+  var $6c0a9d5fadf5707a808de076d780889d$export$default = function (value) {
+    return arguments.length ? this.each(value == null ? $6c0a9d5fadf5707a808de076d780889d$var$htmlRemove : (typeof value === "function" ? $6c0a9d5fadf5707a808de076d780889d$var$htmlFunction : $6c0a9d5fadf5707a808de076d780889d$var$htmlConstant)(value)) : this.node().innerHTML;
+  };
+  function $27fa44323694e19409bbcda80766c74c$var$raise() {
+    if (this.nextSibling) this.parentNode.appendChild(this);
+  }
+  var $27fa44323694e19409bbcda80766c74c$export$default = function () {
+    return this.each($27fa44323694e19409bbcda80766c74c$var$raise);
+  };
+  function $501010b0915c6cf1fcb2e2ae9e1fccd1$var$lower() {
+    if (this.previousSibling) this.parentNode.insertBefore(this, this.parentNode.firstChild);
+  }
+  var $501010b0915c6cf1fcb2e2ae9e1fccd1$export$default = function () {
+    return this.each($501010b0915c6cf1fcb2e2ae9e1fccd1$var$lower);
+  };
+  function $d5b25f17c3cdf908aae81a8eb8ee6818$var$creatorInherit(name) {
+    return function () {
+      var document = this.ownerDocument, uri = this.namespaceURI;
+      return uri === $cb92310024944cb1bdf5419e0148da0c$export$xhtml && document.documentElement.namespaceURI === $cb92310024944cb1bdf5419e0148da0c$export$xhtml ? document.createElement(name) : document.createElementNS(uri, name);
+    };
+  }
+  function $d5b25f17c3cdf908aae81a8eb8ee6818$var$creatorFixed(fullname) {
+    return function () {
+      return this.ownerDocument.createElementNS(fullname.space, fullname.local);
+    };
+  }
+  var $d5b25f17c3cdf908aae81a8eb8ee6818$export$default = function (name) {
+    var fullname = $84bce901ef731659a5a215f54bbb65d4$export$default(name);
+    return (fullname.local ? $d5b25f17c3cdf908aae81a8eb8ee6818$var$creatorFixed : $d5b25f17c3cdf908aae81a8eb8ee6818$var$creatorInherit)(fullname);
+  };
+  var $c2767b7bd498439479c2888ff90c6761$export$default = function (name) {
+    var create = typeof name === "function" ? name : $d5b25f17c3cdf908aae81a8eb8ee6818$export$default(name);
+    return this.select(function () {
+      return this.appendChild(create.apply(this, arguments));
+    });
+  };
+  function $486136cb043f00c4fe24e1d396520aa0$var$constantNull() {
+    return null;
+  }
+  var $486136cb043f00c4fe24e1d396520aa0$export$default = function (name, before) {
+    var create = typeof name === "function" ? name : $d5b25f17c3cdf908aae81a8eb8ee6818$export$default(name), select = before == null ? $486136cb043f00c4fe24e1d396520aa0$var$constantNull : typeof before === "function" ? before : $9ba8c107a08c03df1f81fb0d2e60e976$export$default(before);
+    return this.select(function () {
+      return this.insertBefore(create.apply(this, arguments), select.apply(this, arguments) || null);
+    });
+  };
+  function $ae507190a5c1bd17d5f698d678fff2dc$var$remove() {
+    var parent = this.parentNode;
+    if (parent) parent.removeChild(this);
+  }
+  var $ae507190a5c1bd17d5f698d678fff2dc$export$default = function () {
+    return this.each($ae507190a5c1bd17d5f698d678fff2dc$var$remove);
+  };
+  function $92a153b3b8d723e4c01ed619b7fd6de7$var$selection_cloneShallow() {
+    var clone = this.cloneNode(false), parent = this.parentNode;
+    return parent ? parent.insertBefore(clone, this.nextSibling) : clone;
+  }
+  function $92a153b3b8d723e4c01ed619b7fd6de7$var$selection_cloneDeep() {
+    var clone = this.cloneNode(true), parent = this.parentNode;
+    return parent ? parent.insertBefore(clone, this.nextSibling) : clone;
+  }
+  var $92a153b3b8d723e4c01ed619b7fd6de7$export$default = function (deep) {
+    return this.select(deep ? $92a153b3b8d723e4c01ed619b7fd6de7$var$selection_cloneDeep : $92a153b3b8d723e4c01ed619b7fd6de7$var$selection_cloneShallow);
+  };
+  var $5bc7e45b800667c5e8402ec19b34c309$export$default = function (value) {
+    return arguments.length ? this.property("__data__", value) : this.node().__data__;
+  };
+  function $be397344a8e2fd1076b538832f70db33$var$contextListener(listener) {
+    return function (event) {
+      listener.call(this, event, this.__data__);
+    };
+  }
+  function $be397344a8e2fd1076b538832f70db33$var$parseTypenames(typenames) {
+    return typenames.trim().split(/^|\s+/).map(function (t) {
+      var name = "", i = t.indexOf(".");
+      if (i >= 0) (name = t.slice(i + 1), t = t.slice(0, i));
+      return {
+        type: t,
+        name: name
+      };
+    });
+  }
+  function $be397344a8e2fd1076b538832f70db33$var$onRemove(typename) {
+    return function () {
+      var on = this.__on;
+      if (!on) return;
+      for (var j = 0, i = -1, m = on.length, o; j < m; ++j) {
+        if ((o = on[j], (!typename.type || o.type === typename.type) && o.name === typename.name)) {
+          this.removeEventListener(o.type, o.listener, o.options);
+        } else {
+          on[++i] = o;
+        }
+      }
+      if (++i) on.length = i; else delete this.__on;
+    };
+  }
+  function $be397344a8e2fd1076b538832f70db33$var$onAdd(typename, value, options) {
+    return function () {
+      var on = this.__on, o, listener = $be397344a8e2fd1076b538832f70db33$var$contextListener(value);
+      if (on) for (var j = 0, m = on.length; j < m; ++j) {
+        if ((o = on[j]).type === typename.type && o.name === typename.name) {
+          this.removeEventListener(o.type, o.listener, o.options);
+          this.addEventListener(o.type, o.listener = listener, o.options = options);
+          o.value = value;
+          return;
+        }
+      }
+      this.addEventListener(typename.type, listener, options);
+      o = {
+        type: typename.type,
+        name: typename.name,
+        value: value,
+        listener: listener,
+        options: options
+      };
+      if (!on) this.__on = [o]; else on.push(o);
+    };
+  }
+  var $be397344a8e2fd1076b538832f70db33$export$default = function (typename, value, options) {
+    var typenames = $be397344a8e2fd1076b538832f70db33$var$parseTypenames(typename + ""), i, n = typenames.length, t;
+    if (arguments.length < 2) {
+      var on = this.node().__on;
+      if (on) for (var j = 0, m = on.length, o; j < m; ++j) {
+        for ((i = 0, o = on[j]); i < n; ++i) {
+          if ((t = typenames[i]).type === o.type && t.name === o.name) {
+            return o.value;
+          }
+        }
+      }
+      return;
+    }
+    on = value ? $be397344a8e2fd1076b538832f70db33$var$onAdd : $be397344a8e2fd1076b538832f70db33$var$onRemove;
+    for (i = 0; i < n; ++i) this.each(on(typenames[i], value, options));
+    return this;
+  };
+  function $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchEvent(node, type, params) {
+    var window = $cd9234e09fb37d9aa41bebca88b33df1$export$default(node), event = window.CustomEvent;
+    if (typeof event === "function") {
+      event = new event(type, params);
+    } else {
+      event = window.document.createEvent("Event");
+      if (params) (event.initEvent(type, params.bubbles, params.cancelable), event.detail = params.detail); else event.initEvent(type, false, false);
+    }
+    node.dispatchEvent(event);
+  }
+  function $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchConstant(type, params) {
+    return function () {
+      return $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchEvent(this, type, params);
+    };
+  }
+  function $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchFunction(type, params) {
+    return function () {
+      return $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchEvent(this, type, params.apply(this, arguments));
+    };
+  }
+  var $ad9cb8518207cde5fab84f27adc51c6b$export$default = function (type, params) {
+    return this.each((typeof params === "function" ? $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchFunction : $ad9cb8518207cde5fab84f27adc51c6b$var$dispatchConstant)(type, params));
+  };
+  var $40d752073f36d156cfefccf5d3b27598$export$default = function* () {
+    for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) {
+      for (var group = groups[j], i = 0, n = group.length, node; i < n; ++i) {
+        if (node = group[i]) yield node;
+      }
+    }
+  };
+  var $335d4abf3982ea8c06e1168e360d6ecd$export$root = [null];
+  function $335d4abf3982ea8c06e1168e360d6ecd$export$Selection(groups, parents) {
+    this._groups = groups;
+    this._parents = parents;
+  }
+  function $335d4abf3982ea8c06e1168e360d6ecd$export$default() {
+    return new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection([[document.documentElement]], $335d4abf3982ea8c06e1168e360d6ecd$export$root);
+  }
+  function $335d4abf3982ea8c06e1168e360d6ecd$var$selection_selection() {
+    return this;
+  }
+  $335d4abf3982ea8c06e1168e360d6ecd$export$Selection.prototype = $335d4abf3982ea8c06e1168e360d6ecd$export$default.prototype = {
+    constructor: $335d4abf3982ea8c06e1168e360d6ecd$export$Selection,
+    select: $908fb1bead7f59f20f21532372150794$export$default,
+    selectAll: $46e7875d08f2c4ec4804e3987899e975$export$default,
+    selectChild: $c9fabc4c7ebbdb1c9747492c334a6280$export$default,
+    selectChildren: $2e9c5afec4fe89b281814a219074a4b0$export$default,
+    filter: $a39371a46beec8ccba9d228853cc617e$export$default,
+    data: $e53a947341b2b7b525592475b0f357c4$export$default,
+    enter: $7a61e313ec30ad8a56736fb7306b264a$export$default,
+    exit: $dd5c71f43c48094972500c94630ce87f$export$default,
+    join: $2118b92a7ea9166c7ae812f49d19f5fc$export$default,
+    merge: $5e13c2b953bca66c8b13adeef5731e06$export$default,
+    selection: $335d4abf3982ea8c06e1168e360d6ecd$var$selection_selection,
+    order: $890f5c73492eda90478469dd4dd00ff3$export$default,
+    sort: $ecdbecb740644e309843855c8e037e87$export$default,
+    call: $c30e715d50450dde96536afacee70bc4$export$default,
+    nodes: $ebb62fac56470a5dcf5fe70e99504dca$export$default,
+    node: $66be5410f2b027751662d45fa7bc334b$export$default,
+    size: $4faa51486094e7a877c3c13163125b0b$export$default,
+    empty: $c4157691487415935f7f8687770475f0$export$default,
+    each: $03e5577617a89961b54b43b49158df63$export$default,
+    attr: $d2339f5a21288836db0dbfb70dcab0c7$export$default,
+    style: $956fad25c45e04d774ab6172ee26a78d$export$default,
+    property: $976662770b6c16b2cac25b4c0672c49a$export$default,
+    classed: $8806e16a8de44897b600333b85c77f38$export$default,
+    text: $fba00137978ebea003bd3f69b97e83b2$export$default,
+    html: $6c0a9d5fadf5707a808de076d780889d$export$default,
+    raise: $27fa44323694e19409bbcda80766c74c$export$default,
+    lower: $501010b0915c6cf1fcb2e2ae9e1fccd1$export$default,
+    append: $c2767b7bd498439479c2888ff90c6761$export$default,
+    insert: $486136cb043f00c4fe24e1d396520aa0$export$default,
+    remove: $ae507190a5c1bd17d5f698d678fff2dc$export$default,
+    clone: $92a153b3b8d723e4c01ed619b7fd6de7$export$default,
+    datum: $5bc7e45b800667c5e8402ec19b34c309$export$default,
+    on: $be397344a8e2fd1076b538832f70db33$export$default,
+    dispatch: $ad9cb8518207cde5fab84f27adc51c6b$export$default,
+    [Symbol.iterator]: $40d752073f36d156cfefccf5d3b27598$export$default
+  };
+  var $e993fd4cd330c3edbc4011f7539819bb$export$default = function (selector) {
+    return typeof selector === "string" ? new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection([[document.querySelector(selector)]], [document.documentElement]) : new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection([[selector]], $335d4abf3982ea8c06e1168e360d6ecd$export$root);
+  };
+  class $d3f60a93bd10b483e21045daeca73e8b$export$default {
+    constructor(svg) {
+      this.svg = svg;
+      this.d3SVG = $e993fd4cd330c3edbc4011f7539819bb$export$default(this.svg);
+      this.svg.style.width = "100%";
+      this.svg.style.height = "100%";
+      this.svg.style.position = "absolute";
+      this.svg.style.zIndex = "1000";
+      this.svg.style.pointerEvents = "none";
+      this.svg.style.overflow = "visible";
+      this._selectMarker = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      this._selectMarker.setAttribute("fill", "rgba(124, 124, 247, 0.3)");
+      this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
+      this._selectMarker.setAttribute("stroke-width", 1);
+      this._selectMarker.setAttribute("stroke-dasharray", "5,5");
+    }
+    setSchema(schema) {
+      this.schema = schema;
+    }
+    init() {
+      this.svg.appendChild(this._selectMarker);
+      this.xAxisAnchor = this.d3SVG.append("g");
+      this.yAxisAnchor = this.d3SVG.append("g");
+    }
+    updateView(currentXRange, currentYRange, width, height) {
+      this.currentXRange = currentXRange;
+      this.currentYRange = currentYRange;
+      this.width = width;
+      this.height = height;
+      if (this.currentXRange) {
+        this.xAxis = this._calculateAxis("x", this.schema.xAxis, this.schema, $794bbb298c1fc0cc3157526701549b8c$init().getScaleForSchema("x", this.schema), this.xAxisAnchor);
+      }
+      if (this.xAxis) {
+        this.xAxisAnchor.call(this.xAxis);
+      }
+      if (this.currentYRange) {
+        this.yAxis = this._calculateAxis("y", this.schema.yAxis, this.schema, $794bbb298c1fc0cc3157526701549b8c$init().getScaleForSchema("y", this.schema), this.yAxisAnchor);
+      }
+      if (this.yAxis) {
+        this.yAxisAnchor.call(this.yAxis);
+      }
+    }
+    _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
+      let axis, domain, range;
+      if (dimension === "x") {
+        domain = this.currentXRange;
+        range = [0, this.width];
+        switch (orientation) {
+          case "top":
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisTop();
+            anchor.attr("transform", `translate(0, 0)`);
+            break;
+          case "center":
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisBottom();
+            anchor.attr("transform", `translate(0, ${this.height / 2})`);
+            break;
+          case "bottom":
+          default:
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisBottom();
+            anchor.attr("transform", `translate(0, ${this.height})`);
+            break;
+        }
+      }
+      if (dimension === "y") {
+        domain = this.currentYRange;
+        range = [this.height, 0];
+        switch (orientation) {
+          case "center":
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisRight();
+            anchor.attr("transform", `translate(${this.width / 2}, 0)`);
+            break;
+          case "right":
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisRight();
+            anchor.attr("transform", `translate(${this.width}, 0)`);
+            break;
+          case "left":
+          default:
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisLeft();
+            anchor.attr("transform", `translate(0, 0)`);
+            break;
+        }
+      }
+      let genomic = false;
+      for (const track of schema.tracks) {
+        if (track[dimension].type && track[dimension].type.includes("genomic")) {
+          genomic = true;
+        }
+      }
+      if (!genomic) {
+        return axis.scale($58645d8f0414d4e672ef41e54377799e$export$default().domain(domain).range(range));
+      }
+      let tickInfo;
+      if (dimension === "x") {
+        tickInfo = genomeScale.getTickCoordsAndLabels(domain[0], domain[1]);
+      } else {
+        tickInfo = genomeScale.getTickCoordsAndLabels(range[0], range[1]);
+      }
+      return axis.scale($58645d8f0414d4e672ef41e54377799e$export$default().domain(domain).range(range)).tickValues(tickInfo.tickCoords).tickFormat((_, index) => tickInfo.tickLabels[index]);
+    }
+    /**
+    * Updates user selection view if they have selected a box
+    */
+    _updateBoxSelectView(points) {
+      if (points.length !== 4) {
+        return;
+      }
+      const topLeftCorner = this._calculateViewportSpotInverse(points[0], points[1]);
+      const bottomRightCorner = this._calculateViewportSpotInverse(points[2], points[3]);
+      let pointAttr = `${topLeftCorner[0]},${topLeftCorner[1]} 
+                     ${topLeftCorner[0]},${bottomRightCorner[1]}, 
+                     ${bottomRightCorner[0]},${bottomRightCorner[1]}
+                     ${bottomRightCorner[0]},${topLeftCorner[1]}
+                     `;
+      this._selectMarker.setAttribute("points", pointAttr);
+    }
+    updateSelectView(points) {
+      if (points.length === 4) {
+        this._updateBoxSelectView(points);
+        return;
+      }
+      if (points.length < 6) {
+        this._selectMarker.setAttribute("points", "");
+        return;
+      }
+      let pointAttr = "";
+      for (let i = 0; i < points.length; i += 2) {
+        const asCanvasPoint = this._calculateViewportSpotInverse(points[i], points[i + 1]);
+        pointAttr += `${asCanvasPoint[0]}, ${asCanvasPoint[1]} `;
+      }
+      this._selectMarker.setAttribute("points", pointAttr);
+    }
+    /**
+    * Calculate the location on the canvas a real coordniate corresponds to.
+    *
+    * @param {Float} viewportX x coordinate of data space
+    * @param {Float} viewportY y coordniate of data space
+    * @returns canvas coordindate as array
+    */
+    _calculateViewportSpotInverse(viewportX, viewportY) {
+      const inverseScaleX = $794bbb298c1fc0cc3157526701549b8c$init().scale(this.currentXRange, [0, this.width]);
+      // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
+      const inverseScaleY = $794bbb298c1fc0cc3157526701549b8c$init().scale(this.currentYRange, [this.height, 0]);
+      return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
+    }
   }
   class $ea9fc8a1b0a7e0be7497639e5ed20241$export$default {
     /**
     *
     * @param {HTMLElement} element meant to read mouse events, necessary since OffscreenCanvas cannot read DOM events
-    * @param {Handler} handler that is using
+    * @param {WebGLVis} handler WebGLVis that is using this mousereader
     */
     constructor(element, handler) {
       this.element = element;
@@ -5198,17 +6775,16 @@
       this._currentSelectionPoints = [];
       this.tool = "box";
       // Initializing elements to show user their current selection
-      this._selectContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      this._selectContainer.style.width = "100%";
-      this._selectContainer.style.height = "100%";
-      this._selectContainer.style.position = "absolute";
-      this._selectContainer.style.zIndex = "1000";
-      this._selectContainer.style.pointerEvents = "none";
-      this._selectMarker = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-      this._selectMarker.setAttribute("fill", "rgba(124, 124, 247, 0.3)");
-      this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
-      this._selectMarker.setAttribute("stroke-width", 1);
-      this._selectMarker.setAttribute("stroke-dasharray", "5,5");
+      this.SVGInteractor = new $d3f60a93bd10b483e21045daeca73e8b$export$default(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
+    }
+    /**
+    * Set the schema of the mouse reader and the svg interaction
+    * @param {Object} schema
+    */
+    setSchema(schema) {
+      this.viewport = $794bbb298c1fc0cc3157526701549b8c$init().getViewportForSchema(schema);
+      this.SVGInteractor.setSchema(schema);
+      this._updateSVG();
     }
     /**
     * Set the viewport in the format mouseReader.viewport = [minX, maxX, minY, maxY].
@@ -5232,8 +6808,9 @@
     init() {
       this.width = this.element.clientWidth;
       this.height = this.element.clientHeight;
-      this.element.appendChild(this._selectContainer);
-      this._selectContainer.appendChild(this._selectMarker);
+      this.element.appendChild(this.SVGInteractor.svg);
+      this.SVGInteractor.init();
+      this._updateSVG();
       this.element.addEventListener("wheel", this._onWheel.bind(this), false);
       let mouseDown = false;
       this.element.addEventListener("mousedown", event => {
@@ -5264,7 +6841,7 @@
           case "tooltip":
             break;
         }
-        this._updateSelectView();
+        this._updateSVG();
       }, false);
       this.element.addEventListener("mouseup", event => {
         mouseDown = false;
@@ -5281,7 +6858,7 @@
           case "lasso":
             if (this._currentSelectionPoints.length < 6) {
               this._currentSelectionPoints = [];
-              this._updateSelectView();
+              this._updateSVG();
               return;
             }
             this._onSelect();
@@ -5349,7 +6926,7 @@
         }
       }
       this.handler.sendDrawerState(this.getViewport());
-      this._updateSelectView();
+      this._updateSVG();
     }
     /**
     * Method to handle a clicked mouse moving around canvas to pan around canvas.
@@ -5379,7 +6956,7 @@
         }
       }
       this.handler.sendDrawerState(this.getViewport());
-      this._updateSelectView();
+      this._updateSVG();
     }
     /**
     * Checks if this.currentXRange is valid with first element less than second
@@ -5400,40 +6977,12 @@
       return this.currentYRange[1] >= this.currentYRange[0];
     }
     /**
-    * Updates user selection view if they have selected a box
+    * Updates the DOM component used to show user selection or axis.
+    * Calls methods from SVGInteractor.
     */
-    _updateBoxSelectView() {
-      if (this._currentSelectionPoints.length !== 4) {
-        return;
-      }
-      const topLeftCorner = this._calculateViewportSpotInverse(this._currentSelectionPoints[0], this._currentSelectionPoints[1]);
-      const bottomRightCorner = this._calculateViewportSpotInverse(this._currentSelectionPoints[2], this._currentSelectionPoints[3]);
-      let pointAttr = `${topLeftCorner[0]},${topLeftCorner[1]} 
-                     ${topLeftCorner[0]},${bottomRightCorner[1]}, 
-                     ${bottomRightCorner[0]},${bottomRightCorner[1]}
-                     ${bottomRightCorner[0]},${topLeftCorner[1]}
-                     `;
-      this._selectMarker.setAttribute("points", pointAttr);
-    }
-    /**
-    * Updates the DOM component used to show user selection.
-    * If user has only 2 selection points calls {@link MouseReader#_updateBoxSelectView}
-    */
-    _updateSelectView() {
-      if (this._currentSelectionPoints.length === 4) {
-        this._updateBoxSelectView();
-        return;
-      }
-      if (this._currentSelectionPoints.length < 6) {
-        this._selectMarker.setAttribute("points", "");
-        return;
-      }
-      let pointAttr = "";
-      for (let i = 0; i < this._currentSelectionPoints.length; i += 2) {
-        const asCanvasPoint = this._calculateViewportSpotInverse(this._currentSelectionPoints[i], this._currentSelectionPoints[i + 1]);
-        pointAttr += `${asCanvasPoint[0]}, ${asCanvasPoint[1]} `;
-      }
-      this._selectMarker.setAttribute("points", pointAttr);
+    _updateSVG() {
+      this.SVGInteractor.updateView(this.currentXRange, this.currentYRange, this.width, this.height);
+      this.SVGInteractor.updateSelectView(this._currentSelectionPoints);
     }
     /**
     * Executes when user has confirmed selection points (typically by releasing mouse)
@@ -5449,23 +6998,10 @@
     * @returns viewport coordinate as array
     */
     _calculateViewportSpot(canvasX, canvasY) {
-      const scaleX = $794bbb298c1fc0cc3157526701549b8c$export$scale([0, this.width], this.currentXRange);
+      const scaleX = $794bbb298c1fc0cc3157526701549b8c$init().scale([0, this.width], this.currentXRange);
       // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
-      const scaleY = $794bbb298c1fc0cc3157526701549b8c$export$scale([this.height, 0], this.currentYRange);
+      const scaleY = $794bbb298c1fc0cc3157526701549b8c$init().scale([this.height, 0], this.currentYRange);
       return [scaleX(canvasX), scaleY(canvasY)];
-    }
-    /**
-    * Calculate the location on the canvas a real coordniate corresponds to.
-    *
-    * @param {Float} viewportX x coordinate of data space
-    * @param {Float} viewportY y coordniate of data space
-    * @returns canvas coordindate as array
-    */
-    _calculateViewportSpotInverse(viewportX, viewportY) {
-      const inverseScaleX = $794bbb298c1fc0cc3157526701549b8c$export$scale(this.currentXRange, [0, this.width]);
-      // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
-      const inverseScaleY = $794bbb298c1fc0cc3157526701549b8c$export$scale(this.currentYRange, [this.height, 0]);
-      return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
     }
   }
   // ASSET: node_modules/jsonschema/lib/index.js
@@ -8170,6 +9706,12 @@
     type: "object",
     required: ["tracks"],
     properties: {
+      xAxis: {
+        enum: ["bottom", "top", "center"]
+      },
+      yAxis: {
+        enum: ["left", "right", "center"]
+      },
       tracks: {
         type: "array",
         items: {
@@ -8234,9 +9776,6 @@
         properties: {
           scale: {
             enum: ["linear", "log", "sqrt"]
-          },
-          axis: {
-            enum: ["bottom", "top"]
           }
         },
         allOf: [{
@@ -8248,9 +9787,6 @@
         properties: {
           scale: {
             enum: ["linear", "log", "sqrt"]
-          },
-          axis: {
-            enum: ["left", "right"]
           }
         },
         allOf: [{
@@ -8646,7 +10182,7 @@
       if (!$c8f06cc078f97a945737a566c0b1ac42$export$default(schema)) {
         return false;
       }
-      this.mouseReader.viewport = $794bbb298c1fc0cc3157526701549b8c$export$schemaViewport(schema);
+      this.mouseReader.setSchema(schema);
       this.sendDrawerState(this.mouseReader.getViewport());
       this.webglWorker.postMessage({
         type: "schema",
@@ -8722,7 +10258,7 @@
         theme: "light",
         history: 25,
         top: "-20px",
-        left: `${this.width}px`,
+        left: `${this.width / 2}px`,
         transform: "translateX(-100%)"
       });
     }
@@ -8799,4 +10335,4 @@
   });
 })();
 
-//# sourceMappingURL=index.df37118f.js.map
+//# sourceMappingURL=index.b0491e0f.js.map

@@ -1,5 +1,5 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.756994ba.js");
+  importScripts("./offscreen-webgl-worker.3ff5d79e.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
@@ -9296,7 +9296,7 @@
       let currentTrackShaderIndex = 0;
       while (currentTrack) {
         // Construct calculator in track loop as calculator keeps internal state for each track
-        let vertexCalculator = new ($6d3e717fed031fdb2ee2c357e03764b6$init().default)([this.minX, this.maxX], [this.minY, this.maxY], currentTrack.track);
+        let vertexCalculator = new ($6d3e717fed031fdb2ee2c357e03764b6$init().default)(schemaHelper.xScale, schemaHelper.yScale, currentTrack.track);
         let currentMark = currentTrack.getNextMark();
         while (currentMark) {
           this.trackShaders[currentTrackShaderIndex].addMarkToBuffers(currentMark, vertexCalculator);
@@ -9396,4 +9396,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.4755d593.js.map
+//# sourceMappingURL=offscreen-webgl-worker.b2cf71a4.js.map
