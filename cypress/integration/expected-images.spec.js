@@ -3,15 +3,14 @@ import { expectCanvasToLookLike } from "../support";
 describe("The canvas should match test images", function () {
   before(() => {
     cy.visit("http://localhost:1234");
-    cy.window().then((win) => {
-      win.app.visualization.setCanvasSize(200, 200);
-    });
-    cy.wait(100); // wait for resize to occur
   });
 
   const renderAndCheck = (presetName) => {
     cy.get("#schema-select").select(presetName);
     cy.get("#refresh-schema").click();
+    cy.window().then((win) => {
+      win.app.visualization.setCanvasSize(200, 200);
+    });
     cy.wait(1000); // Wait for drawing to occur
     expectCanvasToLookLike(presetName);
   };
