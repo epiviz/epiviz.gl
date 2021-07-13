@@ -12,6 +12,7 @@ import inlineData from "../examples/inline-data";
 import doubleInlineData from "../examples/double-inline-data";
 import tinyScatter from "../examples/tiny-scatter";
 import scatterGrid from "../examples/scatter-grid";
+import scatterGridMargins from "../examples/scatter-grid-margins";
 import heatmap from "../examples/heatmap";
 import signedBarChart from "../examples/signed-bar-chart";
 import verticalSignedBarChart from "../examples/vertical-signed-bar-chart";
@@ -36,6 +37,7 @@ const exampleMap = new Map([
   ["vertical-signed-bar-chart", verticalSignedBarChart],
   ["box-track", boxTrack],
   ["line-track", lineTrack],
+  ["scatter-grid-margins", scatterGridMargins],
 ]);
 
 class Toolbar {

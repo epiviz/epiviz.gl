@@ -1,4 +1,8 @@
-import { scale, getViewportForSchema } from "./utilities";
+import {
+  scale,
+  getViewportForSchema,
+  getDimAndMarginStyleForSchema,
+} from "./utilities";
 import SVGInteractor from "./svg-interactor";
 
 /**
@@ -30,8 +34,6 @@ class MouseReader {
     this.element.style.width = "100%";
     this.element.style.height = "100%";
 
-    this.element.id = "mouse-reader";
-
     this.handler = handler;
 
     this._currentSelectionPoints = [];
@@ -49,6 +51,11 @@ class MouseReader {
    * @param {Object} schema
    */
   setSchema(schema) {
+    const styles = getDimAndMarginStyleForSchema(schema);
+    this.element.style.width = styles.width;
+    this.element.style.height = styles.height;
+    this.element.style.margin = styles.margin;
+
     this.viewport = getViewportForSchema(schema);
     this.SVGInteractor.setSchema(schema);
     this._updateSVG();
@@ -81,7 +88,7 @@ class MouseReader {
     this.width = this.element.clientWidth;
     this.height = this.element.clientHeight;
 
-    this.element.appendChild(this.SVGInteractor.svg);
+    this.element.parentElement.appendChild(this.SVGInteractor.svg);
     this.SVGInteractor.init();
     this._updateSVG();
 

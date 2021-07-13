@@ -146,6 +146,30 @@ const getScaleForSchema = (dimension, schema) => {
   return new GenomeScale(genome, [smallestGene, largestGene]);
 };
 
+const DEFAULT_MARGIN = "2em";
+const getDimAndMarginStyleForSchema = (schema) => {
+  if (schema.margins === undefined) {
+    return {
+      width: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
+      height: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
+      margin: DEFAULT_MARGIN,
+    };
+  }
+  let toReturn = {};
+  toReturn.width = `calc(100% - ${schema.margins.left || DEFAULT_MARGIN} - ${
+    schema.margins.right || DEFAULT_MARGIN
+  })`;
+  toReturn.height = `calc(100% - ${schema.margins.top || DEFAULT_MARGIN} - ${
+    schema.margins.bottom || DEFAULT_MARGIN
+  })`;
+  // Shorthand for top right bottom left
+  toReturn.margin = `${schema.margins.top || DEFAULT_MARGIN}
+                     ${schema.margins.right || DEFAULT_MARGIN}
+                     ${schema.margins.bottom || DEFAULT_MARGIN}
+                     ${schema.margins.left || DEFAULT_MARGIN}`;
+  return toReturn;
+};
+
 export {
   scale,
   rgbToHex,
@@ -153,4 +177,5 @@ export {
   getViewportForSchema,
   colorSpecifierToHex,
   getScaleForSchema,
+  getDimAndMarginStyleForSchema,
 };

@@ -1,4 +1,8 @@
-import { scale, getScaleForSchema } from "./utilities";
+import {
+  scale,
+  getScaleForSchema,
+  getDimAndMarginStyleForSchema,
+} from "./utilities";
 
 const d3Axis = require("d3-axis");
 const d3Scale = require("d3-scale");
@@ -38,6 +42,11 @@ class SVGInteractor {
    */
   setSchema(schema) {
     this.schema = schema;
+
+    const styles = getDimAndMarginStyleForSchema(schema);
+    this.svg.style.width = styles.width;
+    this.svg.style.height = styles.height;
+    this.svg.style.margin = styles.margin;
   }
 
   /**

@@ -1,6 +1,7 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
 import isJSONValid from "./schema-validation";
+import { getDimAndMarginStyleForSchema } from "./utilities";
 
 class WebGLVis {
   POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
@@ -25,8 +26,11 @@ class WebGLVis {
     this.parent.style.position = "relative";
     this.parent.style.width = "100%";
     this.parent.style.height = "100%";
+    this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
+    this.canvas.style.width = "100%";
+    this.canvas.style.height = "100%";
   }
 
   /**
@@ -41,6 +45,9 @@ class WebGLVis {
       width,
       height,
     });
+
+    this.canvas.style.width = width;
+    this.canvas.style.height = height;
     this.mouseReader.width = width;
     this.mouseReader.height = height;
     this.sendDrawerState(this.mouseReader.getViewport());
@@ -55,18 +62,18 @@ class WebGLVis {
    */
   addToDom() {
     this.container.appendChild(this.parent);
+    this.parent.appendChild(this.canvas);
+    this.parent.appendChild(this.mouseReader.element);
 
+    const canvasBox = this.canvas.getBoundingClientRect();
     this.width = this.parent.clientWidth;
     this.height = this.parent.clientHeight;
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+    this.canvas.width = canvasBox.width;
+    this.canvas.height = canvasBox.height;
 
     this.canvas.style.position = "absolute";
 
     this.initFpsmeter();
-
-    this.parent.appendChild(this.canvas);
-    this.parent.appendChild(this.mouseReader.element);
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
@@ -124,6 +131,16 @@ class WebGLVis {
     this.sendDrawerState(this.mouseReader.getViewport());
   }
 
+  _setMargins(schema) {
+    const styles = getDimAndMarginStyleForSchema(schema);
+    this.canvas.style.width = styles.width;
+    this.canvas.style.height = styles.height;
+    this.canvas.style.margin = styles.margin;
+
+    const canvasBox = this.canvas.getBoundingClientRect();
+    this.setCanvasSize(canvasBox.width, canvasBox.height);
+  }
+
   /**
    * Set the schema of the visualization, and then render it.
    *
@@ -134,6 +151,8 @@ class WebGLVis {
     if (!isJSONValid(schema)) {
       return false;
     }
+
+    this._setMargins(schema);
     this.mouseReader.setSchema(schema);
     this.sendDrawerState(this.mouseReader.getViewport());
     this.webglWorker.postMessage({ type: "schema", schema });
