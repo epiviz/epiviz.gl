@@ -2,6 +2,7 @@ import csv from "url:../data/heatmap.csv";
 
 export default JSON.stringify(
   {
+    xAxis: "top",
     defaultData: csv,
     tracks: [
       {
@@ -11,14 +12,12 @@ export default JSON.stringify(
           attribute: "sample",
           type: "categorical",
           cardinality: 4,
-          axis: "bottom",
           scale: "linear",
         },
         y: {
           attribute: "subject",
           type: "categorical",
           cardinality: 4,
-          axis: "left",
           scale: "linear",
         },
         color: {

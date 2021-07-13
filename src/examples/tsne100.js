@@ -12,14 +12,12 @@ export default JSON.stringify(
           attribute: "x",
           type: "quantitative",
           domain: [-10, 10],
-          axis: "bottom",
           scale: "linear",
         },
         y: {
           attribute: "y",
           type: "quantitative",
           domain: [-10, 10],
-          axis: "left",
           scale: "linear",
         },
         color: {
@@ -28,7 +26,7 @@ export default JSON.stringify(
           cardinality: 32,
           colorScheme: "interpolateRainbow",
         },
-        opacity: { value: 0.05 },
+        opacity: { value: 0.5 },
       },
     ],
   },

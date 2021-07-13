@@ -10,13 +10,11 @@ export default JSON.stringify(
           attribute: "day",
           type: "quantitative",
           domain: [1, 10],
-          axis: "bottom",
         },
         y: {
           attribute: "price",
           type: "quantitative",
           domain: [0, 40],
-          axis: "left",
           scale: "linear",
         },
         color: {
