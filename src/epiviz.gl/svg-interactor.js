@@ -33,6 +33,11 @@ class SVGInteractor {
     this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
     this._selectMarker.setAttribute("stroke-width", 1);
     this._selectMarker.setAttribute("stroke-dasharray", "5,5");
+
+    this._labelMarker = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g"
+    );
   }
 
   /**
@@ -47,6 +52,13 @@ class SVGInteractor {
     this.svg.style.width = styles.width;
     this.svg.style.height = styles.height;
     this.svg.style.margin = styles.margin;
+
+    this.initialX = undefined; // used for updating labels
+    this.initialY = undefined;
+    d3Selection.select(this._labelMarker).selectAll("*").remove();
+    for (const _ of this.schema.labels || []) {
+      d3Selection.select(this._labelMarker).append("text");
+    }
   }
 
   /**
@@ -54,6 +66,7 @@ class SVGInteractor {
    */
   init() {
     this.svg.appendChild(this._selectMarker);
+    this.svg.appendChild(this._labelMarker);
     this.xAxisAnchor = this.d3SVG.append("g");
     this.yAxisAnchor = this.d3SVG.append("g");
   }
@@ -79,6 +92,10 @@ class SVGInteractor {
         getScaleForSchema("x", this.schema),
         this.xAxisAnchor
       );
+
+      if (this.schema.labels) {
+        this.updateLabels();
+      }
     }
 
     if (this.xAxis) {
@@ -98,6 +115,46 @@ class SVGInteractor {
     if (this.yAxis) {
       this.yAxisAnchor.call(this.yAxis);
     }
+  }
+
+  updateLabels() {
+    if (!this.initialX && this.schema.labels) {
+      this.initialX = this.schema.labels.map(
+        (label) => this._calculateViewportSpotInverse(label.x, label.y)[0]
+      );
+    }
+    if (!this.initialY && this.schema.labels) {
+      this.initialY = this.schema.labels.map(
+        (label) => this._calculateViewportSpotInverse(label.x, label.y)[1]
+      );
+    }
+
+    d3Selection
+      .select(this._labelMarker)
+      .selectAll("text")
+      .data(this.schema.labels)
+      .text((d) => d.text)
+      .attr("x", (d, i) => {
+        if (d.fixedX) {
+          return this.initialX[i];
+        }
+        return this._calculateViewportSpotInverse(d.x, d.y)[0];
+      })
+      .attr("y", (d, i) => {
+        if (d.fixedY) {
+          return this.initialY[i];
+        }
+        return this._calculateViewportSpotInverse(d.x, d.y)[1];
+      })
+      .each(function (d) {
+        // Set any possible svg properties specified in label
+        for (const property in d) {
+          if (["x", "y", "text"].includes(property)) {
+            continue;
+          }
+          d3Selection.select(this).attr(property, d[property]);
+        }
+      });
   }
 
   _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {

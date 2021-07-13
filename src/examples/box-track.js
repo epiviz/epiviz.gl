@@ -2,6 +2,17 @@ import csv from "url:../data/box-track.csv";
 
 export default JSON.stringify(
   {
+    margins: {
+      left: "4em",
+    },
+    labels: [
+      {
+        y: 0.05,
+        x: -1.3,
+        text: "Box 1",
+        fixedX: true,
+      },
+    ],
     xAxis: "zero",
     yAxis: "none",
     defaultData: csv,
