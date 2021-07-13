@@ -43,7 +43,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.b0491e0f.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.b2cf71a4.js\",\"1S3Hi\":\"data-processor-worker.82cb4296.js\",\"20dyd\":\"index.10f1aa48.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.2b3693f6.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.8bfc81c2.js\",\"1S3Hi\":\"data-processor-worker.8abd338d.js\",\"20dyd\":\"index.c70f1414.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3239,14 +3239,12 @@
         attribute: "x",
         type: "quantitative",
         domain: [-10, 10],
-        axis: "bottom",
         scale: "linear"
       },
       y: {
         attribute: "y",
         type: "quantitative",
         domain: [-10, 10],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3330,14 +3328,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3354,14 +3350,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3381,14 +3375,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3400,6 +3392,8 @@
     }]
   }, null, 2);
   var $06294e840446056ad074ad50bb09449b$export$default = JSON.stringify({
+    xAxis: "zero",
+    yAxis: "left",
     tracks: [{
       order: 1,
       data: $df282eba898e0e889073ebd022fefed9$$interop$default,
@@ -3409,14 +3403,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3434,14 +3426,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3458,6 +3448,8 @@
   var $4ebe4b0d71af6f636de836cf32fbe13e$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ebe4b0d71af6f636de836cf32fbe13e$exports);
   var $0f98a365f816c6c3b2771c04be944e48$export$default = JSON.stringify({
     defaultData: $4ebe4b0d71af6f636de836cf32fbe13e$$interop$default,
+    xAxis: "top",
+    yAxis: "left",
     tracks: [{
       tooltips: 1,
       mark: "tick",
@@ -3465,14 +3457,12 @@
       x: {
         attribute: "time",
         type: "quantitative",
-        domain: [0, 10],
-        axis: "top"
+        domain: [0, 10]
       },
       y: {
         attribute: "sample",
         type: "categorical",
-        cardinality: 3,
-        axis: "left"
+        cardinality: 3
       },
       color: {
         attribute: "strength",
@@ -3534,14 +3524,12 @@
         attribute: "x",
         type: "quantitative",
         domain: [-10, 10],
-        axis: "bottom",
         scale: "linear"
       },
       y: {
         attribute: "y",
         type: "quantitative",
         domain: [-10, 10],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3551,7 +3539,7 @@
         colorScheme: "interpolateRainbow"
       },
       opacity: {
-        value: 0.05
+        value: 0.5
       }
     }]
   }, null, 2);
@@ -3564,14 +3552,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [1, 10],
-        axis: "bottom"
+        domain: [1, 10]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3642,14 +3628,12 @@
       x: {
         attribute: "day",
         type: "quantitative",
-        domain: [0, 5],
-        axis: "bottom"
+        domain: [0, 5]
       },
       y: {
         attribute: "price",
         type: "quantitative",
         domain: [0, 40],
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3694,6 +3678,61 @@
   $a849e1ad706408dab39aa942681c7f64$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "1Ls68");
   var $a849e1ad706408dab39aa942681c7f64$$interop$default = /*@__PURE__*/$parcel$interopDefault($a849e1ad706408dab39aa942681c7f64$exports);
   var $d4eb447e3830ce64d9d9844a053aa807$export$default = JSON.stringify({
+    margins: {
+      top: "4em",
+      left: "3em",
+      bottom: 0,
+      right: 0
+    },
+    labels: [{
+      x: -0.5,
+      y: 1.1,
+      text: "SUBJECT VS SAMPLE MAP",
+      fixedX: true,
+      fixedY: true
+    }, {
+      x: -0.8,
+      y: 1.05,
+      text: "a",
+      fixedY: true
+    }, {
+      x: -0.3,
+      y: 1.05,
+      text: "b",
+      fixedY: true
+    }, {
+      x: 0.2,
+      y: 1.05,
+      text: "c",
+      fixedY: true
+    }, {
+      x: 0.7,
+      y: 1.05,
+      text: "d",
+      fixedY: true
+    }, {
+      x: -1.1,
+      y: 0.8,
+      text: "a",
+      fixedX: true
+    }, {
+      x: -1.1,
+      y: 0.3,
+      text: "b",
+      fixedX: true
+    }, {
+      x: -1.1,
+      y: -0.3,
+      text: "c",
+      fixedX: true
+    }, {
+      x: -1.1,
+      y: -0.8,
+      text: "d",
+      fixedX: true
+    }],
+    xAxis: "none",
+    yAxis: "none",
     defaultData: $a849e1ad706408dab39aa942681c7f64$$interop$default,
     tracks: [{
       tooltips: 1,
@@ -3702,14 +3741,12 @@
         attribute: "sample",
         type: "categorical",
         cardinality: 4,
-        axis: "bottom",
         scale: "linear"
       },
       y: {
         attribute: "subject",
         type: "categorical",
         cardinality: 4,
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3726,8 +3763,19 @@
       }
     }]
   }, null, 2);
+  const $66d52080171abc5351c14cb43ff3c04e$var$buildGrid = cellsPerRow => {
+    const toReturn = [];
+    for (let i = 0; i < cellsPerRow; i++) {
+      for (let j = 0; j < cellsPerRow; j++) {
+        toReturn.push(`${i / cellsPerRow},${j / cellsPerRow}`);
+      }
+    }
+    return toReturn;
+  };
   var $39b829b66c49ff9e9c7cba8890167cf4$export$default = JSON.stringify({
     defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
+    xAxis: "zero",
+    yAxis: "right",
     tracks: [{
       tooltips: 1,
       mark: "rect",
@@ -3735,12 +3783,10 @@
       x: {
         attribute: "x",
         type: "quantitative",
-        domain: [0, 10],
-        axis: "bottom"
+        domain: [0, 10]
       },
       y: {
         value: 0,
-        axis: "left",
         scale: "linear"
       },
       color: {
@@ -3760,21 +3806,47 @@
       }
     }]
   }, null, 2);
+  var $66d52080171abc5351c14cb43ff3c04e$export$default = JSON.stringify({
+    margins: {
+      top: "2em",
+      bottom: "100px",
+      left: "5%",
+      right: "1em"
+    },
+    defaultData: ["x,y"].concat($66d52080171abc5351c14cb43ff3c04e$var$buildGrid(5)),
+    tracks: [{
+      tooltips: 1,
+      mark: "point",
+      x: {
+        attribute: "x",
+        type: "quantitative",
+        domain: [0, 1]
+      },
+      y: {
+        attribute: "y",
+        type: "quantitative",
+        domain: [0, 1]
+      },
+      size: {
+        value: 5
+      }
+    }]
+  }, null, 2);
   var $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default = JSON.stringify({
     defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
+    xAxis: "bottom",
+    yAxis: "zero",
     tracks: [{
       tooltips: 1,
       mark: "rect",
       layout: "linear",
       x: {
-        value: 0,
-        axis: "bottom"
+        value: 0
       },
       y: {
         attribute: "x",
         type: "quantitative",
-        domain: [0, 10],
-        axis: "left"
+        domain: [0, 10]
       },
       color: {
         attribute: "type",
@@ -3798,7 +3870,17 @@
   $4ba204665ead0e711ea03dbeb63addd3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "3hl2O");
   var $4ba204665ead0e711ea03dbeb63addd3$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ba204665ead0e711ea03dbeb63addd3$exports);
   var $a45e353aa6a197e52ec53fe3a27eca5c$export$default = JSON.stringify({
-    xAxis: "center",
+    margins: {
+      left: "4em"
+    },
+    labels: [{
+      y: 0.05,
+      x: -1.3,
+      text: "Box 1",
+      fixedX: true
+    }],
+    xAxis: "zero",
+    yAxis: "none",
     defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
     tracks: [{
       tooltips: 1,
@@ -3853,7 +3935,7 @@
       }
     }]
   }, null, 2);
-  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default]]);
+  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default], ["scatter-grid-margins", $66d52080171abc5351c14cb43ff3c04e$export$default]]);
   class $9e70f4d5b36c39388b117fee7d542725$export$default {
     /**
     * A class meant to handle changing options on the scatter plot
@@ -6615,6 +6697,12 @@
     return typeof selector === "string" ? new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection([[document.querySelector(selector)]], [document.documentElement]) : new $335d4abf3982ea8c06e1168e360d6ecd$export$Selection([[selector]], $335d4abf3982ea8c06e1168e360d6ecd$export$root);
   };
   class $d3f60a93bd10b483e21045daeca73e8b$export$default {
+    /**
+    * A class used to illustrate state of the visualization on the main thread such as
+    * selection or axis.
+    *
+    * @param {SVGElement} svg container for all svg elements
+    */
     constructor(svg) {
       this.svg = svg;
       this.d3SVG = $e993fd4cd330c3edbc4011f7539819bb$export$default(this.svg);
@@ -6629,15 +6717,43 @@
       this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
       this._selectMarker.setAttribute("stroke-width", 1);
       this._selectMarker.setAttribute("stroke-dasharray", "5,5");
+      this._labelMarker = document.createElementNS("http://www.w3.org/2000/svg", "g");
     }
+    /**
+    * Set the schema for this class to refer to.
+    *
+    * @param {Object} schema
+    */
     setSchema(schema) {
       this.schema = schema;
+      const styles = $794bbb298c1fc0cc3157526701549b8c$init().getDimAndMarginStyleForSchema(schema);
+      this.svg.style.width = styles.width;
+      this.svg.style.height = styles.height;
+      this.svg.style.margin = styles.margin;
+      this.initialX = undefined;
+      // used for updating labels
+      this.initialY = undefined;
+      $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).selectAll("*").remove();
+      for (const _ of this.schema.labels || []) {
+        $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).append("text");
+      }
     }
+    /**
+    * Add svg elements to the DOM
+    */
     init() {
       this.svg.appendChild(this._selectMarker);
+      this.svg.appendChild(this._labelMarker);
       this.xAxisAnchor = this.d3SVG.append("g");
       this.yAxisAnchor = this.d3SVG.append("g");
     }
+    /**
+    * Update the svg using the new viewport information
+    * @param {Array} currentXRange of mousereader
+    * @param {Array} currentYRange of mousereader
+    * @param {Number} width of mousereader
+    * @param {Number} height of mousereader
+    */
     updateView(currentXRange, currentYRange, width, height) {
       this.currentXRange = currentXRange;
       this.currentYRange = currentYRange;
@@ -6645,6 +6761,9 @@
       this.height = height;
       if (this.currentXRange) {
         this.xAxis = this._calculateAxis("x", this.schema.xAxis, this.schema, $794bbb298c1fc0cc3157526701549b8c$init().getScaleForSchema("x", this.schema), this.xAxisAnchor);
+        if (this.schema.labels) {
+          this.updateLabels();
+        }
       }
       if (this.xAxis) {
         this.xAxisAnchor.call(this.xAxis);
@@ -6656,12 +6775,42 @@
         this.yAxisAnchor.call(this.yAxis);
       }
     }
+    updateLabels() {
+      if (!this.initialX && this.schema.labels) {
+        this.initialX = this.schema.labels.map(label => this._calculateViewportSpotInverse(label.x, label.y)[0]);
+      }
+      if (!this.initialY && this.schema.labels) {
+        this.initialY = this.schema.labels.map(label => this._calculateViewportSpotInverse(label.x, label.y)[1]);
+      }
+      $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).selectAll("text").data(this.schema.labels).text(d => d.text).attr("x", (d, i) => {
+        if (d.fixedX) {
+          return this.initialX[i];
+        }
+        return this._calculateViewportSpotInverse(d.x, d.y)[0];
+      }).attr("y", (d, i) => {
+        if (d.fixedY) {
+          return this.initialY[i];
+        }
+        return this._calculateViewportSpotInverse(d.x, d.y)[1];
+      }).each(function (d) {
+        // Set any possible svg properties specified in label
+        for (const property in d) {
+          if (["x", "y", "text"].includes(property)) {
+            continue;
+          }
+          $e993fd4cd330c3edbc4011f7539819bb$export$default(this).attr(property, d[property]);
+        }
+      });
+    }
     _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
       let axis, domain, range;
       if (dimension === "x") {
         domain = this.currentXRange;
         range = [0, this.width];
         switch (orientation) {
+          case "none":
+            anchor.attr("transform", `translate(-1000000, -1000000)`);
+            return null;
           case "top":
             axis = $760ea7c5ee2367f072293af450f2641d$export$axisTop();
             anchor.attr("transform", `translate(0, 0)`);
@@ -6669,6 +6818,11 @@
           case "center":
             axis = $760ea7c5ee2367f072293af450f2641d$export$axisBottom();
             anchor.attr("transform", `translate(0, ${this.height / 2})`);
+            break;
+          case "zero":
+            const yScale = $58645d8f0414d4e672ef41e54377799e$export$default().domain(this.currentYRange).range([this.height, 0]);
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisBottom();
+            anchor.attr("transform", `translate(0, ${yScale(0)})`);
             break;
           case "bottom":
           default:
@@ -6681,6 +6835,9 @@
         domain = this.currentYRange;
         range = [this.height, 0];
         switch (orientation) {
+          case "none":
+            anchor.attr("transform", `translate(-1000000, -1000000)`);
+            return null;
           case "center":
             axis = $760ea7c5ee2367f072293af450f2641d$export$axisRight();
             anchor.attr("transform", `translate(${this.width / 2}, 0)`);
@@ -6688,6 +6845,11 @@
           case "right":
             axis = $760ea7c5ee2367f072293af450f2641d$export$axisRight();
             anchor.attr("transform", `translate(${this.width}, 0)`);
+            break;
+          case "zero":
+            const xScale = $58645d8f0414d4e672ef41e54377799e$export$default().domain(this.currentXRange).range([0, this.width]);
+            axis = $760ea7c5ee2367f072293af450f2641d$export$axisLeft();
+            anchor.attr("transform", `translate(${xScale(0)}, 0)`);
             break;
           case "left":
           default:
@@ -6729,6 +6891,11 @@
                      `;
       this._selectMarker.setAttribute("points", pointAttr);
     }
+    /**
+    * Update the selection box/lasso with the points as bounds
+    *
+    * @param {Array} points 1D array of coordinates that are used for selection ex. [x1,y1,x2,y2,...]
+    */
     updateSelectView(points) {
       if (points.length === 4) {
         this._updateBoxSelectView(points);
@@ -6759,6 +6926,22 @@
       return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
     }
   }
+  /**
+  * event.layerX and event.layerY are deprecated. We will use them if they are on the event, but
+  * if not we will use a manual calculation.
+  *
+  * @param {Event} event
+  * @returns layerX and layerY, coordinates of event with origin at top right corner of bounding box
+  */
+  const $ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent = event => {
+    if (event.layerX !== undefined && event.layerY !== undefined) {
+      return [event.layerX, event.layerY];
+    }
+    const bbox = event.target.getBoundingClientRect();
+    const x = event.clientX - bbox.left;
+    const y = event.clientY - bbox.top;
+    return [x, y];
+  };
   class $ea9fc8a1b0a7e0be7497639e5ed20241$export$default {
     /**
     *
@@ -6770,7 +6953,6 @@
       this.element.style.position = "absolute";
       this.element.style.width = "100%";
       this.element.style.height = "100%";
-      this.element.id = "mouse-reader";
       this.handler = handler;
       this._currentSelectionPoints = [];
       this.tool = "box";
@@ -6782,6 +6964,10 @@
     * @param {Object} schema
     */
     setSchema(schema) {
+      const styles = $794bbb298c1fc0cc3157526701549b8c$init().getDimAndMarginStyleForSchema(schema);
+      this.element.style.width = styles.width;
+      this.element.style.height = styles.height;
+      this.element.style.margin = styles.margin;
       this.viewport = $794bbb298c1fc0cc3157526701549b8c$init().getViewportForSchema(schema);
       this.SVGInteractor.setSchema(schema);
       this._updateSVG();
@@ -6808,7 +6994,7 @@
     init() {
       this.width = this.element.clientWidth;
       this.height = this.element.clientHeight;
-      this.element.appendChild(this.SVGInteractor.svg);
+      this.element.parentElement.appendChild(this.SVGInteractor.svg);
       this.SVGInteractor.init();
       this._updateSVG();
       this.element.addEventListener("wheel", this._onWheel.bind(this), false);
@@ -6820,7 +7006,7 @@
             break;
           case "box":
           case "lasso":
-            this._currentSelectionPoints = [...this._calculateViewportSpot(event.layerX, event.layerY)];
+            this._currentSelectionPoints = [...this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event))];
             break;
         }
       }, false);
@@ -6833,10 +7019,10 @@
             this._onPan(event);
             break;
           case "box":
-            this._currentSelectionPoints = this._currentSelectionPoints.slice(0, 2).concat(this._calculateViewportSpot(event.layerX, event.layerY));
+            this._currentSelectionPoints = this._currentSelectionPoints.slice(0, 2).concat(this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event)));
             break;
           case "lasso":
-            this._currentSelectionPoints.push(...this._calculateViewportSpot(event.layerX, event.layerY));
+            this._currentSelectionPoints.push(...this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event)));
             break;
           case "tooltip":
             break;
@@ -6905,8 +7091,10 @@
       if (!this.lockedX) {
         const previousX = [...this.currentXRange];
         // ... to avoid aliasing
-        this.currentXRange[0] -= event.wheelDelta * this._wheelDampenX;
-        this.currentXRange[1] += event.wheelDelta * this._wheelDampenX;
+        const t = -event.wheelDelta * this._wheelDampenX;
+        const inDataSpace = this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event));
+        this.currentXRange[0] = t * inDataSpace[0] + (1 - t) * this.currentXRange[0];
+        this.currentXRange[1] = t * inDataSpace[0] + (1 - t) * this.currentXRange[1];
         this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
         this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
         if (!this._validateXRange()) {
@@ -6916,8 +7104,10 @@
       }
       if (!this.lockedY) {
         const previousY = [...this.currentYRange];
-        this.currentYRange[0] -= event.wheelDelta * this._wheelDampenY;
-        this.currentYRange[1] += event.wheelDelta * this._wheelDampenY;
+        const t = -event.wheelDelta * this._wheelDampenY;
+        const inDataSpace = this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event));
+        this.currentYRange[0] = t * inDataSpace[1] + (1 - t) * this.currentYRange[0];
+        this.currentYRange[1] = t * inDataSpace[1] + (1 - t) * this.currentYRange[1];
         this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
         this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
         if (!this._validateYRange()) {
@@ -6993,8 +7183,8 @@
     /**
     * Calculate the location on the real coordinate space a point on the canvas corresponds to.
     *
-    * @param {Float} canvasX likely from event.layerX
-    * @param {Float} canvasY likely from event.layerY
+    * @param {Float} canvasX likely from event.layerX or getLayerXandYFromEvent
+    * @param {Float} canvasY likely from event.layerY or getLayerXandYFromEvent
     * @returns viewport coordinate as array
     */
     _calculateViewportSpot(canvasX, canvasY) {
@@ -9706,11 +9896,31 @@
     type: "object",
     required: ["tracks"],
     properties: {
+      labels: {
+        type: "array",
+        items: {
+          properties: {
+            x: {
+              type: "number"
+            },
+            y: {
+              type: "number"
+            },
+            fixedX: {
+              type: "boolean"
+            },
+            fixedY: {
+              type: "boolean"
+            },
+            required: ["x", "y"]
+          }
+        }
+      },
       xAxis: {
-        enum: ["bottom", "top", "center"]
+        enum: ["bottom", "top", "center", "none", "zero"]
       },
       yAxis: {
-        enum: ["left", "right", "center"]
+        enum: ["left", "right", "center", "none", "zero"]
       },
       tracks: {
         type: "array",
@@ -10073,6 +10283,12 @@
   const $c8f06cc078f97a945737a566c0b1ac42$var$v = new $0cb2a726714ab9e25f66a914aaf55a06$export$Validator();
   $c8f06cc078f97a945737a566c0b1ac42$var$v.addSchema($c8f06cc078f97a945737a566c0b1ac42$export$channel, "/channel");
   $c8f06cc078f97a945737a566c0b1ac42$var$v.addSchema($c8f06cc078f97a945737a566c0b1ac42$export$track, "/track");
+  /**
+  * Utility method that returns a boolean on whether the json is a valid schema.
+  * console.errors the reason if it is not.
+  * @param {Object} json schema
+  * @returns boolean
+  */
   const $c8f06cc078f97a945737a566c0b1ac42$export$default = json => {
     const validation = $c8f06cc078f97a945737a566c0b1ac42$var$v.validate(json, $c8f06cc078f97a945737a566c0b1ac42$export$visualization);
     if (!validation.valid) {
@@ -10080,6 +10296,7 @@
     }
     return validation.valid;
   };
+  $794bbb298c1fc0cc3157526701549b8c$init();
   class $b24d98818d6efd81d9f858dfc1cbed2a$export$default {
     POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze(["lockedX", "lockedY", "tool", "viewport", "currentXRange", "currentYRange"]);
     /**
@@ -10094,7 +10311,10 @@
       this.parent.style.position = "relative";
       this.parent.style.width = "100%";
       this.parent.style.height = "100%";
+      this.parent.style.overflow = "hidden";
       this.canvas = document.createElement("canvas");
+      this.canvas.style.width = "100%";
+      this.canvas.style.height = "100%";
     }
     /**
     * Resize the canvas to a particular size and rerender the data
@@ -10108,6 +10328,8 @@
         width,
         height
       });
+      this.canvas.style.width = width;
+      this.canvas.style.height = height;
       this.mouseReader.width = width;
       this.mouseReader.height = height;
       this.sendDrawerState(this.mouseReader.getViewport());
@@ -10121,14 +10343,15 @@
     */
     addToDom() {
       this.container.appendChild(this.parent);
-      this.width = this.parent.clientWidth;
-      this.height = this.parent.clientHeight;
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
-      this.canvas.style.position = "absolute";
-      this.initFpsmeter();
       this.parent.appendChild(this.canvas);
       this.parent.appendChild(this.mouseReader.element);
+      const canvasBox = this.canvas.getBoundingClientRect();
+      this.width = this.parent.clientWidth;
+      this.height = this.parent.clientHeight;
+      this.canvas.width = canvasBox.width;
+      this.canvas.height = canvasBox.height;
+      this.canvas.style.position = "absolute";
+      this.initFpsmeter();
       const offscreenCanvas = this.canvas.transferControlToOffscreen();
       this.webglWorker = new Worker($e2a27ccf5a10c3f4307fd317dc99f3cf$init());
       this.webglWorker.postMessage({
@@ -10172,6 +10395,14 @@
       }
       this.sendDrawerState(this.mouseReader.getViewport());
     }
+    _setMargins(schema) {
+      const styles = $794bbb298c1fc0cc3157526701549b8c$init().getDimAndMarginStyleForSchema(schema);
+      this.canvas.style.width = styles.width;
+      this.canvas.style.height = styles.height;
+      this.canvas.style.margin = styles.margin;
+      const canvasBox = this.canvas.getBoundingClientRect();
+      this.setCanvasSize(canvasBox.width, canvasBox.height);
+    }
     /**
     * Set the schema of the visualization, and then render it.
     *
@@ -10182,6 +10413,7 @@
       if (!$c8f06cc078f97a945737a566c0b1ac42$export$default(schema)) {
         return false;
       }
+      this._setMargins(schema);
       this.mouseReader.setSchema(schema);
       this.sendDrawerState(this.mouseReader.getViewport());
       this.webglWorker.postMessage({
@@ -10335,4 +10567,4 @@
   });
 })();
 
-//# sourceMappingURL=index.b0491e0f.js.map
+//# sourceMappingURL=index.2b3693f6.js.map

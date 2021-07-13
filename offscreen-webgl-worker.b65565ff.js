@@ -21,8 +21,8 @@
       if ((name in $parcel$modules)) {
         return $parcel$modules[name];
       }
-      // Try the node require function if it exists.
-      // Do not use `require` to prevent Webpack from trying to bundle this call
+      /*Try the node require function if it exists.*/
+      /*Do not use `require` to prevent Webpack from trying to bundle this call*/
       if (typeof module !== 'undefined' && typeof module.require === 'function') {
         return module.require(name);
       }
@@ -827,7 +827,8 @@
   /**
   * Get the VIEWPORT of the schema to be used by the mouseReader.
   * If all types for a dimension across tracks are categorical or genomic,
-  * will default to [-1, 1] for that dimension for the mouseReader.
+  * will default to [-1, 1] for that dimension for the mouseReader. If X or Y
+  * has a fixed value, it will consider the width or height channel domains.
   *
   * @param {Object} schema of visualization
   * @returns [smallestX, largestX, smallestY, largestY] of viewport
@@ -839,7 +840,13 @@
     let largestY = Number.NEGATIVE_INFINITY;
     schema.tracks.forEach(track => {
       let xDomain = track.x.domain;
+      if (!xDomain && track.x.value !== undefined && track.width.domain !== undefined) {
+        xDomain = track.width.domain;
+      }
       let yDomain = track.y.domain;
+      if (!yDomain && track.y.value !== undefined && track.height.domain !== undefined) {
+        yDomain = track.height.domain;
+      }
       if (xDomain) {
         smallestX = xDomain[0] < smallestX ? xDomain[0] : smallestX;
         largestX = xDomain[1] > largestX ? xDomain[1] : largestX;
@@ -861,7 +868,7 @@
   *
   * @param {String} dimension either x or y
   * @param {Object} schema for the visualization
-  * @returns
+  * @returns function which can be used to map to an "x" or "y" value
   */
   const $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema = (dimension, schema) => {
     if (dimension !== "x" && dimension !== "y") {
@@ -903,6 +910,28 @@
     }
     return new $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale(genome, [smallestGene, largestGene]);
   };
+  const $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN = "2em";
+  const $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema = schema => {
+    if (schema.margins === undefined) {
+      return {
+        width: `calc(100% - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`,
+        height: `calc(100% - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`,
+        margin: $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN
+      };
+    }
+    let toReturn = {};
+    toReturn.width = `calc(100% - ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${schema.margins.right || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN})`;
+    toReturn.height = `calc(100% - ${schema.margins.top || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${schema.margins.bottom || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN})`;
+    // Shorthand for top right bottom left
+    toReturn.margin = `${schema.margins.top || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
+                     ${schema.margins.right || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
+                     ${schema.margins.bottom || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
+                     ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`;
+    return toReturn;
+  };
+  $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getDimAndMarginStyleForSchema", function () {
+    return $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema;
+  });
   $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getScaleForSchema", function () {
     return $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema;
   });
@@ -926,6 +955,13 @@
   // is equal to 50 pixels
   const $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS = 1 / 100;
   class $6d3e717fed031fdb2ee2c357e03764b6$export$default {
+    /**
+    * A class used to construct the vertices of marks that are given to the drawer to draw.
+    *
+    * @param {Function or GenomeScale} xScale maps the x values of the data to clip space [-1, 1]
+    * @param {Function or GenomeScale} yScale maps the y values of the data to clip space [-1, 1]
+    * @param {Object} track from schema
+    */
     constructor(xScale, yScale, track) {
       if (xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale) {
         this.xScale = args => xScale.toClipSpaceFromParts(args[0], args[1]);
@@ -940,6 +976,12 @@
       this.track = track;
       this.drawMode = $647b390bbe26a1e6bbc6a8c9e19f41d2$export$getDrawModeForTrack(track);
     }
+    /**
+    * Transform a mark with a range for coordinates into a simpler mark to draw.
+    *
+    * @param {Object} mark that contains ranges for x or y
+    * @returns mark with fixed x and y but with appropriate width and height for drawing
+    */
     transformGenomicRangeToStandard(mark) {
       let x, y, width, height;
       if (Array.isArray(mark.x)) {
@@ -964,6 +1006,12 @@
         height
       };
     }
+    /**
+    * Construct the vertices of a mark.
+    *
+    * @param {Object} mark to draw
+    * @returns vertices of mark
+    */
     calculateForMark(mark) {
       if (this.track.x.type === "genomicRange" || this.track.y.type === "genomicRange") {
         return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
@@ -3142,6 +3190,12 @@
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$DEFAULT_MAX_HEIGHT = 1 / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$DEFAULT_COLOR_SCHEME = "interpolateBrBG";
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$SHAPES = ["dot", "triangle", "circle", "diamond"];
+  /**
+  * Given a track, determine the WebGL draw mode for it
+  *
+  * @param {Object} track from schema
+  * @returns WebGLDrawMode as a string
+  */
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$export$getDrawModeForTrack = track => {
     switch (track.mark) {
       case "line":
@@ -3161,6 +3215,13 @@
     }
   };
   class $647b390bbe26a1e6bbc6a8c9e19f41d2$export$default {
+    /**
+    * Process a schema by reading in the data, the channel information, and producing an
+    * iterator like interface with getNextTrack to feed to a drawer.
+    *
+    * @param {Object} schema user defined schema
+    * @param {Function} callback function to call after all the data has been loaded
+    */
     constructor(schema, callback) {
       this.index = 0;
       this.schema = schema;
@@ -3182,6 +3243,10 @@
       // TODO: Allow tracks to be processed while waiting for others, need to keep in mind order
       Promise.all(allPromises).then(() => callback(this));
     }
+    /**
+    * Get the next track to process
+    * @returns {@link Track}
+    */
     getNextTrack() {
       if (this.index >= this.tracks.length) {
         return null;
@@ -3190,6 +3255,13 @@
     }
   }
   class $647b390bbe26a1e6bbc6a8c9e19f41d2$var$Track {
+    /**
+    * Process a track from a schema by loading data and producing an iterator
+    * like interface with getNextDataPoint or getNextMark.
+    *
+    * @param {Object} schema user defined visualization
+    * @param {Object} track user defined track
+    */
     constructor(schema, track) {
       this.track = track;
       this.index = 1;
@@ -3220,6 +3292,10 @@
         console.error(`Could not find data (no defaultData in schema and no data specified for this track) for track ${track}.`);
       }
     }
+    /**
+    * Read the headers from the first row of data and then build functions to map a data row
+    * to a channel value for drawing. Ultimately a method due to clunky constructor.
+    */
     processHeadersAndMappers() {
       // Processing headers
       this.headers = this.data[0].split(",");
@@ -3229,8 +3305,13 @@
         this.channelMaps.set(channel, this.buildMapperForChannel(channel));
       });
     }
+    /**
+    * Get the next data point from the track. Returns null when all points have been returned.
+    * @returns A data point with the x and y coordinates and other attributes from the header
+    */
     getNextDataPoint() {
       if (this.index >= this.data.length) {
+        // TODO potentially erase this.data for garbage collection
         return null;
       }
       const toReturn = {
@@ -3248,6 +3329,11 @@
       toReturn.geometry.coordinates.push(x, y);
       return toReturn;
     }
+    /**
+    * Get the next mark from the track for the drawer to process. Returns null when all
+    * marks have been returned.
+    * @returns An object containing information used to draw a mark for a row of data.
+    */
     getNextMark() {
       if (this.index >= this.data.length) {
         return null;
@@ -3260,6 +3346,14 @@
       });
       return toReturn;
     }
+    /**
+    * Builds a function which maps an attribute value to a channel value for use by the drawer.
+    * The function will return a default if not present in the track, or a constant if
+    * value is defined.
+    *
+    * @param {String} channel one of the channels listed in default channels
+    * @returns the function
+    */
     buildMapperForChannel = channel => {
       if ((channel in this.track)) {
         const channelInfo = this.track[channel];
@@ -3439,4 +3533,4 @@
   parcelRequire.register("3k8Hq", $6d3e717fed031fdb2ee2c357e03764b6$init);
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.3ff5d79e.js.map
+//# sourceMappingURL=offscreen-webgl-worker.b65565ff.js.map

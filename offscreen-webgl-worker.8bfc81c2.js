@@ -1,5 +1,5 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.3ff5d79e.js");
+  importScripts("./offscreen-webgl-worker.b65565ff.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
@@ -57,7 +57,7 @@
   $647b390bbe26a1e6bbc6a8c9e19f41d2$init();
   $794bbb298c1fc0cc3157526701549b8c$init();
   /**
-  * A vertex shader meant to take in positions and colors.
+  * A vertex shader meant to take in positions, colors, and contain uniforms for zooming and panning.
   */
   const $5aa01963e4773c466fc995fbb6f57ffb$var$baseVertexShader = `
   precision highp float;
@@ -70,6 +70,10 @@
 
   varying vec4 vColor;
 `;
+  /**
+  * Appended to end of vertex shader. Includes math for zooming and panning,
+  * ability to unpack colors and send to fragment shader.
+  */
   const $5aa01963e4773c466fc995fbb6f57ffb$var$vertexShaderSuffix = `
   vec3 unpackColor(float f) {
     vec3 colorVec;
@@ -108,6 +112,11 @@
   }
 `;
   class $5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader {
+    /**
+    * A class meant to contain all the relevant information for a shader program, such as uniforms
+    * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSchema
+    * or fromTrack instead.
+    */
     constructor() {
       this.shader = $5aa01963e4773c466fc995fbb6f57ffb$var$baseVertexShader;
       this.uniforms = {};
@@ -119,11 +128,19 @@
         }
       };
     }
+    /**
+    * Add a mark to the buffers by calculating its vertices, then adding its
+    * attributes such as size, color, or opacity to the buffers.
+    *
+    * @param {Object} mark passed in from SchemaHelper in webgl-drawer.js
+    * @param {VertexCalculator} vertexCalculator used to calculate vertices for a track
+    */
     addMarkToBuffers(mark, vertexCalculator) {
       const vertices = vertexCalculator.calculateForMark(mark);
       this.attributes.aVertexPosition.data.push(...vertices);
       for (const channel of Object.keys(this.attributes)) {
         if (channel === "aVertexPosition") {
+          // handled above
           continue;
         }
         for (let i = 0; i < vertices.length / 2; i++) {
@@ -132,21 +149,46 @@
       }
       this.lastMark = mark;
     }
+    /**
+    * Set the webgl draw mode to use
+    * @param {String} drawMode
+    */
     setDrawMode(drawMode) {
       this.drawMode = drawMode;
     }
+    /**
+    * Signify this channel varies from mark to mark, so build buffers to carry this info
+    * for the program. Also add desclaration to shader code.
+    *
+    * @param {String} channel such as opacity, color, size
+    * @param {Number} numComponents number of components of this attribute to pull in, usually 1
+    * @returns this
+    */
     addChannelBuffer(channel, numComponents = 1) {
       this.attributes[channel] = {
         numComponents,
         data: []
       };
       this.shader += `attribute float ${channel};\n`;
+      return this;
     }
+    /**
+    * Signify this channel is the same for every mark, so set a uniform to refer to.
+    *
+    * @param {String} channel such as opacity, color, size
+    * @param {Number} uniform value to set uniform to, must be a float
+    * @returns this
+    */
     setChannelUniform(channel, uniform) {
       this.uniforms[channel] = uniform;
       this.shader += `uniform float ${channel};\n`;
       return this;
     }
+    /**
+    * Build the shader code after uniforms and attributes have been finalized.
+    *
+    * @returns shader code to compile
+    */
     buildShader() {
       // Assumes color, opacity, size channels have been used in
       // addChannelBuffer or addChannelUniform
@@ -157,10 +199,22 @@
       this.built = true;
       return this.shader;
     }
+    /**
+    * Construct the vertex shaders for each track in the schema.
+    *
+    * @param {Object} schema of visualization
+    * @returns an array of {@link VertexShaders}s
+    */
     static fromSchema(schema) {
       // Returns one per track
       return schema.tracks.map($5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader.fromTrack);
     }
+    /**
+    * Construct the vertex shader a track including setting attributes, uniforms, drawMode.
+    *
+    * @param {Object} track from schema
+    * @returns a {@link VertexShaders}
+    */
     static fromTrack(track) {
       // Given a track produce attributes and uniforms that describe a webgl drawing
       const vsBuilder = new $5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader();
@@ -9252,8 +9306,6 @@
     }
     return false;
   }
-  // Largely taken from
-  // https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample2/webgl-demo.js
   class $2b3199d0d5be952e84d95e8de105dfa8$export$default extends $d125d48a203687d140152f108c7101d5$export$default {
     constructor(viewportData) {
       super(viewportData);
@@ -9284,6 +9336,14 @@
       // Which becomes uniform in vertex shader
       return [scaleXWindowSpace(this.currentXRange[0]), scaleYWindowSpace(this.currentYRange[0]), scaleXWindowSpace(this.currentXRange[1]), scaleYWindowSpace(this.currentYRange[1]), pointSize];
     }
+    /**
+    * Sets the schema and begins the process of drawing it.
+    *  1. Cancels any current animation
+    *  2. Builds shaders for the tracks
+    *  3. After data is loaded, calls populateBuffers.
+    *
+    * @param {Object} schema of visualization
+    */
     setSchema(schema) {
       super.render();
       // Cancels current animation frame
@@ -9291,6 +9351,11 @@
       this.trackShaders = $5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader.fromSchema(schema);
       new ($647b390bbe26a1e6bbc6a8c9e19f41d2$init().default)(schema, this.populateBuffers.bind(this));
     }
+    /**
+    * Populate the buffers that are fed to webgl for drawing.
+    *
+    * @param {SchemaProcessor} schemaHelper created in the setSchema method
+    */
     populateBuffers(schemaHelper) {
       let currentTrack = schemaHelper.getNextTrack();
       let currentTrackShaderIndex = 0;
@@ -9299,6 +9364,7 @@
         let vertexCalculator = new ($6d3e717fed031fdb2ee2c357e03764b6$init().default)(schemaHelper.xScale, schemaHelper.yScale, currentTrack.track);
         let currentMark = currentTrack.getNextMark();
         while (currentMark) {
+          // A lot of the heavy lifting occurs in the track shaders, this class is mostly boilerplate for webgl
           this.trackShaders[currentTrackShaderIndex].addMarkToBuffers(currentMark, vertexCalculator);
           currentMark = currentTrack.getNextMark();
         }
@@ -9308,10 +9374,11 @@
       this.render();
     }
     /**
-    * Animates the frames by setting viewport, blending, clearing, and calling webgl draw.
+    * Animates the frames by setting viewport, uniforms, blending, clearing, and calling webgl draw.
     */
     animate() {
       if (!this.needsAnimation) {
+        // Prevent pointless animation if canvas does not change
         this.lastFrame = requestAnimationFrame(this.animate.bind(this));
         this.tick();
         return;
@@ -9335,6 +9402,7 @@
       this.gl.enable(this.gl.BLEND);
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
       this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+      // For each track shader, use their shader program then draw it
       this.trackShaders.forEach((trackShader, index) => {
         this.gl.useProgram(this.programInfos[index].program);
         $52d13d33bd60c65a724bfd448491637f$export$setBuffersAndAttributes(this.gl, this.programInfos[index], this.bufferInfos[index]);
@@ -9396,4 +9464,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.b2cf71a4.js.map
+//# sourceMappingURL=offscreen-webgl-worker.8bfc81c2.js.map

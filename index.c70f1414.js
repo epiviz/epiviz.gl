@@ -823,7 +823,8 @@
     /**
     * Get the VIEWPORT of the schema to be used by the mouseReader.
     * If all types for a dimension across tracks are categorical or genomic,
-    * will default to [-1, 1] for that dimension for the mouseReader.
+    * will default to [-1, 1] for that dimension for the mouseReader. If X or Y
+    * has a fixed value, it will consider the width or height channel domains.
     *
     * @param {Object} schema of visualization
     * @returns [smallestX, largestX, smallestY, largestY] of viewport
@@ -835,7 +836,13 @@
       let largestY = Number.NEGATIVE_INFINITY;
       schema.tracks.forEach(track => {
         let xDomain = track.x.domain;
+        if (!xDomain && track.x.value !== undefined && track.width.domain !== undefined) {
+          xDomain = track.width.domain;
+        }
         let yDomain = track.y.domain;
+        if (!yDomain && track.y.value !== undefined && track.height.domain !== undefined) {
+          yDomain = track.height.domain;
+        }
         if (xDomain) {
           smallestX = xDomain[0] < smallestX ? xDomain[0] : smallestX;
           largestX = xDomain[1] > largestX ? xDomain[1] : largestX;
@@ -857,7 +864,7 @@
     *
     * @param {String} dimension either x or y
     * @param {Object} schema for the visualization
-    * @returns
+    * @returns function which can be used to map to an "x" or "y" value
     */
     const $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema = (dimension, schema) => {
       if (dimension !== "x" && dimension !== "y") {
@@ -899,6 +906,28 @@
       }
       return new $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale(genome, [smallestGene, largestGene]);
     };
+    const $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN = "2em";
+    const $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema = schema => {
+      if (schema.margins === undefined) {
+        return {
+          width: `calc(100% - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`,
+          height: `calc(100% - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`,
+          margin: $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN
+        };
+      }
+      let toReturn = {};
+      toReturn.width = `calc(100% - ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${schema.margins.right || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN})`;
+      toReturn.height = `calc(100% - ${schema.margins.top || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${schema.margins.bottom || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN})`;
+      // Shorthand for top right bottom left
+      toReturn.margin = `${schema.margins.top || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
+                     ${schema.margins.right || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
+                     ${schema.margins.bottom || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
+                     ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`;
+      return toReturn;
+    };
+    $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getDimAndMarginStyleForSchema", function () {
+      return $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema;
+    });
     $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getScaleForSchema", function () {
       return $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema;
     });
@@ -925,4 +954,4 @@
   }
 })();
 
-//# sourceMappingURL=index.10f1aa48.js.map
+//# sourceMappingURL=index.c70f1414.js.map
