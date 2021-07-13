@@ -3,6 +3,8 @@ import signals from "url:../data/signals.csv";
 export default JSON.stringify(
   {
     defaultData: signals,
+    xAxis: "top",
+    yAxis: "left",
     tracks: [
       {
         tooltips: 1,
@@ -12,13 +14,11 @@ export default JSON.stringify(
           attribute: "time",
           type: "quantitative",
           domain: [0, 10],
-          axis: "top",
         },
         y: {
           attribute: "sample",
           type: "categorical",
           cardinality: 3,
-          axis: "left",
         },
         color: {
           attribute: "strength",

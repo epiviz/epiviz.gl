@@ -8,11 +8,31 @@ const visualization = {
   type: "object",
   required: ["tracks"],
   properties: {
+    labels: {
+      type: "array",
+      items: {
+        properties: {
+          x: {
+            type: "number",
+          },
+          y: {
+            type: "number",
+          },
+          fixedX: {
+            type: "boolean",
+          },
+          fixedY: {
+            type: "boolean",
+          },
+          required: ["x", "y"],
+        },
+      },
+    },
     xAxis: {
-      enum: ["bottom", "top", "center"],
+      enum: ["bottom", "top", "center", "none", "zero"],
     },
     yAxis: {
-      enum: ["left", "right", "center"],
+      enum: ["left", "right", "center", "none", "zero"],
     },
     tracks: {
       type: "array",

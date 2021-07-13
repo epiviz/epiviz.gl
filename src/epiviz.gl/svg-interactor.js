@@ -1,4 +1,8 @@
-import { scale, getScaleForSchema } from "./utilities";
+import {
+  scale,
+  getScaleForSchema,
+  getDimAndMarginStyleForSchema,
+} from "./utilities";
 
 const d3Axis = require("d3-axis");
 const d3Scale = require("d3-scale");
@@ -29,6 +33,11 @@ class SVGInteractor {
     this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
     this._selectMarker.setAttribute("stroke-width", 1);
     this._selectMarker.setAttribute("stroke-dasharray", "5,5");
+
+    this._labelMarker = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g"
+    );
   }
 
   /**
@@ -38,6 +47,18 @@ class SVGInteractor {
    */
   setSchema(schema) {
     this.schema = schema;
+
+    const styles = getDimAndMarginStyleForSchema(schema);
+    this.svg.style.width = styles.width;
+    this.svg.style.height = styles.height;
+    this.svg.style.margin = styles.margin;
+
+    this.initialX = undefined; // used for updating labels
+    this.initialY = undefined;
+    d3Selection.select(this._labelMarker).selectAll("*").remove();
+    for (const _ of this.schema.labels || []) {
+      d3Selection.select(this._labelMarker).append("text");
+    }
   }
 
   /**
@@ -45,6 +66,7 @@ class SVGInteractor {
    */
   init() {
     this.svg.appendChild(this._selectMarker);
+    this.svg.appendChild(this._labelMarker);
     this.xAxisAnchor = this.d3SVG.append("g");
     this.yAxisAnchor = this.d3SVG.append("g");
   }
@@ -70,6 +92,10 @@ class SVGInteractor {
         getScaleForSchema("x", this.schema),
         this.xAxisAnchor
       );
+
+      if (this.schema.labels) {
+        this.updateLabels();
+      }
     }
 
     if (this.xAxis) {
@@ -91,12 +117,55 @@ class SVGInteractor {
     }
   }
 
+  updateLabels() {
+    if (!this.initialX && this.schema.labels) {
+      this.initialX = this.schema.labels.map(
+        (label) => this._calculateViewportSpotInverse(label.x, label.y)[0]
+      );
+    }
+    if (!this.initialY && this.schema.labels) {
+      this.initialY = this.schema.labels.map(
+        (label) => this._calculateViewportSpotInverse(label.x, label.y)[1]
+      );
+    }
+
+    d3Selection
+      .select(this._labelMarker)
+      .selectAll("text")
+      .data(this.schema.labels)
+      .text((d) => d.text)
+      .attr("x", (d, i) => {
+        if (d.fixedX) {
+          return this.initialX[i];
+        }
+        return this._calculateViewportSpotInverse(d.x, d.y)[0];
+      })
+      .attr("y", (d, i) => {
+        if (d.fixedY) {
+          return this.initialY[i];
+        }
+        return this._calculateViewportSpotInverse(d.x, d.y)[1];
+      })
+      .each(function (d) {
+        // Set any possible svg properties specified in label
+        for (const property in d) {
+          if (["x", "y", "text"].includes(property)) {
+            continue;
+          }
+          d3Selection.select(this).attr(property, d[property]);
+        }
+      });
+  }
+
   _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
     let axis, domain, range;
     if (dimension === "x") {
       domain = this.currentXRange;
       range = [0, this.width];
       switch (orientation) {
+        case "none":
+          anchor.attr("transform", `translate(-1000000, -1000000)`);
+          return null;
         case "top":
           axis = d3Axis.axisTop();
           anchor.attr("transform", `translate(0, 0)`);
@@ -104,6 +173,15 @@ class SVGInteractor {
         case "center":
           axis = d3Axis.axisBottom();
           anchor.attr("transform", `translate(0, ${this.height / 2})`);
+          break;
+        case "zero":
+          const yScale = d3Scale
+            .scaleLinear()
+            .domain(this.currentYRange)
+            .range([this.height, 0]);
+
+          axis = d3Axis.axisBottom();
+          anchor.attr("transform", `translate(0, ${yScale(0)})`);
           break;
         case "bottom":
         default:
@@ -117,6 +195,9 @@ class SVGInteractor {
       domain = this.currentYRange;
       range = [this.height, 0];
       switch (orientation) {
+        case "none":
+          anchor.attr("transform", `translate(-1000000, -1000000)`);
+          return null;
         case "center":
           axis = d3Axis.axisRight();
           anchor.attr("transform", `translate(${this.width / 2}, 0)`);
@@ -124,6 +205,15 @@ class SVGInteractor {
         case "right":
           axis = d3Axis.axisRight();
           anchor.attr("transform", `translate(${this.width}, 0)`);
+          break;
+        case "zero":
+          const xScale = d3Scale
+            .scaleLinear()
+            .domain(this.currentXRange)
+            .range([0, this.width]);
+
+          axis = d3Axis.axisLeft();
+          anchor.attr("transform", `translate(${xScale(0)}, 0)`);
           break;
         case "left": // left is default behavior
         default:

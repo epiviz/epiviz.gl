@@ -12,6 +12,8 @@ export default JSON.stringify(
       "8,15,c",
     ],
 
+    xAxis: "bottom",
+    yAxis: "zero",
     tracks: [
       {
         tooltips: 1,
@@ -19,13 +21,11 @@ export default JSON.stringify(
         layout: "linear",
         x: {
           value: 0,
-          axis: "bottom",
         },
         y: {
           attribute: "x",
           type: "quantitative",
           domain: [0, 10],
-          axis: "left",
         },
         color: {
           attribute: "type",

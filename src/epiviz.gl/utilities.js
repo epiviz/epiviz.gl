@@ -44,7 +44,8 @@ function colorSpecifierToHex(specifier) {
 /**
  * Get the VIEWPORT of the schema to be used by the mouseReader.
  * If all types for a dimension across tracks are categorical or genomic,
- * will default to [-1, 1] for that dimension for the mouseReader.
+ * will default to [-1, 1] for that dimension for the mouseReader. If X or Y
+ * has a fixed value, it will consider the width or height channel domains.
  *
  * @param {Object} schema of visualization
  * @returns [smallestX, largestX, smallestY, largestY] of viewport
@@ -57,7 +58,22 @@ function getViewportForSchema(schema) {
 
   schema.tracks.forEach((track) => {
     let xDomain = track.x.domain;
+    if (
+      !xDomain &&
+      track.x.value !== undefined &&
+      track.width.domain !== undefined
+    ) {
+      xDomain = track.width.domain;
+    }
     let yDomain = track.y.domain;
+    if (
+      !yDomain &&
+      track.y.value !== undefined &&
+      track.height.domain !== undefined
+    ) {
+      yDomain = track.height.domain;
+    }
+
     if (xDomain) {
       smallestX = xDomain[0] < smallestX ? xDomain[0] : smallestX;
       largestX = xDomain[1] > largestX ? xDomain[1] : largestX;
@@ -130,6 +146,30 @@ const getScaleForSchema = (dimension, schema) => {
   return new GenomeScale(genome, [smallestGene, largestGene]);
 };
 
+const DEFAULT_MARGIN = "2em";
+const getDimAndMarginStyleForSchema = (schema) => {
+  if (schema.margins === undefined) {
+    return {
+      width: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
+      height: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
+      margin: DEFAULT_MARGIN,
+    };
+  }
+  let toReturn = {};
+  toReturn.width = `calc(100% - ${schema.margins.left || DEFAULT_MARGIN} - ${
+    schema.margins.right || DEFAULT_MARGIN
+  })`;
+  toReturn.height = `calc(100% - ${schema.margins.top || DEFAULT_MARGIN} - ${
+    schema.margins.bottom || DEFAULT_MARGIN
+  })`;
+  // Shorthand for top right bottom left
+  toReturn.margin = `${schema.margins.top || DEFAULT_MARGIN}
+                     ${schema.margins.right || DEFAULT_MARGIN}
+                     ${schema.margins.bottom || DEFAULT_MARGIN}
+                     ${schema.margins.left || DEFAULT_MARGIN}`;
+  return toReturn;
+};
+
 export {
   scale,
   rgbToHex,
@@ -137,4 +177,5 @@ export {
   getViewportForSchema,
   colorSpecifierToHex,
   getScaleForSchema,
+  getDimAndMarginStyleForSchema,
 };
