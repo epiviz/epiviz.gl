@@ -117,6 +117,15 @@ class SVGInteractor {
           axis = d3Axis.axisBottom();
           anchor.attr("transform", `translate(0, ${this.height / 2})`);
           break;
+        case "zero":
+          const yScale = d3Scale
+            .scaleLinear()
+            .domain(this.currentYRange)
+            .range([this.height, 0]);
+
+          axis = d3Axis.axisBottom();
+          anchor.attr("transform", `translate(0, ${yScale(0)})`);
+          break;
         case "bottom":
         default:
           axis = d3Axis.axisBottom();
@@ -139,6 +148,15 @@ class SVGInteractor {
         case "right":
           axis = d3Axis.axisRight();
           anchor.attr("transform", `translate(${this.width}, 0)`);
+          break;
+        case "zero":
+          const xScale = d3Scale
+            .scaleLinear()
+            .domain(this.currentXRange)
+            .range([0, this.width]);
+
+          axis = d3Axis.axisLeft();
+          anchor.attr("transform", `translate(${xScale(0)}, 0)`);
           break;
         case "left": // left is default behavior
         default:
