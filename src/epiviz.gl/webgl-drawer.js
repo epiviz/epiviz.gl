@@ -7,6 +7,10 @@ import { VertexShader, varyingColorsFragmentShader } from "./webgl.js";
 
 const twgl = require("twgl.js");
 
+const ALL_POTENTIAL_ATTRIBUTES = VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.map(
+  (attr) => `a_${attr}`
+).concat("a_VertexPosition");
+
 class WebGLCanvasDrawer extends Drawer {
   constructor(viewportData) {
     super(viewportData);
@@ -127,15 +131,6 @@ class WebGLCanvasDrawer extends Drawer {
     this.globalUniforms.viewport = new Float32Array(viewport.slice(0, 4));
     this.globalUniforms.pointSizeModifier = viewport[4];
 
-    this.trackShaders.forEach((trackShader, index) => {
-      this.gl.useProgram(this.programInfos[index].program);
-
-      twgl.setUniforms(this.programInfos[index], {
-        ...this.globalUniforms,
-        ...trackShader.uniforms,
-      });
-    });
-
     // Clear the canvas before we start drawing on it.
     this.gl.clearColor(1, 1, 1, 1);
 
@@ -151,16 +146,23 @@ class WebGLCanvasDrawer extends Drawer {
     // For each track shader, use their shader program then draw it
     this.trackShaders.forEach((trackShader, index) => {
       this.gl.useProgram(this.programInfos[index].program);
+
+      twgl.setUniforms(this.programInfos[index], {
+        ...this.globalUniforms,
+        ...trackShader.uniforms,
+      });
+
       twgl.setBuffersAndAttributes(
         this.gl,
         this.programInfos[index],
-        this.bufferInfos[index]
+        this.vertexArrayInfos[index]
       );
+
       twgl.drawBufferInfo(
         this.gl,
-        this.bufferInfos[index],
+        this.vertexArrayInfos[index],
         this.gl[trackShader.drawMode],
-        trackShader.attributes.aVertexPosition.data.length / 2
+        trackShader.attributes.a_VertexPosition.data.length / 2
       );
     });
 
@@ -177,10 +179,11 @@ class WebGLCanvasDrawer extends Drawer {
     super.render();
 
     this.programInfos = this.trackShaders.map((trackShader) =>
-      twgl.createProgramInfo(this.gl, [
-        trackShader.buildShader(),
-        varyingColorsFragmentShader,
-      ])
+      twgl.createProgramInfo(
+        this.gl,
+        [trackShader.buildShader(), varyingColorsFragmentShader],
+        ALL_POTENTIAL_ATTRIBUTES
+      )
     );
 
     this.globalUniforms = {
@@ -188,8 +191,12 @@ class WebGLCanvasDrawer extends Drawer {
       pointSizeModifier: 1,
     };
 
-    this.bufferInfos = this.trackShaders.map((trackShader) =>
-      twgl.createBufferInfoFromArrays(this.gl, trackShader.attributes)
+    this.vertexArrayInfos = this.trackShaders.map((trackShader) =>
+      twgl.createVertexArrayInfo(
+        this.gl,
+        this.programInfos,
+        twgl.createBufferInfoFromArrays(this.gl, trackShader.attributes)
+      )
     );
 
     this.needsAnimation = true;

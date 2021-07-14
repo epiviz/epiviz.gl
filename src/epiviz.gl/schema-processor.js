@@ -85,7 +85,6 @@ const getDrawModeForTrack = (track) => {
       } else {
         return "POINTS";
       }
-    case "bar":
     case "rect":
     case "area":
       return "TRIANGLES";

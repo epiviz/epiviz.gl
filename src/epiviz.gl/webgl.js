@@ -7,7 +7,7 @@ import { colorSpecifierToHex } from "./utilities";
 const baseVertexShader = `#version 300 es
   precision highp float;
 
-  in vec2 aVertexPosition;
+  in vec2 a_VertexPosition;
 
   uniform float pointSizeModifier;
   // [x1, y1,x2, y2] of viewing window
@@ -20,7 +20,7 @@ const baseVertexShader = `#version 300 es
  * Appended to end of vertex shader. Includes math for zooming and panning,
  * ability to unpack colors and send to fragment shader.
  */
-const vertexShaderSuffix = `
+const vertexShaderSuffix = (opacityName, colorName, sizeName) => `
   vec3 unpackColor(float f) {
     vec3 colorVec;
     colorVec.r = floor(f / 65536.0);
@@ -33,18 +33,18 @@ const vertexShaderSuffix = `
     // Subtract each vertex by midpoint of the viewport 
     // window to center points. Then scale by ratio of max window size to window size
     gl_Position = vec4(
-       (aVertexPosition.x - (viewport.z + viewport.x)/2.0) * 2.0/(viewport.z - viewport.x),
-       (aVertexPosition.y - (viewport.w + viewport.y)/2.0) * 2.0/(viewport.w - viewport.y),
+       (a_VertexPosition.x - (viewport.z + viewport.x)/2.0) * 2.0/(viewport.z - viewport.x),
+       (a_VertexPosition.y - (viewport.w + viewport.y)/2.0) * 2.0/(viewport.w - viewport.y),
         0,
         1
     );
-    vec3 unpackedValues = unpackColor(color);
+    vec3 unpackedValues = unpackColor(${colorName});
 
     vColor = vec4(
       unpackedValues.rgb,
-      opacity
+      ${opacityName}
     );
-    gl_PointSize = size * pointSizeModifier;
+    gl_PointSize = ${sizeName} * pointSizeModifier;
   }
 `;
 
@@ -63,6 +63,12 @@ const varyingColorsFragmentShader = `#version 300 es
 `;
 
 class VertexShader {
+  static SUPPORTED_CHANNEL_ATTRIBUTES = Object.freeze([
+    "color",
+    "size",
+    "opacity",
+  ]);
+
   /**
    * A class meant to contain all the relevant information for a shader program, such as uniforms
    * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSchema
@@ -74,7 +80,7 @@ class VertexShader {
 
     // Add position buffers here since x and y channels don't map nicely to shader code
     this.attributes = {
-      aVertexPosition: {
+      a_VertexPosition: {
         numComponents: 2,
         data: [],
       },
@@ -90,16 +96,16 @@ class VertexShader {
    */
   addMarkToBuffers(mark, vertexCalculator) {
     const vertices = vertexCalculator.calculateForMark(mark);
-    this.attributes.aVertexPosition.data.push(...vertices);
+    this.attributes.a_VertexPosition.data.push(...vertices);
 
     for (const channel of Object.keys(this.attributes)) {
-      if (channel === "aVertexPosition") {
+      if (channel === "a_VertexPosition") {
         // handled above
         continue;
       }
 
       for (let i = 0; i < vertices.length / 2; i++) {
-        this.attributes[channel].data.push(mark[channel]);
+        this.attributes[channel].data.push(mark[channel.substring(2)]); // Remove "a_" prefix
       }
     }
 
@@ -123,8 +129,8 @@ class VertexShader {
    * @returns this
    */
   addChannelBuffer(channel, numComponents = 1) {
-    this.attributes[channel] = { numComponents, data: [] };
-    this.shader += `in float ${channel};\n`;
+    this.attributes[`a_${channel}`] = { numComponents, data: [] };
+    this.shader += `in float a_${channel};\n`;
     return this;
   }
 
@@ -136,8 +142,8 @@ class VertexShader {
    * @returns this
    */
   setChannelUniform(channel, uniform) {
-    this.uniforms[channel] = uniform;
-    this.shader += `uniform float ${channel};\n`;
+    this.uniforms[`u_${channel}`] = uniform;
+    this.shader += `uniform float u_${channel};\n`;
     return this;
   }
 
@@ -152,7 +158,13 @@ class VertexShader {
     if (this.built) {
       return this.shader;
     }
-    this.shader += vertexShaderSuffix;
+
+    const colorName = "a_color" in this.attributes ? "a_color" : "u_color";
+    const opacityName =
+      "a_opacity" in this.attributes ? "a_opacity" : "u_opacity";
+    const sizeName = "a_size" in this.attributes ? "a_size" : "u_size";
+
+    this.shader += vertexShaderSuffix(opacityName, colorName, sizeName);
     this.built = true;
     return this.shader;
   }
@@ -199,14 +211,20 @@ class VertexShader {
             // Skip for x and y as handled in constructor
             continue;
           }
-          vsBuilder.addChannelBuffer(
-            channel,
-            DEFAULT_CHANNELS[channel].numComponents
-          );
+
+          // These are currently the only supported channels for shader usage
+          if (VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
+            vsBuilder.addChannelBuffer(
+              channel,
+              DEFAULT_CHANNELS[channel].numComponents
+            );
+          }
         }
       } else {
         // Channel not listed, set default
-        vsBuilder.setChannelUniform(channel, DEFAULT_CHANNELS[channel].value);
+        if (VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
+          vsBuilder.setChannelUniform(channel, DEFAULT_CHANNELS[channel].value);
+        }
       }
     }
 
