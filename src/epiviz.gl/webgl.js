@@ -4,16 +4,16 @@ import { colorSpecifierToHex } from "./utilities";
 /**
  * A vertex shader meant to take in positions, colors, and contain uniforms for zooming and panning.
  */
-const baseVertexShader = `
+const baseVertexShader = `#version 300 es
   precision highp float;
 
-  attribute vec2 aVertexPosition;
+  in vec2 aVertexPosition;
 
   uniform float pointSizeModifier;
   // [x1, y1,x2, y2] of viewing window
   uniform vec4 viewport;
 
-  varying vec4 vColor;
+  out vec4 vColor;
 `;
 
 /**
@@ -51,11 +51,14 @@ const vertexShaderSuffix = `
 /**
  * A fragment shader which chooses color simply passed to by vertex shader.
  */
-const varyingColorsFragmentShader = `
-  varying mediump vec4 vColor;
+const varyingColorsFragmentShader = `#version 300 es
+  precision highp float;
 
+  in vec4 vColor;
+
+  out vec4 outColor;
   void main(void) {
-    gl_FragColor = vColor;
+    outColor = vColor;
   }
 `;
 
@@ -121,7 +124,7 @@ class VertexShader {
    */
   addChannelBuffer(channel, numComponents = 1) {
     this.attributes[channel] = { numComponents, data: [] };
-    this.shader += `attribute float ${channel};\n`;
+    this.shader += `in float ${channel};\n`;
     return this;
   }
 
