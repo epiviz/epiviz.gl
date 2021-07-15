@@ -41,6 +41,8 @@ class SemanticZoomer {
       if (numberOfGenes < sizeOfGeneRangeForTriangles) {
         return "TRIANGLES";
       }
+    } else {
+      return "TRIANGLES";
     }
 
     return "LINES";
