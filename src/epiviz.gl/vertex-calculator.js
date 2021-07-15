@@ -208,14 +208,12 @@ class VertexCalculator {
   }
 
   _getVerticesForRect(mark) {
-    //  2------------1,4
-    //  |        /    |
-    //  |    /        |
-    // 3,5------------6
+    //  1-----------3,6
+    //  |       /    |
+    //  |     /      |
+    // 2,5-----------4
     const center = this._mapToGPUSpace([mark.x, mark.y]);
     return [
-      center[0] + mark.width * SIZE_UNITS,
-      center[1] + mark.height * SIZE_UNITS,
       center[0],
       center[1] + mark.height * SIZE_UNITS,
       center[0],
@@ -226,6 +224,8 @@ class VertexCalculator {
       center[1],
       center[0],
       center[1],
+      center[0] + mark.width * SIZE_UNITS,
+      center[1] + mark.height * SIZE_UNITS,
     ];
   }
 

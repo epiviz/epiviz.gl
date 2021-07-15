@@ -2,7 +2,7 @@ import Drawer from "./drawer";
 import SchemaProcessor from "./schema-processor";
 import { scale } from "./utilities";
 import VertexCalculator from "./vertex-calculator";
-
+import SemanticZoomer from "./semantic-zoomer";
 import { VertexShader, varyingColorsFragmentShader } from "./webgl.js";
 
 const twgl = require("twgl.js");
@@ -89,6 +89,8 @@ class WebGLCanvasDrawer extends Drawer {
     let currentTrack = schemaHelper.getNextTrack();
     let currentTrackShaderIndex = 0;
 
+    this.semanticZoomer = new SemanticZoomer(schemaHelper);
+
     while (currentTrack) {
       // Construct calculator in track loop as calculator keeps internal state for each track
       let vertexCalculator = new VertexCalculator(
@@ -161,7 +163,13 @@ class WebGLCanvasDrawer extends Drawer {
       twgl.drawBufferInfo(
         this.gl,
         this.vertexArrayInfos[index],
-        this.gl[trackShader.drawMode],
+        this.gl[
+          this.semanticZoomer.getRecommendedDrawingMode(
+            trackShader,
+            this.currentXRange,
+            this.currentYRange
+          )
+        ],
         trackShader.attributes.a_VertexPosition.data.length / 2
       );
     });
