@@ -9,3 +9,4 @@ yarn-error.log
 
 cypress/fixtures/failed-test-images
 cypress/videos
+cypress/screenshots
