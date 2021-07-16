@@ -10,6 +10,8 @@ const SIZE_UNITS = 1 / 100;
 
 const NUMBER_OF_VERTICES_PER_ARC = 20;
 
+const ARC_HEIGHT_MODIFIER = 10;
+
 /**
  * Get a curve representing the arc with given start and end points
  *
@@ -39,7 +41,7 @@ const getCurveForArc = (P0, P2) => {
 
   return getQuadraticBezierCurveForPoints(
     P0,
-    parameterized((distance * Math.sqrt(3) * 10) / 2),
+    parameterized(distance * ARC_HEIGHT_MODIFIER),
     P2
   );
 };
@@ -111,9 +113,12 @@ class VertexCalculator {
     let x, y, width, height;
     if (Array.isArray(mark.x)) {
       x = this.xScale.getMidpoint(...mark.x);
-      let x1ClipSpace = this.xScale(x);
       let x2 = this.xScale.getMidpoint(...mark.width);
-      width = (this.xScale(x2) - x1ClipSpace) / SIZE_UNITS;
+      let x1ClipSpace = this.xScale(x);
+      let x2ClipSpace = this.xScale(x2);
+
+      x = x1ClipSpace < x2ClipSpace ? x : x2;
+      width = Math.abs(this.xScale(x2) - x1ClipSpace) / SIZE_UNITS;
     } else {
       x = mark.x;
       width = mark.width;
@@ -121,9 +126,13 @@ class VertexCalculator {
 
     if (Array.isArray(mark.y)) {
       y = this.yScale.getMidpoint(...mark.y);
-      let y1ClipSpace = this.xScale(y);
       let y2 = this.yScale.getMidpoint(...mark.height);
-      height = (this.yScale(y2) - y1ClipSpace) / SIZE_UNITS;
+
+      let y1ClipSpace = this.xScale(y);
+      let y2ClipSpace = this.xScale(y2);
+
+      y = y1ClipSpace < y2ClipSpace ? y : y2;
+      height = Math.abs(this.yScale(y2) - y1ClipSpace) / SIZE_UNITS;
     } else {
       y = mark.y;
       height = mark.height;
