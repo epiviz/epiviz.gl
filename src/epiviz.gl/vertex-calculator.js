@@ -1,11 +1,48 @@
 import { GenomeScale } from "./genome-sizes";
 import { getDrawModeForTrack } from "./schema-processor";
+import { getQuadraticBezierCurveForPoints } from "./utilities";
 
 // Each size unit refers to 1/200 of the clip space
 // e.g. if the canvas is 1000x1000 pixels, and the size value for a mark
 // is 10, then that mark takes up 10/200 = 1/20 of the clip space which
 // is equal to 50 pixels
 const SIZE_UNITS = 1 / 100;
+
+const NUMBER_OF_VERTICES_PER_ARC = 20;
+
+/**
+ * Get a curve representing the arc with given start and end points
+ *
+ * https://math.stackexchange.com/a/1484684
+ *
+ * @param {Array} P0 start of arc
+ * @param {Array} P2 end of arc
+ * @returns function mapping 0 to beginning of arc, and 1 to end of arc
+ */
+const getCurveForArc = (P0, P2) => {
+  const midpoint = [P0[0] / 2 + P2[0] / 2, P0[1] / 2 + P2[1] / 2];
+  const slope = (P2[1] - P0[1]) / (P2[0] - P0[0]);
+  const distance = Math.sqrt((P2[1] - P0[1]) ** 2 + (P2[0] - P0[0]) ** 2);
+  if (!isFinite(slope)) {
+    // vertical slope
+    return getQuadraticBezierCurveForPoints(
+      P0,
+      [P0[0] - distance, midpoint[1]],
+      P2
+    );
+  }
+
+  const parameterized = (t) => [
+    midpoint[0] + (t / distance) * (P0[1] - P2[1]),
+    midpoint[1] + (t / distance) * (P2[0] - P0[0]),
+  ];
+
+  return getQuadraticBezierCurveForPoints(
+    P0,
+    parameterized((distance * Math.sqrt(3) * 10) / 2),
+    P2
+  );
+};
 
 class VertexCalculator {
   /**
@@ -17,13 +54,13 @@ class VertexCalculator {
    */
   constructor(xScale, yScale, track) {
     if (xScale instanceof GenomeScale) {
-      this.xScale = (args) => xScale.toClipSpaceFromParts(args[0], args[1]);
+      this.xScale = xScale.toCallable();
     } else {
       this.xScale = xScale;
     }
 
     if (yScale instanceof GenomeScale) {
-      this.yScale = (args) => yScale.toClipSpaceFromParts(args[0], args[1]);
+      this.yScale = yScale.toCallable();
     } else {
       this.yScale = yScale;
     }
@@ -65,6 +102,41 @@ class VertexCalculator {
   }
 
   /**
+   * Transform a mark with a range for coordinates and a range for width or height into a simpler mark to draw.
+   *
+   * @param {Object} mark that contains ranges for x and y, and potentially ranges for width and height
+   * @returns mark with fixed x, y, width, and height for drawing
+   */
+  transformGenomicRangeArcToStandard(mark) {
+    let x, y, width, height;
+    if (Array.isArray(mark.x)) {
+      x = this.xScale.getMidpoint(...mark.x);
+      let x1ClipSpace = this.xScale(x);
+      let x2 = this.xScale.getMidpoint(...mark.width);
+      width = (this.xScale(x2) - x1ClipSpace) / SIZE_UNITS;
+    } else {
+      x = mark.x;
+      width = mark.width;
+    }
+
+    if (Array.isArray(mark.y)) {
+      y = this.yScale.getMidpoint(...mark.y);
+      let y1ClipSpace = this.xScale(y);
+      let y2 = this.yScale.getMidpoint(...mark.height);
+      height = (this.yScale(y2) - y1ClipSpace) / SIZE_UNITS;
+    } else {
+      y = mark.y;
+      height = mark.height;
+    }
+    return {
+      x,
+      y,
+      width,
+      height,
+    };
+  }
+
+  /**
    * Construct the vertices of a mark.
    *
    * @param {Object} mark to draw
@@ -75,6 +147,11 @@ class VertexCalculator {
       this.track.x.type === "genomicRange" ||
       this.track.y.type === "genomicRange"
     ) {
+      if (this.track.mark === "arc") {
+        return this._calculateForMark(
+          this.transformGenomicRangeArcToStandard(mark)
+        );
+      }
       return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
     }
     return this._calculateForMark(mark);
@@ -97,6 +174,10 @@ class VertexCalculator {
 
     if (this.track.mark === "rect") {
       return this._getVerticesForRect(mark);
+    }
+
+    if (this.track.mark === "arc") {
+      return this._getVerticesForArc(mark);
     }
 
     switch (mark.shape) {
@@ -127,6 +208,31 @@ class VertexCalculator {
       isX = !isX;
       return isX ? this.xScale(coord) : this.yScale(coord);
     });
+  }
+
+  _getVerticesForArc(mark) {
+    const startPoint = this._mapToGPUSpace([mark.x, mark.y]);
+    const quadraticCurve = getCurveForArc(startPoint, [
+      startPoint[0] + mark.width * SIZE_UNITS,
+      startPoint[1] + mark.height * SIZE_UNITS,
+    ]);
+
+    const vertices = [
+      ...quadraticCurve(0),
+      ...quadraticCurve(1 / NUMBER_OF_VERTICES_PER_ARC),
+    ];
+
+    for (let i = 2; i < NUMBER_OF_VERTICES_PER_ARC + 1; i++) {
+      const nextPoint = quadraticCurve(i / NUMBER_OF_VERTICES_PER_ARC);
+      vertices.push(
+        vertices[vertices.length - 2],
+        vertices[vertices.length - 1],
+        nextPoint[0],
+        nextPoint[1]
+      );
+    }
+
+    return vertices;
   }
 
   _getVerticesForAreaSection(mark) {

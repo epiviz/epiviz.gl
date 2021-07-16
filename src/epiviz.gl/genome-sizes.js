@@ -109,6 +109,14 @@ class GenomeScale {
       : `chr${chrId}:${chrLoc}`;
   }
 
+  getMidpoint(chr1, gene1, chr2, gene2) {
+    const x1 = this.toClipSpaceFromParts(chr1, gene1);
+    const x2 = this.toClipSpaceFromParts(chr2, gene2);
+    const middleGene = this.inverse((x1 + x2) / 2);
+    const [chrId, gene] = middleGene.substring(3).split(":");
+    return [chrId, parseInt(gene)];
+  }
+
   /**
    * Get a sequence of ticks for a range in the genome.
    *
@@ -147,6 +155,15 @@ class GenomeScale {
         this.inverse(coord, format(`.${suggestedFormat}s`))
       ),
     };
+  }
+
+  toCallable() {
+    // TODO investigate if using this method in the vertex calculator leads to slow downs
+    const func = (args) => {
+      return this.toClipSpaceFromParts(args[0], args[1]);
+    };
+    func.getMidpoint = this.getMidpoint.bind(this);
+    return func;
   }
 
   /**

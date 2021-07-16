@@ -170,6 +170,27 @@ const getDimAndMarginStyleForSchema = (schema) => {
   return toReturn;
 };
 
+/**
+ * We need to calculate points on the arc for that mark type, but it needs to be quick.
+ * In addition, it shouldn't be a perfect circle, and also should look somewhat arc like.
+ * This utility funciton returns function that takes a value between 0 and 1 where 0 maps
+ * to the first control point, and 1 maps to the third control point.
+ *
+ * https://math.stackexchange.com/a/1361717
+ *
+ * @param {Array} P0 first control point
+ * @param {Array} P1 second control point
+ * @param {Array} P2 third control point
+ * @returns a function [0, 1] -> point on curve
+ */
+const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
+  const x = (t) =>
+    (1 - t) ** 2 * P0[0] + 2 * t * (1 - t) * P1[0] + t ** 2 * P2[0];
+  const y = (t) =>
+    (1 - t) ** 2 * P0[1] + 2 * t * (1 - t) * P1[1] + t ** 2 * P2[1];
+  return (t) => [x(t), y(t)];
+};
+
 export {
   scale,
   rgbToHex,
@@ -178,4 +199,5 @@ export {
   colorSpecifierToHex,
   getScaleForSchema,
   getDimAndMarginStyleForSchema,
+  getQuadraticBezierCurveForPoints,
 };

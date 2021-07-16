@@ -18,6 +18,13 @@ class SemanticZoomer {
       return trackShader.drawMode;
     }
 
+    if (
+      !(this.schemaHelper.xScale instanceof GenomeScale) &&
+      !(this.schemaHelper.yScale instanceof GenomeScale)
+    ) {
+      // Currently only used for genome tracks
+      return "TRIANGLES";
+    }
     if (this.schemaHelper.xScale instanceof GenomeScale) {
       const numberOfGenes =
         this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(
@@ -41,8 +48,6 @@ class SemanticZoomer {
       if (numberOfGenes < sizeOfGeneRangeForTriangles) {
         return "TRIANGLES";
       }
-    } else {
-      return "TRIANGLES";
     }
 
     return "LINES";
