@@ -126,5 +126,3 @@ class Toolbar {
 }
 
 export default Toolbar;
-
-export { exampleMap }; // For testing
