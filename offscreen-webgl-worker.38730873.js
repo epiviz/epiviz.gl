@@ -366,6 +366,13 @@
       }
       return formatting ? `chr${chrId}:${$c8cf865515e7e5d7357b07df1e313b78$export$format(formatting)(chrLoc)}` : `chr${chrId}:${chrLoc}`;
     }
+    getMidpoint(chr1, gene1, chr2, gene2) {
+      const x1 = this.toClipSpaceFromParts(chr1, gene1);
+      const x2 = this.toClipSpaceFromParts(chr2, gene2);
+      const middleGene = this.inverse((x1 + x2) / 2);
+      const [chrId, gene] = middleGene.substring(3).split(":");
+      return [chrId, parseInt(gene)];
+    }
     /**
     * Get a sequence of ticks for a range in the genome.
     *
@@ -396,6 +403,14 @@
         tickCoords: toReturn,
         tickLabels: toReturn.map(coord => this.inverse(coord, $c8cf865515e7e5d7357b07df1e313b78$export$format(`.${suggestedFormat}s`)))
       };
+    }
+    toCallable() {
+      // TODO investigate if using this method in the vertex calculator leads to slow downs
+      const func = args => {
+        return this.toClipSpaceFromParts(args[0], args[1]);
+      };
+      func.getMidpoint = this.getMidpoint.bind(this);
+      return func;
     }
     /**
     * Utility method for getting a GenomeScale across an entire genome.
@@ -929,6 +944,27 @@
                      ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`;
     return toReturn;
   };
+  /**
+  * We need to calculate points on the arc for that mark type, but it needs to be quick.
+  * In addition, it shouldn't be a perfect circle, and also should look somewhat arc like.
+  * This utility funciton returns function that takes a value between 0 and 1 where 0 maps
+  * to the first control point, and 1 maps to the third control point.
+  *
+  * https://math.stackexchange.com/a/1361717
+  *
+  * @param {Array} P0 first control point
+  * @param {Array} P1 second control point
+  * @param {Array} P2 third control point
+  * @returns a function [0, 1] -> point on curve
+  */
+  const $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
+    const x = t => (1 - t) ** 2 * P0[0] + 2 * t * (1 - t) * P1[0] + t ** 2 * P2[0];
+    const y = t => (1 - t) ** 2 * P0[1] + 2 * t * (1 - t) * P1[1] + t ** 2 * P2[1];
+    return t => [x(t), y(t)];
+  };
+  $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getQuadraticBezierCurveForPoints", function () {
+    return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints;
+  });
   $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getDimAndMarginStyleForSchema", function () {
     return $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema;
   });
@@ -954,6 +990,27 @@
   // is 10, then that mark takes up 10/200 = 1/20 of the clip space which
   // is equal to 50 pixels
   const $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS = 1 / 100;
+  const $6d3e717fed031fdb2ee2c357e03764b6$var$NUMBER_OF_VERTICES_PER_ARC = 20;
+  /**
+  * Get a curve representing the arc with given start and end points
+  *
+  * https://math.stackexchange.com/a/1484684
+  *
+  * @param {Array} P0 start of arc
+  * @param {Array} P2 end of arc
+  * @returns function mapping 0 to beginning of arc, and 1 to end of arc
+  */
+  const $6d3e717fed031fdb2ee2c357e03764b6$var$getCurveForArc = (P0, P2) => {
+    const midpoint = [P0[0] / 2 + P2[0] / 2, P0[1] / 2 + P2[1] / 2];
+    const slope = (P2[1] - P0[1]) / (P2[0] - P0[0]);
+    const distance = Math.sqrt((P2[1] - P0[1]) ** 2 + (P2[0] - P0[0]) ** 2);
+    if (!isFinite(slope)) {
+      // vertical slope
+      return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints(P0, [P0[0] - distance, midpoint[1]], P2);
+    }
+    const parameterized = t => [midpoint[0] + t / distance * (P0[1] - P2[1]), midpoint[1] + t / distance * (P2[0] - P0[0])];
+    return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints(P0, parameterized(distance * Math.sqrt(3) * 10 / 2), P2);
+  };
   class $6d3e717fed031fdb2ee2c357e03764b6$export$default {
     /**
     * A class used to construct the vertices of marks that are given to the drawer to draw.
@@ -964,12 +1021,12 @@
     */
     constructor(xScale, yScale, track) {
       if (xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale) {
-        this.xScale = args => xScale.toClipSpaceFromParts(args[0], args[1]);
+        this.xScale = xScale.toCallable();
       } else {
         this.xScale = xScale;
       }
       if (yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale) {
-        this.yScale = args => yScale.toClipSpaceFromParts(args[0], args[1]);
+        this.yScale = yScale.toCallable();
       } else {
         this.yScale = yScale;
       }
@@ -1007,6 +1064,39 @@
       };
     }
     /**
+    * Transform a mark with a range for coordinates and a range for width or height into a simpler mark to draw.
+    *
+    * @param {Object} mark that contains ranges for x and y, and potentially ranges for width and height
+    * @returns mark with fixed x, y, width, and height for drawing
+    */
+    transformGenomicRangeArcToStandard(mark) {
+      let x, y, width, height;
+      if (Array.isArray(mark.x)) {
+        x = this.xScale.getMidpoint(...mark.x);
+        let x1ClipSpace = this.xScale(x);
+        let x2 = this.xScale.getMidpoint(...mark.width);
+        width = (this.xScale(x2) - x1ClipSpace) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+      } else {
+        x = mark.x;
+        width = mark.width;
+      }
+      if (Array.isArray(mark.y)) {
+        y = this.yScale.getMidpoint(...mark.y);
+        let y1ClipSpace = this.xScale(y);
+        let y2 = this.yScale.getMidpoint(...mark.height);
+        height = (this.yScale(y2) - y1ClipSpace) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+      } else {
+        y = mark.y;
+        height = mark.height;
+      }
+      return {
+        x,
+        y,
+        width,
+        height
+      };
+    }
+    /**
     * Construct the vertices of a mark.
     *
     * @param {Object} mark to draw
@@ -1014,6 +1104,9 @@
     */
     calculateForMark(mark) {
       if (this.track.x.type === "genomicRange" || this.track.y.type === "genomicRange") {
+        if (this.track.mark === "arc") {
+          return this._calculateForMark(this.transformGenomicRangeArcToStandard(mark));
+        }
         return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
       }
       return this._calculateForMark(mark);
@@ -1032,6 +1125,9 @@
       }
       if (this.track.mark === "rect") {
         return this._getVerticesForRect(mark);
+      }
+      if (this.track.mark === "arc") {
+        return this._getVerticesForArc(mark);
       }
       switch (mark.shape) {
         case "dot":
@@ -1060,6 +1156,16 @@
         isX = !isX;
         return isX ? this.xScale(coord) : this.yScale(coord);
       });
+    }
+    _getVerticesForArc(mark) {
+      const startPoint = this._mapToGPUSpace([mark.x, mark.y]);
+      const quadraticCurve = $6d3e717fed031fdb2ee2c357e03764b6$var$getCurveForArc(startPoint, [startPoint[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, startPoint[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS]);
+      const vertices = [...quadraticCurve(0), ...quadraticCurve(1 / $6d3e717fed031fdb2ee2c357e03764b6$var$NUMBER_OF_VERTICES_PER_ARC)];
+      for (let i = 2; i < $6d3e717fed031fdb2ee2c357e03764b6$var$NUMBER_OF_VERTICES_PER_ARC + 1; i++) {
+        const nextPoint = quadraticCurve(i / $6d3e717fed031fdb2ee2c357e03764b6$var$NUMBER_OF_VERTICES_PER_ARC);
+        vertices.push(vertices[vertices.length - 2], vertices[vertices.length - 1], nextPoint[0], nextPoint[1]);
+      }
+      return vertices;
     }
     _getVerticesForAreaSection(mark) {
       if (!this.lastMark) {
@@ -1093,12 +1199,12 @@
       center[0] - mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] - mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0] + mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] + mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0] - mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] - mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0] + mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] - mark.size / 2 * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS];
     }
     _getVerticesForRect(mark) {
-      // 2------------1,4
-      // |        /    |
-      // |    /        |
-      // 3,5------------6
+      // 1-----------3,6
+      // |       /    |
+      // |     /      |
+      // 2,5-----------4
       const center = this._mapToGPUSpace([mark.x, mark.y]);
-      return [center[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0], center[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0], center[1], center[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1], center[0], center[1]];
+      return [center[0], center[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0], center[1], center[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1], center[0], center[1], center[0] + mark.width * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS, center[1] + mark.height * $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS];
     }
     _getVerticesForTick(mark) {
       const center = this._mapToGPUSpace([mark.x, mark.y]);
@@ -3201,6 +3307,7 @@
       case "line":
         return "LINE_STRIP";
       case "tick":
+      case "arc":
         return "LINES";
       case "point":
         if (track.shape && track.shape.value !== "dot") {
@@ -3208,7 +3315,6 @@
         } else {
           return "POINTS";
         }
-      case "bar":
       case "rect":
       case "area":
         return "TRIANGLES";
@@ -3488,7 +3594,7 @@
   };
   /**
   * Build a function which maps a genome chr, start, and end to an object consumable by a scale
-  * @param {*} channel either x or y
+  * @param {*} channel either x or y, width or height may be included if doing arc marks
   * @param {*} channelInfo the object containing info for this channel from the schema
   * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
   *  format: [chrId, geneLocation, chrId2, geneLocation2]
@@ -3496,6 +3602,8 @@
   */
   const $647b390bbe26a1e6bbc6a8c9e19f41d2$var$buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
     switch (channel) {
+      case "width":
+      case "height":
       case "x":
       case "y":
         return (chr, genomeStart, genomeEnd) => {
@@ -3533,4 +3641,4 @@
   parcelRequire.register("3k8Hq", $6d3e717fed031fdb2ee2c357e03764b6$init);
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.b65565ff.js.map
+//# sourceMappingURL=offscreen-webgl-worker.38730873.js.map

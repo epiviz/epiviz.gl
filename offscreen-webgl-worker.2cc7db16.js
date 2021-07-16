@@ -1,10 +1,11 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.b65565ff.js");
+  importScripts("./offscreen-webgl-worker.38730873.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
   var $794bbb298c1fc0cc3157526701549b8c$init = parcelRequire("3GSGc");
   var $6d3e717fed031fdb2ee2c357e03764b6$init = parcelRequire("3k8Hq");
+  var $2e9e6b6c3378724b336406626f99a6bc$init = parcelRequire("1pY2N");
   class $d125d48a203687d140152f108c7101d5$export$default {
     /**
     * An interface for drawing on a canvas.
@@ -59,22 +60,22 @@
   /**
   * A vertex shader meant to take in positions, colors, and contain uniforms for zooming and panning.
   */
-  const $5aa01963e4773c466fc995fbb6f57ffb$var$baseVertexShader = `
+  const $5aa01963e4773c466fc995fbb6f57ffb$var$baseVertexShader = `#version 300 es
   precision highp float;
 
-  attribute vec2 aVertexPosition;
+  in vec2 a_VertexPosition;
 
   uniform float pointSizeModifier;
   // [x1, y1,x2, y2] of viewing window
   uniform vec4 viewport;
 
-  varying vec4 vColor;
+  out vec4 vColor;
 `;
   /**
   * Appended to end of vertex shader. Includes math for zooming and panning,
   * ability to unpack colors and send to fragment shader.
   */
-  const $5aa01963e4773c466fc995fbb6f57ffb$var$vertexShaderSuffix = `
+  const $5aa01963e4773c466fc995fbb6f57ffb$var$vertexShaderSuffix = (opacityName, colorName, sizeName) => `
   vec3 unpackColor(float f) {
     vec3 colorVec;
     colorVec.r = floor(f / 65536.0);
@@ -87,31 +88,35 @@
     // Subtract each vertex by midpoint of the viewport 
     // window to center points. Then scale by ratio of max window size to window size
     gl_Position = vec4(
-       (aVertexPosition.x - (viewport.z + viewport.x)/2.0) * 2.0/(viewport.z - viewport.x),
-       (aVertexPosition.y - (viewport.w + viewport.y)/2.0) * 2.0/(viewport.w - viewport.y),
+       (a_VertexPosition.x - (viewport.z + viewport.x)/2.0) * 2.0/(viewport.z - viewport.x),
+       (a_VertexPosition.y - (viewport.w + viewport.y)/2.0) * 2.0/(viewport.w - viewport.y),
         0,
         1
     );
-    vec3 unpackedValues = unpackColor(color);
+    vec3 unpackedValues = unpackColor(${colorName});
 
     vColor = vec4(
       unpackedValues.rgb,
-      opacity
+      ${opacityName}
     );
-    gl_PointSize = size * pointSizeModifier;
+    gl_PointSize = ${sizeName} * pointSizeModifier;
   }
 `;
   /**
   * A fragment shader which chooses color simply passed to by vertex shader.
   */
-  const $5aa01963e4773c466fc995fbb6f57ffb$export$varyingColorsFragmentShader = `
-  varying mediump vec4 vColor;
+  const $5aa01963e4773c466fc995fbb6f57ffb$export$varyingColorsFragmentShader = `#version 300 es
+  precision highp float;
 
+  in vec4 vColor;
+
+  out vec4 outColor;
   void main(void) {
-    gl_FragColor = vColor;
+    outColor = vColor;
   }
 `;
   class $5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader {
+    static SUPPORTED_CHANNEL_ATTRIBUTES = Object.freeze(["color", "size", "opacity"]);
     /**
     * A class meant to contain all the relevant information for a shader program, such as uniforms
     * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSchema
@@ -122,7 +127,7 @@
       this.uniforms = {};
       // Add position buffers here since x and y channels don't map nicely to shader code
       this.attributes = {
-        aVertexPosition: {
+        a_VertexPosition: {
           numComponents: 2,
           data: []
         }
@@ -137,14 +142,14 @@
     */
     addMarkToBuffers(mark, vertexCalculator) {
       const vertices = vertexCalculator.calculateForMark(mark);
-      this.attributes.aVertexPosition.data.push(...vertices);
+      this.attributes.a_VertexPosition.data.push(...vertices);
       for (const channel of Object.keys(this.attributes)) {
-        if (channel === "aVertexPosition") {
+        if (channel === "a_VertexPosition") {
           // handled above
           continue;
         }
         for (let i = 0; i < vertices.length / 2; i++) {
-          this.attributes[channel].data.push(mark[channel]);
+          this.attributes[channel].data.push(mark[channel.substring(2)]);
         }
       }
       this.lastMark = mark;
@@ -165,11 +170,11 @@
     * @returns this
     */
     addChannelBuffer(channel, numComponents = 1) {
-      this.attributes[channel] = {
+      this.attributes[`a_${channel}`] = {
         numComponents,
         data: []
       };
-      this.shader += `attribute float ${channel};\n`;
+      this.shader += `in float a_${channel};\n`;
       return this;
     }
     /**
@@ -180,8 +185,8 @@
     * @returns this
     */
     setChannelUniform(channel, uniform) {
-      this.uniforms[channel] = uniform;
-      this.shader += `uniform float ${channel};\n`;
+      this.uniforms[`u_${channel}`] = uniform;
+      this.shader += `uniform float u_${channel};\n`;
       return this;
     }
     /**
@@ -195,7 +200,10 @@
       if (this.built) {
         return this.shader;
       }
-      this.shader += $5aa01963e4773c466fc995fbb6f57ffb$var$vertexShaderSuffix;
+      const colorName = ("a_color" in this.attributes) ? "a_color" : "u_color";
+      const opacityName = ("a_opacity" in this.attributes) ? "a_opacity" : "u_opacity";
+      const sizeName = ("a_size" in this.attributes) ? "a_size" : "u_size";
+      this.shader += $5aa01963e4773c466fc995fbb6f57ffb$var$vertexShaderSuffix(opacityName, colorName, sizeName);
       this.built = true;
       return this.shader;
     }
@@ -238,16 +246,22 @@
               // Skip for x and y as handled in constructor
               continue;
             }
-            vsBuilder.addChannelBuffer(channel, $647b390bbe26a1e6bbc6a8c9e19f41d2$init().DEFAULT_CHANNELS[channel].numComponents);
+            // These are currently the only supported channels for shader usage
+            if ($5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
+              vsBuilder.addChannelBuffer(channel, $647b390bbe26a1e6bbc6a8c9e19f41d2$init().DEFAULT_CHANNELS[channel].numComponents);
+            }
           }
         } else {
           // Channel not listed, set default
-          vsBuilder.setChannelUniform(channel, $647b390bbe26a1e6bbc6a8c9e19f41d2$init().DEFAULT_CHANNELS[channel].value);
+          if ($5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
+            vsBuilder.setChannelUniform(channel, $647b390bbe26a1e6bbc6a8c9e19f41d2$init().DEFAULT_CHANNELS[channel].value);
+          }
         }
       }
       return vsBuilder;
     }
   }
+  $2e9e6b6c3378724b336406626f99a6bc$init();
   /*@license twgl.js 4.19.1 Copyright (c) 2015, Gregg Tavares All Rights Reserved.
   Available via the MIT license.
   see: http://github.com/greggman/twgl.js for details*/
@@ -9306,6 +9320,41 @@
     }
     return false;
   }
+  const $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles = 1000000;
+  class $5c6650abbf803aceaee251e2c8e111c9$export$default {
+    /**
+    * Gives guidance or takes control over canvas when semantic zooming
+    * is necessary. Developers should extend this class to create semantic zooming
+    * behavior.
+    * @param {SchemaProcessor} schemaHelper
+    */
+    constructor(schemaHelper) {
+      this.schemaHelper = schemaHelper;
+    }
+    getRecommendedDrawingMode(trackShader, currentXRange, currentYRange) {
+      if (trackShader.drawMode !== "TRIANGLES") {
+        return trackShader.drawMode;
+      }
+      if (!(this.schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) && !(this.schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale)) {
+        // Currently only used for genome tracks
+        return "TRIANGLES";
+      }
+      if (this.schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
+        const numberOfGenes = this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[1]) - this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[0]);
+        if (numberOfGenes < $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles) {
+          return "TRIANGLES";
+        }
+      }
+      if (this.schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
+        const numberOfGenes = this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[1]) - this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[0]);
+        if (numberOfGenes < $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles) {
+          return "TRIANGLES";
+        }
+      }
+      return "LINES";
+    }
+  }
+  const $2b3199d0d5be952e84d95e8de105dfa8$var$ALL_POTENTIAL_ATTRIBUTES = $5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.map(attr => `a_${attr}`).concat("a_VertexPosition");
   class $2b3199d0d5be952e84d95e8de105dfa8$export$default extends $d125d48a203687d140152f108c7101d5$export$default {
     constructor(viewportData) {
       super(viewportData);
@@ -9359,6 +9408,7 @@
     populateBuffers(schemaHelper) {
       let currentTrack = schemaHelper.getNextTrack();
       let currentTrackShaderIndex = 0;
+      this.semanticZoomer = new $5c6650abbf803aceaee251e2c8e111c9$export$default(schemaHelper);
       while (currentTrack) {
         // Construct calculator in track loop as calculator keeps internal state for each track
         let vertexCalculator = new ($6d3e717fed031fdb2ee2c357e03764b6$init().default)(schemaHelper.xScale, schemaHelper.yScale, currentTrack.track);
@@ -9386,13 +9436,6 @@
       const viewport = this.getWebGLViewport();
       this.globalUniforms.viewport = new Float32Array(viewport.slice(0, 4));
       this.globalUniforms.pointSizeModifier = viewport[4];
-      this.trackShaders.forEach((trackShader, index) => {
-        this.gl.useProgram(this.programInfos[index].program);
-        $52d13d33bd60c65a724bfd448491637f$export$setUniforms(this.programInfos[index], {
-          ...this.globalUniforms,
-          ...trackShader.uniforms
-        });
-      });
       // Clear the canvas before we start drawing on it.
       this.gl.clearColor(1, 1, 1, 1);
       // Set the blending function
@@ -9405,8 +9448,12 @@
       // For each track shader, use their shader program then draw it
       this.trackShaders.forEach((trackShader, index) => {
         this.gl.useProgram(this.programInfos[index].program);
-        $52d13d33bd60c65a724bfd448491637f$export$setBuffersAndAttributes(this.gl, this.programInfos[index], this.bufferInfos[index]);
-        $52d13d33bd60c65a724bfd448491637f$export$drawBufferInfo(this.gl, this.bufferInfos[index], this.gl[trackShader.drawMode], trackShader.attributes.aVertexPosition.data.length / 2);
+        $52d13d33bd60c65a724bfd448491637f$export$setUniforms(this.programInfos[index], {
+          ...this.globalUniforms,
+          ...trackShader.uniforms
+        });
+        $52d13d33bd60c65a724bfd448491637f$export$setBuffersAndAttributes(this.gl, this.programInfos[index], this.vertexArrayInfos[index]);
+        $52d13d33bd60c65a724bfd448491637f$export$drawBufferInfo(this.gl, this.vertexArrayInfos[index], this.gl[this.semanticZoomer.getRecommendedDrawingMode(trackShader, this.currentXRange, this.currentYRange)], trackShader.attributes.a_VertexPosition.data.length / 2);
       });
       this.needsAnimation = false;
       this.lastFrame = requestAnimationFrame(this.animate.bind(this));
@@ -9418,12 +9465,12 @@
     */
     render() {
       super.render();
-      this.programInfos = this.trackShaders.map(trackShader => $52d13d33bd60c65a724bfd448491637f$export$createProgramInfo(this.gl, [trackShader.buildShader(), $5aa01963e4773c466fc995fbb6f57ffb$export$varyingColorsFragmentShader]));
+      this.programInfos = this.trackShaders.map(trackShader => $52d13d33bd60c65a724bfd448491637f$export$createProgramInfo(this.gl, [trackShader.buildShader(), $5aa01963e4773c466fc995fbb6f57ffb$export$varyingColorsFragmentShader], $2b3199d0d5be952e84d95e8de105dfa8$var$ALL_POTENTIAL_ATTRIBUTES));
       this.globalUniforms = {
         viewport: new Float32Array([-1, -1, 1, 1]),
         pointSizeModifier: 1
       };
-      this.bufferInfos = this.trackShaders.map(trackShader => $52d13d33bd60c65a724bfd448491637f$export$createBufferInfoFromArrays(this.gl, trackShader.attributes));
+      this.vertexArrayInfos = this.trackShaders.map(trackShader => $52d13d33bd60c65a724bfd448491637f$export$createVertexArrayInfo(this.gl, this.programInfos, $52d13d33bd60c65a724bfd448491637f$export$createBufferInfoFromArrays(this.gl, trackShader.attributes)));
       this.needsAnimation = true;
       this.animate();
     }
@@ -9464,4 +9511,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.8bfc81c2.js.map
+//# sourceMappingURL=offscreen-webgl-worker.2cc7db16.js.map

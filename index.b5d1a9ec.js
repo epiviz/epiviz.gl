@@ -365,6 +365,13 @@
         }
         return formatting ? `chr${chrId}:${$c8cf865515e7e5d7357b07df1e313b78$export$format(formatting)(chrLoc)}` : `chr${chrId}:${chrLoc}`;
       }
+      getMidpoint(chr1, gene1, chr2, gene2) {
+        const x1 = this.toClipSpaceFromParts(chr1, gene1);
+        const x2 = this.toClipSpaceFromParts(chr2, gene2);
+        const middleGene = this.inverse((x1 + x2) / 2);
+        const [chrId, gene] = middleGene.substring(3).split(":");
+        return [chrId, parseInt(gene)];
+      }
       /**
       * Get a sequence of ticks for a range in the genome.
       *
@@ -395,6 +402,14 @@
           tickCoords: toReturn,
           tickLabels: toReturn.map(coord => this.inverse(coord, $c8cf865515e7e5d7357b07df1e313b78$export$format(`.${suggestedFormat}s`)))
         };
+      }
+      toCallable() {
+        // TODO investigate if using this method in the vertex calculator leads to slow downs
+        const func = args => {
+          return this.toClipSpaceFromParts(args[0], args[1]);
+        };
+        func.getMidpoint = this.getMidpoint.bind(this);
+        return func;
       }
       /**
       * Utility method for getting a GenomeScale across an entire genome.
@@ -925,6 +940,27 @@
                      ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`;
       return toReturn;
     };
+    /**
+    * We need to calculate points on the arc for that mark type, but it needs to be quick.
+    * In addition, it shouldn't be a perfect circle, and also should look somewhat arc like.
+    * This utility funciton returns function that takes a value between 0 and 1 where 0 maps
+    * to the first control point, and 1 maps to the third control point.
+    *
+    * https://math.stackexchange.com/a/1361717
+    *
+    * @param {Array} P0 first control point
+    * @param {Array} P1 second control point
+    * @param {Array} P2 third control point
+    * @returns a function [0, 1] -> point on curve
+    */
+    const $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
+      const x = t => (1 - t) ** 2 * P0[0] + 2 * t * (1 - t) * P1[0] + t ** 2 * P2[0];
+      const y = t => (1 - t) ** 2 * P0[1] + 2 * t * (1 - t) * P1[1] + t ** 2 * P2[1];
+      return t => [x(t), y(t)];
+    };
+    $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getQuadraticBezierCurveForPoints", function () {
+      return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints;
+    });
     $parcel$export($794bbb298c1fc0cc3157526701549b8c$exports, "getDimAndMarginStyleForSchema", function () {
       return $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema;
     });
@@ -954,4 +990,4 @@
   }
 })();
 
-//# sourceMappingURL=index.c70f1414.js.map
+//# sourceMappingURL=index.b5d1a9ec.js.map

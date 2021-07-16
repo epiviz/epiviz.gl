@@ -26,7 +26,7 @@
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $794bbb298c1fc0cc3157526701549b8c$init = parcelRequire("3GSGc");
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $a3ec95f4dee7d6015f5e0e469f993559$exports = {};
+  var $d6a4d9a7119db89129669e54966b9920$exports = {};
   var $7d806a7a603c235ec027b73d847f4d95$var$mapping = {};
   function $7d806a7a603c235ec027b73d847f4d95$var$register(pairs) {
     var keys = Object.keys(pairs);
@@ -43,7 +43,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.2b3693f6.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.8bfc81c2.js\",\"1S3Hi\":\"data-processor-worker.8abd338d.js\",\"20dyd\":\"index.c70f1414.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.3d9e5432.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"56Qu8\":\"arcs.952090dc.csv\",\"1Utg0\":\"offscreen-webgl-worker.2cc7db16.js\",\"1S3Hi\":\"data-processor-worker.19163a87.js\",\"20dyd\":\"index.b5d1a9ec.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3935,7 +3935,245 @@
       }
     }]
   }, null, 2);
-  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default], ["scatter-grid-margins", $66d52080171abc5351c14cb43ff3c04e$export$default]]);
+  // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
+  var $7ad576ebb62df824fd84d8660c436161$exports = {};
+  $7ad576ebb62df824fd84d8660c436161$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "56Qu8");
+  var $7ad576ebb62df824fd84d8660c436161$$interop$default = /*@__PURE__*/$parcel$interopDefault($7ad576ebb62df824fd84d8660c436161$exports);
+  var $6bf60ad4cb5471e264d914bf306b21ec$export$default = JSON.stringify({
+    xAxis: "zero",
+    yAxis: "none",
+    defaultData: $7ad576ebb62df824fd84d8660c436161$$interop$default,
+    tracks: [{
+      tooltips: 1,
+      mark: "rect",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region1Chrom",
+        startAttribute: "region1Start",
+        endAttribute: "regionEnd",
+        domain: ["chr2:46000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        value: 0
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateBlues"
+      },
+      opacity: {
+        value: 0.25
+      }
+    }, {
+      tooltips: 1,
+      mark: "rect",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region2Chrom",
+        startAttribute: "region2Start",
+        endAttribute: "region2End",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        value: 0
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateReds"
+      },
+      opacity: {
+        value: 0.25
+      }
+    }, {
+      tooltips: 1,
+      mark: "arc",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region1Chrom",
+        startAttribute: "region1Start",
+        endAttribute: "regionEnd",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      width: {
+        type: "genomicRange",
+        chrAttribute: "region2Chrom",
+        startAttribute: "region2Start",
+        endAttribute: "region2End",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        value: 0.1
+      },
+      height: {
+        value: 0
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateBuGn"
+      }
+    }]
+  }, null, 2);
+  var $8470d6df10f48fd658da2e3d9548d382$export$default = JSON.stringify({
+    xAxis: "zero",
+    yAxis: "none",
+    defaultData: $7ad576ebb62df824fd84d8660c436161$$interop$default,
+    tracks: [{
+      tooltips: 1,
+      mark: "rect",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region1Chrom",
+        startAttribute: "region1Start",
+        endAttribute: "regionEnd",
+        domain: ["chr2:46000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        value: 100
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateBlues"
+      },
+      opacity: {
+        value: 0.25
+      }
+    }, {
+      tooltips: 1,
+      mark: "rect",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region2Chrom",
+        startAttribute: "region2Start",
+        endAttribute: "region2End",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        value: 100
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateReds"
+      },
+      opacity: {
+        value: 0.25
+      }
+    }, {
+      tooltips: 1,
+      mark: "arc",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region1Chrom",
+        startAttribute: "region1Start",
+        endAttribute: "regionEnd",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      width: {
+        type: "genomicRange",
+        chrAttribute: "region2Chrom",
+        startAttribute: "region2Start",
+        endAttribute: "region2End",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        value: 108
+      },
+      height: {
+        value: 0
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateBuGn"
+      }
+    }, {
+      tooltips: 1,
+      mark: "line",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region2Chrom",
+        startAttribute: "region2Start",
+        endAttribute: "region2End",
+        domain: ["chr2:38000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 160]
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateReds"
+      },
+      opacity: {
+        value: 0.25
+      }
+    }, {
+      tooltips: 1,
+      mark: "line",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "region1Chrom",
+        startAttribute: "region1Start",
+        endAttribute: "regionEnd",
+        domain: ["chr2:46000", "chr2:243149000"],
+        genome: "hg19"
+      },
+      y: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 160]
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "value",
+        domain: [0, 60],
+        colorScheme: "interpolateBlues"
+      },
+      opacity: {
+        value: 0.25
+      }
+    }]
+  }, null, 2);
+  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["arc-track", $6bf60ad4cb5471e264d914bf306b21ec$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default], ["all-tracks", $8470d6df10f48fd658da2e3d9548d382$export$default], ["scatter-grid-margins", $66d52080171abc5351c14cb43ff3c04e$export$default]]);
   class $9e70f4d5b36c39388b117fee7d542725$export$default {
     /**
     * A class meant to handle changing options on the scatter plot
@@ -3992,24 +4230,6 @@
     updateSelectionWindowDisplay(currentXRange, currentYRange) {
       // This may slow down the rendering since it needs to call the DOM before animating, may need to remove for true benchmark
       document.querySelector(".selection-window").textContent = `[${currentXRange[0].toFixed(4)}, ${currentXRange[1].toFixed(4)}] x [${currentYRange[0].toFixed(4)}, ${currentYRange[1].toFixed(4)}]`;
-    }
-    /**
-    * Maps selection box values to schema paths.
-    *
-    * @param {String} schema name from selection box
-    * @returns path to schema
-    */
-    determineSchemaPath(schema) {
-      switch (schema) {
-        case "tsne":
-          return csv1;
-        case "tsne-10":
-          return csv10;
-        case "tsne-100":
-          return csv100;
-        default:
-          console.error(`Did not recognize schema: ${schema}`);
-      }
     }
   }
   // ASSET: node_modules/@parcel/runtime-js/lib/get-worker-url.js
@@ -9974,7 +10194,7 @@
         }
       },
       mark: {
-        enum: ["point", "line", "area", "rect", "tick"]
+        enum: ["point", "line", "area", "rect", "tick", "arc"]
       },
       tooltips: {
         type: "number",
@@ -10567,4 +10787,4 @@
   });
 })();
 
-//# sourceMappingURL=index.2b3693f6.js.map
+//# sourceMappingURL=index.3d9e5432.js.map
