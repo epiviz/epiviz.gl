@@ -28,3 +28,9 @@ $ npx cypress open
 ```
 
 This will open an additional window, where tests can be run on a live version of chrome.
+
+### Record the tests
+
+```
+$ npx cypress run --spec "cypress/integration/record-tests.spec.js" --env recording=true
+```
