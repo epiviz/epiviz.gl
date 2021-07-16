@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import csv10 from "../examples/tsne10";
+import csv10 from "../examples/tsne-10th";
 
 const controlsSlice = createSlice({
   name: "webglControls",

@@ -6,8 +6,8 @@ import linePlot from "../examples/line-plot";
 import stackedAreaChart from "../examples/stacked-area-chart";
 import tickChart from "../examples/tick-chart";
 import tsne from "../examples/tsne";
-import tsne10 from "../examples/tsne10";
-import tsne100 from "../examples/tsne100";
+import tsne10 from "../examples/tsne-10th";
+import tsne100 from "../examples/tsne-100th";
 import inlineData from "../examples/inline-data";
 import doubleInlineData from "../examples/double-inline-data";
 import tinyScatter from "../examples/tiny-scatter";
@@ -26,8 +26,8 @@ const exampleMap = new Map([
   ["stacked-area-chart", stackedAreaChart],
   ["tick-chart", tickChart],
   ["tsne", tsne],
-  ["tsne-10", tsne10],
-  ["tsne-100", tsne100],
+  ["tsne-10th", tsne10],
+  ["tsne-100th", tsne100],
   ["inline-data", inlineData],
   ["double-inline-data", doubleInlineData],
   ["tiny-scatter", tinyScatter],

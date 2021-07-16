@@ -21,31 +21,56 @@ import "./commands";
 
 const expectCanvasToLookLike = (presetName, wait = 100) => {
   cy.wait(wait); // wait for drawing
-  cy.get("canvas")
-    .then(($c) => {
-      return $c[0].toDataURL("image/png").replace("data:image/png;base64,", "");
-    })
-    .then((canvasData) => {
-      cy.readFile(
-        `cypress/fixtures/test-images/${presetName}.png`,
-        "base64"
-      ).then((correctImage) => {
-        try {
-          expect(canvasData).to.eq(correctImage);
-        } catch (err) {
-          cy.writeFile(
-            `cypress/fixtures/failed-test-images/${presetName}.png`,
-            canvasData,
-            "base64"
-          ).then(() => {
-            expect(0).to.eq(
-              1,
-              `${presetName} did not produce the correct test image!`
-            );
-          });
-        }
-      });
+  getCanvasImage().then((canvasData) => {
+    cy.readFile(
+      `cypress/fixtures/test-images/${presetName}.png`,
+      "base64"
+    ).then((correctImage) => {
+      try {
+        expect(canvasData).to.eq(correctImage);
+      } catch (err) {
+        cy.writeFile(
+          `cypress/fixtures/failed-test-images/${presetName}.png`,
+          canvasData,
+          "base64"
+        ).then(() => {
+          expect(0).to.eq(
+            1,
+            `${presetName} did not produce the correct test image!`
+          );
+        });
+      }
     });
+  });
 };
 
-export { expectCanvasToLookLike };
+const getCanvasImage = () => {
+  return cy.get("canvas").then(($c) => {
+    return $c[0].toDataURL("image/png").replace("data:image/png;base64,", "");
+  });
+};
+
+const allPresetNames = [
+  "area-chart",
+  "double-line-plot",
+  "line-plot",
+  "stacked-area-chart",
+  "tick-chart",
+  "tsne",
+  "tsne-10th",
+  "tsne-100th",
+  "inline-data",
+  "double-inline-data",
+  "tiny-scatter",
+  "scatter-grid",
+  "heatmap",
+  "signed-bar-chart",
+  "vertical-signed-bar-chart",
+  "box-track",
+  "line-track",
+  "scatter-grid-margins",
+];
+
+const longPresets = ["tsne"];
+
+export { expectCanvasToLookLike, getCanvasImage, allPresetNames, longPresets };
