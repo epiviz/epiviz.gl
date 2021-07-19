@@ -16,8 +16,10 @@ import scatterGridMargins from "../examples/scatter-grid-margins";
 import heatmap from "../examples/heatmap";
 import signedBarChart from "../examples/signed-bar-chart";
 import verticalSignedBarChart from "../examples/vertical-signed-bar-chart";
+import arcTrack from "../examples/arc-track";
 import boxTrack from "../examples/box-track";
 import lineTrack from "../examples/line-track";
+import allTracks from "../examples/all-tracks";
 
 const exampleMap = new Map([
   ["area-chart", areaChart],
@@ -35,8 +37,10 @@ const exampleMap = new Map([
   ["heatmap", heatmap],
   ["signed-bar-chart", signedBarChart],
   ["vertical-signed-bar-chart", verticalSignedBarChart],
+  ["arc-track", arcTrack],
   ["box-track", boxTrack],
   ["line-track", lineTrack],
+  ["all-tracks", allTracks],
   ["scatter-grid-margins", scatterGridMargins],
 ]);
 
@@ -103,25 +107,6 @@ class Toolbar {
     )}, ${currentXRange[1].toFixed(4)}] x [${currentYRange[0].toFixed(
       4
     )}, ${currentYRange[1].toFixed(4)}]`;
-  }
-
-  /**
-   * Maps selection box values to schema paths.
-   *
-   * @param {String} schema name from selection box
-   * @returns path to schema
-   */
-  determineSchemaPath(schema) {
-    switch (schema) {
-      case "tsne":
-        return csv1;
-      case "tsne-10":
-        return csv10;
-      case "tsne-100":
-        return csv100;
-      default:
-        console.error(`Did not recognize schema: ${schema}`);
-    }
   }
 }
 

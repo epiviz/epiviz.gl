@@ -78,6 +78,7 @@ const getDrawModeForTrack = (track) => {
     case "line":
       return "LINE_STRIP";
     case "tick":
+    case "arc":
       return "LINES";
     case "point":
       if (track.shape && track.shape.value !== "dot") {
@@ -85,7 +86,6 @@ const getDrawModeForTrack = (track) => {
       } else {
         return "POINTS";
       }
-    case "bar":
     case "rect":
     case "area":
       return "TRIANGLES";
@@ -453,7 +453,7 @@ const buildMapperForGenomicChannel = (channel, channelInfo) => {
 
 /**
  * Build a function which maps a genome chr, start, and end to an object consumable by a scale
- * @param {*} channel either x or y
+ * @param {*} channel either x or y, width or height may be included if doing arc marks
  * @param {*} channelInfo the object containing info for this channel from the schema
  * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
  *  format: [chrId, geneLocation, chrId2, geneLocation2]
@@ -461,6 +461,8 @@ const buildMapperForGenomicChannel = (channel, channelInfo) => {
  */
 const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   switch (channel) {
+    case "width":
+    case "height":
     case "x":
     case "y":
       return (chr, genomeStart, genomeEnd) => {
