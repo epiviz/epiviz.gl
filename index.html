@@ -5,7 +5,7 @@
     <meta name="description" content="A demo of an interactive point visualization using WebGL">
     <link rel="stylesheet" href="index.c3f73997.css">
     <link rel="icon" href="favicon.0961d3ce.ico" type="image/x-icon">
-    <script src="index.b5d1a9ec.js"></script><script src="index.3d9e5432.js"></script>
+    <script src="index.b5d1a9ec.js"></script><script src="index.f2e930bb.js"></script>
   </head>
   <body>
     <main>
@@ -34,8 +34,8 @@
             <option value="arc-track">Arc Track</option>
             <option value="box-track">Box Track</option>
             <option value="line-track">Line Track</option>
-            <option value="tsne-100">t-SNE Dataset (1/100)</option>
-            <option value="tsne-10">t-SNE Dataset (1/10)</option>
+            <option value="tsne-100th">t-SNE Dataset (1/100)</option>
+            <option value="tsne-10th">t-SNE Dataset (1/10)</option>
             <option value="tsne">t-SNE Dataset</option>
           </select>
         </div>
@@ -43,8 +43,8 @@
           <img src="pan_tool_black_24dp.809514b8.svg" alt="pan tool">
           <img src="highlight_alt_black_24dp.115f99d7.svg" alt="box select">
           <img src="gesture_black_24dp.d0be24a4.svg" alt="lasso select">
-          <img src="zoom_in_black_24dp.5a11330d.svg" alt="zoom in">
-          <img src="touch_app_black_24dp.6f0cca5f.svg" alt="tooltip examine">
+          <!-- <img src="../assets/zoom_in_black_24dp.svg" alt="zoom in" /> -->
+          <!-- <img src="../assets/touch_app_black_24dp.svg" alt="tooltip examine" /> -->
         </div>
 
         <div class="scroll-state">
@@ -52,11 +52,6 @@
           <input type="checkbox" id="lock-x" name="lock-x">
           <label for="lock-x">Lock Y</label>
           <input type="checkbox" id="lock-y" name="lock-y">
-        </div>
-        <div class="selection-window">
-          <span class="x-range"></span>
-          x
-          <span class="y-range"></span>
         </div>
       </div>
       <div class="panes">

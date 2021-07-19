@@ -21,8 +21,8 @@
       if ((name in $parcel$modules)) {
         return $parcel$modules[name];
       }
-      /*Try the node require function if it exists.*/
-      /*Do not use `require` to prevent Webpack from trying to bundle this call*/
+      // Try the node require function if it exists.
+      // Do not use `require` to prevent Webpack from trying to bundle this call
       if (typeof module !== 'undefined' && typeof module.require === 'function') {
         return module.require(name);
       }
@@ -991,6 +991,7 @@
   // is equal to 50 pixels
   const $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS = 1 / 100;
   const $6d3e717fed031fdb2ee2c357e03764b6$var$NUMBER_OF_VERTICES_PER_ARC = 20;
+  const $6d3e717fed031fdb2ee2c357e03764b6$var$ARC_HEIGHT_MODIFIER = 10;
   /**
   * Get a curve representing the arc with given start and end points
   *
@@ -1009,7 +1010,7 @@
       return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints(P0, [P0[0] - distance, midpoint[1]], P2);
     }
     const parameterized = t => [midpoint[0] + t / distance * (P0[1] - P2[1]), midpoint[1] + t / distance * (P2[0] - P0[0])];
-    return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints(P0, parameterized(distance * Math.sqrt(3) * 10 / 2), P2);
+    return $794bbb298c1fc0cc3157526701549b8c$export$getQuadraticBezierCurveForPoints(P0, parameterized(distance * $6d3e717fed031fdb2ee2c357e03764b6$var$ARC_HEIGHT_MODIFIER), P2);
   };
   class $6d3e717fed031fdb2ee2c357e03764b6$export$default {
     /**
@@ -1073,18 +1074,22 @@
       let x, y, width, height;
       if (Array.isArray(mark.x)) {
         x = this.xScale.getMidpoint(...mark.x);
-        let x1ClipSpace = this.xScale(x);
         let x2 = this.xScale.getMidpoint(...mark.width);
-        width = (this.xScale(x2) - x1ClipSpace) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+        let x1ClipSpace = this.xScale(x);
+        let x2ClipSpace = this.xScale(x2);
+        x = x1ClipSpace < x2ClipSpace ? x : x2;
+        width = Math.abs(this.xScale(x2) - x1ClipSpace) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
       } else {
         x = mark.x;
         width = mark.width;
       }
       if (Array.isArray(mark.y)) {
         y = this.yScale.getMidpoint(...mark.y);
-        let y1ClipSpace = this.xScale(y);
         let y2 = this.yScale.getMidpoint(...mark.height);
-        height = (this.yScale(y2) - y1ClipSpace) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
+        let y1ClipSpace = this.xScale(y);
+        let y2ClipSpace = this.xScale(y2);
+        y = y1ClipSpace < y2ClipSpace ? y : y2;
+        height = Math.abs(this.yScale(y2) - y1ClipSpace) / $6d3e717fed031fdb2ee2c357e03764b6$export$SIZE_UNITS;
       } else {
         y = mark.y;
         height = mark.height;
@@ -3641,4 +3646,4 @@
   parcelRequire.register("3k8Hq", $6d3e717fed031fdb2ee2c357e03764b6$init);
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.38730873.js.map
+//# sourceMappingURL=offscreen-webgl-worker.1b7f1349.js.map

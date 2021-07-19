@@ -1,5 +1,5 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.38730873.js");
+  importScripts("./offscreen-webgl-worker.1b7f1349.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
@@ -55,6 +55,41 @@
   $647b390bbe26a1e6bbc6a8c9e19f41d2$init();
   $794bbb298c1fc0cc3157526701549b8c$init();
   $6d3e717fed031fdb2ee2c357e03764b6$init();
+  $2e9e6b6c3378724b336406626f99a6bc$init();
+  const $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles = 20000000;
+  class $5c6650abbf803aceaee251e2c8e111c9$export$default {
+    /**
+    * Gives guidance or takes control over canvas when semantic zooming
+    * is necessary. Developers should extend this class to create semantic zooming
+    * behavior.
+    * @param {SchemaProcessor} schemaHelper
+    */
+    constructor(schemaHelper) {
+      this.schemaHelper = schemaHelper;
+    }
+    getRecommendedDrawingMode(trackShader, currentXRange, currentYRange) {
+      if (trackShader.drawMode !== "TRIANGLES") {
+        return trackShader.drawMode;
+      }
+      if (!(this.schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) && !(this.schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale)) {
+        // Currently only used for genome tracks
+        return "TRIANGLES";
+      }
+      if (this.schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
+        const numberOfGenes = this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[1]) - this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[0]);
+        if (numberOfGenes < $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles) {
+          return "TRIANGLES";
+        }
+      }
+      if (this.schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
+        const numberOfGenes = this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[1]) - this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[0]);
+        if (numberOfGenes < $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles) {
+          return "TRIANGLES";
+        }
+      }
+      return "LINES";
+    }
+  }
   $647b390bbe26a1e6bbc6a8c9e19f41d2$init();
   $794bbb298c1fc0cc3157526701549b8c$init();
   /**
@@ -261,7 +296,6 @@
       return vsBuilder;
     }
   }
-  $2e9e6b6c3378724b336406626f99a6bc$init();
   /*@license twgl.js 4.19.1 Copyright (c) 2015, Gregg Tavares All Rights Reserved.
   Available via the MIT license.
   see: http://github.com/greggman/twgl.js for details*/
@@ -9320,40 +9354,6 @@
     }
     return false;
   }
-  const $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles = 1000000;
-  class $5c6650abbf803aceaee251e2c8e111c9$export$default {
-    /**
-    * Gives guidance or takes control over canvas when semantic zooming
-    * is necessary. Developers should extend this class to create semantic zooming
-    * behavior.
-    * @param {SchemaProcessor} schemaHelper
-    */
-    constructor(schemaHelper) {
-      this.schemaHelper = schemaHelper;
-    }
-    getRecommendedDrawingMode(trackShader, currentXRange, currentYRange) {
-      if (trackShader.drawMode !== "TRIANGLES") {
-        return trackShader.drawMode;
-      }
-      if (!(this.schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) && !(this.schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale)) {
-        // Currently only used for genome tracks
-        return "TRIANGLES";
-      }
-      if (this.schemaHelper.xScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
-        const numberOfGenes = this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[1]) - this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[0]);
-        if (numberOfGenes < $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles) {
-          return "TRIANGLES";
-        }
-      }
-      if (this.schemaHelper.yScale instanceof $2e9e6b6c3378724b336406626f99a6bc$init().GenomeScale) {
-        const numberOfGenes = this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[1]) - this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[0]);
-        if (numberOfGenes < $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles) {
-          return "TRIANGLES";
-        }
-      }
-      return "LINES";
-    }
-  }
   const $2b3199d0d5be952e84d95e8de105dfa8$var$ALL_POTENTIAL_ATTRIBUTES = $5aa01963e4773c466fc995fbb6f57ffb$export$VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.map(attr => `a_${attr}`).concat("a_VertexPosition");
   class $2b3199d0d5be952e84d95e8de105dfa8$export$default extends $d125d48a203687d140152f108c7101d5$export$default {
     constructor(viewportData) {
@@ -9511,4 +9511,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.2cc7db16.js.map
+//# sourceMappingURL=offscreen-webgl-worker.a5a92e26.js.map

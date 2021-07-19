@@ -26,7 +26,7 @@
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $794bbb298c1fc0cc3157526701549b8c$init = parcelRequire("3GSGc");
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $d6a4d9a7119db89129669e54966b9920$exports = {};
+  var $bf4b0d5d6d4f1aae0bb84612c5c5736f$exports = {};
   var $7d806a7a603c235ec027b73d847f4d95$var$mapping = {};
   function $7d806a7a603c235ec027b73d847f4d95$var$register(pairs) {
     var keys = Object.keys(pairs);
@@ -43,7 +43,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.3d9e5432.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"56Qu8\":\"arcs.952090dc.csv\",\"1Utg0\":\"offscreen-webgl-worker.2cc7db16.js\",\"1S3Hi\":\"data-processor-worker.19163a87.js\",\"20dyd\":\"index.b5d1a9ec.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.f2e930bb.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"56Qu8\":\"arcs.952090dc.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.a5a92e26.js\",\"1S3Hi\":\"data-processor-worker.6cc8b5b6.js\",\"20dyd\":\"index.b5d1a9ec.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3229,7 +3229,7 @@
   }
   $05429b931e0851c076a95f3dc2c40c24$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "inPCI");
   var $05429b931e0851c076a95f3dc2c40c24$$interop$default = /*@__PURE__*/$parcel$interopDefault($05429b931e0851c076a95f3dc2c40c24$exports);
-  var $5a3b28105c0ee01e6a48fa93335877fd$export$default = JSON.stringify({
+  var $26bf634d365f6af6515f0df355f6569a$export$default = JSON.stringify({
     defaultData: $05429b931e0851c076a95f3dc2c40c24$$interop$default,
     tracks: [{
       tooltips: 0.01,
@@ -3262,7 +3262,7 @@
     name: "webglControls",
     initialState: {
       tool: "pan",
-      schema: $5a3b28105c0ee01e6a48fa93335877fd$export$default,
+      schema: $26bf634d365f6af6515f0df355f6569a$export$default,
       lockedX: false,
       lockedY: false
     },
@@ -3514,7 +3514,7 @@
   var $7c9202d0108707a15e9b799437b0f8ca$exports = {};
   $7c9202d0108707a15e9b799437b0f8ca$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "xDcCF");
   var $7c9202d0108707a15e9b799437b0f8ca$$interop$default = /*@__PURE__*/$parcel$interopDefault($7c9202d0108707a15e9b799437b0f8ca$exports);
-  var $6a6d3a42af9f635efef082120917a460$export$default = JSON.stringify({
+  var $ee02c7b7a829886d2920efde6ce8ac94$export$default = JSON.stringify({
     defaultData: $7c9202d0108707a15e9b799437b0f8ca$$interop$default,
     tracks: [{
       tooltips: 0.01,
@@ -3673,6 +3673,41 @@
       }
     }]
   }, null, 2);
+  const $66d52080171abc5351c14cb43ff3c04e$var$buildGrid = cellsPerRow => {
+    const toReturn = [];
+    for (let i = 0; i < cellsPerRow; i++) {
+      for (let j = 0; j < cellsPerRow; j++) {
+        toReturn.push(`${i / cellsPerRow},${j / cellsPerRow}`);
+      }
+    }
+    return toReturn;
+  };
+  var $66d52080171abc5351c14cb43ff3c04e$export$default = JSON.stringify({
+    margins: {
+      top: "2em",
+      bottom: "100px",
+      left: "5%",
+      right: "1em"
+    },
+    defaultData: ["x,y"].concat($66d52080171abc5351c14cb43ff3c04e$var$buildGrid(5)),
+    tracks: [{
+      tooltips: 1,
+      mark: "point",
+      x: {
+        attribute: "x",
+        type: "quantitative",
+        domain: [0, 1]
+      },
+      y: {
+        attribute: "y",
+        type: "quantitative",
+        domain: [0, 1]
+      },
+      size: {
+        value: 5
+      }
+    }]
+  }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
   var $a849e1ad706408dab39aa942681c7f64$exports = {};
   $a849e1ad706408dab39aa942681c7f64$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "1Ls68");
@@ -3763,15 +3798,6 @@
       }
     }]
   }, null, 2);
-  const $66d52080171abc5351c14cb43ff3c04e$var$buildGrid = cellsPerRow => {
-    const toReturn = [];
-    for (let i = 0; i < cellsPerRow; i++) {
-      for (let j = 0; j < cellsPerRow; j++) {
-        toReturn.push(`${i / cellsPerRow},${j / cellsPerRow}`);
-      }
-    }
-    return toReturn;
-  };
   var $39b829b66c49ff9e9c7cba8890167cf4$export$default = JSON.stringify({
     defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
     xAxis: "zero",
@@ -3806,32 +3832,6 @@
       }
     }]
   }, null, 2);
-  var $66d52080171abc5351c14cb43ff3c04e$export$default = JSON.stringify({
-    margins: {
-      top: "2em",
-      bottom: "100px",
-      left: "5%",
-      right: "1em"
-    },
-    defaultData: ["x,y"].concat($66d52080171abc5351c14cb43ff3c04e$var$buildGrid(5)),
-    tracks: [{
-      tooltips: 1,
-      mark: "point",
-      x: {
-        attribute: "x",
-        type: "quantitative",
-        domain: [0, 1]
-      },
-      y: {
-        attribute: "y",
-        type: "quantitative",
-        domain: [0, 1]
-      },
-      size: {
-        value: 5
-      }
-    }]
-  }, null, 2);
   var $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default = JSON.stringify({
     defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
     xAxis: "bottom",
@@ -3862,76 +3862,6 @@
         domain: [-20, 20],
         minWidth: -100,
         maxWidth: 100
-      }
-    }]
-  }, null, 2);
-  // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $4ba204665ead0e711ea03dbeb63addd3$exports = {};
-  $4ba204665ead0e711ea03dbeb63addd3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "3hl2O");
-  var $4ba204665ead0e711ea03dbeb63addd3$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ba204665ead0e711ea03dbeb63addd3$exports);
-  var $a45e353aa6a197e52ec53fe3a27eca5c$export$default = JSON.stringify({
-    margins: {
-      left: "4em"
-    },
-    labels: [{
-      y: 0.05,
-      x: -1.3,
-      text: "Box 1",
-      fixedX: true
-    }],
-    xAxis: "zero",
-    yAxis: "none",
-    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
-    tracks: [{
-      tooltips: 1,
-      mark: "rect",
-      layout: "linear",
-      x: {
-        type: "genomicRange",
-        chrAttribute: "chr",
-        startAttribute: "start",
-        endAttribute: "end",
-        domain: ["chr2:3049800", "chr2:9001000"],
-        genome: "hg38"
-      },
-      y: {
-        value: 0
-      },
-      height: {
-        value: 10
-      },
-      color: {
-        type: "quantitative",
-        attribute: "score",
-        domain: [0, 8],
-        colorScheme: "interpolateBlues"
-      }
-    }]
-  }, null, 2);
-  var $58b5cda6e30b83a6e54733d3e1a14e9d$export$default = JSON.stringify({
-    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
-    tracks: [{
-      tooltips: 1,
-      mark: "line",
-      layout: "linear",
-      x: {
-        type: "genomic",
-        chrAttribute: "chr",
-        geneAttribute: "start",
-        domain: ["chr2:3049800", "chr2:9001000"],
-        genome: "hg38"
-      },
-      y: {
-        type: "quantitative",
-        attribute: "score",
-        domain: [0, 10],
-        colorScheme: "interpolateBlues"
-      },
-      color: {
-        type: "quantitative",
-        attribute: "score",
-        domain: [0, 8],
-        colorScheme: "interpolateBlues"
       }
     }]
   }, null, 2);
@@ -4025,6 +3955,76 @@
         attribute: "value",
         domain: [0, 60],
         colorScheme: "interpolateBuGn"
+      }
+    }]
+  }, null, 2);
+  // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
+  var $4ba204665ead0e711ea03dbeb63addd3$exports = {};
+  $4ba204665ead0e711ea03dbeb63addd3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "3hl2O");
+  var $4ba204665ead0e711ea03dbeb63addd3$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ba204665ead0e711ea03dbeb63addd3$exports);
+  var $a45e353aa6a197e52ec53fe3a27eca5c$export$default = JSON.stringify({
+    margins: {
+      left: "4em"
+    },
+    labels: [{
+      y: 0.05,
+      x: -1.3,
+      text: "Box 1",
+      fixedX: true
+    }],
+    xAxis: "zero",
+    yAxis: "none",
+    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
+    tracks: [{
+      tooltips: 1,
+      mark: "rect",
+      layout: "linear",
+      x: {
+        type: "genomicRange",
+        chrAttribute: "chr",
+        startAttribute: "start",
+        endAttribute: "end",
+        domain: ["chr2:3049800", "chr2:9001000"],
+        genome: "hg38"
+      },
+      y: {
+        value: 0
+      },
+      height: {
+        value: 10
+      },
+      color: {
+        type: "quantitative",
+        attribute: "score",
+        domain: [0, 8],
+        colorScheme: "interpolateBlues"
+      }
+    }]
+  }, null, 2);
+  var $58b5cda6e30b83a6e54733d3e1a14e9d$export$default = JSON.stringify({
+    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
+    tracks: [{
+      tooltips: 1,
+      mark: "line",
+      layout: "linear",
+      x: {
+        type: "genomic",
+        chrAttribute: "chr",
+        geneAttribute: "start",
+        domain: ["chr2:3049800", "chr2:9001000"],
+        genome: "hg38"
+      },
+      y: {
+        type: "quantitative",
+        attribute: "score",
+        domain: [0, 10],
+        colorScheme: "interpolateBlues"
+      },
+      color: {
+        type: "quantitative",
+        attribute: "score",
+        domain: [0, 8],
+        colorScheme: "interpolateBlues"
       }
     }]
   }, null, 2);
@@ -4173,7 +4173,7 @@
       }
     }]
   }, null, 2);
-  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10", $5a3b28105c0ee01e6a48fa93335877fd$export$default], ["tsne-100", $6a6d3a42af9f635efef082120917a460$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["arc-track", $6bf60ad4cb5471e264d914bf306b21ec$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default], ["all-tracks", $8470d6df10f48fd658da2e3d9548d382$export$default], ["scatter-grid-margins", $66d52080171abc5351c14cb43ff3c04e$export$default]]);
+  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10th", $26bf634d365f6af6515f0df355f6569a$export$default], ["tsne-100th", $ee02c7b7a829886d2920efde6ce8ac94$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["arc-track", $6bf60ad4cb5471e264d914bf306b21ec$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default], ["all-tracks", $8470d6df10f48fd658da2e3d9548d382$export$default], ["scatter-grid-margins", $66d52080171abc5351c14cb43ff3c04e$export$default]]);
   class $9e70f4d5b36c39388b117fee7d542725$export$default {
     /**
     * A class meant to handle changing options on the scatter plot
@@ -10787,4 +10787,4 @@
   });
 })();
 
-//# sourceMappingURL=index.3d9e5432.js.map
+//# sourceMappingURL=index.f2e930bb.js.map

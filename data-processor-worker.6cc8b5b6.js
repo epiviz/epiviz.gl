@@ -1,5 +1,5 @@
 (function () {
-  importScripts("./offscreen-webgl-worker.38730873.js");
+  importScripts("./offscreen-webgl-worker.1b7f1349.js");
   var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $647b390bbe26a1e6bbc6a8c9e19f41d2$init = parcelRequire("33BxP");
@@ -2884,4 +2884,4 @@
   };
 })();
 
-//# sourceMappingURL=data-processor-worker.19163a87.js.map
+//# sourceMappingURL=data-processor-worker.6cc8b5b6.js.map
