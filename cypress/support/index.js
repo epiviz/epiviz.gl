@@ -66,6 +66,7 @@ const allPresetNames = [
   "heatmap",
   "signed-bar-chart",
   "vertical-signed-bar-chart",
+  "arc-track",
   "box-track",
   "line-track",
   "scatter-grid-margins",
