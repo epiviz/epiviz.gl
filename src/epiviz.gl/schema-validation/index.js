@@ -3,7 +3,6 @@ import visualization from "./visualization.json";
 import track from "./track.json";
 import channel from "./channel.json";
 
-console.log(channel, track, visualization);
 const v = new Validator();
 v.addSchema(channel, "/channel");
 v.addSchema(track, "/track");
