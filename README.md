@@ -2,6 +2,14 @@
 
 The `epiviz.gl` project is meant to visualize genomic data using webgl and webworkers, in an effort to give a fluid, high-performance user experience.
 
+**Live demo: https://epiviz.github.io/epiviz.gl/**
+
+## Install
+
+```
+$ yarn install git+https://github.com/epiviz/epiviz.gl
+```
+
 ## Quick Start
 
 ### Prepare the repository
