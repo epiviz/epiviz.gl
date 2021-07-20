@@ -1,4 +1,4 @@
-import csv from "url:../data/arcs.csv";
+import csv from "url:./data/arcs.csv";
 
 export default JSON.stringify(
   {

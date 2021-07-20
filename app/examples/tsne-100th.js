@@ -1,10 +1,8 @@
-import csv from "url:../data/tsne.csv";
+import csv100 from "url:./data/tsne_hundreth.csv";
 
 export default JSON.stringify(
   {
-    xAxis: "center",
-    yAxis: "center",
-    defaultData: csv,
+    defaultData: csv100,
     tracks: [
       {
         tooltips: 0.01,
@@ -28,7 +26,7 @@ export default JSON.stringify(
           cardinality: 32,
           colorScheme: "interpolateRainbow",
         },
-        opacity: { value: 0.05 },
+        opacity: { value: 0.5 },
       },
     ],
   },

@@ -1,14 +1,12 @@
-import strawberries from "url:../data/strawberries.csv";
+import strawberries from "url:./data/strawberries.csv";
 
 export default JSON.stringify(
   {
     defaultData: strawberries,
-    xAxis: "bottom",
-    yAxis: "left",
     tracks: [
       {
         tooltips: 1,
-        mark: "area",
+        mark: "line",
         layout: "linear",
         x: {
           attribute: "day",

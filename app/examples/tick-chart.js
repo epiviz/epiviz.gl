@@ -1,4 +1,4 @@
-import signals from "url:../data/signals.csv";
+import signals from "url:./data/signals.csv";
 
 export default JSON.stringify(
   {

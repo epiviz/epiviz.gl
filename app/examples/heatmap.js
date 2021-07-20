@@ -1,4 +1,4 @@
-import csv from "url:../data/heatmap.csv";
+import csv from "url:./data/heatmap.csv";
 
 export default JSON.stringify(
   {

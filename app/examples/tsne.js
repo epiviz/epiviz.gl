@@ -1,8 +1,10 @@
-import csv10 from "url:../data/tsne_tenth.csv";
+import csv from "url:./data/tsne.csv";
 
 export default JSON.stringify(
   {
-    defaultData: csv10,
+    xAxis: "center",
+    yAxis: "center",
+    defaultData: csv,
     tracks: [
       {
         tooltips: 0.01,

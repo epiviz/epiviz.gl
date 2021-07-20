@@ -1,13 +1,16 @@
-import strawberries from "url:../data/strawberries.csv";
-import broccoli from "url:../data/broccoli.csv";
+import strawberries from "url:./data/strawberries.csv";
+import broccoli from "url:./data/broccoli.csv";
 
 export default JSON.stringify(
   {
+    xAxis: "zero",
+    yAxis: "left",
     tracks: [
       {
+        order: 1,
         data: strawberries,
         tooltips: 1,
-        mark: "line",
+        mark: "area",
         layout: "linear",
         x: {
           attribute: "day",
@@ -28,9 +31,10 @@ export default JSON.stringify(
         },
       },
       {
+        order: 2,
         data: broccoli,
         tooltips: 1,
-        mark: "line",
+        mark: "area",
         layout: "linear",
         x: {
           attribute: "day",

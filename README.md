@@ -4,7 +4,7 @@ The `epiviz.gl` project is meant to visualize genomic data using webgl and webwo
 
 ## Quick Start
 
-### Prepare the repositoryu
+### Prepare the repository
 
 ```
 $ yarn install
@@ -24,6 +24,18 @@ Then navigate to `localhost:1234`
 ```
 $ yarn start
 (In a seperate window)
+$ npx cypress open
+```
+
+#### Via command line
+
+```
+$ npx cypress run
+```
+
+#### Via GUI
+
+```
 $ npx cypress open
 ```
 
