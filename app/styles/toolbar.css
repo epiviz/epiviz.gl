@@ -1,0 +1,22 @@
+.toolbar {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background: #ccc;
+  box-shadow: 0 0 10px black;
+  height: 10%;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.controls img {
+  cursor: pointer;
+}
+
+.controls img.selected {
+  padding: 2px;
+  box-shadow: 0 0 5px black;
+}
