@@ -12,7 +12,7 @@ $ yarn install git+https://github.com/epiviz/epiviz.gl
 
 ## Usage
 
-See [app/index.js](https://github.com/epiviz/epiviz.gl/blob/main/src/app/index.js) for a more comprehensive example.
+See [app/index.js](https://github.com/epiviz/epiviz.gl/blob/main/app/scripts/index.js) for a more comprehensive example.
 
 ```javascript
 import WebGLVis from "epiviz.gl";
@@ -60,7 +60,7 @@ All visualizations also include an ability to box or lasso select:
 
 # Schemas
 
-Documentation for schemas can be found in [docs/schema_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/src/docs/schema_doc.md). Documentation for the schemas can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
+Documentation for schemas can be found in [docs/schema_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/schema_doc.md). Documentation for the schemas can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
 
 ```
 $ cd src/epiviz.gl/schema-validation
