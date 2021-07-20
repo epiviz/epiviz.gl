@@ -340,7 +340,7 @@ A method of doing of integration tests is to record the state of the application
 Check if current state matches recordings:
 
 ```
-$ npx cypress run --spec "cypress/integration/expected-images.spec.js" --env recording=true
+$ npx cypress run --spec "cypress/integration/expected-images.spec.js"
 ```
 
 Rerecord the tests:
