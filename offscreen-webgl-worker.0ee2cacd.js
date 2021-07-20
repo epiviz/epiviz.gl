@@ -56,7 +56,7 @@
   $794bbb298c1fc0cc3157526701549b8c$init();
   $6d3e717fed031fdb2ee2c357e03764b6$init();
   $2e9e6b6c3378724b336406626f99a6bc$init();
-  const $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles = 20000000;
+  const $5c6650abbf803aceaee251e2c8e111c9$var$sizeOfGeneRangeForTriangles = 1000000;
   class $5c6650abbf803aceaee251e2c8e111c9$export$default {
     /**
     * Gives guidance or takes control over canvas when semantic zooming
@@ -9511,4 +9511,4 @@
   };
 })();
 
-//# sourceMappingURL=offscreen-webgl-worker.a5a92e26.js.map
+//# sourceMappingURL=offscreen-webgl-worker.0ee2cacd.js.map

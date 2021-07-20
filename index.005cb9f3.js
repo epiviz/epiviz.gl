@@ -26,7 +26,7 @@
   var parcelRequire = $parcel$global.parcelRequire3582;
   var $794bbb298c1fc0cc3157526701549b8c$init = parcelRequire("3GSGc");
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $bf4b0d5d6d4f1aae0bb84612c5c5736f$exports = {};
+  var $2307ed0e773774255ef84947ba32cfcf$exports = {};
   var $7d806a7a603c235ec027b73d847f4d95$var$mapping = {};
   function $7d806a7a603c235ec027b73d847f4d95$var$register(pairs) {
     var keys = Object.keys(pairs);
@@ -43,7 +43,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"2aO6o\":\"index.f2e930bb.js\",\"inPCI\":\"tsne_tenth.55e43465.csv\",\"5AQt2\":\"strawberries.11a42acc.csv\",\"W43K1\":\"broccoli.36a995d8.csv\",\"68hza\":\"signals.1a70087f.csv\",\"5zI6Y\":\"tsne.31f8a0af.csv\",\"xDcCF\":\"tsne_hundreth.33d06bad.csv\",\"1Ls68\":\"heatmap.7058ecef.csv\",\"56Qu8\":\"arcs.952090dc.csv\",\"3hl2O\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.a5a92e26.js\",\"1S3Hi\":\"data-processor-worker.6cc8b5b6.js\",\"20dyd\":\"index.b5d1a9ec.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"50Tuj\":\"index.005cb9f3.js\",\"2BNpl\":\"tsne_tenth.55e43465.csv\",\"3KpF6\":\"strawberries.11a42acc.csv\",\"1wuCL\":\"broccoli.36a995d8.csv\",\"2rcfJ\":\"signals.1a70087f.csv\",\"2LfjQ\":\"tsne.31f8a0af.csv\",\"1Uw7P\":\"tsne_hundreth.33d06bad.csv\",\"22mpg\":\"heatmap.7058ecef.csv\",\"6M6zH\":\"arcs.952090dc.csv\",\"4iX5g\":\"box-track.13d5c735.csv\",\"1Utg0\":\"offscreen-webgl-worker.0ee2cacd.js\",\"1S3Hi\":\"data-processor-worker.6cc8b5b6.js\",\"1pJs5\":\"index.92a94ea9.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3120,7 +3120,7 @@
     return $a5a79905d7f29b6c9078769d5e01bfa0$export$configureStore;
   });
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $05429b931e0851c076a95f3dc2c40c24$exports = {};
+  var $afdcf52e86490c4e584026f316045f57$exports = {};
   // ASSET: node_modules/@parcel/runtime-js/lib/bundle-url.js
   var $634f916bc30b7d6650877f3f4b6a8b3a$exports, $634f916bc30b7d6650877f3f4b6a8b3a$var$bundleURL, $634f916bc30b7d6650877f3f4b6a8b3a$export$getBundleURL, $634f916bc30b7d6650877f3f4b6a8b3a$export$getOrigin, $634f916bc30b7d6650877f3f4b6a8b3a$executed = false;
   function $634f916bc30b7d6650877f3f4b6a8b3a$var$getBundleURLCached() {
@@ -3227,10 +3227,10 @@
     }
     return $824bc590bf0a3702ac7bd27152cb0639$exports;
   }
-  $05429b931e0851c076a95f3dc2c40c24$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "inPCI");
-  var $05429b931e0851c076a95f3dc2c40c24$$interop$default = /*@__PURE__*/$parcel$interopDefault($05429b931e0851c076a95f3dc2c40c24$exports);
-  var $26bf634d365f6af6515f0df355f6569a$export$default = JSON.stringify({
-    defaultData: $05429b931e0851c076a95f3dc2c40c24$$interop$default,
+  $afdcf52e86490c4e584026f316045f57$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "2BNpl");
+  var $afdcf52e86490c4e584026f316045f57$$interop$default = /*@__PURE__*/$parcel$interopDefault($afdcf52e86490c4e584026f316045f57$exports);
+  var $0211b2fb0a3f771e39d61213a7d704bf$export$default = JSON.stringify({
+    defaultData: $afdcf52e86490c4e584026f316045f57$$interop$default,
     tracks: [{
       tooltips: 0.01,
       mark: "point",
@@ -3258,11 +3258,11 @@
       }
     }]
   }, null, 2);
-  const $139b79e5ff209336f4025f9472954faf$var$controlsSlice = $a5a79905d7f29b6c9078769d5e01bfa0$exports.createSlice({
+  const $fed51f82549545858aa2253463b56601$var$controlsSlice = $a5a79905d7f29b6c9078769d5e01bfa0$exports.createSlice({
     name: "webglControls",
     initialState: {
       tool: "pan",
-      schema: $26bf634d365f6af6515f0df355f6569a$export$default,
+      schema: $0211b2fb0a3f771e39d61213a7d704bf$export$default,
       lockedX: false,
       lockedY: false
     },
@@ -3282,14 +3282,14 @@
       }
     }
   });
-  const {setSchema: $139b79e5ff209336f4025f9472954faf$export$setSchema, setTool: $139b79e5ff209336f4025f9472954faf$export$setTool, setScroll: $139b79e5ff209336f4025f9472954faf$export$setScroll} = $139b79e5ff209336f4025f9472954faf$var$controlsSlice.actions;
-  var $139b79e5ff209336f4025f9472954faf$export$default = $139b79e5ff209336f4025f9472954faf$var$controlsSlice.reducer;
+  const {setSchema: $fed51f82549545858aa2253463b56601$export$setSchema, setTool: $fed51f82549545858aa2253463b56601$export$setTool, setScroll: $fed51f82549545858aa2253463b56601$export$setScroll} = $fed51f82549545858aa2253463b56601$var$controlsSlice.actions;
+  var $fed51f82549545858aa2253463b56601$export$default = $fed51f82549545858aa2253463b56601$var$controlsSlice.reducer;
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $df282eba898e0e889073ebd022fefed9$exports = {};
-  $df282eba898e0e889073ebd022fefed9$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "5AQt2");
-  var $df282eba898e0e889073ebd022fefed9$$interop$default = /*@__PURE__*/$parcel$interopDefault($df282eba898e0e889073ebd022fefed9$exports);
-  var $a9e3c2f2aaebe10b8305f7e3352f7046$export$default = JSON.stringify({
-    defaultData: $df282eba898e0e889073ebd022fefed9$$interop$default,
+  var $6db04e0a5e5949211a44689d02584937$exports = {};
+  $6db04e0a5e5949211a44689d02584937$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "3KpF6");
+  var $6db04e0a5e5949211a44689d02584937$$interop$default = /*@__PURE__*/$parcel$interopDefault($6db04e0a5e5949211a44689d02584937$exports);
+  var $b2b06bbc34da9c97d03e2103f126b73d$export$default = JSON.stringify({
+    defaultData: $6db04e0a5e5949211a44689d02584937$$interop$default,
     xAxis: "bottom",
     yAxis: "left",
     tracks: [{
@@ -3316,12 +3316,12 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $0966204d340c6493e3c0d589d8804aa3$exports = {};
-  $0966204d340c6493e3c0d589d8804aa3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "W43K1");
-  var $0966204d340c6493e3c0d589d8804aa3$$interop$default = /*@__PURE__*/$parcel$interopDefault($0966204d340c6493e3c0d589d8804aa3$exports);
-  var $31d08680e4d940d79f9d502e4d97edec$export$default = JSON.stringify({
+  var $1f3dfe127c28412b038a464b614fdba5$exports = {};
+  $1f3dfe127c28412b038a464b614fdba5$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "1wuCL");
+  var $1f3dfe127c28412b038a464b614fdba5$$interop$default = /*@__PURE__*/$parcel$interopDefault($1f3dfe127c28412b038a464b614fdba5$exports);
+  var $28b5c2186bde29d144c6c25132c73834$export$default = JSON.stringify({
     tracks: [{
-      data: $df282eba898e0e889073ebd022fefed9$$interop$default,
+      data: $6db04e0a5e5949211a44689d02584937$$interop$default,
       tooltips: 1,
       mark: "line",
       layout: "linear",
@@ -3343,7 +3343,7 @@
         value: "circle"
       }
     }, {
-      data: $0966204d340c6493e3c0d589d8804aa3$$interop$default,
+      data: $1f3dfe127c28412b038a464b614fdba5$$interop$default,
       tooltips: 1,
       mark: "line",
       layout: "linear",
@@ -3366,8 +3366,8 @@
       }
     }]
   }, null, 2);
-  var $c2d4747f98db7cca7d38b57ec4886cff$export$default = JSON.stringify({
-    defaultData: $df282eba898e0e889073ebd022fefed9$$interop$default,
+  var $64fb7f98bb40bce9aedc0741b7fb08f7$export$default = JSON.stringify({
+    defaultData: $6db04e0a5e5949211a44689d02584937$$interop$default,
     tracks: [{
       tooltips: 1,
       mark: "line",
@@ -3391,12 +3391,12 @@
       }
     }]
   }, null, 2);
-  var $06294e840446056ad074ad50bb09449b$export$default = JSON.stringify({
+  var $c35df55c918803ed3924bc428794d449$export$default = JSON.stringify({
     xAxis: "zero",
     yAxis: "left",
     tracks: [{
       order: 1,
-      data: $df282eba898e0e889073ebd022fefed9$$interop$default,
+      data: $6db04e0a5e5949211a44689d02584937$$interop$default,
       tooltips: 1,
       mark: "area",
       layout: "linear",
@@ -3419,7 +3419,7 @@
       }
     }, {
       order: 2,
-      data: $0966204d340c6493e3c0d589d8804aa3$$interop$default,
+      data: $1f3dfe127c28412b038a464b614fdba5$$interop$default,
       tooltips: 1,
       mark: "area",
       layout: "linear",
@@ -3443,11 +3443,11 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $4ebe4b0d71af6f636de836cf32fbe13e$exports = {};
-  $4ebe4b0d71af6f636de836cf32fbe13e$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "68hza");
-  var $4ebe4b0d71af6f636de836cf32fbe13e$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ebe4b0d71af6f636de836cf32fbe13e$exports);
-  var $0f98a365f816c6c3b2771c04be944e48$export$default = JSON.stringify({
-    defaultData: $4ebe4b0d71af6f636de836cf32fbe13e$$interop$default,
+  var $ab1163b4c8dbdb3a77810a83e438c54b$exports = {};
+  $ab1163b4c8dbdb3a77810a83e438c54b$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "2rcfJ");
+  var $ab1163b4c8dbdb3a77810a83e438c54b$$interop$default = /*@__PURE__*/$parcel$interopDefault($ab1163b4c8dbdb3a77810a83e438c54b$exports);
+  var $f9fba8d8af875065e61ce1daddb9f8bc$export$default = JSON.stringify({
+    defaultData: $ab1163b4c8dbdb3a77810a83e438c54b$$interop$default,
     xAxis: "top",
     yAxis: "left",
     tracks: [{
@@ -3476,13 +3476,13 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $8b3efa6c57a63b41bcdaf6541b273229$exports = {};
-  $8b3efa6c57a63b41bcdaf6541b273229$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "5zI6Y");
-  var $8b3efa6c57a63b41bcdaf6541b273229$$interop$default = /*@__PURE__*/$parcel$interopDefault($8b3efa6c57a63b41bcdaf6541b273229$exports);
-  var $0a467d28eddc87ce2373b436ddee85da$export$default = JSON.stringify({
+  var $41069a0984d71e895b3b50142cebe2b7$exports = {};
+  $41069a0984d71e895b3b50142cebe2b7$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "2LfjQ");
+  var $41069a0984d71e895b3b50142cebe2b7$$interop$default = /*@__PURE__*/$parcel$interopDefault($41069a0984d71e895b3b50142cebe2b7$exports);
+  var $2a9839b00cf841def758e0be20e22c6f$export$default = JSON.stringify({
     xAxis: "center",
     yAxis: "center",
-    defaultData: $8b3efa6c57a63b41bcdaf6541b273229$$interop$default,
+    defaultData: $41069a0984d71e895b3b50142cebe2b7$$interop$default,
     tracks: [{
       tooltips: 0.01,
       mark: "point",
@@ -3511,11 +3511,11 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $7c9202d0108707a15e9b799437b0f8ca$exports = {};
-  $7c9202d0108707a15e9b799437b0f8ca$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "xDcCF");
-  var $7c9202d0108707a15e9b799437b0f8ca$$interop$default = /*@__PURE__*/$parcel$interopDefault($7c9202d0108707a15e9b799437b0f8ca$exports);
-  var $ee02c7b7a829886d2920efde6ce8ac94$export$default = JSON.stringify({
-    defaultData: $7c9202d0108707a15e9b799437b0f8ca$$interop$default,
+  var $921a05a121945e733cae6ba1551d797a$exports = {};
+  $921a05a121945e733cae6ba1551d797a$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "1Uw7P");
+  var $921a05a121945e733cae6ba1551d797a$$interop$default = /*@__PURE__*/$parcel$interopDefault($921a05a121945e733cae6ba1551d797a$exports);
+  var $0e7ae96a73d4d148eada0a3a939a96c9$export$default = JSON.stringify({
+    defaultData: $921a05a121945e733cae6ba1551d797a$$interop$default,
     tracks: [{
       tooltips: 0.01,
       mark: "point",
@@ -3543,7 +3543,7 @@
       }
     }]
   }, null, 2);
-  var $9460168384434553e5edaf730410268d$export$default = JSON.stringify({
+  var $06e40a23570870f8a83f3aaf907d82c8$export$default = JSON.stringify({
     defaultData: ["day,price", "1,10", "2,22", "3,35"],
     tracks: [{
       tooltips: 1,
@@ -3568,7 +3568,7 @@
       }
     }]
   }, null, 2);
-  var $dedc15b93015bb1fb7511bf51cff2788$export$default = JSON.stringify({
+  var $685eef2c83a2c0cb7a78bba1269cadc0$export$default = JSON.stringify({
     xAxis: "top",
     yAxis: "right",
     tracks: [{
@@ -3619,7 +3619,7 @@
       }
     }]
   }, null, 2);
-  var $0f8fe932d8b95379a1c5e72a71c87dd3$export$default = JSON.stringify({
+  var $e846c1d03922ee59f48b09e88821c117$export$default = JSON.stringify({
     defaultData: ["day,price", "1,10", "2,22", "3,35", "4,20"],
     tracks: [{
       tooltips: 1,
@@ -3644,7 +3644,7 @@
       }
     }]
   }, null, 2);
-  const $e344a3a5e663d2f509e434b39ac40926$var$buildGrid = cellsPerRow => {
+  const $cd4e733a1254aa9bac58e47aad354d6e$var$buildGrid = cellsPerRow => {
     const toReturn = [];
     for (let i = 0; i < cellsPerRow; i++) {
       for (let j = 0; j < cellsPerRow; j++) {
@@ -3653,8 +3653,8 @@
     }
     return toReturn;
   };
-  var $e344a3a5e663d2f509e434b39ac40926$export$default = JSON.stringify({
-    defaultData: ["x,y"].concat($e344a3a5e663d2f509e434b39ac40926$var$buildGrid(5)),
+  var $cd4e733a1254aa9bac58e47aad354d6e$export$default = JSON.stringify({
+    defaultData: ["x,y"].concat($cd4e733a1254aa9bac58e47aad354d6e$var$buildGrid(5)),
     tracks: [{
       tooltips: 1,
       mark: "point",
@@ -3673,7 +3673,7 @@
       }
     }]
   }, null, 2);
-  const $66d52080171abc5351c14cb43ff3c04e$var$buildGrid = cellsPerRow => {
+  const $dc5329828972700f257f79472a39bdd7$var$buildGrid = cellsPerRow => {
     const toReturn = [];
     for (let i = 0; i < cellsPerRow; i++) {
       for (let j = 0; j < cellsPerRow; j++) {
@@ -3682,14 +3682,14 @@
     }
     return toReturn;
   };
-  var $66d52080171abc5351c14cb43ff3c04e$export$default = JSON.stringify({
+  var $dc5329828972700f257f79472a39bdd7$export$default = JSON.stringify({
     margins: {
       top: "2em",
       bottom: "100px",
       left: "5%",
       right: "1em"
     },
-    defaultData: ["x,y"].concat($66d52080171abc5351c14cb43ff3c04e$var$buildGrid(5)),
+    defaultData: ["x,y"].concat($dc5329828972700f257f79472a39bdd7$var$buildGrid(5)),
     tracks: [{
       tooltips: 1,
       mark: "point",
@@ -3709,10 +3709,10 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $a849e1ad706408dab39aa942681c7f64$exports = {};
-  $a849e1ad706408dab39aa942681c7f64$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "1Ls68");
-  var $a849e1ad706408dab39aa942681c7f64$$interop$default = /*@__PURE__*/$parcel$interopDefault($a849e1ad706408dab39aa942681c7f64$exports);
-  var $d4eb447e3830ce64d9d9844a053aa807$export$default = JSON.stringify({
+  var $e0d3122223e747ce6acde9924c0b87ff$exports = {};
+  $e0d3122223e747ce6acde9924c0b87ff$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "22mpg");
+  var $e0d3122223e747ce6acde9924c0b87ff$$interop$default = /*@__PURE__*/$parcel$interopDefault($e0d3122223e747ce6acde9924c0b87ff$exports);
+  var $3ae04e195465ab057b9d0859c8bca45e$export$default = JSON.stringify({
     margins: {
       top: "4em",
       left: "3em",
@@ -3768,7 +3768,7 @@
     }],
     xAxis: "none",
     yAxis: "none",
-    defaultData: $a849e1ad706408dab39aa942681c7f64$$interop$default,
+    defaultData: $e0d3122223e747ce6acde9924c0b87ff$$interop$default,
     tracks: [{
       tooltips: 1,
       mark: "rect",
@@ -3798,7 +3798,7 @@
       }
     }]
   }, null, 2);
-  var $39b829b66c49ff9e9c7cba8890167cf4$export$default = JSON.stringify({
+  var $ee1e30ff6b3c6ac12a412718c8b0e4af$export$default = JSON.stringify({
     defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
     xAxis: "zero",
     yAxis: "right",
@@ -3832,7 +3832,7 @@
       }
     }]
   }, null, 2);
-  var $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default = JSON.stringify({
+  var $0f5ae853568c24a4e290b25dc33e6e49$export$default = JSON.stringify({
     defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
     xAxis: "bottom",
     yAxis: "zero",
@@ -3866,13 +3866,13 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $7ad576ebb62df824fd84d8660c436161$exports = {};
-  $7ad576ebb62df824fd84d8660c436161$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "56Qu8");
-  var $7ad576ebb62df824fd84d8660c436161$$interop$default = /*@__PURE__*/$parcel$interopDefault($7ad576ebb62df824fd84d8660c436161$exports);
-  var $6bf60ad4cb5471e264d914bf306b21ec$export$default = JSON.stringify({
+  var $ba38db1c4196620de86c9a4f7ad51d14$exports = {};
+  $ba38db1c4196620de86c9a4f7ad51d14$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "6M6zH");
+  var $ba38db1c4196620de86c9a4f7ad51d14$$interop$default = /*@__PURE__*/$parcel$interopDefault($ba38db1c4196620de86c9a4f7ad51d14$exports);
+  var $e28e2e6485a5501afc478d0e6ffa1a3c$export$default = JSON.stringify({
     xAxis: "zero",
     yAxis: "none",
-    defaultData: $7ad576ebb62df824fd84d8660c436161$$interop$default,
+    defaultData: $ba38db1c4196620de86c9a4f7ad51d14$$interop$default,
     tracks: [{
       tooltips: 1,
       mark: "rect",
@@ -3959,10 +3959,10 @@
     }]
   }, null, 2);
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $4ba204665ead0e711ea03dbeb63addd3$exports = {};
-  $4ba204665ead0e711ea03dbeb63addd3$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "3hl2O");
-  var $4ba204665ead0e711ea03dbeb63addd3$$interop$default = /*@__PURE__*/$parcel$interopDefault($4ba204665ead0e711ea03dbeb63addd3$exports);
-  var $a45e353aa6a197e52ec53fe3a27eca5c$export$default = JSON.stringify({
+  var $1a3f5296257096e3fb8d31e27ee8d264$exports = {};
+  $1a3f5296257096e3fb8d31e27ee8d264$exports = $634f916bc30b7d6650877f3f4b6a8b3a$init().getBundleURL() + $824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "4iX5g");
+  var $1a3f5296257096e3fb8d31e27ee8d264$$interop$default = /*@__PURE__*/$parcel$interopDefault($1a3f5296257096e3fb8d31e27ee8d264$exports);
+  var $cb39b387c6fd45b9532e71fe77fa9820$export$default = JSON.stringify({
     margins: {
       left: "4em"
     },
@@ -3974,7 +3974,7 @@
     }],
     xAxis: "zero",
     yAxis: "none",
-    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
+    defaultData: $1a3f5296257096e3fb8d31e27ee8d264$$interop$default,
     tracks: [{
       tooltips: 1,
       mark: "rect",
@@ -4001,8 +4001,8 @@
       }
     }]
   }, null, 2);
-  var $58b5cda6e30b83a6e54733d3e1a14e9d$export$default = JSON.stringify({
-    defaultData: $4ba204665ead0e711ea03dbeb63addd3$$interop$default,
+  var $c2231ef3fd017e34a47a19f07032fdc1$export$default = JSON.stringify({
+    defaultData: $1a3f5296257096e3fb8d31e27ee8d264$$interop$default,
     tracks: [{
       tooltips: 1,
       mark: "line",
@@ -4028,10 +4028,10 @@
       }
     }]
   }, null, 2);
-  var $8470d6df10f48fd658da2e3d9548d382$export$default = JSON.stringify({
+  var $1e24c4d0dd6463602be771b38449f5c1$export$default = JSON.stringify({
     xAxis: "zero",
     yAxis: "none",
-    defaultData: $7ad576ebb62df824fd84d8660c436161$$interop$default,
+    defaultData: $ba38db1c4196620de86c9a4f7ad51d14$$interop$default,
     tracks: [{
       tooltips: 1,
       mark: "rect",
@@ -4173,8 +4173,8 @@
       }
     }]
   }, null, 2);
-  const $9e70f4d5b36c39388b117fee7d542725$var$exampleMap = new Map([["area-chart", $a9e3c2f2aaebe10b8305f7e3352f7046$export$default], ["double-line-plot", $31d08680e4d940d79f9d502e4d97edec$export$default], ["line-plot", $c2d4747f98db7cca7d38b57ec4886cff$export$default], ["stacked-area-chart", $06294e840446056ad074ad50bb09449b$export$default], ["tick-chart", $0f98a365f816c6c3b2771c04be944e48$export$default], ["tsne", $0a467d28eddc87ce2373b436ddee85da$export$default], ["tsne-10th", $26bf634d365f6af6515f0df355f6569a$export$default], ["tsne-100th", $ee02c7b7a829886d2920efde6ce8ac94$export$default], ["inline-data", $9460168384434553e5edaf730410268d$export$default], ["double-inline-data", $dedc15b93015bb1fb7511bf51cff2788$export$default], ["tiny-scatter", $0f8fe932d8b95379a1c5e72a71c87dd3$export$default], ["scatter-grid", $e344a3a5e663d2f509e434b39ac40926$export$default], ["heatmap", $d4eb447e3830ce64d9d9844a053aa807$export$default], ["signed-bar-chart", $39b829b66c49ff9e9c7cba8890167cf4$export$default], ["vertical-signed-bar-chart", $cde15cc1ee7acd4e487e6e2bdd4c7e09$export$default], ["arc-track", $6bf60ad4cb5471e264d914bf306b21ec$export$default], ["box-track", $a45e353aa6a197e52ec53fe3a27eca5c$export$default], ["line-track", $58b5cda6e30b83a6e54733d3e1a14e9d$export$default], ["all-tracks", $8470d6df10f48fd658da2e3d9548d382$export$default], ["scatter-grid-margins", $66d52080171abc5351c14cb43ff3c04e$export$default]]);
-  class $9e70f4d5b36c39388b117fee7d542725$export$default {
+  const $361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap = new Map([["area-chart", $b2b06bbc34da9c97d03e2103f126b73d$export$default], ["double-line-plot", $28b5c2186bde29d144c6c25132c73834$export$default], ["line-plot", $64fb7f98bb40bce9aedc0741b7fb08f7$export$default], ["stacked-area-chart", $c35df55c918803ed3924bc428794d449$export$default], ["tick-chart", $f9fba8d8af875065e61ce1daddb9f8bc$export$default], ["tsne", $2a9839b00cf841def758e0be20e22c6f$export$default], ["tsne-10th", $0211b2fb0a3f771e39d61213a7d704bf$export$default], ["tsne-100th", $0e7ae96a73d4d148eada0a3a939a96c9$export$default], ["inline-data", $06e40a23570870f8a83f3aaf907d82c8$export$default], ["double-inline-data", $685eef2c83a2c0cb7a78bba1269cadc0$export$default], ["tiny-scatter", $e846c1d03922ee59f48b09e88821c117$export$default], ["scatter-grid", $cd4e733a1254aa9bac58e47aad354d6e$export$default], ["heatmap", $3ae04e195465ab057b9d0859c8bca45e$export$default], ["signed-bar-chart", $ee1e30ff6b3c6ac12a412718c8b0e4af$export$default], ["vertical-signed-bar-chart", $0f5ae853568c24a4e290b25dc33e6e49$export$default], ["arc-track", $e28e2e6485a5501afc478d0e6ffa1a3c$export$default], ["box-track", $cb39b387c6fd45b9532e71fe77fa9820$export$default], ["line-track", $c2231ef3fd017e34a47a19f07032fdc1$export$default], ["all-tracks", $1e24c4d0dd6463602be771b38449f5c1$export$default], ["scatter-grid-margins", $dc5329828972700f257f79472a39bdd7$export$default]]);
+  class $361b32f374cb657bf7d3a299cf1eb93a$export$default {
     /**
     * A class meant to handle changing options on the scatter plot
     * @param {Function} dispatch method from store to dispatch redux actions
@@ -4189,22 +4189,22 @@
     */
     init() {
       document.getElementById("lock-x").addEventListener("change", event => {
-        this.dispatch($139b79e5ff209336f4025f9472954faf$export$setScroll({
+        this.dispatch($fed51f82549545858aa2253463b56601$export$setScroll({
           axis: "x",
           checked: event.target.checked
         }));
       });
       document.getElementById("lock-y").addEventListener("change", event => {
-        this.dispatch($139b79e5ff209336f4025f9472954faf$export$setScroll({
+        this.dispatch($fed51f82549545858aa2253463b56601$export$setScroll({
           axis: "y",
           checked: event.target.checked
         }));
       });
       document.getElementById("schema-select").value = this.schema;
-      this.dispatch($139b79e5ff209336f4025f9472954faf$export$setSchema($9e70f4d5b36c39388b117fee7d542725$var$exampleMap.get(this.schema)));
+      this.dispatch($fed51f82549545858aa2253463b56601$export$setSchema($361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap.get(this.schema)));
       document.getElementById("schema-select").addEventListener("change", event => {
         this.schema = event.target.value;
-        this.dispatch($139b79e5ff209336f4025f9472954faf$export$setSchema($9e70f4d5b36c39388b117fee7d542725$var$exampleMap.get(this.schema)));
+        this.dispatch($fed51f82549545858aa2253463b56601$export$setSchema($361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap.get(this.schema)));
       });
       this.prevIcon = null;
       // force only 1 icon to have selected class
@@ -4215,7 +4215,7 @@
             this.prevIcon.classList.remove("selected");
           }
           this.mouseAction = icon.alt.substring(0, icon.alt.indexOf(" "));
-          this.dispatch($139b79e5ff209336f4025f9472954faf$export$setTool(this.mouseAction));
+          this.dispatch($fed51f82549545858aa2253463b56601$export$setTool(this.mouseAction));
           icon.classList.add("selected");
           this.prevIcon = icon;
         });
@@ -4258,30 +4258,30 @@
     return $1066a859165bb0eb99d326939ca5e6fc$exports;
   }
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $e2a27ccf5a10c3f4307fd317dc99f3cf$exports, $e2a27ccf5a10c3f4307fd317dc99f3cf$executed = false;
-  function $e2a27ccf5a10c3f4307fd317dc99f3cf$exec() {
-    $e2a27ccf5a10c3f4307fd317dc99f3cf$exports = {};
-    $e2a27ccf5a10c3f4307fd317dc99f3cf$exports = $1066a859165bb0eb99d326939ca5e6fc$init()($824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "1Utg0"));
+  var $7704af86a984fa1b93aace200931c11d$exports, $7704af86a984fa1b93aace200931c11d$executed = false;
+  function $7704af86a984fa1b93aace200931c11d$exec() {
+    $7704af86a984fa1b93aace200931c11d$exports = {};
+    $7704af86a984fa1b93aace200931c11d$exports = $1066a859165bb0eb99d326939ca5e6fc$init()($824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "1Utg0"));
   }
-  function $e2a27ccf5a10c3f4307fd317dc99f3cf$init() {
-    if (!$e2a27ccf5a10c3f4307fd317dc99f3cf$executed) {
-      $e2a27ccf5a10c3f4307fd317dc99f3cf$executed = true;
-      $e2a27ccf5a10c3f4307fd317dc99f3cf$exec();
+  function $7704af86a984fa1b93aace200931c11d$init() {
+    if (!$7704af86a984fa1b93aace200931c11d$executed) {
+      $7704af86a984fa1b93aace200931c11d$executed = true;
+      $7704af86a984fa1b93aace200931c11d$exec();
     }
-    return $e2a27ccf5a10c3f4307fd317dc99f3cf$exports;
+    return $7704af86a984fa1b93aace200931c11d$exports;
   }
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
-  var $19de698c7ff95be5ef3defeb95d369f8$exports, $19de698c7ff95be5ef3defeb95d369f8$executed = false;
-  function $19de698c7ff95be5ef3defeb95d369f8$exec() {
-    $19de698c7ff95be5ef3defeb95d369f8$exports = {};
-    $19de698c7ff95be5ef3defeb95d369f8$exports = $1066a859165bb0eb99d326939ca5e6fc$init()($824bc590bf0a3702ac7bd27152cb0639$init()("2aO6o", "1S3Hi"));
+  var $60b87e96a2fe8f6bfd5406ececd3a407$exports, $60b87e96a2fe8f6bfd5406ececd3a407$executed = false;
+  function $60b87e96a2fe8f6bfd5406ececd3a407$exec() {
+    $60b87e96a2fe8f6bfd5406ececd3a407$exports = {};
+    $60b87e96a2fe8f6bfd5406ececd3a407$exports = $1066a859165bb0eb99d326939ca5e6fc$init()($824bc590bf0a3702ac7bd27152cb0639$init()("50Tuj", "1S3Hi"));
   }
-  function $19de698c7ff95be5ef3defeb95d369f8$init() {
-    if (!$19de698c7ff95be5ef3defeb95d369f8$executed) {
-      $19de698c7ff95be5ef3defeb95d369f8$executed = true;
-      $19de698c7ff95be5ef3defeb95d369f8$exec();
+  function $60b87e96a2fe8f6bfd5406ececd3a407$init() {
+    if (!$60b87e96a2fe8f6bfd5406ececd3a407$executed) {
+      $60b87e96a2fe8f6bfd5406ececd3a407$executed = true;
+      $60b87e96a2fe8f6bfd5406ececd3a407$exec();
     }
-    return $19de698c7ff95be5ef3defeb95d369f8$exports;
+    return $60b87e96a2fe8f6bfd5406ececd3a407$exports;
   }
   /*!
   * FPSMeter 0.3.1 - 9th May 2013
@@ -10573,7 +10573,7 @@
       this.canvas.style.position = "absolute";
       this.initFpsmeter();
       const offscreenCanvas = this.canvas.transferControlToOffscreen();
-      this.webglWorker = new Worker($e2a27ccf5a10c3f4307fd317dc99f3cf$init());
+      this.webglWorker = new Worker($7704af86a984fa1b93aace200931c11d$init());
       this.webglWorker.postMessage({
         type: "init",
         canvas: offscreenCanvas
@@ -10585,7 +10585,7 @@
         }
       };
       this.dataWorkerStream = [];
-      this.dataWorker = new Worker($19de698c7ff95be5ef3defeb95d369f8$init());
+      this.dataWorker = new Worker($60b87e96a2fe8f6bfd5406ececd3a407$init());
       this.dataWorker.onmessage = message => {
         this.dataWorkerStream.push(message);
         console.log(this.dataWorkerStream);
@@ -10715,10 +10715,11 @@
       });
     }
   }
-  const $61d0faa07b02e6c31f5661014f46b7d4$export$default = $a5a79905d7f29b6c9078769d5e01bfa0$exports.configureStore({
-    reducer: $139b79e5ff209336f4025f9472954faf$export$default
+  var $d3dfc027196df876626c47bef188877c$export$default = $b24d98818d6efd81d9f858dfc1cbed2a$export$default;
+  const $5e201880271bd6cdc5df36305bdf55c4$export$default = $a5a79905d7f29b6c9078769d5e01bfa0$exports.configureStore({
+    reducer: $fed51f82549545858aa2253463b56601$export$default
   });
-  let $61d0faa07b02e6c31f5661014f46b7d4$var$previousValues = {};
+  let $5e201880271bd6cdc5df36305bdf55c4$var$previousValues = {};
   /**
   * This utility method is meant to check if a part of the state in the global
   * store has changed since it was last called. It is useful in a store subscription
@@ -10730,30 +10731,30 @@
   * @param {String} key of the state from the store
   * @returns null if value at key has not changed, the new value otherwise
   */
-  const $61d0faa07b02e6c31f5661014f46b7d4$export$getIfChanged = key => {
-    const currValue = $61d0faa07b02e6c31f5661014f46b7d4$export$default.getState()[key];
-    if ((key in $61d0faa07b02e6c31f5661014f46b7d4$var$previousValues)) {
-      if ($61d0faa07b02e6c31f5661014f46b7d4$var$previousValues[key] === currValue) {
+  const $5e201880271bd6cdc5df36305bdf55c4$export$getIfChanged = key => {
+    const currValue = $5e201880271bd6cdc5df36305bdf55c4$export$default.getState()[key];
+    if ((key in $5e201880271bd6cdc5df36305bdf55c4$var$previousValues)) {
+      if ($5e201880271bd6cdc5df36305bdf55c4$var$previousValues[key] === currValue) {
         return null;
       } else {
-        $61d0faa07b02e6c31f5661014f46b7d4$var$previousValues[key] = currValue;
+        $5e201880271bd6cdc5df36305bdf55c4$var$previousValues[key] = currValue;
       }
-      return $61d0faa07b02e6c31f5661014f46b7d4$export$default.getState()[key];
+      return $5e201880271bd6cdc5df36305bdf55c4$export$default.getState()[key];
     } else {
-      $61d0faa07b02e6c31f5661014f46b7d4$var$previousValues[key] = currValue;
+      $5e201880271bd6cdc5df36305bdf55c4$var$previousValues[key] = currValue;
     }
   };
-  class $a10a209bf484f978a78f5f9c319d2eaf$var$App {
+  class $54616a5c096b4bff84f51b78a178267f$var$App {
     /*
     The App class is meant to emulate an app that may use the webgl visualization as a component
     */
     constructor() {
       const container = document.querySelector(".content");
-      this.visualization = new $b24d98818d6efd81d9f858dfc1cbed2a$export$default(container);
+      this.visualization = new $d3dfc027196df876626c47bef188877c$export$default(container);
       this.visualization.addToDom();
-      this.store = $61d0faa07b02e6c31f5661014f46b7d4$export$default;
+      this.store = $5e201880271bd6cdc5df36305bdf55c4$export$default;
       this.store.subscribe(this.subscription.bind(this));
-      const toolbar = new $9e70f4d5b36c39388b117fee7d542725$export$default(this.store.dispatch);
+      const toolbar = new $361b32f374cb657bf7d3a299cf1eb93a$export$default(this.store.dispatch);
       toolbar.init();
       document.getElementById("refresh-schema").onclick = this.onSchemaSubmit.bind(this);
       window.addEventListener("resize", this.onWindowResize.bind(this));
@@ -10765,7 +10766,7 @@
     */
     subscription() {
       const currState = this.store.getState();
-      const schema = $61d0faa07b02e6c31f5661014f46b7d4$export$getIfChanged("schema");
+      const schema = $5e201880271bd6cdc5df36305bdf55c4$export$getIfChanged("schema");
       if (schema) {
         document.getElementById("schema-editor").value = schema;
       }
@@ -10783,8 +10784,8 @@
     }
   }
   document.addEventListener("DOMContentLoaded", () => {
-    window.app = new $a10a209bf484f978a78f5f9c319d2eaf$var$App();
+    window.app = new $54616a5c096b4bff84f51b78a178267f$var$App();
   });
 })();
 
-//# sourceMappingURL=index.f2e930bb.js.map
+//# sourceMappingURL=index.005cb9f3.js.map
