@@ -73,14 +73,14 @@ describe("The mouse reader should handle zooming and panning", function () {
     expectCanvasToLookLike("scatter-grid-zoomed");
 
     cy.get(mouseReaderSelector).trigger("mousedown");
-    cy.get(mouseReaderSelector).trigger("mousemove", { movementX: -100 });
+    cy.get(mouseReaderSelector).trigger("mousemove", { movementX: -125 });
     cy.get(mouseReaderSelector).trigger("mouseup");
     assertMouseReaderWindowIs([0.2, 1.0], [0.1, 0.9]);
 
     cy.get(mouseReaderSelector).trigger("mousedown");
     cy.get(mouseReaderSelector).trigger("mousemove", {
-      movementX: 10,
-      movementY: 10,
+      movementX: 13,
+      movementY: 13,
     });
     cy.get(mouseReaderSelector).trigger("mouseup");
     assertMouseReaderWindowIs([0.19, 0.99], [0.11, 0.91]);

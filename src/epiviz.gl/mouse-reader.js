@@ -73,12 +73,6 @@ class MouseReader {
 
     this.currentXRange = [this.minX, this.maxX];
     this.currentYRange = [this.minY, this.maxY];
-
-    this._wheelDampenX = (this.maxX - this.minX) / 1000;
-    this._wheelDampenY = (this.maxY - this.minY) / 1000;
-
-    this._panDampenX = (this.maxX - this.minX) / 1000;
-    this._panDampenY = (this.maxY - this.minY) / 1000;
   }
 
   /**
@@ -206,7 +200,7 @@ class MouseReader {
     event.preventDefault();
     if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
-      const t = -event.wheelDelta * this._wheelDampenX;
+      const t = -event.wheelDelta / 1000;
       const inDataSpace = this._calculateViewportSpot(
         ...getLayerXandYFromEvent(event)
       );
@@ -227,7 +221,7 @@ class MouseReader {
 
     if (!this.lockedY) {
       const previousY = [...this.currentYRange];
-      const t = -event.wheelDelta * this._wheelDampenY;
+      const t = -event.wheelDelta / 1000;
       const inDataSpace = this._calculateViewportSpot(
         ...getLayerXandYFromEvent(event)
       );
@@ -257,8 +251,9 @@ class MouseReader {
   _onPan(event) {
     if (!this.lockedX) {
       const previousX = [...this.currentXRange]; // ... to avoid aliasing
-      this.currentXRange[0] -= event.movementX * this._panDampenX;
-      this.currentXRange[1] -= event.movementX * this._panDampenX;
+      const xDampen = (this.currentXRange[1] - this.currentXRange[0]) / 1000;
+      this.currentXRange[0] -= event.movementX * xDampen;
+      this.currentXRange[1] -= event.movementX * xDampen;
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
@@ -269,8 +264,9 @@ class MouseReader {
 
     if (!this.lockedY) {
       const previousY = [...this.currentYRange];
-      this.currentYRange[0] += event.movementY * this._panDampenY;
-      this.currentYRange[1] += event.movementY * this._panDampenY;
+      const yDampen = (this.currentYRange[1] - this.currentYRange[0]) / 1000;
+      this.currentYRange[0] += event.movementY * yDampen;
+      this.currentYRange[1] += event.movementY * yDampen;
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
