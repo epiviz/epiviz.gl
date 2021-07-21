@@ -69,6 +69,7 @@ function getViewportForSchema(schema) {
     if (
       !yDomain &&
       track.y.value !== undefined &&
+      track.height &&
       track.height.domain !== undefined
     ) {
       yDomain = track.height.domain;
