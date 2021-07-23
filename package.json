@@ -1,16 +1,31 @@
 {
   "name": "epiviz.gl",
   "version": "1.0.0",
-  "main": "src/index",
+  "main": "dist/index.js",
+  "app": "dist-app/index.html",
   "repository": "https://github.com/epiviz/epiviz.gl",
   "homepage": "https://github.com/epiviz/epiviz.gl",
   "author": "Sam Rosen",
   "license": "MIT",
+  "targets": {
+    "main": {
+      "context": "node",
+      "includeNodeModules": true,
+      "isLibrary": true,
+      "optimize": false
+    },
+    "app": {
+      "context": "browser",
+      "publicUrl": "./",
+      "optimize": false
+    }
+  },
   "scripts": {
     "start": "parcel serve app/index.html --open",
-    "build": "rm -rf dist/ && parcel build app/index.html --no-optimize --public-url ./",
+    "build": "rm -rf dist-app/ && parcel build app/index.html --target app",
+    "build-package": "rm -rf dist/ && parcel build src/index.js --target main && cp src/index.d.ts dist/index.d.ts",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist-app",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
     "cypress:open": "cypress open"
   },
