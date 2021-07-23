@@ -71,7 +71,7 @@ $ generate-schema-doc visualization.json --config template_name=md
 
 ### Scatterplot
 
-**Schema:**
+**Specification:**
 
 ```json
 {
@@ -107,7 +107,7 @@ $ generate-schema-doc visualization.json --config template_name=md
 
 ### Box Track
 
-**Schema:**
+**Specification:**
 
 ```json
 {
@@ -159,7 +159,7 @@ $ generate-schema-doc visualization.json --config template_name=md
 
 ### Line Track
 
-**Schema:**
+**Specification:**
 
 ```json
 {
@@ -197,7 +197,7 @@ $ generate-schema-doc visualization.json --config template_name=md
 
 ### Arc Track
 
-**Schema:**
+**Specification:**
 
 ```json
 {
