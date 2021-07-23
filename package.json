@@ -1,7 +1,7 @@
 {
   "name": "epiviz.gl",
   "version": "1.0.0",
-  "main": "dist/index.html",
+  "main": "src/index.js",
   "repository": "https://github.com/epiviz/epiviz.gl",
   "homepage": "https://github.com/epiviz/epiviz.gl",
   "author": "Sam Rosen",
