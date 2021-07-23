@@ -56,7 +56,7 @@ const allPresetNames = [
   "line-plot",
   "stacked-area-chart",
   "tick-chart",
-  "tsne",
+  // "tsne",
   "tsne-10th",
   "tsne-100th",
   "inline-data",

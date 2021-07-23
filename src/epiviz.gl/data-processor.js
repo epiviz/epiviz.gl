@@ -1,10 +1,10 @@
 import SchemaProcessor from "./schema-processor";
 
-import Supercluster from "supercluster";
+import Flatbush from "flatbush";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon } from "@turf/helpers";
 import simplify from "@turf/simplify";
-import { GenomeScale } from "./genome-sizes";
+import GeometryMapper from "./geometry-mapper";
 
 class DataProcessor {
   /**
@@ -16,7 +16,7 @@ class DataProcessor {
    * @param {Array} data the processor is meant to handle and index
    */
   constructor(schema) {
-    this.schema = this.index = new Supercluster();
+    this.schema = schema;
 
     console.log("Loading data...");
 
@@ -29,64 +29,41 @@ class DataProcessor {
    * @param {SchemaProcessor} schemaHelper that is built in the constructor
    */
   indexData(schemaHelper) {
-    this.points = [];
-    let modifyGeometry;
-
-    // If we are using genome scales, we need to map the coordinates correctly
-    // We build mapping functions based on what needs to occur for each data
-    // point in order to avoid lots of checks in the potentially very long
-    // data loop.
-    if (schemaHelper.xScale instanceof GenomeScale) {
-      modifyGeometry = (point) => {
-        point.geometry.coordinates[0] =
-          schemaHelper.xScale.toClipSpaceFromParts(
-            point.geometry.coordinates[0][0],
-            point.geometry.coordinates[0][1]
-          );
-      };
+    let totalPoints = 0;
+    if (schemaHelper.data) {
+      // subtract 1 to not count header
+      totalPoints += schemaHelper.data.length - 1;
     }
 
-    if (schemaHelper.yScale instanceof GenomeScale) {
-      // This is a way to check if x is also a genome scale, so we don't
-      // include instanceof checks in the data loop
-      if (modifyGeometry) {
-        // x dimension is also a genome scale
-        (point) => {
-          point.geometry.coordinates = [
-            schemaHelper.xScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            ),
-            schemaHelper.yScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            ),
-          ];
-        };
-      } else {
-        modifyGeometry = (point) => {
-          point.geometry.coordinates[1] =
-            schemaHelper.yScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            );
-        };
-      }
-    }
+    schemaHelper.tracks
+      .filter((track) => track.hasOwnData)
+      .forEach((track) => (totalPoints += track.data.length - 1));
 
+    this.index = new Flatbush(totalPoints);
+    this.data = [];
     console.log("Reading data...");
 
     // Process the global data in the schema processor
     if (schemaHelper.data) {
       for (let track of schemaHelper.tracks) {
         if (!track.hasOwnData) {
+          const geometryMapper = new GeometryMapper(schemaHelper, track);
+
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
-            if (modifyGeometry) {
-              // only call if we need to
-              modifyGeometry(currentPoint);
-            }
-            this.points.push(currentPoint);
+            geometryMapper.modifyGeometry(currentPoint.geometry);
+
+            this.data[
+              this.index.add(
+                currentPoint.geometry.coordinates[0],
+                currentPoint.geometry.coordinates[1],
+                currentPoint.geometry.coordinates[0] +
+                  currentPoint.geometry.dimensions[0],
+                currentPoint.geometry.coordinates[1] +
+                  currentPoint.geometry.dimensions[1]
+              )
+            ] = currentPoint;
+
             currentPoint = track.getNextDataPoint();
           }
           break;
@@ -98,18 +75,29 @@ class DataProcessor {
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
       .forEach((track) => {
+        const geometryMapper = new GeometryMapper(schemaHelper, track);
+
         let currentPoint = track.getNextDataPoint();
         while (currentPoint) {
-          if (modifyGeometry) {
-            modifyGeometry(currentPoint);
-          }
-          this.points.push(currentPoint);
+          geometryMapper.modifyGeometry(currentPoint.geometry);
+
+          this.data[
+            this.index.add(
+              currentPoint.geometry.coordinates[0],
+              currentPoint.geometry.coordinates[1],
+              currentPoint.geometry.coordinates[0] +
+                currentPoint.geometry.dimensions[0],
+              currentPoint.geometry.coordinates[1] +
+                currentPoint.geometry.dimensions[1]
+            )
+          ] = currentPoint;
+
           currentPoint = track.getNextDataPoint();
         }
       });
 
     console.log("Indexing data...");
-    this.index.load(this.points);
+    this.index.finish();
 
     console.log("Data processing complete.");
   }
@@ -150,13 +138,15 @@ class DataProcessor {
    * @param {Integer} zoom to pass to supercluster
    * @returns points in bounding box
    */
-  selectBox(points, zoom = 16) {
+  selectBox(points) {
     const smallerX = Math.min(points[0], points[2]);
     const smallerY = Math.min(points[1], points[3]);
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    return this.index.getClusters([smallerX, smallerY, largerX, largerY], zoom);
+    return this.index
+      .search(smallerX, smallerY, largerX, largerY)
+      .map((i) => this.data[i]);
   }
 
   /**
@@ -184,10 +174,12 @@ class DataProcessor {
 
     polygonPoints.push([...polygonPoints[0]]); // First and last must be same position
 
-    const candidatePoints = this.index.getClusters(
-      [smallestX, smallestY, largestX, largestY],
-      zoom
-    );
+    const candidatePoints = this.selectBox([
+      smallestX,
+      smallestY,
+      largestX,
+      largestY,
+    ]);
 
     const boundingPolygon = polygon([polygonPoints]);
 

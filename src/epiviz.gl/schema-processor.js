@@ -42,13 +42,15 @@ const DEFAULT_CHANNELS = Object.freeze({
     type: null, // Will not interact with shader code
   },
   width: {
-    value: 1,
+    // Default values for width and height add complications
+    // to mapping geometry and creating tick vertices
+    value: undefined,
     numComponents: 1,
     type: "float",
   },
 
   height: {
-    value: 1,
+    value: undefined,
     numComponents: 1,
     type: "float",
   },
@@ -200,21 +202,25 @@ class Track {
    * @returns A data point with the x and y coordinates and other attributes from the header
    */
   getNextDataPoint() {
-    if (this.index >= this.data.length) {
+    if (this.data.length <= 1) {
       // TODO potentially erase this.data for garbage collection
       return null;
     }
 
-    const toReturn = { geometry: { coordinates: [] } };
-    const currRow = this.data[this.index++];
+    const toReturn = { geometry: { coordinates: [], dimensions: [] } };
+    const currRow = this.data.pop();
     const splitted = currRow.split(",");
     this.headers.forEach((header, index) => {
       toReturn[header] = splitted[index];
     });
 
+    const rawHeight = this.channelMaps.get("height")(splitted);
+    const rawWidth = this.channelMaps.get("width")(splitted);
+    console.log(rawWidth);
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
     toReturn.geometry.coordinates.push(x, y);
+    toReturn.geometry.dimensions.push(rawWidth, rawHeight);
     return toReturn;
   }
 
@@ -467,7 +473,10 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
     case "y":
       return (chr, genomeStart, genomeEnd) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return [chrId, parseInt(genomeStart), chrId, parseInt(genomeEnd)];
+        return [
+          [chrId, parseInt(genomeStart)],
+          [chrId, parseInt(genomeEnd)],
+        ];
       };
 
     default:

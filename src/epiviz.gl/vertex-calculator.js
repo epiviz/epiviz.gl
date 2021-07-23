@@ -55,17 +55,8 @@ class VertexCalculator {
    * @param {Object} track from schema
    */
   constructor(xScale, yScale, track) {
-    if (xScale instanceof GenomeScale) {
-      this.xScale = xScale.toCallable();
-    } else {
-      this.xScale = xScale;
-    }
-
-    if (yScale instanceof GenomeScale) {
-      this.yScale = yScale.toCallable();
-    } else {
-      this.yScale = yScale;
-    }
+    this.xScale = xScale;
+    this.yScale = yScale;
 
     this.track = track;
     this.drawMode = getDrawModeForTrack(track);
@@ -80,17 +71,18 @@ class VertexCalculator {
   transformGenomicRangeToStandard(mark) {
     let x, y, width, height;
     if (Array.isArray(mark.x)) {
-      let x1 = this.xScale([mark.x[0], mark.x[1]]);
-      x = [mark.x[0], mark.x[1]];
-      width = (this.xScale([mark.x[2], mark.x[3]]) - x1) / SIZE_UNITS;
+      let x1 = this.xScale(mark.x[0]);
+      x = mark.x[0];
+      width = (this.xScale(mark.x[1]) - x1) / SIZE_UNITS;
     } else {
       x = mark.x;
       width = mark.width;
     }
 
     if (Array.isArray(mark.y)) {
-      y = this.yScale([mark.y[0], mark.y[1]]);
-      height = (this.yScale([mark.y[2], mark.y[3]]) - y) / SIZE_UNITS;
+      let y1 = this.yScale(mark.y[0]);
+      y = mark.y[0];
+      height = (this.yScale(mark.y[1]) - y1) / SIZE_UNITS;
     } else {
       y = mark.y;
       height = mark.height;
