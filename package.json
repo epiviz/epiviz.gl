@@ -12,7 +12,8 @@
       "context": "node",
       "includeNodeModules": true,
       "isLibrary": true,
-      "optimize": false
+      "optimize": false,
+      "outputFormat": "esmodule"
     },
     "app": {
       "context": "browser",
