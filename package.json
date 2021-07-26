@@ -1,7 +1,7 @@
 {
   "name": "epiviz.gl",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "app": "dist-app/index.html",
   "type": "module",
   "repository": "https://github.com/epiviz/epiviz.gl",
@@ -12,7 +12,6 @@
     "main": {
       "context": "node",
       "includeNodeModules": true,
-      "isLibrary": true,
       "optimize": false,
       "outputFormat": "esmodule"
     },
