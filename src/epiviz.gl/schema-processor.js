@@ -384,7 +384,7 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
-      channelScale = scale([0, channelInfo.cardinality], [-1, 1]);
+      channelScale = scale([1, channelInfo.cardinality + 1], [-1, 1]);
       break;
     case "opacity":
       channelScale = scale(
@@ -445,9 +445,9 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
 
   return (attrValue) => {
     if (!categoryTracker.has(attrValue)) {
-      categoryTracker.set(attrValue, categoryTracker.size);
+      categoryTracker.set(attrValue, categoryTracker.size + 1);
     }
-    return channelScale(categoryTracker.get(attrValue) + 1);
+    return channelScale(categoryTracker.get(attrValue));
   };
 };
 

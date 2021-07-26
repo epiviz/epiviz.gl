@@ -5,7 +5,10 @@ export default JSON.stringify(
     tracks: [
       {
         order: 1,
-        data: ["day,price", "1,5", "2,15", "3,30"],
+        data: {
+          day: [1, 2, 3],
+          price: [5, 15, 30],
+        },
         tooltips: 1,
         mark: "area",
         layout: "linear",
@@ -29,7 +32,10 @@ export default JSON.stringify(
       },
       {
         order: 2,
-        data: ["day,price", "1,15", "2,25", "3,40"],
+        data: {
+          day: [1, 2, 3],
+          price: [15, 25, 40],
+        },
         tooltips: 1,
         mark: "area",
         layout: "linear",

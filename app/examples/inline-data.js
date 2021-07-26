@@ -1,6 +1,9 @@
 export default JSON.stringify(
   {
-    defaultData: ["day,price", "1,10", "2,22", "3,35"],
+    defaultData: {
+      day: [1, 2, 3],
+      price: [10, 22, 35],
+    },
     tracks: [
       {
         tooltips: 1,
