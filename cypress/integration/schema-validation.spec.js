@@ -490,19 +490,32 @@ describe("Visualization Schema Validation", function () {
           ...baseValidTrack,
           data: ["attr,attr2", "1,2", "3,4", "5,6"],
         })
+      ).to.eq(false);
+
+      expect(
+        validate({
+          ...baseValidTrack,
+          data: {
+            attr1: [1, 2, 3, 4],
+            attr2: [1, 2, 3, 4],
+          },
+        })
       ).to.eq(true);
 
       expect(
         validate({
           ...baseValidTrack,
-          data: ["attr,attr2", 1, 2, 3, 4, 5, 6],
+          data: [1, 2, 3, 4, 5, 6],
         })
       ).to.eq(false);
 
       expect(
         validate({
           ...baseValidTrack,
-          data: [1, 2, 3, 4, 5, 6],
+          data: {
+            attr1: "[1,2,3,4]",
+            attr2: [1, 2, 3, 4],
+          },
         })
       ).to.eq(false);
     });
@@ -539,7 +552,7 @@ describe("Visualization Schema Validation", function () {
           defaultData: ["attr,attr2", "1,2", "3,4", "5,6"],
           tracks: baseValidVisualization.tracks,
         })
-      ).to.eq(true);
+      ).to.eq(false);
 
       expect(
         isJSONValid({
@@ -550,7 +563,17 @@ describe("Visualization Schema Validation", function () {
 
       expect(
         isJSONValid({
-          defaultData: ["1 2", "3 4", "5 6"],
+          defaultData: {
+            attr1: "1,2,3",
+            attr2: [1, 2, 3],
+          },
+          tracks: baseValidVisualization.tracks,
+        })
+      ).to.eq(false);
+
+      expect(
+        isJSONValid({
+          defaultData: {},
           tracks: baseValidVisualization.tracks,
         })
       ).to.eq(false);
