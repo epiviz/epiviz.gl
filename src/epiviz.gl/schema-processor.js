@@ -384,6 +384,7 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
+      // +1 here to avoid setting x or y at a boundary that makes it not visible
       channelScale = scale([1, channelInfo.cardinality + 1], [-1, 1]);
       break;
     case "opacity":
