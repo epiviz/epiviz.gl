@@ -1,4 +1,7 @@
-import { SIZE_UNITS } from "./vertex-calculator";
+import {
+  SIZE_UNITS,
+  transformGenomicRangeToStandard,
+} from "./vertex-calculator";
 import { getViewportForSchema } from "./utilities";
 
 class GeometryMapper {
@@ -24,25 +27,54 @@ class GeometryMapper {
   }
 
   modifyGeometry(geometry) {
+    if (
+      this.trackObject.track.x.type === "genomicRange" ||
+      this.trackObject.track.y.type === "genomicRange"
+    ) {
+      if (this.trackObject.track.mark === "arc") {
+        const standardized = transformGenomicRangeArcToStandard(
+          {
+            x: geometry.coordinates[0],
+            y: geometry.coordinates[1],
+            width: geometry.dimensions[0],
+            height: geometry.dimensions[1],
+          },
+          this.schemaObject.xScale,
+          this.schemaObject.yScale
+        );
+
+        geometry.coordinates = [standardized.x, standardized.y];
+        geometry.dimensions = [standardized.width, standardized.height];
+      } else {
+        const standardized = transformGenomicRangeToStandard(
+          {
+            x: geometry.coordinates[0],
+            y: geometry.coordinates[1],
+          },
+          this.schemaObject.xScale,
+          this.schemaObject.yScale
+        );
+        geometry.coordinates = [standardized.x, standardized.y];
+      }
+      if (!this.schemaObject.xScale.isGenomeScale && geometry.dimensions[0]) {
+        // No need to do !== undefined to handle 0 case as result would be the same either way
+        geometry.dimensions[0] *= (this.xDomainWidth * SIZE_UNITS) / 2;
+      } else if (
+        !this.schemaObject.yScale.isGenomeScale &&
+        geometry.dimensions[1]
+      ) {
+        geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+      }
+
+      return;
+    }
     // If the x coordinate is a base pair, map it to a value between -1 and 1 for
     // data indexing
     console.log("before", geometry.dimensions);
     console.log("before", [...geometry.coordinates]);
 
-    if (this.schemaObject.xScale.isGenomeScale) {
-      geometry.coordinates[0] = this.schemaObject.xScale(
-        geometry.coordinates[0]
-      );
-
-      // x is defined as a range so we need to calculate width
-      if (this.trackObject.track.x.type === "genomeRange") {
-        // When x is a genome range, coordinates[0] and [1] no longer refer to x and y respectively.
-        // They instead refer to 2-length arrays containing base pair info.
-        geometry.dimensions[0] =
-          this.schemaObject.xScale(geometry.coordinates[1]) -
-          geometry.coordinates[0];
-      }
-    }
+    this._modifyX(geometry);
+    this._modifyY(geometry);
 
     // As above but with y
     if (this.schemaObject.yScale.isGenomeScale) {
@@ -90,6 +122,39 @@ class GeometryMapper {
     geometry.dimensions[1] = geometry.dimensions[1] || 1e-10;
     console.log("after", geometry.dimensions);
   }
+
+  _modifyX(geometry) {
+    // Need to map base pair to coordinate between -1 and 1
+    if (this.schemaObject.xScale.isGenomeScale) {
+      // If x is defined by genomic range, width is calculated here
+      if (this.trackObject.track.x.type === "genomicRange") {
+      }
+      geometry.coordinates[0] = this.schemaObject.xScale(
+        geometry.coordinates[0]
+      );
+
+      // x is defined as a range so we need to calculate width
+      if (this.trackObject.track.x.type === "genomeRange") {
+        // When x is a genome range, coordinates[0] and [1] no longer refer to x and y respectively.
+        // They instead refer to 2-length arrays containing base pair info.
+        geometry.dimensions[0] =
+          this.schemaObject.xScale(geometry.coordinates[1]) -
+          geometry.coordinates[0];
+      }
+    }
+  }
+
+  _modifyY(geometry) {}
+
+  _mapHeightToDataSpace(geometry) {
+    geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+  }
+
+  _mapWidthToDataSpace(geometry) {
+    geometry.dimensions[0] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+  }
+
+  _remapGenomicRangeGeometry(geometry) {}
 }
 
 export default GeometryMapper;

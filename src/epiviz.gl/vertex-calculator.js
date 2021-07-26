@@ -1,4 +1,3 @@
-import { GenomeScale } from "./genome-sizes";
 import { getDrawModeForTrack } from "./schema-processor";
 import { getQuadraticBezierCurveForPoints } from "./utilities";
 
@@ -46,6 +45,81 @@ const getCurveForArc = (P0, P2) => {
   );
 };
 
+/**
+ * Transform a mark with a range for coordinates into a simpler mark to draw.
+ *
+ * @param {Object} mark that contains ranges for x or y
+ * @returns mark with fixed x and y but with appropriate width and height for drawing
+ */
+const transformGenomicRangeToStandard = (mark, xScale, yScale) => {
+  let x, y, width, height;
+  if (Array.isArray(mark.x)) {
+    let x1 = xScale(mark.x[0]);
+    x = mark.x[0];
+    width = (xScale(mark.x[1]) - x1) / SIZE_UNITS;
+  } else {
+    x = mark.x;
+    width = mark.width;
+  }
+
+  if (Array.isArray(mark.y)) {
+    let y1 = yScale(mark.y[0]);
+    y = mark.y[0];
+    height = (yScale(mark.y[1]) - y1) / SIZE_UNITS;
+  } else {
+    y = mark.y;
+    height = mark.height;
+  }
+  return {
+    x,
+    y,
+    width,
+    height,
+  };
+};
+
+/**
+ * Transform a mark with a range for coordinates and a range for width or height into a simpler mark to draw.
+ *
+ * @param {Object} mark that contains ranges for x and y, and potentially ranges for width and height
+ * @returns mark with fixed x, y, width, and height for drawing
+ */
+const transformGenomicRangeArcToStandard = (mark, xScale, yScale) => {
+  let x, y, width, height;
+  if (Array.isArray(mark.x)) {
+    x = xScale.getMidpoint(...mark.x);
+    let x2 = xScale.getMidpoint(...mark.width);
+    let x1ClipSpace = xScale(x);
+    let x2ClipSpace = xScale(x2);
+
+    x = x1ClipSpace < x2ClipSpace ? x : x2;
+    width = Math.abs(xScale(x2) - x1ClipSpace) / SIZE_UNITS;
+  } else {
+    x = mark.x;
+    width = mark.width;
+  }
+
+  if (Array.isArray(mark.y)) {
+    y = yScale.getMidpoint(...mark.y);
+    let y2 = yScale.getMidpoint(...mark.height);
+
+    let y1ClipSpace = xScale(y);
+    let y2ClipSpace = xScale(y2);
+
+    y = y1ClipSpace < y2ClipSpace ? y : y2;
+    height = Math.abs(yScale(y2) - y1ClipSpace) / SIZE_UNITS;
+  } else {
+    y = mark.y;
+    height = mark.height;
+  }
+  return {
+    x,
+    y,
+    width,
+    height,
+  };
+};
+
 class VertexCalculator {
   /**
    * A class used to construct the vertices of marks that are given to the drawer to draw.
@@ -63,81 +137,6 @@ class VertexCalculator {
   }
 
   /**
-   * Transform a mark with a range for coordinates into a simpler mark to draw.
-   *
-   * @param {Object} mark that contains ranges for x or y
-   * @returns mark with fixed x and y but with appropriate width and height for drawing
-   */
-  transformGenomicRangeToStandard(mark) {
-    let x, y, width, height;
-    if (Array.isArray(mark.x)) {
-      let x1 = this.xScale(mark.x[0]);
-      x = mark.x[0];
-      width = (this.xScale(mark.x[1]) - x1) / SIZE_UNITS;
-    } else {
-      x = mark.x;
-      width = mark.width;
-    }
-
-    if (Array.isArray(mark.y)) {
-      let y1 = this.yScale(mark.y[0]);
-      y = mark.y[0];
-      height = (this.yScale(mark.y[1]) - y1) / SIZE_UNITS;
-    } else {
-      y = mark.y;
-      height = mark.height;
-    }
-    return {
-      x,
-      y,
-      width,
-      height,
-    };
-  }
-
-  /**
-   * Transform a mark with a range for coordinates and a range for width or height into a simpler mark to draw.
-   *
-   * @param {Object} mark that contains ranges for x and y, and potentially ranges for width and height
-   * @returns mark with fixed x, y, width, and height for drawing
-   */
-  transformGenomicRangeArcToStandard(mark) {
-    let x, y, width, height;
-    if (Array.isArray(mark.x)) {
-      x = this.xScale.getMidpoint(...mark.x);
-      let x2 = this.xScale.getMidpoint(...mark.width);
-      let x1ClipSpace = this.xScale(x);
-      let x2ClipSpace = this.xScale(x2);
-
-      x = x1ClipSpace < x2ClipSpace ? x : x2;
-      width = Math.abs(this.xScale(x2) - x1ClipSpace) / SIZE_UNITS;
-    } else {
-      x = mark.x;
-      width = mark.width;
-    }
-
-    if (Array.isArray(mark.y)) {
-      y = this.yScale.getMidpoint(...mark.y);
-      let y2 = this.yScale.getMidpoint(...mark.height);
-
-      let y1ClipSpace = this.xScale(y);
-      let y2ClipSpace = this.xScale(y2);
-
-      y = y1ClipSpace < y2ClipSpace ? y : y2;
-      height = Math.abs(this.yScale(y2) - y1ClipSpace) / SIZE_UNITS;
-    } else {
-      y = mark.y;
-      height = mark.height;
-    }
-    return {
-      x,
-      y,
-      width,
-      height,
-    };
-  }
-
-  /**
    * Construct the vertices of a mark.
    *
    * @param {Object} mark to draw
@@ -150,10 +149,12 @@ class VertexCalculator {
     ) {
       if (this.track.mark === "arc") {
         return this._calculateForMark(
-          this.transformGenomicRangeArcToStandard(mark)
+          transformGenomicRangeArcToStandard(mark, this.xScale, this.yScale)
         );
       }
-      return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
+      return this._calculateForMark(
+        transformGenomicRangeToStandard(mark, this.xScale, this.yScale)
+      );
     }
     return this._calculateForMark(mark);
   }
@@ -365,4 +366,8 @@ class VertexCalculator {
 
 export default VertexCalculator;
 
-export { SIZE_UNITS };
+export {
+  SIZE_UNITS,
+  transformGenomicRangeArcToStandard,
+  transformGenomicRangeToStandard,
+};
