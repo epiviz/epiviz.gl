@@ -19,13 +19,14 @@
   "scripts": {
     "start": "parcel serve app/index.html --open",
     "build": "rm -rf dist-app/ && parcel build app/index.html --target app",
-    "build-package": "rm -rf dist/ && rollup -c && cp src/index.d.ts dist/index.d.ts && cp src/epiviz.gl/*-worker.js dist",
+    "build-package": "rm -rf dist/ && rollup -c && cp src/index.d.ts dist/index.d.ts",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d dist-app",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@surma/rollup-plugin-off-main-thread": "^2.2.2",
     "@turf/boolean-point-in-polygon": "^6.3.0",
     "@turf/helpers": "^6.3.0",
     "@turf/simplify": "6.3.0",
@@ -43,10 +44,10 @@
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.6.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "cypress": "^7.6.0",
     "gh-pages": "^3.2.0",
     "parcel": "2.0.0-beta.2",
-    "rollup": "2.54.0",
-    "rollup-plugin-web-worker-loader": "^1.6.1"
+    "rollup": "2.54.0"
   }
 }

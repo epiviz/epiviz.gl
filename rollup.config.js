@@ -1,12 +1,13 @@
-import webWorkerLoader from "rollup-plugin-web-worker-loader";
+import OMT from "@surma/rollup-plugin-off-main-thread";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default {
   input: "src/index.js",
   output: {
-    file: "dist/index.js",
-    format: "esm",
+    dir: "dist",
+    format: "amd",
   },
-  plugins: [webWorkerLoader()],
+  plugins: [OMT(), nodeResolve()],
 };
 
 /**
