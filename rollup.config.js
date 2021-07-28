@@ -1,5 +1,6 @@
 import OMT from "@surma/rollup-plugin-off-main-thread";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 
 export default {
   input: "src/index.js",
@@ -7,5 +8,5 @@ export default {
     dir: "dist",
     format: "esm",
   },
-  plugins: [OMT(), nodeResolve()],
+  plugins: [OMT(), nodeResolve({ preferBuiltins: false }), commonjs()],
 };

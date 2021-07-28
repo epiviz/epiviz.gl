@@ -1,6 +1,6 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
-// import isJSONValid from "./schema-validation";
+import isJSONValid from "./schema-validation";
 import { getDimAndMarginStyleForSchema } from "./utilities";
 
 class WebGLVis {
@@ -150,9 +150,9 @@ class WebGLVis {
    * @returns boolean on whether the schema was accepted
    */
   setSchema(schema) {
-    // if (!isJSONValid(schema)) {
-    //   return false;
-    // }
+    if (!isJSONValid(schema)) {
+      return false;
+    }
 
     this._setMargins(schema);
     this.mouseReader.setSchema(schema);
