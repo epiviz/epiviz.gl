@@ -30,7 +30,6 @@
     "@turf/boolean-point-in-polygon": "^6.3.0",
     "@turf/helpers": "^6.3.0",
     "@turf/simplify": "6.3.0",
-    "axios": "0.21.1",
     "d3-axis": "^3.0.0",
     "d3-color": "^3.0.1",
     "d3-format": "3.0.1",
