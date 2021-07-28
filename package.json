@@ -1,14 +1,17 @@
 {
   "name": "epiviz.gl",
   "version": "1.0.0",
-  "main": "src/index",
   "repository": "https://github.com/epiviz/epiviz.gl",
   "homepage": "https://github.com/epiviz/epiviz.gl",
   "author": "Sam Rosen",
   "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "start": "parcel serve app/index.html --open",
-    "build": "rm -rf dist/ && parcel build app/index.html --no-optimize --public-url ./",
+    "build": "rm -rf dist-app/ && parcel build app/index.html --no-optimize --public-url ./",
+    "build-package": "rm -rf dist/ && rollup -c && cp src/index.d.ts dist/index.d.ts && cp src/epiviz.gl/*-worker.js dist",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d dist",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
@@ -34,6 +37,8 @@
     "@reduxjs/toolkit": "^1.6.0",
     "cypress": "^7.6.0",
     "gh-pages": "^3.2.0",
-    "parcel": "2.0.0-beta.2"
+    "parcel": "2.0.0-beta.2",
+    "rollup": "2.54.0",
+    "rollup-plugin-web-worker-loader": "^1.6.1"
   }
 }

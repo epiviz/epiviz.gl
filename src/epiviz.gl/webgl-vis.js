@@ -1,6 +1,6 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
-import isJSONValid from "./schema-validation";
+// import isJSONValid from "./schema-validation";
 import { getDimAndMarginStyleForSchema } from "./utilities";
 
 class WebGLVis {
@@ -78,7 +78,8 @@ class WebGLVis {
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
     this.webglWorker = new Worker(
-      new URL("./offscreen-webgl-worker.js", import.meta.url)
+      new URL("offscreen-webgl-worker.js", import.meta.url),
+      { type: "module" }
     );
     this.webglWorker.postMessage(
       {
@@ -97,7 +98,8 @@ class WebGLVis {
 
     this.dataWorkerStream = [];
     this.dataWorker = new Worker(
-      new URL("./data-processor-worker.js", import.meta.url)
+      new URL("data-processor-worker.js", import.meta.url),
+      { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);
@@ -148,9 +150,9 @@ class WebGLVis {
    * @returns boolean on whether the schema was accepted
    */
   setSchema(schema) {
-    if (!isJSONValid(schema)) {
-      return false;
-    }
+    // if (!isJSONValid(schema)) {
+    //   return false;
+    // }
 
     this._setMargins(schema);
     this.mouseReader.setSchema(schema);

@@ -6,8 +6,8 @@ import {
 } from "./utilities";
 import { SIZE_UNITS } from "./vertex-calculator";
 
-const d3 = require("d3-scale-chromatic");
-const axios = require("axios");
+import * as d3 from "d3-scale-chromatic";
+import * as axios from "axios";
 
 // Default channel values of schema which is passed to webgl drawer
 const DEFAULT_CHANNELS = Object.freeze({
