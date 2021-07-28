@@ -8,12 +8,20 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "app": "dist-app/index.html",
+  "targets": {
+    "app": {
+      "context": "browser",
+      "publicUrl": "./",
+      "optimize": false
+    }
+  },
   "scripts": {
     "start": "parcel serve app/index.html --open",
-    "build": "rm -rf dist-app/ && parcel build app/index.html --no-optimize --public-url ./",
+    "build": "rm -rf dist-app/ && parcel build app/index.html --target app",
     "build-package": "rm -rf dist/ && rollup -c && cp src/index.d.ts dist/index.d.ts && cp src/epiviz.gl/*-worker.js dist",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist-app",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
     "cypress:open": "cypress open"
   },

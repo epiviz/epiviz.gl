@@ -1,5 +1,5 @@
 node_modules
-dist
+dist-app
 .env
 .cache
 .DS_Store
