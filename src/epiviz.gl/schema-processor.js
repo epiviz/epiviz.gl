@@ -64,7 +64,8 @@ const DEFAULT_MAX_HEIGHT = 1 / SIZE_UNITS;
 
 const DEFAULT_COLOR_SCHEME = "interpolateBrBG";
 
-const SHAPES = ["dot", "triangle", "circle", "diamond"];
+// first value is undefined as categories are 1-indexed
+const SHAPES = [undefined, "dot", "triangle", "circle", "diamond"];
 
 /**
  * Given a track, determine the WebGL draw mode for it
@@ -102,18 +103,21 @@ class SchemaProcessor {
   constructor(schema, callback) {
     this.index = 0;
     this.schema = schema;
-    if (Array.isArray(schema.defaultData)) {
-      this.data = schema.defaultData;
-    } else if (typeof schema.defaultData === "string") {
+    if (typeof schema.defaultData === "string") {
+      // data is a url to get
       this.dataPromise = fetch(schema.defaultData)
         .then((response) => response.text())
         .then((text) => (this.data = text.split("\n")));
+    } else if (schema.defaultData) {
+      // default data is defined, assumed to be an object
+      this.data = schema.defaultData;
+      this.isInlineData = true;
     }
     this.tracks = schema.tracks.map((track) => new Track(this, track));
 
     const allPromises = this.tracks
       .map((track) => track.dataPromise)
-      .filter((p) => p);
+      .filter((p) => p); // Removes undefined
     if (this.dataPromise) {
       allPromises.push(this.dataPromise);
     }
@@ -150,12 +154,7 @@ class Track {
     this.track = track;
     this.index = 1; // Start at 1 to skip headers
 
-    if (Array.isArray(track.data)) {
-      // Track has its own inline data
-      this.data = track.data;
-      this.processHeadersAndMappers();
-      this.hasOwnData = true;
-    } else if (typeof track.data === "string") {
+    if (typeof track.data === "string") {
       // Track has its own data to GET
       this.dataPromise = fetch(track.data)
         .then((response) => response.text())
@@ -164,9 +163,16 @@ class Track {
           this.processHeadersAndMappers();
           this.hasOwnData = true;
         });
+    } else if (track.data) {
+      // Track has its own inline data
+      this.data = track.data;
+      this.isInlineData = true;
+      this.processHeadersAndMappers();
+      this.hasOwnData = true;
     } else if (schema.data) {
       // Track does not have its own data, but the schema has default data
       this.data = schema.data;
+      this.isInlineData = schema.isInlineData;
       this.processHeadersAndMappers();
     } else if (schema.dataPromise) {
       // Track does not have its own data, but the schema is GETting default data
@@ -187,7 +193,14 @@ class Track {
    */
   processHeadersAndMappers() {
     // Processing headers
-    this.headers = this.data[0].split(",");
+    if (this.isInlineData) {
+      this.headers = Object.keys(this.data);
+      this.dataLength = this.data[this.headers[0]].length;
+      this.index = 0;
+    } else {
+      this.headers = this.data[0].split(",");
+      this.dataLength = this.data.length;
+    }
 
     // Creating channel mappers
     this.channelMaps = new Map();
@@ -201,14 +214,21 @@ class Track {
    * @returns A data point with the x and y coordinates and other attributes from the header
    */
   getNextDataPoint() {
-    if (this.index >= this.data.length) {
+    if (this.index >= this.dataLength) {
       // TODO potentially erase this.data for garbage collection
       return null;
     }
 
     const toReturn = { geometry: { coordinates: [] } };
-    const currRow = this.data[this.index++];
-    const splitted = currRow.split(",");
+    let splitted;
+    if (this.isInlineData) {
+      splitted = this.headers.map((header) => this.data[header][this.index]);
+      this.index++;
+    } else {
+      const currRow = this.data[this.index++];
+      splitted = currRow.split(",");
+    }
+
     this.headers.forEach((header, index) => {
       toReturn[header] = splitted[index];
     });
@@ -225,12 +245,18 @@ class Track {
    * @returns An object containing information used to draw a mark for a row of data.
    */
   getNextMark() {
-    if (this.index >= this.data.length) {
+    if (this.index >= this.dataLength) {
       return null;
     }
     const toReturn = {};
-    const currRow = this.data[this.index++];
-    const splitted = currRow.split(",");
+    let splitted;
+    if (this.isInlineData) {
+      splitted = this.headers.map((header) => this.data[header][this.index]);
+      this.index++;
+    } else {
+      const currRow = this.data[this.index++];
+      splitted = currRow.split(",");
+    }
 
     this.channelMaps.forEach((mapper, channel) => {
       toReturn[channel] = mapper(splitted);
@@ -359,20 +385,18 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
-      channelScale = scale([0, channelInfo.cardinality], [-1, 1]);
+      // +1 here to avoid setting x or y at a boundary that makes it not visible
+      channelScale = scale([1, channelInfo.cardinality + 1], [-1, 1]);
       break;
     case "opacity":
       channelScale = scale(
-        [
-          channelInfo.minOpacity || DEFAULT_MIN_OPACITY,
-          channelInfo.cardinality,
-        ],
-        [0, 1]
+        [1, channelInfo.cardinality],
+        [channelInfo.minOpacity || DEFAULT_MIN_OPACITY, 1]
       );
       break;
     case "size":
       channelScale = scale(
-        [0, channelInfo.cardinality],
+        [1, channelInfo.cardinality],
         [
           channelInfo.minSize || DEFAULT_MIN_SIZE,
           channelInfo.maxSize || DEFAULT_MAX_SIZE,
@@ -393,13 +417,13 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
         );
         d3colorScale = d3[DEFAULT_COLOR_SCHEME];
       }
-      const zeroToOneScale = scale([0, channelInfo.cardinality], [0, 1]);
+      const zeroToOneScale = scale([1, channelInfo.cardinality], [0, 1]);
       channelScale = (categoryId) =>
         rgbStringToHex(d3colorScale(zeroToOneScale(categoryId)));
       break;
     case "width":
       channelScale = scale(
-        [0, channelInfo.cardinality],
+        [1, channelInfo.cardinality],
         [
           channelInfo.minWidth || DEFAULT_MIN_WIDTH,
           channelInfo.maxWidth || DEFAULT_MAX_WIDTH,
@@ -408,7 +432,7 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
       break;
     case "height":
       channelScale = scale(
-        [0, channelInfo.cardinality],
+        [1, channelInfo.cardinality],
         [
           channelInfo.minHeight || DEFAULT_MIN_HEIGHT,
           channelInfo.maxHeight || DEFAULT_MAX_HEIGHT,
@@ -423,7 +447,7 @@ const buildMapperForCategoricalChannel = (channel, channelInfo) => {
 
   return (attrValue) => {
     if (!categoryTracker.has(attrValue)) {
-      categoryTracker.set(attrValue, categoryTracker.size);
+      categoryTracker.set(attrValue, categoryTracker.size + 1);
     }
     return channelScale(categoryTracker.get(attrValue));
   };

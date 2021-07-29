@@ -7,12 +7,10 @@ export default {
   "required": ["mark", "x", "y"],
   "properties": {
     "data": {
-      "description": "A string of a csv href containing data or an array of inline data where each row is a string with comma seperated values",
-      "type": ["string", "array"],
-      "items": {
-        "type": "string",
-        "pattern": ","
-      }
+      "description": "A string of a csv href containing data or an object of inline data where each key is an array of a data column",
+      "type": ["string", "object"],
+      "additionalProperties": { "type": "array" },
+      "minProperties": 1
     },
     "mark": {
       "description": "type of mark to visualize",

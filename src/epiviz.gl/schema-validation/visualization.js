@@ -61,16 +61,17 @@ export default {
       "items": { "$ref": "/track" }
     },
     "defaultData": {
-      "description": "A string of a csv href containing data or an array of inline data where each row is a string with comma seperated values",
+      "description": "A string of a csv href containing data or an object of inline data where each key is a column of values",
       "examples": [
         "http://example.com/data.csv",
-        ["day,price", "1,10", "2,20"]
+        {
+          "day": [1, 2],
+          "price": [10, 20]
+        }
       ],
-      "type": ["string", "array"],
-      "items": {
-        "type": "string",
-        "pattern": ","
-      }
+      "type": ["string", "object"],
+      "additionalProperties": { "type": "array" },
+      "minProperties": 1
     }
   },
 
