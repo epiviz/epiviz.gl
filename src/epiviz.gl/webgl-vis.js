@@ -78,7 +78,8 @@ class WebGLVis {
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
     this.webglWorker = new Worker(
-      new URL("./offscreen-webgl-worker.js", import.meta.url)
+      new URL("offscreen-webgl-worker.js", import.meta.url),
+      { type: "module" }
     );
     this.webglWorker.postMessage(
       {
@@ -97,7 +98,8 @@ class WebGLVis {
 
     this.dataWorkerStream = [];
     this.dataWorker = new Worker(
-      new URL("./data-processor-worker.js", import.meta.url)
+      new URL("data-processor-worker.js", import.meta.url),
+      { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);

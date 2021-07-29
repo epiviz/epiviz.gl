@@ -6,8 +6,7 @@ import {
 } from "./utilities";
 import { SIZE_UNITS } from "./vertex-calculator";
 
-const d3 = require("d3-scale-chromatic");
-const axios = require("axios");
+import * as d3 from "d3-scale-chromatic";
 
 // Default channel values of schema which is passed to webgl drawer
 const DEFAULT_CHANNELS = Object.freeze({
@@ -106,9 +105,9 @@ class SchemaProcessor {
     this.schema = schema;
     if (typeof schema.defaultData === "string") {
       // data is a url to get
-      this.dataPromise = axios.get(schema.defaultData).then((response) => {
-        this.data = response.data.split("\n");
-      });
+      this.dataPromise = fetch(schema.defaultData)
+        .then((response) => response.text())
+        .then((text) => (this.data = text.split("\n")));
     } else if (schema.defaultData) {
       // default data is defined, assumed to be an object
       this.data = schema.defaultData;
@@ -157,11 +156,13 @@ class Track {
 
     if (typeof track.data === "string") {
       // Track has its own data to GET
-      this.dataPromise = axios.get(track.data).then((response) => {
-        this.data = response.data.split(/[\n\r]+/);
-        this.processHeadersAndMappers();
-        this.hasOwnData = true;
-      });
+      this.dataPromise = fetch(track.data)
+        .then((response) => response.text())
+        .then((text) => {
+          this.data = text.split(/[\n\r]+/);
+          this.processHeadersAndMappers();
+          this.hasOwnData = true;
+        });
     } else if (track.data) {
       // Track has its own inline data
       this.data = track.data;
