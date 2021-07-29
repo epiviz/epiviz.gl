@@ -1,4 +1,4 @@
-import { S as SchemaProcessor } from './schema-processor-17202e73.js';
+import { S as SchemaProcessor } from './schema-processor-66236800.js';
 import { G as GenomeScale } from './utilities-52abb45c.js';
 
 function sortKD(ids, coords, nodeSize, left, right, depth) {

@@ -7003,16 +7003,17 @@ var visualization = {
       "items": { "$ref": "/track" }
     },
     "defaultData": {
-      "description": "A string of a csv href containing data or an array of inline data where each row is a string with comma seperated values",
+      "description": "A string of a csv href containing data or an object of inline data where each key is a column of values",
       "examples": [
         "http://example.com/data.csv",
-        ["day,price", "1,10", "2,20"]
+        {
+          "day": [1, 2],
+          "price": [10, 20]
+        }
       ],
-      "type": ["string", "array"],
-      "items": {
-        "type": "string",
-        "pattern": ","
-      }
+      "type": ["string", "object"],
+      "additionalProperties": { "type": "array" },
+      "minProperties": 1
     }
   },
 
@@ -7045,12 +7046,10 @@ var track = {
   "required": ["mark", "x", "y"],
   "properties": {
     "data": {
-      "description": "A string of a csv href containing data or an array of inline data where each row is a string with comma seperated values",
-      "type": ["string", "array"],
-      "items": {
-        "type": "string",
-        "pattern": ","
-      }
+      "description": "A string of a csv href containing data or an object of inline data where each key is an array of a data column",
+      "type": ["string", "object"],
+      "additionalProperties": { "type": "array" },
+      "minProperties": 1
     },
     "mark": {
       "description": "type of mark to visualize",
@@ -7489,7 +7488,7 @@ class WebGLVis {
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-6123b92b.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-a1ab5662.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7508,7 +7507,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-88b8b720.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-d88f706d.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {

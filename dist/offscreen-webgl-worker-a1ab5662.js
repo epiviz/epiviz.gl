@@ -1,4 +1,4 @@
-import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, S as SchemaProcessor, V as VertexCalculator } from './schema-processor-17202e73.js';
+import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, S as SchemaProcessor, V as VertexCalculator } from './schema-processor-66236800.js';
 import { G as GenomeScale, c as colorSpecifierToHex, s as scale } from './utilities-52abb45c.js';
 
 class Drawer {
