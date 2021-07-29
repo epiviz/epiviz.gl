@@ -1,4 +1,4 @@
-import {$a482b49601c034373694faa8888ffe15$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init, $3ebbd6da2f6dbbd2ea0ba22bdc176caf$init} from "./offscreen-webgl-worker.660d7e45.js";
+import {$a482b49601c034373694faa8888ffe15$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init, $3ebbd6da2f6dbbd2ea0ba22bdc176caf$init} from "./offscreen-webgl-worker.dec4d95d.js";
 class $1ef1a7c693c135c8fefb2c851c556f34$export$default {
   /**
   * An interface for drawing on a canvas.
@@ -9503,4 +9503,4 @@ self.onmessage = message => {
   }
 };
 
-//# sourceMappingURL=offscreen-webgl-worker.5cece366.js.map
+//# sourceMappingURL=offscreen-webgl-worker.69e75a5c.js.map

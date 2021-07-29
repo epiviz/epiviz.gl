@@ -1,4 +1,5 @@
 (function () {
+  var $parcel$global = typeof globalThis !== 'undefined' ? globalThis : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
   function $parcel$interopDefault(a) {
     return a && a.__esModule ? a.default : a;
   }
@@ -40,7 +41,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.7760c25e.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"5hunV\":\"offscreen-webgl-worker.5cece366.js\",\"4qh26\":\"data-processor-worker.581dbebf.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.d8751590.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"5hunV\":\"offscreen-webgl-worker.69e75a5c.js\",\"4qh26\":\"data-processor-worker.39b8c74d.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3541,7 +3542,10 @@
     }]
   }, null, 2);
   var $06e40a23570870f8a83f3aaf907d82c8$export$default = JSON.stringify({
-    defaultData: ["day,price", "1,10", "2,22", "3,35"],
+    defaultData: {
+      day: [1, 2, 3],
+      price: [10, 22, 35]
+    },
     tracks: [{
       tooltips: 1,
       mark: "line",
@@ -3570,7 +3574,10 @@
     yAxis: "right",
     tracks: [{
       order: 1,
-      data: ["day,price", "1,5", "2,15", "3,30"],
+      data: {
+        day: [1, 2, 3],
+        price: [5, 15, 30]
+      },
       tooltips: 1,
       mark: "area",
       layout: "linear",
@@ -3593,7 +3600,10 @@
       }
     }, {
       order: 2,
-      data: ["day,price", "1,15", "2,25", "3,40"],
+      data: {
+        day: [1, 2, 3],
+        price: [15, 25, 40]
+      },
       tooltips: 1,
       mark: "area",
       layout: "linear",
@@ -3617,7 +3627,10 @@
     }]
   }, null, 2);
   var $e846c1d03922ee59f48b09e88821c117$export$default = JSON.stringify({
-    defaultData: ["day,price", "1,10", "2,22", "3,35", "4,20"],
+    defaultData: {
+      day: [1, 2, 3, 4],
+      price: [10, 22, 35, 20]
+    },
     tracks: [{
       tooltips: 1,
       mark: "point",
@@ -3642,16 +3655,20 @@
     }]
   }, null, 2);
   const $cd4e733a1254aa9bac58e47aad354d6e$var$buildGrid = cellsPerRow => {
-    const toReturn = [];
+    const toReturn = {
+      x: [],
+      y: []
+    };
     for (let i = 0; i < cellsPerRow; i++) {
       for (let j = 0; j < cellsPerRow; j++) {
-        toReturn.push(`${i / cellsPerRow},${j / cellsPerRow}`);
+        toReturn.x.push(i / cellsPerRow);
+        toReturn.y.push(j / cellsPerRow);
       }
     }
     return toReturn;
   };
   var $cd4e733a1254aa9bac58e47aad354d6e$export$default = JSON.stringify({
-    defaultData: ["x,y"].concat($cd4e733a1254aa9bac58e47aad354d6e$var$buildGrid(5)),
+    defaultData: $cd4e733a1254aa9bac58e47aad354d6e$var$buildGrid(5),
     tracks: [{
       tooltips: 1,
       mark: "point",
@@ -3671,10 +3688,14 @@
     }]
   }, null, 2);
   const $dc5329828972700f257f79472a39bdd7$var$buildGrid = cellsPerRow => {
-    const toReturn = [];
+    const toReturn = {
+      x: [],
+      y: []
+    };
     for (let i = 0; i < cellsPerRow; i++) {
       for (let j = 0; j < cellsPerRow; j++) {
-        toReturn.push(`${i / cellsPerRow},${j / cellsPerRow}`);
+        toReturn.x.push(i / cellsPerRow);
+        toReturn.y.push(j / cellsPerRow);
       }
     }
     return toReturn;
@@ -3686,7 +3707,7 @@
       left: "5%",
       right: "1em"
     },
-    defaultData: ["x,y"].concat($dc5329828972700f257f79472a39bdd7$var$buildGrid(5)),
+    defaultData: $dc5329828972700f257f79472a39bdd7$var$buildGrid(5),
     tracks: [{
       tooltips: 1,
       mark: "point",
@@ -3796,7 +3817,11 @@
     }]
   }, null, 2);
   var $ee1e30ff6b3c6ac12a412718c8b0e4af$export$default = JSON.stringify({
-    defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
+    defaultData: {
+      x: [1, 2, 3, 4, 5, 6, 7, 8],
+      y: [10, -10, 5, 15, -15, -1, 1, 15],
+      type: ["a", "b", "c", "b", "a", "c", "b", "c"]
+    },
     xAxis: "zero",
     yAxis: "right",
     tracks: [{
@@ -3830,7 +3855,11 @@
     }]
   }, null, 2);
   var $0f5ae853568c24a4e290b25dc33e6e49$export$default = JSON.stringify({
-    defaultData: ["x,y,type", "1,10,a", "2,-10,b", "3,5,c", "4,15,b", "5,-15,a", "6,-1,c", "7,1,b", "8,15,c"],
+    defaultData: {
+      x: [1, 2, 3, 4, 5, 6, 7, 8],
+      y: [10, -10, 5, 15, -15, -1, 1, 15],
+      type: ["a", "b", "c", "b", "a", "c", "b", "c"]
+    },
     xAxis: "bottom",
     yAxis: "zero",
     tracks: [{
@@ -8290,6 +8319,3173 @@
       return [scaleX(canvasX), scaleY(canvasY)];
     }
   }
+  // ASSET: node_modules/jsonschema/lib/index.js
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$Validator;
+  // ASSET: node_modules/jsonschema/lib/validator.js
+  var $9cdb8ac535d7173eb5acc47d93433e56$exports = {};
+  // ASSET: node_modules/@parcel/node-libs-browser/node_modules/punycode/punycode.js
+  var $864e6a05bc46b64ca907230a1ad19082$exports = (function () {
+    var exports = this;
+    var module = {
+      exports: this
+    };
+    var define;
+    /*! https://mths.be/punycode v1.4.1 by @mathias*/
+    ;
+    (function (root) {
+      /** Detect free variables*/
+      var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
+      var freeModule = typeof module == 'object' && module && !module.nodeType && module;
+      var freeGlobal = typeof $parcel$global == 'object' && $parcel$global;
+      if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal || freeGlobal.self === freeGlobal) {
+        root = freeGlobal;
+      }
+      /**
+      * The `punycode` object.
+      * @name punycode
+      * @type Object
+      */
+      var punycode, /** Highest positive signed 32-bit float value*/
+      maxInt = 2147483647, // aka. 0x7FFFFFFF or 2^31-1
+      /** Bootstring parameters*/
+      base = 36, tMin = 1, tMax = 26, skew = 38, damp = 700, initialBias = 72, initialN = 128, // 0x80
+      delimiter = '-', // '\x2D'
+      /** Regular expressions*/
+      regexPunycode = /^xn--/, regexNonASCII = /[^\x20-\x7E]/, // unprintable ASCII chars + non-ASCII chars
+      regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g, // RFC 3490 separators
+      /** Error messages*/
+      errors = {
+        'overflow': 'Overflow: input needs wider integers to process',
+        'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
+        'invalid-input': 'Invalid input'
+      }, /** Convenience shortcuts*/
+      baseMinusTMin = base - tMin, floor = Math.floor, stringFromCharCode = String.fromCharCode, /** Temporary variable*/
+      key;
+      /*--------------------------------------------------------------------------*/
+      /**
+      * A generic error utility function.
+      * @private
+      * @param {String} type The error type.
+      * @returns {Error} Throws a `RangeError` with the applicable error message.
+      */
+      function error(type) {
+        throw new RangeError(errors[type]);
+      }
+      /**
+      * A generic `Array#map` utility function.
+      * @private
+      * @param {Array} array The array to iterate over.
+      * @param {Function} callback The function that gets called for every array
+      * item.
+      * @returns {Array} A new array of values returned by the callback function.
+      */
+      function map(array, fn) {
+        var length = array.length;
+        var result = [];
+        while (length--) {
+          result[length] = fn(array[length]);
+        }
+        return result;
+      }
+      /**
+      * A simple `Array#map`-like wrapper to work with domain name strings or email
+      * addresses.
+      * @private
+      * @param {String} domain The domain name or email address.
+      * @param {Function} callback The function that gets called for every
+      * character.
+      * @returns {Array} A new string of characters returned by the callback
+      * function.
+      */
+      function mapDomain(string, fn) {
+        var parts = string.split('@');
+        var result = '';
+        if (parts.length > 1) {
+          // In email addresses, only the domain name should be punycoded. Leave
+          // the local part (i.e. everything up to `@`) intact.
+          result = parts[0] + '@';
+          string = parts[1];
+        }
+        // Avoid `split(regex)` for IE8 compatibility. See #17.
+        string = string.replace(regexSeparators, '\x2E');
+        var labels = string.split('.');
+        var encoded = map(labels, fn).join('.');
+        return result + encoded;
+      }
+      /**
+      * Creates an array containing the numeric code points of each Unicode
+      * character in the string. While JavaScript uses UCS-2 internally,
+      * this function will convert a pair of surrogate halves (each of which
+      * UCS-2 exposes as separate characters) into a single code point,
+      * matching UTF-16.
+      * @see `punycode.ucs2.encode`
+      * @see <https://mathiasbynens.be/notes/javascript-encoding>
+      * @memberOf punycode.ucs2
+      * @name decode
+      * @param {String} string The Unicode input string (UCS-2).
+      * @returns {Array} The new array of code points.
+      */
+      function ucs2decode(string) {
+        var output = [], counter = 0, length = string.length, value, extra;
+        while (counter < length) {
+          value = string.charCodeAt(counter++);
+          if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+            // high surrogate, and there is a next character
+            extra = string.charCodeAt(counter++);
+            if ((extra & 0xFC00) == 0xDC00) {
+              // low surrogate
+              output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+            } else {
+              // unmatched surrogate; only append this code unit, in case the next
+              // code unit is the high surrogate of a surrogate pair
+              output.push(value);
+              counter--;
+            }
+          } else {
+            output.push(value);
+          }
+        }
+        return output;
+      }
+      /**
+      * Creates a string based on an array of numeric code points.
+      * @see `punycode.ucs2.decode`
+      * @memberOf punycode.ucs2
+      * @name encode
+      * @param {Array} codePoints The array of numeric code points.
+      * @returns {String} The new Unicode string (UCS-2).
+      */
+      function ucs2encode(array) {
+        return map(array, function (value) {
+          var output = '';
+          if (value > 0xFFFF) {
+            value -= 0x10000;
+            output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
+            value = 0xDC00 | value & 0x3FF;
+          }
+          output += stringFromCharCode(value);
+          return output;
+        }).join('');
+      }
+      /**
+      * Converts a basic code point into a digit/integer.
+      * @see `digitToBasic()`
+      * @private
+      * @param {Number} codePoint The basic numeric code point value.
+      * @returns {Number} The numeric value of a basic code point (for use in
+      * representing integers) in the range `0` to `base - 1`, or `base` if
+      * the code point does not represent a value.
+      */
+      function basicToDigit(codePoint) {
+        if (codePoint - 48 < 10) {
+          return codePoint - 22;
+        }
+        if (codePoint - 65 < 26) {
+          return codePoint - 65;
+        }
+        if (codePoint - 97 < 26) {
+          return codePoint - 97;
+        }
+        return base;
+      }
+      /**
+      * Converts a digit/integer into a basic code point.
+      * @see `basicToDigit()`
+      * @private
+      * @param {Number} digit The numeric value of a basic code point.
+      * @returns {Number} The basic code point whose value (when used for
+      * representing integers) is `digit`, which needs to be in the range
+      * `0` to `base - 1`. If `flag` is non-zero, the uppercase form is
+      * used; else, the lowercase form is used. The behavior is undefined
+      * if `flag` is non-zero and `digit` has no uppercase form.
+      */
+      function digitToBasic(digit, flag) {
+        // 0..25 map to ASCII a..z or A..Z
+        // 26..35 map to ASCII 0..9
+        return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
+      }
+      /**
+      * Bias adaptation function as per section 3.4 of RFC 3492.
+      * https://tools.ietf.org/html/rfc3492#section-3.4
+      * @private
+      */
+      function adapt(delta, numPoints, firstTime) {
+        var k = 0;
+        delta = firstTime ? floor(delta / damp) : delta >> 1;
+        delta += floor(delta / numPoints);
+        for (; /*no initialization*/
+        delta > baseMinusTMin * tMax >> 1; k += base) {
+          delta = floor(delta / baseMinusTMin);
+        }
+        return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
+      }
+      /**
+      * Converts a Punycode string of ASCII-only symbols to a string of Unicode
+      * symbols.
+      * @memberOf punycode
+      * @param {String} input The Punycode string of ASCII-only symbols.
+      * @returns {String} The resulting string of Unicode symbols.
+      */
+      function decode(input) {
+        // Don't use UCS-2
+        var output = [], inputLength = input.length, out, i = 0, n = initialN, bias = initialBias, basic, j, index, oldi, w, k, digit, t, /** Cached calculation results*/
+        baseMinusT;
+        // Handle the basic code points: let `basic` be the number of input code
+        // points before the last delimiter, or `0` if there is none, then copy
+        // the first basic code points to the output.
+        basic = input.lastIndexOf(delimiter);
+        if (basic < 0) {
+          basic = 0;
+        }
+        for (j = 0; j < basic; ++j) {
+          // if it's not a basic code point
+          if (input.charCodeAt(j) >= 0x80) {
+            error('not-basic');
+          }
+          output.push(input.charCodeAt(j));
+        }
+        // Main decoding loop: start just after the last delimiter if any basic code
+        // points were copied; start at the beginning otherwise.
+        for (index = basic > 0 ? basic + 1 : 0; index < inputLength; ) /*no final expression*/
+        {
+          // `index` is the index of the next character to be consumed.
+          // Decode a generalized variable-length integer into `delta`,
+          // which gets added to `i`. The overflow checking is easier
+          // if we increase `i` as we go, then subtract off its starting
+          // value at the end to obtain `delta`.
+          for ((oldi = i, w = 1, k = base); ; /*no condition*/
+          k += base) {
+            if (index >= inputLength) {
+              error('invalid-input');
+            }
+            digit = basicToDigit(input.charCodeAt(index++));
+            if (digit >= base || digit > floor((maxInt - i) / w)) {
+              error('overflow');
+            }
+            i += digit * w;
+            t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
+            if (digit < t) {
+              break;
+            }
+            baseMinusT = base - t;
+            if (w > floor(maxInt / baseMinusT)) {
+              error('overflow');
+            }
+            w *= baseMinusT;
+          }
+          out = output.length + 1;
+          bias = adapt(i - oldi, out, oldi == 0);
+          // `i` was supposed to wrap around from `out` to `0`,
+          // incrementing `n` each time, so we'll fix that now:
+          if (floor(i / out) > maxInt - n) {
+            error('overflow');
+          }
+          n += floor(i / out);
+          i %= out;
+          // Insert `n` at position `i` of the output
+          output.splice(i++, 0, n);
+        }
+        return ucs2encode(output);
+      }
+      /**
+      * Converts a string of Unicode symbols (e.g. a domain name label) to a
+      * Punycode string of ASCII-only symbols.
+      * @memberOf punycode
+      * @param {String} input The string of Unicode symbols.
+      * @returns {String} The resulting Punycode string of ASCII-only symbols.
+      */
+      function encode(input) {
+        var n, delta, handledCPCount, basicLength, bias, j, m, q, k, t, currentValue, output = [], /** `inputLength` will hold the number of code points in `input`.*/
+        inputLength, /** Cached calculation results*/
+        handledCPCountPlusOne, baseMinusT, qMinusT;
+        // Convert the input in UCS-2 to Unicode
+        input = ucs2decode(input);
+        // Cache the length
+        inputLength = input.length;
+        // Initialize the state
+        n = initialN;
+        delta = 0;
+        bias = initialBias;
+        // Handle the basic code points
+        for (j = 0; j < inputLength; ++j) {
+          currentValue = input[j];
+          if (currentValue < 0x80) {
+            output.push(stringFromCharCode(currentValue));
+          }
+        }
+        handledCPCount = basicLength = output.length;
+        // `handledCPCount` is the number of code points that have been handled;
+        // `basicLength` is the number of basic code points.
+        // Finish the basic string - if it is not empty - with a delimiter
+        if (basicLength) {
+          output.push(delimiter);
+        }
+        // Main encoding loop:
+        while (handledCPCount < inputLength) {
+          // All non-basic code points < n have been handled already. Find the next
+          // larger one:
+          for ((m = maxInt, j = 0); j < inputLength; ++j) {
+            currentValue = input[j];
+            if (currentValue >= n && currentValue < m) {
+              m = currentValue;
+            }
+          }
+          // Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
+          // but guard against overflow
+          handledCPCountPlusOne = handledCPCount + 1;
+          if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
+            error('overflow');
+          }
+          delta += (m - n) * handledCPCountPlusOne;
+          n = m;
+          for (j = 0; j < inputLength; ++j) {
+            currentValue = input[j];
+            if (currentValue < n && ++delta > maxInt) {
+              error('overflow');
+            }
+            if (currentValue == n) {
+              // Represent delta as a generalized variable-length integer
+              for ((q = delta, k = base); ; /*no condition*/
+              k += base) {
+                t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
+                if (q < t) {
+                  break;
+                }
+                qMinusT = q - t;
+                baseMinusT = base - t;
+                output.push(stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0)));
+                q = floor(qMinusT / baseMinusT);
+              }
+              output.push(stringFromCharCode(digitToBasic(q, 0)));
+              bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
+              delta = 0;
+              ++handledCPCount;
+            }
+          }
+          ++delta;
+          ++n;
+        }
+        return output.join('');
+      }
+      /**
+      * Converts a Punycode string representing a domain name or an email address
+      * to Unicode. Only the Punycoded parts of the input will be converted, i.e.
+      * it doesn't matter if you call it on a string that has already been
+      * converted to Unicode.
+      * @memberOf punycode
+      * @param {String} input The Punycoded domain name or email address to
+      * convert to Unicode.
+      * @returns {String} The Unicode representation of the given Punycode
+      * string.
+      */
+      function toUnicode(input) {
+        return mapDomain(input, function (string) {
+          return regexPunycode.test(string) ? decode(string.slice(4).toLowerCase()) : string;
+        });
+      }
+      /**
+      * Converts a Unicode string representing a domain name or an email address to
+      * Punycode. Only the non-ASCII parts of the domain name will be converted,
+      * i.e. it doesn't matter if you call it with a domain that's already in
+      * ASCII.
+      * @memberOf punycode
+      * @param {String} input The domain name or email address to convert, as a
+      * Unicode string.
+      * @returns {String} The Punycode representation of the given domain name or
+      * email address.
+      */
+      function toASCII(input) {
+        return mapDomain(input, function (string) {
+          return regexNonASCII.test(string) ? 'xn--' + encode(string) : string;
+        });
+      }
+      /*--------------------------------------------------------------------------*/
+      /** Define the public API*/
+      punycode = {
+        /**
+        * A string representing the current Punycode.js version number.
+        * @memberOf punycode
+        * @type String
+        */
+        'version': '1.4.1',
+        /**
+        * An object of methods to convert from JavaScript's internal character
+        * representation (UCS-2) to Unicode code points, and back.
+        * @see <https://mathiasbynens.be/notes/javascript-encoding>
+        * @memberOf punycode
+        * @type Object
+        */
+        'ucs2': {
+          'decode': ucs2decode,
+          'encode': ucs2encode
+        },
+        'decode': decode,
+        'encode': encode,
+        'toASCII': toASCII,
+        'toUnicode': toUnicode
+      };
+      /** Expose `punycode`*/
+      // Some AMD build optimizers, like r.js, check for specific condition patterns
+      // like the following:
+      if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+        define('punycode', function () {
+          return punycode;
+        });
+      } else if (freeExports && freeModule) {
+        if (module.exports == freeExports) {
+          // in Node.js, io.js, or RingoJS v0.8.0+
+          freeModule.exports = punycode;
+        } else {
+          // in Narwhal or RingoJS v0.7.0-
+          for (key in punycode) {
+            punycode.hasOwnProperty(key) && (freeExports[key] = punycode[key]);
+          }
+        }
+      } else {
+        // in Rhino or a web browser
+        root.punycode = punycode;
+      }
+    })(this);
+    return module.exports;
+  }).call({});
+  // ASSET: node_modules/url/util.js
+  var $fb6a21cc5c1e7677f11d39d63f817a4d$exports = {};
+  $fb6a21cc5c1e7677f11d39d63f817a4d$exports = {
+    isString: function (arg) {
+      return typeof arg === 'string';
+    },
+    isObject: function (arg) {
+      return typeof arg === 'object' && arg !== null;
+    },
+    isNull: function (arg) {
+      return arg === null;
+    },
+    isNullOrUndefined: function (arg) {
+      return arg == null;
+    }
+  };
+  var $42c0ab72f3b39275783aaa4babb143cb$export$parse = $42c0ab72f3b39275783aaa4babb143cb$var$urlParse;
+  var $42c0ab72f3b39275783aaa4babb143cb$export$resolve = $42c0ab72f3b39275783aaa4babb143cb$var$urlResolve;
+  function $42c0ab72f3b39275783aaa4babb143cb$var$Url() {
+    this.protocol = null;
+    this.slashes = null;
+    this.auth = null;
+    this.host = null;
+    this.port = null;
+    this.hostname = null;
+    this.hash = null;
+    this.search = null;
+    this.query = null;
+    this.pathname = null;
+    this.path = null;
+    this.href = null;
+  }
+  var $42c0ab72f3b39275783aaa4babb143cb$var$protocolPattern = /^([a-z0-9.+-]+:)/i, $42c0ab72f3b39275783aaa4babb143cb$var$portPattern = /:[0-9]*$/, // Special case for a simple path URL
+  $42c0ab72f3b39275783aaa4babb143cb$var$simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/, // RFC 2396: characters reserved for delimiting URLs.
+  // We actually just auto-escape these.
+  $42c0ab72f3b39275783aaa4babb143cb$var$delims = ['<', '>', '"', '`', ' ', '\r', '\n', '\t'], // RFC 2396: characters not allowed for various reasons.
+  $42c0ab72f3b39275783aaa4babb143cb$var$unwise = ['{', '}', '|', '\\', '^', '`'].concat($42c0ab72f3b39275783aaa4babb143cb$var$delims), // Allowed by RFCs, but cause of XSS attacks.  Always escape these.
+  $42c0ab72f3b39275783aaa4babb143cb$var$autoEscape = ['\''].concat($42c0ab72f3b39275783aaa4babb143cb$var$unwise), // Characters that are never ever allowed in a hostname.
+  // Note that any invalid chars are also handled, but these
+  // are the ones that are *expected* to be seen, so we fast-path
+  // them.
+  $42c0ab72f3b39275783aaa4babb143cb$var$nonHostChars = ['%', '/', '?', ';', '#'].concat($42c0ab72f3b39275783aaa4babb143cb$var$autoEscape), $42c0ab72f3b39275783aaa4babb143cb$var$hostEndingChars = ['/', '?', '#'], $42c0ab72f3b39275783aaa4babb143cb$var$hostnameMaxLen = 255, $42c0ab72f3b39275783aaa4babb143cb$var$hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/, $42c0ab72f3b39275783aaa4babb143cb$var$hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/, // protocols that can allow "unsafe" and "unwise" chars.
+  $42c0ab72f3b39275783aaa4babb143cb$var$unsafeProtocol = {
+    'javascript': true,
+    'javascript:': true
+  }, // protocols that never have a hostname.
+  $42c0ab72f3b39275783aaa4babb143cb$var$hostlessProtocol = {
+    'javascript': true,
+    'javascript:': true
+  }, // protocols that always contain a // bit.
+  $42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol = {
+    'http': true,
+    'https': true,
+    'ftp': true,
+    'gopher': true,
+    'file': true,
+    'http:': true,
+    'https:': true,
+    'ftp:': true,
+    'gopher:': true,
+    'file:': true
+  };
+  // ASSET: node_modules/querystring-es3/index.js
+  var $70e061cbbf2bffea2b54f2252d0f8e2c$export$parse, $70e061cbbf2bffea2b54f2252d0f8e2c$export$stringify;
+  // ASSET: node_modules/querystring-es3/decode.js
+  var $c56928b73ed3cf970544263e95eb1144$exports = {};
+  // If obj.hasOwnProperty has been overridden, then calling
+  // obj.hasOwnProperty(prop) will break.
+  // See: https://github.com/joyent/node/issues/1707
+  function $c56928b73ed3cf970544263e95eb1144$var$hasOwnProperty(obj, prop) {
+    return Object.prototype.hasOwnProperty.call(obj, prop);
+  }
+  $c56928b73ed3cf970544263e95eb1144$exports = function (qs, sep, eq, options) {
+    sep = sep || '&';
+    eq = eq || '=';
+    var obj = {};
+    if (typeof qs !== 'string' || qs.length === 0) {
+      return obj;
+    }
+    var regexp = /\+/g;
+    qs = qs.split(sep);
+    var maxKeys = 1000;
+    if (options && typeof options.maxKeys === 'number') {
+      maxKeys = options.maxKeys;
+    }
+    var len = qs.length;
+    // maxKeys <= 0 means that we should not limit keys count
+    if (maxKeys > 0 && len > maxKeys) {
+      len = maxKeys;
+    }
+    for (var i = 0; i < len; ++i) {
+      var x = qs[i].replace(regexp, '%20'), idx = x.indexOf(eq), kstr, vstr, k, v;
+      if (idx >= 0) {
+        kstr = x.substr(0, idx);
+        vstr = x.substr(idx + 1);
+      } else {
+        kstr = x;
+        vstr = '';
+      }
+      k = decodeURIComponent(kstr);
+      v = decodeURIComponent(vstr);
+      if (!$c56928b73ed3cf970544263e95eb1144$var$hasOwnProperty(obj, k)) {
+        obj[k] = v;
+      } else if ($c56928b73ed3cf970544263e95eb1144$var$isArray(obj[k])) {
+        obj[k].push(v);
+      } else {
+        obj[k] = [obj[k], v];
+      }
+    }
+    return obj;
+  };
+  var $c56928b73ed3cf970544263e95eb1144$var$isArray = Array.isArray || (function (xs) {
+    return Object.prototype.toString.call(xs) === '[object Array]';
+  });
+  var $70e061cbbf2bffea2b54f2252d0f8e2c$export$decode = $70e061cbbf2bffea2b54f2252d0f8e2c$export$parse = $c56928b73ed3cf970544263e95eb1144$exports;
+  // ASSET: node_modules/querystring-es3/encode.js
+  var $4f80fb3d3483eb344e64557f56ed9a89$exports = {};
+  var $4f80fb3d3483eb344e64557f56ed9a89$var$stringifyPrimitive = function (v) {
+    switch (typeof v) {
+      case 'string':
+        return v;
+      case 'boolean':
+        return v ? 'true' : 'false';
+      case 'number':
+        return isFinite(v) ? v : '';
+      default:
+        return '';
+    }
+  };
+  $4f80fb3d3483eb344e64557f56ed9a89$exports = function (obj, sep, eq, name) {
+    sep = sep || '&';
+    eq = eq || '=';
+    if (obj === null) {
+      obj = undefined;
+    }
+    if (typeof obj === 'object') {
+      return $4f80fb3d3483eb344e64557f56ed9a89$var$map($4f80fb3d3483eb344e64557f56ed9a89$var$objectKeys(obj), function (k) {
+        var ks = encodeURIComponent($4f80fb3d3483eb344e64557f56ed9a89$var$stringifyPrimitive(k)) + eq;
+        if ($4f80fb3d3483eb344e64557f56ed9a89$var$isArray(obj[k])) {
+          return $4f80fb3d3483eb344e64557f56ed9a89$var$map(obj[k], function (v) {
+            return ks + encodeURIComponent($4f80fb3d3483eb344e64557f56ed9a89$var$stringifyPrimitive(v));
+          }).join(sep);
+        } else {
+          return ks + encodeURIComponent($4f80fb3d3483eb344e64557f56ed9a89$var$stringifyPrimitive(obj[k]));
+        }
+      }).join(sep);
+    }
+    if (!name) return '';
+    return encodeURIComponent($4f80fb3d3483eb344e64557f56ed9a89$var$stringifyPrimitive(name)) + eq + encodeURIComponent($4f80fb3d3483eb344e64557f56ed9a89$var$stringifyPrimitive(obj));
+  };
+  var $4f80fb3d3483eb344e64557f56ed9a89$var$isArray = Array.isArray || (function (xs) {
+    return Object.prototype.toString.call(xs) === '[object Array]';
+  });
+  function $4f80fb3d3483eb344e64557f56ed9a89$var$map(xs, f) {
+    if (xs.map) return xs.map(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+      res.push(f(xs[i], i));
+    }
+    return res;
+  }
+  var $4f80fb3d3483eb344e64557f56ed9a89$var$objectKeys = Object.keys || (function (obj) {
+    var res = [];
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) res.push(key);
+    }
+    return res;
+  });
+  var $70e061cbbf2bffea2b54f2252d0f8e2c$export$encode = $70e061cbbf2bffea2b54f2252d0f8e2c$export$stringify = $4f80fb3d3483eb344e64557f56ed9a89$exports;
+  function $42c0ab72f3b39275783aaa4babb143cb$var$urlParse(url, parseQueryString, slashesDenoteHost) {
+    if (url && $fb6a21cc5c1e7677f11d39d63f817a4d$exports.isObject(url) && url instanceof $42c0ab72f3b39275783aaa4babb143cb$var$Url) return url;
+    var u = new $42c0ab72f3b39275783aaa4babb143cb$var$Url();
+    u.parse(url, parseQueryString, slashesDenoteHost);
+    return u;
+  }
+  $42c0ab72f3b39275783aaa4babb143cb$var$Url.prototype.parse = function (url, parseQueryString, slashesDenoteHost) {
+    if (!$fb6a21cc5c1e7677f11d39d63f817a4d$exports.isString(url)) {
+      throw new TypeError("Parameter 'url' must be a string, not " + typeof url);
+    }
+    // Copy chrome, IE, opera backslash-handling behavior.
+    // Back slashes before the query string get converted to forward slashes
+    // See: https://code.google.com/p/chromium/issues/detail?id=25916
+    var queryIndex = url.indexOf('?'), splitter = queryIndex !== -1 && queryIndex < url.indexOf('#') ? '?' : '#', uSplit = url.split(splitter), slashRegex = /\\/g;
+    uSplit[0] = uSplit[0].replace(slashRegex, '/');
+    url = uSplit.join(splitter);
+    var rest = url;
+    // trim before proceeding.
+    // This is to support parse stuff like "  http://foo.com  \n"
+    rest = rest.trim();
+    if (!slashesDenoteHost && url.split('#').length === 1) {
+      // Try fast path regexp
+      var simplePath = $42c0ab72f3b39275783aaa4babb143cb$var$simplePathPattern.exec(rest);
+      if (simplePath) {
+        this.path = rest;
+        this.href = rest;
+        this.pathname = simplePath[1];
+        if (simplePath[2]) {
+          this.search = simplePath[2];
+          if (parseQueryString) {
+            this.query = $70e061cbbf2bffea2b54f2252d0f8e2c$export$parse(this.search.substr(1));
+          } else {
+            this.query = this.search.substr(1);
+          }
+        } else if (parseQueryString) {
+          this.search = '';
+          this.query = {};
+        }
+        return this;
+      }
+    }
+    var proto = $42c0ab72f3b39275783aaa4babb143cb$var$protocolPattern.exec(rest);
+    if (proto) {
+      proto = proto[0];
+      var lowerProto = proto.toLowerCase();
+      this.protocol = lowerProto;
+      rest = rest.substr(proto.length);
+    }
+    // figure out if it's got a host
+    // user@server is *always* interpreted as a hostname, and url
+    // resolution will treat //foo/bar as host=foo,path=bar because that's
+    // how the browser resolves relative URLs.
+    if (slashesDenoteHost || proto || rest.match(/^\/\/[^@\/]+@[^@\/]+/)) {
+      var slashes = rest.substr(0, 2) === '//';
+      if (slashes && !(proto && $42c0ab72f3b39275783aaa4babb143cb$var$hostlessProtocol[proto])) {
+        rest = rest.substr(2);
+        this.slashes = true;
+      }
+    }
+    if (!$42c0ab72f3b39275783aaa4babb143cb$var$hostlessProtocol[proto] && (slashes || proto && !$42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol[proto])) {
+      // there's a hostname.
+      // the first instance of /, ?, ;, or # ends the host.
+      // 
+      // If there is an @ in the hostname, then non-host chars *are* allowed
+      // to the left of the last @ sign, unless some host-ending character
+      // comes *before* the @-sign.
+      // URLs are obnoxious.
+      // 
+      // ex:
+      // http://a@b@c/ => user:a@b host:c
+      // http://a@b?@c => user:a host:c path:/?@c
+      // v0.12 TODO(isaacs): This is not quite how Chrome does things.
+      // Review our test case against browsers more comprehensively.
+      // find the first instance of any hostEndingChars
+      var hostEnd = -1;
+      for (var i = 0; i < $42c0ab72f3b39275783aaa4babb143cb$var$hostEndingChars.length; i++) {
+        var hec = rest.indexOf($42c0ab72f3b39275783aaa4babb143cb$var$hostEndingChars[i]);
+        if (hec !== -1 && (hostEnd === -1 || hec < hostEnd)) hostEnd = hec;
+      }
+      // at this point, either we have an explicit point where the
+      // auth portion cannot go past, or the last @ char is the decider.
+      var auth, atSign;
+      if (hostEnd === -1) {
+        // atSign can be anywhere.
+        atSign = rest.lastIndexOf('@');
+      } else {
+        // atSign must be in auth portion.
+        // http://a@b/c@d => host:b auth:a path:/c@d
+        atSign = rest.lastIndexOf('@', hostEnd);
+      }
+      // Now we have a portion which is definitely the auth.
+      // Pull that off.
+      if (atSign !== -1) {
+        auth = rest.slice(0, atSign);
+        rest = rest.slice(atSign + 1);
+        this.auth = decodeURIComponent(auth);
+      }
+      // the host is the remaining to the left of the first non-host char
+      hostEnd = -1;
+      for (var i = 0; i < $42c0ab72f3b39275783aaa4babb143cb$var$nonHostChars.length; i++) {
+        var hec = rest.indexOf($42c0ab72f3b39275783aaa4babb143cb$var$nonHostChars[i]);
+        if (hec !== -1 && (hostEnd === -1 || hec < hostEnd)) hostEnd = hec;
+      }
+      // if we still have not hit it, then the entire thing is a host.
+      if (hostEnd === -1) hostEnd = rest.length;
+      this.host = rest.slice(0, hostEnd);
+      rest = rest.slice(hostEnd);
+      // pull out port.
+      this.parseHost();
+      // we've indicated that there is a hostname,
+      // so even if it's empty, it has to be present.
+      this.hostname = this.hostname || '';
+      // if hostname begins with [ and ends with ]
+      // assume that it's an IPv6 address.
+      var ipv6Hostname = this.hostname[0] === '[' && this.hostname[this.hostname.length - 1] === ']';
+      // validate a little.
+      if (!ipv6Hostname) {
+        var hostparts = this.hostname.split(/\./);
+        for (var i = 0, l = hostparts.length; i < l; i++) {
+          var part = hostparts[i];
+          if (!part) continue;
+          if (!part.match($42c0ab72f3b39275783aaa4babb143cb$var$hostnamePartPattern)) {
+            var newpart = '';
+            for (var j = 0, k = part.length; j < k; j++) {
+              if (part.charCodeAt(j) > 127) {
+                // we replace non-ASCII char with a temporary placeholder
+                // we need this to make sure size of hostname is not
+                // broken by replacing non-ASCII by nothing
+                newpart += 'x';
+              } else {
+                newpart += part[j];
+              }
+            }
+            // we test again with ASCII char only
+            if (!newpart.match($42c0ab72f3b39275783aaa4babb143cb$var$hostnamePartPattern)) {
+              var validParts = hostparts.slice(0, i);
+              var notHost = hostparts.slice(i + 1);
+              var bit = part.match($42c0ab72f3b39275783aaa4babb143cb$var$hostnamePartStart);
+              if (bit) {
+                validParts.push(bit[1]);
+                notHost.unshift(bit[2]);
+              }
+              if (notHost.length) {
+                rest = '/' + notHost.join('.') + rest;
+              }
+              this.hostname = validParts.join('.');
+              break;
+            }
+          }
+        }
+      }
+      if (this.hostname.length > $42c0ab72f3b39275783aaa4babb143cb$var$hostnameMaxLen) {
+        this.hostname = '';
+      } else {
+        // hostnames are always lower case.
+        this.hostname = this.hostname.toLowerCase();
+      }
+      if (!ipv6Hostname) {
+        // IDNA Support: Returns a punycoded representation of "domain".
+        // It only converts parts of the domain name that
+        // have non-ASCII characters, i.e. it doesn't matter if
+        // you call it with a domain that already is ASCII-only.
+        this.hostname = $864e6a05bc46b64ca907230a1ad19082$exports.toASCII(this.hostname);
+      }
+      var p = this.port ? ':' + this.port : '';
+      var h = this.hostname || '';
+      this.host = h + p;
+      this.href += this.host;
+      // strip [ and ] from the hostname
+      // the host field still retains them, though
+      if (ipv6Hostname) {
+        this.hostname = this.hostname.substr(1, this.hostname.length - 2);
+        if (rest[0] !== '/') {
+          rest = '/' + rest;
+        }
+      }
+    }
+    // now rest is set to the post-host stuff.
+    // chop off any delim chars.
+    if (!$42c0ab72f3b39275783aaa4babb143cb$var$unsafeProtocol[lowerProto]) {
+      // First, make 100% sure that any "autoEscape" chars get
+      // escaped, even if encodeURIComponent doesn't think they
+      // need to be.
+      for (var i = 0, l = $42c0ab72f3b39275783aaa4babb143cb$var$autoEscape.length; i < l; i++) {
+        var ae = $42c0ab72f3b39275783aaa4babb143cb$var$autoEscape[i];
+        if (rest.indexOf(ae) === -1) continue;
+        var esc = encodeURIComponent(ae);
+        if (esc === ae) {
+          esc = escape(ae);
+        }
+        rest = rest.split(ae).join(esc);
+      }
+    }
+    // chop off from the tail first.
+    var hash = rest.indexOf('#');
+    if (hash !== -1) {
+      // got a fragment string.
+      this.hash = rest.substr(hash);
+      rest = rest.slice(0, hash);
+    }
+    var qm = rest.indexOf('?');
+    if (qm !== -1) {
+      this.search = rest.substr(qm);
+      this.query = rest.substr(qm + 1);
+      if (parseQueryString) {
+        this.query = $70e061cbbf2bffea2b54f2252d0f8e2c$export$parse(this.query);
+      }
+      rest = rest.slice(0, qm);
+    } else if (parseQueryString) {
+      // no query string, but parseQueryString still requested
+      this.search = '';
+      this.query = {};
+    }
+    if (rest) this.pathname = rest;
+    if ($42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol[lowerProto] && this.hostname && !this.pathname) {
+      this.pathname = '/';
+    }
+    // to support http.request
+    if (this.pathname || this.search) {
+      var p = this.pathname || '';
+      var s = this.search || '';
+      this.path = p + s;
+    }
+    // finally, reconstruct the href based on what has been validated.
+    this.href = this.format();
+    return this;
+  };
+  // format a parsed object into a url string
+  function $42c0ab72f3b39275783aaa4babb143cb$var$urlFormat(obj) {
+    // ensure it's an object, and not a string url.
+    // If it's an obj, this is a no-op.
+    // this way, you can call url_format() on strings
+    // to clean up potentially wonky urls.
+    if ($fb6a21cc5c1e7677f11d39d63f817a4d$exports.isString(obj)) obj = $42c0ab72f3b39275783aaa4babb143cb$var$urlParse(obj);
+    if (!(obj instanceof $42c0ab72f3b39275783aaa4babb143cb$var$Url)) return $42c0ab72f3b39275783aaa4babb143cb$var$Url.prototype.format.call(obj);
+    return obj.format();
+  }
+  $42c0ab72f3b39275783aaa4babb143cb$var$Url.prototype.format = function () {
+    var auth = this.auth || '';
+    if (auth) {
+      auth = encodeURIComponent(auth);
+      auth = auth.replace(/%3A/i, ':');
+      auth += '@';
+    }
+    var protocol = this.protocol || '', pathname = this.pathname || '', hash = this.hash || '', host = false, query = '';
+    if (this.host) {
+      host = auth + this.host;
+    } else if (this.hostname) {
+      host = auth + (this.hostname.indexOf(':') === -1 ? this.hostname : '[' + this.hostname + ']');
+      if (this.port) {
+        host += ':' + this.port;
+      }
+    }
+    if (this.query && $fb6a21cc5c1e7677f11d39d63f817a4d$exports.isObject(this.query) && Object.keys(this.query).length) {
+      query = $70e061cbbf2bffea2b54f2252d0f8e2c$export$stringify(this.query);
+    }
+    var search = this.search || query && '?' + query || '';
+    if (protocol && protocol.substr(-1) !== ':') protocol += ':';
+    // only the slashedProtocols get the //.  Not mailto:, xmpp:, etc.
+    // unless they had them to begin with.
+    if (this.slashes || (!protocol || $42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol[protocol]) && host !== false) {
+      host = '//' + (host || '');
+      if (pathname && pathname.charAt(0) !== '/') pathname = '/' + pathname;
+    } else if (!host) {
+      host = '';
+    }
+    if (hash && hash.charAt(0) !== '#') hash = '#' + hash;
+    if (search && search.charAt(0) !== '?') search = '?' + search;
+    pathname = pathname.replace(/[?#]/g, function (match) {
+      return encodeURIComponent(match);
+    });
+    search = search.replace('#', '%23');
+    return protocol + host + pathname + search + hash;
+  };
+  function $42c0ab72f3b39275783aaa4babb143cb$var$urlResolve(source, relative) {
+    return $42c0ab72f3b39275783aaa4babb143cb$var$urlParse(source, false, true).resolve(relative);
+  }
+  $42c0ab72f3b39275783aaa4babb143cb$var$Url.prototype.resolve = function (relative) {
+    return this.resolveObject($42c0ab72f3b39275783aaa4babb143cb$var$urlParse(relative, false, true)).format();
+  };
+  function $42c0ab72f3b39275783aaa4babb143cb$var$urlResolveObject(source, relative) {
+    if (!source) return relative;
+    return $42c0ab72f3b39275783aaa4babb143cb$var$urlParse(source, false, true).resolveObject(relative);
+  }
+  $42c0ab72f3b39275783aaa4babb143cb$var$Url.prototype.resolveObject = function (relative) {
+    if ($fb6a21cc5c1e7677f11d39d63f817a4d$exports.isString(relative)) {
+      var rel = new $42c0ab72f3b39275783aaa4babb143cb$var$Url();
+      rel.parse(relative, false, true);
+      relative = rel;
+    }
+    var result = new $42c0ab72f3b39275783aaa4babb143cb$var$Url();
+    var tkeys = Object.keys(this);
+    for (var tk = 0; tk < tkeys.length; tk++) {
+      var tkey = tkeys[tk];
+      result[tkey] = this[tkey];
+    }
+    // hash is always overridden, no matter what.
+    // even href="" will remove it.
+    result.hash = relative.hash;
+    // if the relative url is empty, then there's nothing left to do here.
+    if (relative.href === '') {
+      result.href = result.format();
+      return result;
+    }
+    // hrefs like //foo/bar always cut to the protocol.
+    if (relative.slashes && !relative.protocol) {
+      // take everything except the protocol from relative
+      var rkeys = Object.keys(relative);
+      for (var rk = 0; rk < rkeys.length; rk++) {
+        var rkey = rkeys[rk];
+        if (rkey !== 'protocol') result[rkey] = relative[rkey];
+      }
+      // urlParse appends trailing / to urls like http://www.example.com
+      if ($42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol[result.protocol] && result.hostname && !result.pathname) {
+        result.path = result.pathname = '/';
+      }
+      result.href = result.format();
+      return result;
+    }
+    if (relative.protocol && relative.protocol !== result.protocol) {
+      // if it's a known url protocol, then changing
+      // the protocol does weird things
+      // first, if it's not file:, then we MUST have a host,
+      // and if there was a path
+      // to begin with, then we MUST have a path.
+      // if it is file:, then the host is dropped,
+      // because that's known to be hostless.
+      // anything else is assumed to be absolute.
+      if (!$42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol[relative.protocol]) {
+        var keys = Object.keys(relative);
+        for (var v = 0; v < keys.length; v++) {
+          var k = keys[v];
+          result[k] = relative[k];
+        }
+        result.href = result.format();
+        return result;
+      }
+      result.protocol = relative.protocol;
+      if (!relative.host && !$42c0ab72f3b39275783aaa4babb143cb$var$hostlessProtocol[relative.protocol]) {
+        var relPath = (relative.pathname || '').split('/');
+        while (relPath.length && !(relative.host = relPath.shift())) ;
+        if (!relative.host) relative.host = '';
+        if (!relative.hostname) relative.hostname = '';
+        if (relPath[0] !== '') relPath.unshift('');
+        if (relPath.length < 2) relPath.unshift('');
+        result.pathname = relPath.join('/');
+      } else {
+        result.pathname = relative.pathname;
+      }
+      result.search = relative.search;
+      result.query = relative.query;
+      result.host = relative.host || '';
+      result.auth = relative.auth;
+      result.hostname = relative.hostname || relative.host;
+      result.port = relative.port;
+      // to support http.request
+      if (result.pathname || result.search) {
+        var p = result.pathname || '';
+        var s = result.search || '';
+        result.path = p + s;
+      }
+      result.slashes = result.slashes || relative.slashes;
+      result.href = result.format();
+      return result;
+    }
+    var isSourceAbs = result.pathname && result.pathname.charAt(0) === '/', isRelAbs = relative.host || relative.pathname && relative.pathname.charAt(0) === '/', mustEndAbs = isRelAbs || isSourceAbs || result.host && relative.pathname, removeAllDots = mustEndAbs, srcPath = result.pathname && result.pathname.split('/') || [], relPath = relative.pathname && relative.pathname.split('/') || [], psychotic = result.protocol && !$42c0ab72f3b39275783aaa4babb143cb$var$slashedProtocol[result.protocol];
+    // if the url is a non-slashed url, then relative
+    // links like ../.. should be able
+    // to crawl up to the hostname, as well.  This is strange.
+    // result.protocol has already been set by now.
+    // Later on, put the first path part into the host field.
+    if (psychotic) {
+      result.hostname = '';
+      result.port = null;
+      if (result.host) {
+        if (srcPath[0] === '') srcPath[0] = result.host; else srcPath.unshift(result.host);
+      }
+      result.host = '';
+      if (relative.protocol) {
+        relative.hostname = null;
+        relative.port = null;
+        if (relative.host) {
+          if (relPath[0] === '') relPath[0] = relative.host; else relPath.unshift(relative.host);
+        }
+        relative.host = null;
+      }
+      mustEndAbs = mustEndAbs && (relPath[0] === '' || srcPath[0] === '');
+    }
+    if (isRelAbs) {
+      // it's absolute.
+      result.host = relative.host || relative.host === '' ? relative.host : result.host;
+      result.hostname = relative.hostname || relative.hostname === '' ? relative.hostname : result.hostname;
+      result.search = relative.search;
+      result.query = relative.query;
+      srcPath = relPath;
+    } else if (relPath.length) {
+      // it's relative
+      // throw away the existing file, and take the new path instead.
+      if (!srcPath) srcPath = [];
+      srcPath.pop();
+      srcPath = srcPath.concat(relPath);
+      result.search = relative.search;
+      result.query = relative.query;
+    } else if (!$fb6a21cc5c1e7677f11d39d63f817a4d$exports.isNullOrUndefined(relative.search)) {
+      // just pull out the search.
+      // like href='?foo'.
+      // Put this after the other two cases because it simplifies the booleans
+      if (psychotic) {
+        result.hostname = result.host = srcPath.shift();
+        // occationaly the auth can get stuck only in host
+        // this especially happens in cases like
+        // url.resolveObject('mailto:local1@domain1', 'local2@domain2')
+        var authInHost = result.host && result.host.indexOf('@') > 0 ? result.host.split('@') : false;
+        if (authInHost) {
+          result.auth = authInHost.shift();
+          result.host = result.hostname = authInHost.shift();
+        }
+      }
+      result.search = relative.search;
+      result.query = relative.query;
+      // to support http.request
+      if (!$fb6a21cc5c1e7677f11d39d63f817a4d$exports.isNull(result.pathname) || !$fb6a21cc5c1e7677f11d39d63f817a4d$exports.isNull(result.search)) {
+        result.path = (result.pathname ? result.pathname : '') + (result.search ? result.search : '');
+      }
+      result.href = result.format();
+      return result;
+    }
+    if (!srcPath.length) {
+      // no path at all.  easy.
+      // we've already handled the other stuff above.
+      result.pathname = null;
+      // to support http.request
+      if (result.search) {
+        result.path = '/' + result.search;
+      } else {
+        result.path = null;
+      }
+      result.href = result.format();
+      return result;
+    }
+    // if a url ENDs in . or .., then it must get a trailing slash.
+    // however, if it ends in anything else non-slashy,
+    // then it must NOT get a trailing slash.
+    var last = srcPath.slice(-1)[0];
+    var hasTrailingSlash = (result.host || relative.host || srcPath.length > 1) && (last === '.' || last === '..') || last === '';
+    // strip single dots, resolve double dots to parent dir
+    // if the path tries to go above the root, `up` ends up > 0
+    var up = 0;
+    for (var i = srcPath.length; i >= 0; i--) {
+      last = srcPath[i];
+      if (last === '.') {
+        srcPath.splice(i, 1);
+      } else if (last === '..') {
+        srcPath.splice(i, 1);
+        up++;
+      } else if (up) {
+        srcPath.splice(i, 1);
+        up--;
+      }
+    }
+    // if the path is allowed to go above the root, restore leading ..s
+    if (!mustEndAbs && !removeAllDots) {
+      for (; up--; up) {
+        srcPath.unshift('..');
+      }
+    }
+    if (mustEndAbs && srcPath[0] !== '' && (!srcPath[0] || srcPath[0].charAt(0) !== '/')) {
+      srcPath.unshift('');
+    }
+    if (hasTrailingSlash && srcPath.join('/').substr(-1) !== '/') {
+      srcPath.push('');
+    }
+    var isAbsolute = srcPath[0] === '' || srcPath[0] && srcPath[0].charAt(0) === '/';
+    // put the host back
+    if (psychotic) {
+      result.hostname = result.host = isAbsolute ? '' : srcPath.length ? srcPath.shift() : '';
+      // occationaly the auth can get stuck only in host
+      // this especially happens in cases like
+      // url.resolveObject('mailto:local1@domain1', 'local2@domain2')
+      var authInHost = result.host && result.host.indexOf('@') > 0 ? result.host.split('@') : false;
+      if (authInHost) {
+        result.auth = authInHost.shift();
+        result.host = result.hostname = authInHost.shift();
+      }
+    }
+    mustEndAbs = mustEndAbs || result.host && srcPath.length;
+    if (mustEndAbs && !isAbsolute) {
+      srcPath.unshift('');
+    }
+    if (!srcPath.length) {
+      result.pathname = null;
+      result.path = null;
+    } else {
+      result.pathname = srcPath.join('/');
+    }
+    // to support request.http
+    if (!$fb6a21cc5c1e7677f11d39d63f817a4d$exports.isNull(result.pathname) || !$fb6a21cc5c1e7677f11d39d63f817a4d$exports.isNull(result.search)) {
+      result.path = (result.pathname ? result.pathname : '') + (result.search ? result.search : '');
+    }
+    result.auth = relative.auth || result.auth;
+    result.slashes = result.slashes || relative.slashes;
+    result.href = result.format();
+    return result;
+  };
+  $42c0ab72f3b39275783aaa4babb143cb$var$Url.prototype.parseHost = function () {
+    var host = this.host;
+    var port = $42c0ab72f3b39275783aaa4babb143cb$var$portPattern.exec(host);
+    if (port) {
+      port = port[0];
+      if (port !== ':') {
+        this.port = port.substr(1);
+      }
+      host = host.substr(0, host.length - port.length);
+    }
+    if (host) this.hostname = host;
+  };
+  // ASSET: node_modules/jsonschema/lib/attribute.js
+  var $bfd17381112b94a0814e07dd5040defb$exports = {};
+  // ASSET: node_modules/jsonschema/lib/helpers.js
+  var $ce4eec71ec4285d39f33d14254969864$export$ValidationError, $ce4eec71ec4285d39f33d14254969864$export$ValidatorResult, $ce4eec71ec4285d39f33d14254969864$export$SchemaError, $ce4eec71ec4285d39f33d14254969864$export$SchemaContext, $ce4eec71ec4285d39f33d14254969864$export$FORMAT_REGEXPS, $ce4eec71ec4285d39f33d14254969864$export$makeSuffix;
+  var $ce4eec71ec4285d39f33d14254969864$var$ValidationError = $ce4eec71ec4285d39f33d14254969864$export$ValidationError = function ValidationError(message, instance, schema, path, name, argument) {
+    if (Array.isArray(path)) {
+      this.path = path;
+      this.property = path.reduce(function (sum, item) {
+        return sum + $ce4eec71ec4285d39f33d14254969864$var$makeSuffix(item);
+      }, 'instance');
+    } else if (path !== undefined) {
+      this.property = path;
+    }
+    if (message) {
+      this.message = message;
+    }
+    if (schema) {
+      var id = schema.$id || schema.id;
+      this.schema = id || schema;
+    }
+    if (instance !== undefined) {
+      this.instance = instance;
+    }
+    this.name = name;
+    this.argument = argument;
+    this.stack = this.toString();
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$ValidationError.prototype.toString = function toString() {
+    return this.property + ' ' + this.message;
+  };
+  var $ce4eec71ec4285d39f33d14254969864$var$ValidatorResult = $ce4eec71ec4285d39f33d14254969864$export$ValidatorResult = function ValidatorResult(instance, schema, options, ctx) {
+    this.instance = instance;
+    this.schema = schema;
+    this.options = options;
+    this.path = ctx.path;
+    this.propertyPath = ctx.propertyPath;
+    this.errors = [];
+    this.throwError = options && options.throwError;
+    this.throwFirst = options && options.throwFirst;
+    this.throwAll = options && options.throwAll;
+    this.disableFormat = options && options.disableFormat === true;
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$ValidatorResult.prototype.addError = function addError(detail) {
+    var err;
+    if (typeof detail == 'string') {
+      err = new $ce4eec71ec4285d39f33d14254969864$var$ValidationError(detail, this.instance, this.schema, this.path);
+    } else {
+      if (!detail) throw new Error('Missing error detail');
+      if (!detail.message) throw new Error('Missing error message');
+      if (!detail.name) throw new Error('Missing validator type');
+      err = new $ce4eec71ec4285d39f33d14254969864$var$ValidationError(detail.message, this.instance, this.schema, this.path, detail.name, detail.argument);
+    }
+    this.errors.push(err);
+    if (this.throwFirst) {
+      throw new $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError(this);
+    } else if (this.throwError) {
+      throw err;
+    }
+    return err;
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$ValidatorResult.prototype.importErrors = function importErrors(res) {
+    if (typeof res == 'string' || res && res.validatorType) {
+      this.addError(res);
+    } else if (res && res.errors) {
+      Array.prototype.push.apply(this.errors, res.errors);
+    }
+  };
+  function $ce4eec71ec4285d39f33d14254969864$var$stringizer(v, i) {
+    return i + ': ' + v.toString() + '\n';
+  }
+  $ce4eec71ec4285d39f33d14254969864$var$ValidatorResult.prototype.toString = function toString(res) {
+    return this.errors.map($ce4eec71ec4285d39f33d14254969864$var$stringizer).join('');
+  };
+  Object.defineProperty($ce4eec71ec4285d39f33d14254969864$var$ValidatorResult.prototype, "valid", {
+    get: function () {
+      return !this.errors.length;
+    }
+  });
+  var $ce4eec71ec4285d39f33d14254969864$export$ValidatorResultError = $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError;
+  function $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError(result) {
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError);
+    }
+    this.instance = result.instance;
+    this.schema = result.schema;
+    this.options = result.options;
+    this.errors = result.errors;
+  }
+  $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError.prototype = new Error();
+  $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError.prototype.constructor = $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError;
+  $ce4eec71ec4285d39f33d14254969864$var$ValidatorResultError.prototype.name = "Validation Error";
+  /**
+  * Describes a problem with a Schema which prevents validation of an instance
+  * @name SchemaError
+  * @constructor
+  */
+  var $ce4eec71ec4285d39f33d14254969864$var$SchemaError = $ce4eec71ec4285d39f33d14254969864$export$SchemaError = function SchemaError(msg, schema) {
+    this.message = msg;
+    this.schema = schema;
+    Error.call(this, msg);
+    Error.captureStackTrace(this, SchemaError);
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$SchemaError.prototype = Object.create(Error.prototype, {
+    constructor: {
+      value: $ce4eec71ec4285d39f33d14254969864$var$SchemaError,
+      enumerable: false
+    },
+    name: {
+      value: 'SchemaError',
+      enumerable: false
+    }
+  });
+  var $ce4eec71ec4285d39f33d14254969864$var$SchemaContext = $ce4eec71ec4285d39f33d14254969864$export$SchemaContext = function SchemaContext(schema, options, path, base, schemas) {
+    this.schema = schema;
+    this.options = options;
+    if (Array.isArray(path)) {
+      this.path = path;
+      this.propertyPath = path.reduce(function (sum, item) {
+        return sum + $ce4eec71ec4285d39f33d14254969864$var$makeSuffix(item);
+      }, 'instance');
+    } else {
+      this.propertyPath = path;
+    }
+    this.base = base;
+    this.schemas = schemas;
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$SchemaContext.prototype.resolve = function resolve(target) {
+    return $42c0ab72f3b39275783aaa4babb143cb$export$resolve(this.base, target);
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$SchemaContext.prototype.makeChild = function makeChild(schema, propertyName) {
+    var path = propertyName === undefined ? this.path : this.path.concat([propertyName]);
+    var id = schema.$id || schema.id;
+    var base = $42c0ab72f3b39275783aaa4babb143cb$export$resolve(this.base, id || '');
+    var ctx = new $ce4eec71ec4285d39f33d14254969864$var$SchemaContext(schema, this.options, path, base, Object.create(this.schemas));
+    if (id && !ctx.schemas[base]) {
+      ctx.schemas[base] = schema;
+    }
+    return ctx;
+  };
+  var $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS = $ce4eec71ec4285d39f33d14254969864$export$FORMAT_REGEXPS = {
+    'date-time': /^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-(3[01]|0[1-9]|[12][0-9])[tT ](2[0-4]|[01][0-9]):([0-5][0-9]):(60|[0-5][0-9])(\.\d+)?([zZ]|[+-]([0-5][0-9]):(60|[0-5][0-9]))$/,
+    'date': /^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-(3[01]|0[1-9]|[12][0-9])$/,
+    'time': /^(2[0-4]|[01][0-9]):([0-5][0-9]):(60|[0-5][0-9])$/,
+    'email': /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/,
+    'ip-address': /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
+    'ipv6': /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/,
+    // TODO: A more accurate regular expression for "uri" goes:
+    // [A-Za-z][+\-.0-9A-Za-z]*:((/(/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)(:\d*)?)?)?#(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*|(/(/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)(:\d*)?[/?]|[!$&-.0-;=?-Z_a-z~])|/?%[0-9A-Fa-f]{2}|[!$&-.0-;=?-Z_a-z~])(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*(#(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*)?|/(/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+(:\d*)?|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?:\d*|\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)?)?
+    'uri': /^[a-zA-Z][a-zA-Z0-9+-.]*:[^\s]*$/,
+    'uri-reference': /^(((([A-Za-z][+\-.0-9A-Za-z]*(:%[0-9A-Fa-f]{2}|:[!$&-.0-;=?-Z_a-z~]|[/?])|\?)(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*|([A-Za-z][+\-.0-9A-Za-z]*:?)?)|([A-Za-z][+\-.0-9A-Za-z]*:)?\/((%[0-9A-Fa-f]{2}|\/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)(:\d*)?[/?]|[!$&-.0-;=?-Z_a-z~])(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*|(\/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)(:\d*)?)?))#(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*|(([A-Za-z][+\-.0-9A-Za-z]*)?%[0-9A-Fa-f]{2}|[!$&-.0-9;=@_~]|[A-Za-z][+\-.0-9A-Za-z]*[!$&-*,;=@_~])(%[0-9A-Fa-f]{2}|[!$&-.0-9;=@-Z_a-z~])*((([/?](%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*)?#|[/?])(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*)?|([A-Za-z][+\-.0-9A-Za-z]*(:%[0-9A-Fa-f]{2}|:[!$&-.0-;=?-Z_a-z~]|[/?])|\?)(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*|([A-Za-z][+\-.0-9A-Za-z]*:)?\/((%[0-9A-Fa-f]{2}|\/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)(:\d*)?[/?]|[!$&-.0-;=?-Z_a-z~])(%[0-9A-Fa-f]{2}|[!$&-;=?-Z_a-z~])*|\/((%[0-9A-Fa-f]{2}|[!$&-.0-9;=A-Z_a-z~])+(:\d*)?|(\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?:\d*|\[(([Vv][0-9A-Fa-f]+\.[!$&-.0-;=A-Z_a-z~]+)?|[.0-:A-Fa-f]+)\])?)?|[A-Za-z][+\-.0-9A-Za-z]*:?)?$/,
+    'color': /^(#?([0-9A-Fa-f]{3}){1,2}\b|aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow|(rgb\(\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*,\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*,\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*\))|(rgb\(\s*(\d?\d%|100%)+\s*,\s*(\d?\d%|100%)+\s*,\s*(\d?\d%|100%)+\s*\)))$/,
+    // hostname regex from: http://stackoverflow.com/a/1420225/5628
+    'hostname': /^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/,
+    'host-name': /^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/,
+    'alpha': /^[a-zA-Z]+$/,
+    'alphanumeric': /^[a-zA-Z0-9]+$/,
+    'utc-millisec': function (input) {
+      return typeof input === 'string' && parseFloat(input) === parseInt(input, 10) && !isNaN(input);
+    },
+    'regex': function (input) {
+      var result = true;
+      try {
+        new RegExp(input);
+      } catch (e) {
+        result = false;
+      }
+      return result;
+    },
+    'style': /\s*(.+?):\s*([^;]+);?/,
+    'phone': /^\+(?:[0-9] ?){6,14}[0-9]$/
+  };
+  $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS.regexp = $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS.regex;
+  $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS.pattern = $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS.regex;
+  $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS.ipv4 = $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS['ip-address'];
+  var $ce4eec71ec4285d39f33d14254969864$export$isFormat = function isFormat(input, format, validator) {
+    if (typeof input === 'string' && $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS[format] !== undefined) {
+      if ($ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS[format] instanceof RegExp) {
+        return $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS[format].test(input);
+      }
+      if (typeof $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS[format] === 'function') {
+        return $ce4eec71ec4285d39f33d14254969864$var$FORMAT_REGEXPS[format](input);
+      }
+    } else if (validator && validator.customFormats && typeof validator.customFormats[format] === 'function') {
+      return validator.customFormats[format](input);
+    }
+    return true;
+  };
+  var $ce4eec71ec4285d39f33d14254969864$var$makeSuffix = $ce4eec71ec4285d39f33d14254969864$export$makeSuffix = function makeSuffix(key) {
+    key = key.toString();
+    // This function could be capable of outputting valid a ECMAScript string, but the
+    // resulting code for testing which form to use would be tens of thousands of characters long
+    // That means this will use the name form for some illegal forms
+    if (!key.match(/[.\s\[\]]/) && !key.match(/^[\d]/)) {
+      return '.' + key;
+    }
+    if (key.match(/^\d+$/)) {
+      return '[' + key + ']';
+    }
+    return '[' + JSON.stringify(key) + ']';
+  };
+  var $ce4eec71ec4285d39f33d14254969864$export$deepCompareStrict = function deepCompareStrict(a, b) {
+    if (typeof a !== typeof b) {
+      return false;
+    }
+    if (Array.isArray(a)) {
+      if (!Array.isArray(b)) {
+        return false;
+      }
+      if (a.length !== b.length) {
+        return false;
+      }
+      return a.every(function (v, i) {
+        return deepCompareStrict(a[i], b[i]);
+      });
+    }
+    if (typeof a === 'object') {
+      if (!a || !b) {
+        return a === b;
+      }
+      var aKeys = Object.keys(a);
+      var bKeys = Object.keys(b);
+      if (aKeys.length !== bKeys.length) {
+        return false;
+      }
+      return aKeys.every(function (v) {
+        return deepCompareStrict(a[v], b[v]);
+      });
+    }
+    return a === b;
+  };
+  function $ce4eec71ec4285d39f33d14254969864$var$deepMerger(target, dst, e, i) {
+    if (typeof e === 'object') {
+      dst[i] = $ce4eec71ec4285d39f33d14254969864$var$deepMerge(target[i], e);
+    } else {
+      if (target.indexOf(e) === -1) {
+        dst.push(e);
+      }
+    }
+  }
+  function $ce4eec71ec4285d39f33d14254969864$var$copyist(src, dst, key) {
+    dst[key] = src[key];
+  }
+  function $ce4eec71ec4285d39f33d14254969864$var$copyistWithDeepMerge(target, src, dst, key) {
+    if (typeof src[key] !== 'object' || !src[key]) {
+      dst[key] = src[key];
+    } else {
+      if (!target[key]) {
+        dst[key] = src[key];
+      } else {
+        dst[key] = $ce4eec71ec4285d39f33d14254969864$var$deepMerge(target[key], src[key]);
+      }
+    }
+  }
+  function $ce4eec71ec4285d39f33d14254969864$var$deepMerge(target, src) {
+    var array = Array.isArray(src);
+    var dst = array && [] || ({});
+    if (array) {
+      target = target || [];
+      dst = dst.concat(target);
+      src.forEach($ce4eec71ec4285d39f33d14254969864$var$deepMerger.bind(null, target, dst));
+    } else {
+      if (target && typeof target === 'object') {
+        Object.keys(target).forEach($ce4eec71ec4285d39f33d14254969864$var$copyist.bind(null, target, dst));
+      }
+      Object.keys(src).forEach($ce4eec71ec4285d39f33d14254969864$var$copyistWithDeepMerge.bind(null, target, src, dst));
+    }
+    return dst;
+  }
+  var $ce4eec71ec4285d39f33d14254969864$export$deepMerge = $ce4eec71ec4285d39f33d14254969864$var$deepMerge;
+  var $ce4eec71ec4285d39f33d14254969864$export$objectGetPath = function objectGetPath(o, s) {
+    var parts = s.split('/').slice(1);
+    var k;
+    while (typeof (k = parts.shift()) == 'string') {
+      var n = decodeURIComponent(k.replace(/~0/, '~').replace(/~1/g, '/'));
+      if (!((n in o))) return;
+      o = o[n];
+    }
+    return o;
+  };
+  function $ce4eec71ec4285d39f33d14254969864$var$pathEncoder(v) {
+    return '/' + encodeURIComponent(v).replace(/~/g, '%7E');
+  }
+  var $ce4eec71ec4285d39f33d14254969864$export$getDecimalPlaces = function getDecimalPlaces(number) {
+    var decimalPlaces = 0;
+    if (isNaN(number)) return decimalPlaces;
+    if (typeof number !== 'number') {
+      number = Number(number);
+    }
+    var parts = number.toString().split('e');
+    if (parts.length === 2) {
+      if (parts[1][0] !== '-') {
+        return decimalPlaces;
+      } else {
+        decimalPlaces = Number(parts[1].slice(1));
+      }
+    }
+    var decimalParts = parts[0].split('.');
+    if (decimalParts.length === 2) {
+      decimalPlaces += decimalParts[1].length;
+    }
+    return decimalPlaces;
+  };
+  var $ce4eec71ec4285d39f33d14254969864$export$isSchema = function isSchema(val) {
+    return typeof val === 'object' && val || typeof val === 'boolean';
+  };
+  /** @type ValidatorResult*/
+  var $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult = $ce4eec71ec4285d39f33d14254969864$export$ValidatorResult;
+  /** @type SchemaError*/
+  var $bfd17381112b94a0814e07dd5040defb$var$SchemaError = $ce4eec71ec4285d39f33d14254969864$export$SchemaError;
+  var $bfd17381112b94a0814e07dd5040defb$var$attribute = {};
+  $bfd17381112b94a0814e07dd5040defb$var$attribute.ignoreProperties = {
+    // informative properties
+    'id': true,
+    'default': true,
+    'description': true,
+    'title': true,
+    // arguments to other properties
+    'additionalItems': true,
+    'then': true,
+    'else': true,
+    // special-handled properties
+    '$schema': true,
+    '$ref': true,
+    'extends': true
+  };
+  /**
+  * @name validators
+  */
+  var $bfd17381112b94a0814e07dd5040defb$var$validators = $bfd17381112b94a0814e07dd5040defb$var$attribute.validators = {};
+  /**
+  * Validates whether the instance if of a certain type
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {ValidatorResult|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.type = function validateType(instance, schema, options, ctx) {
+    // Ignore undefined instances
+    if (instance === undefined) {
+      return null;
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var types = Array.isArray(schema.type) ? schema.type : [schema.type];
+    if (!types.some(this.testType.bind(this, instance, schema, options, ctx))) {
+      var list = types.map(function (v) {
+        if (!v) return;
+        var id = v.$id || v.id;
+        return id ? '<' + id + '>' : v + '';
+      });
+      result.addError({
+        name: 'type',
+        argument: list,
+        message: "is not of a type(s) " + list
+      });
+    }
+    return result;
+  };
+  function $bfd17381112b94a0814e07dd5040defb$var$testSchemaNoThrow(instance, options, ctx, callback, schema) {
+    var throwError = options.throwError;
+    var throwAll = options.throwAll;
+    options.throwError = false;
+    options.throwAll = false;
+    var res = this.validateSchema(instance, schema, options, ctx);
+    options.throwError = throwError;
+    options.throwAll = throwAll;
+    if (!res.valid && callback instanceof Function) {
+      callback(res);
+    }
+    return res.valid;
+  }
+  /**
+  * Validates whether the instance matches some of the given schemas
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {ValidatorResult|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.anyOf = function validateAnyOf(instance, schema, options, ctx) {
+    // Ignore undefined instances
+    if (instance === undefined) {
+      return null;
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var inner = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!Array.isArray(schema.anyOf)) {
+      throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError("anyOf must be an array");
+    }
+    if (!schema.anyOf.some($bfd17381112b94a0814e07dd5040defb$var$testSchemaNoThrow.bind(this, instance, options, ctx, function (res) {
+      inner.importErrors(res);
+    }))) {
+      var list = schema.anyOf.map(function (v, i) {
+        var id = v.$id || v.id;
+        if (id) return '<' + id + '>';
+        return v.title && JSON.stringify(v.title) || v['$ref'] && '<' + v['$ref'] + '>' || '[subschema ' + i + ']';
+      });
+      if (options.nestedErrors) {
+        result.importErrors(inner);
+      }
+      result.addError({
+        name: 'anyOf',
+        argument: list,
+        message: "is not any of " + list.join(',')
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance matches every given schema
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.allOf = function validateAllOf(instance, schema, options, ctx) {
+    // Ignore undefined instances
+    if (instance === undefined) {
+      return null;
+    }
+    if (!Array.isArray(schema.allOf)) {
+      throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError("allOf must be an array");
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var self = this;
+    schema.allOf.forEach(function (v, i) {
+      var valid = self.validateSchema(instance, v, options, ctx);
+      if (!valid.valid) {
+        var id = v.$id || v.id;
+        var msg = id || v.title && JSON.stringify(v.title) || v['$ref'] && '<' + v['$ref'] + '>' || '[subschema ' + i + ']';
+        result.addError({
+          name: 'allOf',
+          argument: {
+            id: msg,
+            length: valid.errors.length,
+            valid: valid
+          },
+          message: 'does not match allOf schema ' + msg + ' with ' + valid.errors.length + ' error[s]:'
+        });
+        result.importErrors(valid);
+      }
+    });
+    return result;
+  };
+  /**
+  * Validates whether the instance matches exactly one of the given schemas
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.oneOf = function validateOneOf(instance, schema, options, ctx) {
+    // Ignore undefined instances
+    if (instance === undefined) {
+      return null;
+    }
+    if (!Array.isArray(schema.oneOf)) {
+      throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError("oneOf must be an array");
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var inner = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var count = schema.oneOf.filter($bfd17381112b94a0814e07dd5040defb$var$testSchemaNoThrow.bind(this, instance, options, ctx, function (res) {
+      inner.importErrors(res);
+    })).length;
+    var list = schema.oneOf.map(function (v, i) {
+      var id = v.$id || v.id;
+      return id || v.title && JSON.stringify(v.title) || v['$ref'] && '<' + v['$ref'] + '>' || '[subschema ' + i + ']';
+    });
+    if (count !== 1) {
+      if (options.nestedErrors) {
+        result.importErrors(inner);
+      }
+      result.addError({
+        name: 'oneOf',
+        argument: list,
+        message: "is not exactly one from " + list.join(',')
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates "then" or "else" depending on the result of validating "if"
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.if = function validateIf(instance, schema, options, ctx) {
+    // Ignore undefined instances
+    if (instance === undefined) return null;
+    if (!$ce4eec71ec4285d39f33d14254969864$export$isSchema(schema.if)) throw new Error('Expected "if" keyword to be a schema');
+    var ifValid = $bfd17381112b94a0814e07dd5040defb$var$testSchemaNoThrow.call(this, instance, options, ctx, null, schema.if);
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var res;
+    if (ifValid) {
+      if (schema.then === undefined) return;
+      if (!$ce4eec71ec4285d39f33d14254969864$export$isSchema(schema.then)) throw new Error('Expected "then" keyword to be a schema');
+      res = this.validateSchema(instance, schema.then, options, ctx.makeChild(schema.then));
+      result.importErrors(res);
+    } else {
+      if (schema.else === undefined) return;
+      if (!$ce4eec71ec4285d39f33d14254969864$export$isSchema(schema.else)) throw new Error('Expected "else" keyword to be a schema');
+      res = this.validateSchema(instance, schema.else, options, ctx.makeChild(schema.else));
+      result.importErrors(res);
+    }
+    return result;
+  };
+  function $bfd17381112b94a0814e07dd5040defb$var$getEnumerableProperty(object, key) {
+    // Determine if `key` shows up in `for(var key in object)`
+    // First test Object.hasOwnProperty.call as an optimization: that guarantees it does
+    if (Object.hasOwnProperty.call(object, key)) return object[key];
+    // Test `key in object` as an optimization; false means it won't
+    if (!((key in object))) return;
+    while (object = Object.getPrototypeOf(object)) {
+      if (Object.propertyIsEnumerable.call(object, key)) return object[key];
+    }
+  }
+  /**
+  * Validates propertyNames
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.propertyNames = function validatePropertyNames(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var subschema = schema.propertyNames !== undefined ? schema.propertyNames : {};
+    if (!$ce4eec71ec4285d39f33d14254969864$export$isSchema(subschema)) throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError('Expected "propertyNames" to be a schema (object or boolean)');
+    for (var property in instance) {
+      if ($bfd17381112b94a0814e07dd5040defb$var$getEnumerableProperty(instance, property) !== undefined) {
+        var res = this.validateSchema(property, subschema, options, ctx.makeChild(subschema));
+        result.importErrors(res);
+      }
+    }
+    return result;
+  };
+  /**
+  * Validates properties
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.properties = function validateProperties(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var properties = schema.properties || ({});
+    for (var property in properties) {
+      var subschema = properties[property];
+      if (subschema === undefined) {
+        continue;
+      } else if (subschema === null) {
+        throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError('Unexpected null, expected schema in "properties"');
+      }
+      if (typeof options.preValidateProperty == 'function') {
+        options.preValidateProperty(instance, property, subschema, options, ctx);
+      }
+      var prop = $bfd17381112b94a0814e07dd5040defb$var$getEnumerableProperty(instance, property);
+      var res = this.validateSchema(prop, subschema, options, ctx.makeChild(subschema, property));
+      if (res.instance !== result.instance[property]) result.instance[property] = res.instance;
+      result.importErrors(res);
+    }
+    return result;
+  };
+  /**
+  * Test a specific property within in instance against the additionalProperties schema attribute
+  * This ignores properties with definitions in the properties schema attribute, but no other attributes.
+  * If too many more types of property-existence tests pop up they may need their own class of tests (like `type` has)
+  * @private
+  * @return {boolean}
+  */
+  function $bfd17381112b94a0814e07dd5040defb$var$testAdditionalProperty(instance, schema, options, ctx, property, result) {
+    if (!this.types.object(instance)) return;
+    if (schema.properties && schema.properties[property] !== undefined) {
+      return;
+    }
+    if (schema.additionalProperties === false) {
+      result.addError({
+        name: 'additionalProperties',
+        argument: property,
+        message: "is not allowed to have the additional property " + JSON.stringify(property)
+      });
+    } else {
+      var additionalProperties = schema.additionalProperties || ({});
+      if (typeof options.preValidateProperty == 'function') {
+        options.preValidateProperty(instance, property, additionalProperties, options, ctx);
+      }
+      var res = this.validateSchema(instance[property], additionalProperties, options, ctx.makeChild(additionalProperties, property));
+      if (res.instance !== result.instance[property]) result.instance[property] = res.instance;
+      result.importErrors(res);
+    }
+  }
+  /**
+  * Validates patternProperties
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.patternProperties = function validatePatternProperties(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var patternProperties = schema.patternProperties || ({});
+    for (var property in instance) {
+      var test = true;
+      for (var pattern in patternProperties) {
+        var subschema = patternProperties[pattern];
+        if (subschema === undefined) {
+          continue;
+        } else if (subschema === null) {
+          throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError('Unexpected null, expected schema in "patternProperties"');
+        }
+        try {
+          var regexp = new RegExp(pattern, 'u');
+        } catch (_e) {
+          // In the event the stricter handling causes an error, fall back on the forgiving handling
+          // DEPRECATED
+          regexp = new RegExp(pattern);
+        }
+        if (!regexp.test(property)) {
+          continue;
+        }
+        test = false;
+        if (typeof options.preValidateProperty == 'function') {
+          options.preValidateProperty(instance, property, subschema, options, ctx);
+        }
+        var res = this.validateSchema(instance[property], subschema, options, ctx.makeChild(subschema, property));
+        if (res.instance !== result.instance[property]) result.instance[property] = res.instance;
+        result.importErrors(res);
+      }
+      if (test) {
+        $bfd17381112b94a0814e07dd5040defb$var$testAdditionalProperty.call(this, instance, schema, options, ctx, property, result);
+      }
+    }
+    return result;
+  };
+  /**
+  * Validates additionalProperties
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.additionalProperties = function validateAdditionalProperties(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    // if patternProperties is defined then we'll test when that one is called instead
+    if (schema.patternProperties) {
+      return null;
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    for (var property in instance) {
+      $bfd17381112b94a0814e07dd5040defb$var$testAdditionalProperty.call(this, instance, schema, options, ctx, property, result);
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value is at least of a certain length, when the instance value is a string.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.minProperties = function validateMinProperties(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var keys = Object.keys(instance);
+    if (!(keys.length >= schema.minProperties)) {
+      result.addError({
+        name: 'minProperties',
+        argument: schema.minProperties,
+        message: "does not meet minimum property length of " + schema.minProperties
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value is at most of a certain length, when the instance value is a string.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.maxProperties = function validateMaxProperties(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var keys = Object.keys(instance);
+    if (!(keys.length <= schema.maxProperties)) {
+      result.addError({
+        name: 'maxProperties',
+        argument: schema.maxProperties,
+        message: "does not meet maximum property length of " + schema.maxProperties
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates items when instance is an array
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {String|null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.items = function validateItems(instance, schema, options, ctx) {
+    var self = this;
+    if (!this.types.array(instance)) return;
+    if (!schema.items) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    instance.every(function (value, i) {
+      var items = Array.isArray(schema.items) ? schema.items[i] || schema.additionalItems : schema.items;
+      if (items === undefined) {
+        return true;
+      }
+      if (items === false) {
+        result.addError({
+          name: 'items',
+          message: "additionalItems not permitted"
+        });
+        return false;
+      }
+      var res = self.validateSchema(value, items, options, ctx.makeChild(items, i));
+      if (res.instance !== result.instance[i]) result.instance[i] = res.instance;
+      result.importErrors(res);
+      return true;
+    });
+    return result;
+  };
+  /**
+  * Validates minimum and exclusiveMinimum when the type of the instance value is a number.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.minimum = function validateMinimum(instance, schema, options, ctx) {
+    if (!this.types.number(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (schema.exclusiveMinimum && schema.exclusiveMinimum === true) {
+      if (!(instance > schema.minimum)) {
+        result.addError({
+          name: 'minimum',
+          argument: schema.minimum,
+          message: "must be greater than " + schema.minimum
+        });
+      }
+    } else {
+      if (!(instance >= schema.minimum)) {
+        result.addError({
+          name: 'minimum',
+          argument: schema.minimum,
+          message: "must be greater than or equal to " + schema.minimum
+        });
+      }
+    }
+    return result;
+  };
+  /**
+  * Validates maximum and exclusiveMaximum when the type of the instance value is a number.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.maximum = function validateMaximum(instance, schema, options, ctx) {
+    if (!this.types.number(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (schema.exclusiveMaximum && schema.exclusiveMaximum === true) {
+      if (!(instance < schema.maximum)) {
+        result.addError({
+          name: 'maximum',
+          argument: schema.maximum,
+          message: "must be less than " + schema.maximum
+        });
+      }
+    } else {
+      if (!(instance <= schema.maximum)) {
+        result.addError({
+          name: 'maximum',
+          argument: schema.maximum,
+          message: "must be less than or equal to " + schema.maximum
+        });
+      }
+    }
+    return result;
+  };
+  /**
+  * Validates the number form of exclusiveMinimum when the type of the instance value is a number.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.exclusiveMinimum = function validateExclusiveMinimum(instance, schema, options, ctx) {
+    // Support the boolean form of exclusiveMinimum, which is handled by the "minimum" keyword.
+    if (typeof schema.exclusiveMaximum === 'boolean') return;
+    if (!this.types.number(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var valid = instance > schema.exclusiveMinimum;
+    if (!valid) {
+      result.addError({
+        name: 'exclusiveMinimum',
+        argument: schema.exclusiveMinimum,
+        message: "must be strictly greater than " + schema.exclusiveMinimum
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates the number form of exclusiveMaximum when the type of the instance value is a number.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.exclusiveMaximum = function validateExclusiveMaximum(instance, schema, options, ctx) {
+    // Support the boolean form of exclusiveMaximum, which is handled by the "maximum" keyword.
+    if (typeof schema.exclusiveMaximum === 'boolean') return;
+    if (!this.types.number(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var valid = instance < schema.exclusiveMaximum;
+    if (!valid) {
+      result.addError({
+        name: 'exclusiveMaximum',
+        argument: schema.exclusiveMaximum,
+        message: "must be strictly less than " + schema.exclusiveMaximum
+      });
+    }
+    return result;
+  };
+  /**
+  * Perform validation for multipleOf and divisibleBy, which are essentially the same.
+  * @param instance
+  * @param schema
+  * @param validationType
+  * @param errorMessage
+  * @returns {String|null}
+  */
+  var $bfd17381112b94a0814e07dd5040defb$var$validateMultipleOfOrDivisbleBy = function validateMultipleOfOrDivisbleBy(instance, schema, options, ctx, validationType, errorMessage) {
+    if (!this.types.number(instance)) return;
+    var validationArgument = schema[validationType];
+    if (validationArgument == 0) {
+      throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError(validationType + " cannot be zero");
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var instanceDecimals = $ce4eec71ec4285d39f33d14254969864$export$getDecimalPlaces(instance);
+    var divisorDecimals = $ce4eec71ec4285d39f33d14254969864$export$getDecimalPlaces(validationArgument);
+    var maxDecimals = Math.max(instanceDecimals, divisorDecimals);
+    var multiplier = Math.pow(10, maxDecimals);
+    if (Math.round(instance * multiplier) % Math.round(validationArgument * multiplier) !== 0) {
+      result.addError({
+        name: validationType,
+        argument: validationArgument,
+        message: errorMessage + JSON.stringify(validationArgument)
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates divisibleBy when the type of the instance value is a number.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.multipleOf = function validateMultipleOf(instance, schema, options, ctx) {
+    return $bfd17381112b94a0814e07dd5040defb$var$validateMultipleOfOrDivisbleBy.call(this, instance, schema, options, ctx, "multipleOf", "is not a multiple of (divisible by) ");
+  };
+  /**
+  * Validates multipleOf when the type of the instance value is a number.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.divisibleBy = function validateDivisibleBy(instance, schema, options, ctx) {
+    return $bfd17381112b94a0814e07dd5040defb$var$validateMultipleOfOrDivisbleBy.call(this, instance, schema, options, ctx, "divisibleBy", "is not divisible by (multiple of) ");
+  };
+  /**
+  * Validates whether the instance value is present.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.required = function validateRequired(instance, schema, options, ctx) {
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (instance === undefined && schema.required === true) {
+      // A boolean form is implemented for reverse-compatibility with schemas written against older drafts
+      result.addError({
+        name: 'required',
+        message: "is required"
+      });
+    } else if (this.types.object(instance) && Array.isArray(schema.required)) {
+      schema.required.forEach(function (n) {
+        if ($bfd17381112b94a0814e07dd5040defb$var$getEnumerableProperty(instance, n) === undefined) {
+          result.addError({
+            name: 'required',
+            argument: n,
+            message: "requires property " + JSON.stringify(n)
+          });
+        }
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value matches the regular expression, when the instance value is a string.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.pattern = function validatePattern(instance, schema, options, ctx) {
+    if (!this.types.string(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var pattern = schema.pattern;
+    try {
+      var regexp = new RegExp(pattern, 'u');
+    } catch (_e) {
+      // In the event the stricter handling causes an error, fall back on the forgiving handling
+      // DEPRECATED
+      regexp = new RegExp(pattern);
+    }
+    if (!instance.match(regexp)) {
+      result.addError({
+        name: 'pattern',
+        argument: schema.pattern,
+        message: "does not match pattern " + JSON.stringify(schema.pattern.toString())
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value is of a certain defined format or a custom
+  * format.
+  * The following formats are supported for string types:
+  *   - date-time
+  *   - date
+  *   - time
+  *   - ip-address
+  *   - ipv6
+  *   - uri
+  *   - color
+  *   - host-name
+  *   - alpha
+  *   - alpha-numeric
+  *   - utc-millisec
+  * @param instance
+  * @param schema
+  * @param [options]
+  * @param [ctx]
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.format = function validateFormat(instance, schema, options, ctx) {
+    if (instance === undefined) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!result.disableFormat && !$ce4eec71ec4285d39f33d14254969864$export$isFormat(instance, schema.format, this)) {
+      result.addError({
+        name: 'format',
+        argument: schema.format,
+        message: "does not conform to the " + JSON.stringify(schema.format) + " format"
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value is at least of a certain length, when the instance value is a string.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.minLength = function validateMinLength(instance, schema, options, ctx) {
+    if (!this.types.string(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var hsp = instance.match(/[\uDC00-\uDFFF]/g);
+    var length = instance.length - (hsp ? hsp.length : 0);
+    if (!(length >= schema.minLength)) {
+      result.addError({
+        name: 'minLength',
+        argument: schema.minLength,
+        message: "does not meet minimum length of " + schema.minLength
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value is at most of a certain length, when the instance value is a string.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.maxLength = function validateMaxLength(instance, schema, options, ctx) {
+    if (!this.types.string(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    // TODO if this was already computed in "minLength", use that value instead of re-computing
+    var hsp = instance.match(/[\uDC00-\uDFFF]/g);
+    var length = instance.length - (hsp ? hsp.length : 0);
+    if (!(length <= schema.maxLength)) {
+      result.addError({
+        name: 'maxLength',
+        argument: schema.maxLength,
+        message: "does not meet maximum length of " + schema.maxLength
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether instance contains at least a minimum number of items, when the instance is an Array.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.minItems = function validateMinItems(instance, schema, options, ctx) {
+    if (!this.types.array(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!(instance.length >= schema.minItems)) {
+      result.addError({
+        name: 'minItems',
+        argument: schema.minItems,
+        message: "does not meet minimum length of " + schema.minItems
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether instance contains no more than a maximum number of items, when the instance is an Array.
+  * @param instance
+  * @param schema
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.maxItems = function validateMaxItems(instance, schema, options, ctx) {
+    if (!this.types.array(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!(instance.length <= schema.maxItems)) {
+      result.addError({
+        name: 'maxItems',
+        argument: schema.maxItems,
+        message: "does not meet maximum length of " + schema.maxItems
+      });
+    }
+    return result;
+  };
+  /**
+  * Deep compares arrays for duplicates
+  * @param v
+  * @param i
+  * @param a
+  * @private
+  * @return {boolean}
+  */
+  function $bfd17381112b94a0814e07dd5040defb$var$testArrays(v, i, a) {
+    var j, len = a.length;
+    for ((j = i + 1, len); j < len; j++) {
+      if ($ce4eec71ec4285d39f33d14254969864$export$deepCompareStrict(v, a[j])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  /**
+  * Validates whether there are no duplicates, when the instance is an Array.
+  * @param instance
+  * @return {String|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.uniqueItems = function validateUniqueItems(instance, schema, options, ctx) {
+    if (schema.uniqueItems !== true) return;
+    if (!this.types.array(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!instance.every($bfd17381112b94a0814e07dd5040defb$var$testArrays)) {
+      result.addError({
+        name: 'uniqueItems',
+        message: "contains duplicate item"
+      });
+    }
+    return result;
+  };
+  /**
+  * Validate for the presence of dependency properties, if the instance is an object.
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.dependencies = function validateDependencies(instance, schema, options, ctx) {
+    if (!this.types.object(instance)) return;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    for (var property in schema.dependencies) {
+      if (instance[property] === undefined) {
+        continue;
+      }
+      var dep = schema.dependencies[property];
+      var childContext = ctx.makeChild(dep, property);
+      if (typeof dep == 'string') {
+        dep = [dep];
+      }
+      if (Array.isArray(dep)) {
+        dep.forEach(function (prop) {
+          if (instance[prop] === undefined) {
+            result.addError({
+              // FIXME there's two different "dependencies" errors here with slightly different outputs
+              // Can we make these the same? Or should we create different error types?
+              name: 'dependencies',
+              argument: childContext.propertyPath,
+              message: "property " + prop + " not found, required by " + childContext.propertyPath
+            });
+          }
+        });
+      } else {
+        var res = this.validateSchema(instance, dep, options, childContext);
+        if (result.instance !== res.instance) result.instance = res.instance;
+        if (res && res.errors.length) {
+          result.addError({
+            name: 'dependencies',
+            argument: childContext.propertyPath,
+            message: "does not meet dependency required by " + childContext.propertyPath
+          });
+          result.importErrors(res);
+        }
+      }
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance value is one of the enumerated values.
+  *
+  * @param instance
+  * @param schema
+  * @return {ValidatorResult|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators['enum'] = function validateEnum(instance, schema, options, ctx) {
+    if (instance === undefined) {
+      return null;
+    }
+    if (!Array.isArray(schema['enum'])) {
+      throw new $bfd17381112b94a0814e07dd5040defb$var$SchemaError("enum expects an array", schema);
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!schema['enum'].some($ce4eec71ec4285d39f33d14254969864$export$deepCompareStrict.bind(null, instance))) {
+      result.addError({
+        name: 'enum',
+        argument: schema['enum'],
+        message: "is not one of enum values: " + schema['enum'].map(String).join(',')
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance exactly matches a given value
+  *
+  * @param instance
+  * @param schema
+  * @return {ValidatorResult|null}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators['const'] = function validateEnum(instance, schema, options, ctx) {
+    if (instance === undefined) {
+      return null;
+    }
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    if (!$ce4eec71ec4285d39f33d14254969864$export$deepCompareStrict(schema['const'], instance)) {
+      result.addError({
+        name: 'const',
+        argument: schema['const'],
+        message: "does not exactly match expected constant: " + schema['const']
+      });
+    }
+    return result;
+  };
+  /**
+  * Validates whether the instance if of a prohibited type.
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @return {null|ValidatorResult}
+  */
+  $bfd17381112b94a0814e07dd5040defb$var$validators.not = $bfd17381112b94a0814e07dd5040defb$var$validators.disallow = function validateNot(instance, schema, options, ctx) {
+    var self = this;
+    if (instance === undefined) return null;
+    var result = new $bfd17381112b94a0814e07dd5040defb$var$ValidatorResult(instance, schema, options, ctx);
+    var notTypes = schema.not || schema.disallow;
+    if (!notTypes) return null;
+    if (!Array.isArray(notTypes)) notTypes = [notTypes];
+    notTypes.forEach(function (type) {
+      if (self.testType(instance, schema, options, ctx, type)) {
+        var id = type && (type.$id || type.id);
+        var schemaId = id || type;
+        result.addError({
+          name: 'not',
+          argument: schemaId,
+          message: "is of prohibited type " + schemaId
+        });
+      }
+    });
+    return result;
+  };
+  $bfd17381112b94a0814e07dd5040defb$exports = $bfd17381112b94a0814e07dd5040defb$var$attribute;
+  var $88344eb976b27020930887e01ad42def$export$SchemaScanResult = $88344eb976b27020930887e01ad42def$var$SchemaScanResult;
+  function $88344eb976b27020930887e01ad42def$var$SchemaScanResult(found, ref) {
+    this.id = found;
+    this.ref = ref;
+  }
+  var $88344eb976b27020930887e01ad42def$export$scan = function scan(base, schema) {
+    function scanSchema(baseuri, schema) {
+      if (!schema || typeof schema != 'object') return;
+      // Mark all referenced schemas so we can tell later which schemas are referred to, but never defined
+      if (schema.$ref) {
+        var resolvedUri = $42c0ab72f3b39275783aaa4babb143cb$export$resolve(baseuri, schema.$ref);
+        ref[resolvedUri] = ref[resolvedUri] ? ref[resolvedUri] + 1 : 0;
+        return;
+      }
+      var id = schema.$id || schema.id;
+      var ourBase = id ? $42c0ab72f3b39275783aaa4babb143cb$export$resolve(baseuri, id) : baseuri;
+      if (ourBase) {
+        // If there's no fragment, append an empty one
+        if (ourBase.indexOf('#') < 0) ourBase += '#';
+        if (found[ourBase]) {
+          if (!$ce4eec71ec4285d39f33d14254969864$export$deepCompareStrict(found[ourBase], schema)) {
+            throw new Error('Schema <' + ourBase + '> already exists with different definition');
+          }
+          return found[ourBase];
+        }
+        found[ourBase] = schema;
+        // strip trailing fragment
+        if (ourBase[ourBase.length - 1] == '#') {
+          found[ourBase.substring(0, ourBase.length - 1)] = schema;
+        }
+      }
+      scanArray(ourBase + '/items', Array.isArray(schema.items) ? schema.items : [schema.items]);
+      scanArray(ourBase + '/extends', Array.isArray(schema.extends) ? schema.extends : [schema.extends]);
+      scanSchema(ourBase + '/additionalItems', schema.additionalItems);
+      scanObject(ourBase + '/properties', schema.properties);
+      scanSchema(ourBase + '/additionalProperties', schema.additionalProperties);
+      scanObject(ourBase + '/definitions', schema.definitions);
+      scanObject(ourBase + '/patternProperties', schema.patternProperties);
+      scanObject(ourBase + '/dependencies', schema.dependencies);
+      scanArray(ourBase + '/disallow', schema.disallow);
+      scanArray(ourBase + '/allOf', schema.allOf);
+      scanArray(ourBase + '/anyOf', schema.anyOf);
+      scanArray(ourBase + '/oneOf', schema.oneOf);
+      scanSchema(ourBase + '/not', schema.not);
+    }
+    function scanArray(baseuri, schemas) {
+      if (!Array.isArray(schemas)) return;
+      for (var i = 0; i < schemas.length; i++) {
+        scanSchema(baseuri + '/' + i, schemas[i]);
+      }
+    }
+    function scanObject(baseuri, schemas) {
+      if (!schemas || typeof schemas != 'object') return;
+      for (var p in schemas) {
+        scanSchema(baseuri + '/' + p, schemas[p]);
+      }
+    }
+    var found = {};
+    var ref = {};
+    scanSchema(base, schema);
+    return new $88344eb976b27020930887e01ad42def$var$SchemaScanResult(found, ref);
+  };
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$scanSchema = $88344eb976b27020930887e01ad42def$export$scan;
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$ValidatorResult = $ce4eec71ec4285d39f33d14254969864$export$ValidatorResult;
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$ValidatorResultError = $ce4eec71ec4285d39f33d14254969864$export$ValidatorResultError;
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaError = $ce4eec71ec4285d39f33d14254969864$export$SchemaError;
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaContext = $ce4eec71ec4285d39f33d14254969864$export$SchemaContext;
+  // var anonymousBase = 'vnd.jsonschema:///';
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$anonymousBase = '/';
+  /**
+  * Creates a new Validator object
+  * @name Validator
+  * @constructor
+  */
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$Validator = function Validator() {
+    // Allow a validator instance to override global custom formats or to have their
+    // own custom formats.
+    this.customFormats = Object.create(Validator.prototype.customFormats);
+    this.schemas = {};
+    this.unresolvedRefs = [];
+    // Use Object.create to make this extensible without Validator instances stepping on each other's toes.
+    this.types = Object.create($9cdb8ac535d7173eb5acc47d93433e56$var$types);
+    this.attributes = Object.create($bfd17381112b94a0814e07dd5040defb$exports.validators);
+  };
+  // Allow formats to be registered globally.
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.customFormats = {};
+  // Hint at the presence of a property
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.schemas = null;
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.types = null;
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.attributes = null;
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.unresolvedRefs = null;
+  /**
+  * Adds a schema with a certain urn to the Validator instance.
+  * @param schema
+  * @param urn
+  * @return {Object}
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.addSchema = function addSchema(schema, base) {
+    var self = this;
+    if (!schema) {
+      return null;
+    }
+    var scan = $9cdb8ac535d7173eb5acc47d93433e56$var$scanSchema(base || $9cdb8ac535d7173eb5acc47d93433e56$var$anonymousBase, schema);
+    var ourUri = base || schema.$id || schema.id;
+    for (var uri in scan.id) {
+      this.schemas[uri] = scan.id[uri];
+    }
+    for (var uri in scan.ref) {
+      // If this schema is already defined, it will be filtered out by the next step
+      this.unresolvedRefs.push(uri);
+    }
+    // Remove newly defined schemas from unresolvedRefs
+    this.unresolvedRefs = this.unresolvedRefs.filter(function (uri) {
+      return typeof self.schemas[uri] === 'undefined';
+    });
+    return this.schemas[ourUri];
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.addSubSchemaArray = function addSubSchemaArray(baseuri, schemas) {
+    if (!Array.isArray(schemas)) return;
+    for (var i = 0; i < schemas.length; i++) {
+      this.addSubSchema(baseuri, schemas[i]);
+    }
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.addSubSchemaObject = function addSubSchemaArray(baseuri, schemas) {
+    if (!schemas || typeof schemas != 'object') return;
+    for (var p in schemas) {
+      this.addSubSchema(baseuri, schemas[p]);
+    }
+  };
+  /**
+  * Sets all the schemas of the Validator instance.
+  * @param schemas
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.setSchemas = function setSchemas(schemas) {
+    this.schemas = schemas;
+  };
+  /**
+  * Returns the schema of a certain urn
+  * @param urn
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.getSchema = function getSchema(urn) {
+    return this.schemas[urn];
+  };
+  /**
+  * Validates instance against the provided schema
+  * @param instance
+  * @param schema
+  * @param [options]
+  * @param [ctx]
+  * @return {Array}
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.validate = function validate(instance, schema, options, ctx) {
+    if (typeof schema !== 'boolean' && typeof schema !== 'object' || schema === null) {
+      throw new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaError('Expected `schema` to be an object or boolean');
+    }
+    if (!options) {
+      options = {};
+    }
+    // This section indexes subschemas in the provided schema, so they don't need to be added with Validator#addSchema
+    // This will work so long as the function at uri.resolve() will resolve a relative URI to a relative URI
+    var id = schema.$id || schema.id;
+    var base = $42c0ab72f3b39275783aaa4babb143cb$export$resolve(options.base || $9cdb8ac535d7173eb5acc47d93433e56$var$anonymousBase, id || '');
+    if (!ctx) {
+      ctx = new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaContext(schema, options, [], base, Object.create(this.schemas));
+      if (!ctx.schemas[base]) {
+        ctx.schemas[base] = schema;
+      }
+      var found = $9cdb8ac535d7173eb5acc47d93433e56$var$scanSchema(base, schema);
+      for (var n in found.id) {
+        var sch = found.id[n];
+        ctx.schemas[n] = sch;
+      }
+    }
+    if (options.required && instance === undefined) {
+      var result = new $9cdb8ac535d7173eb5acc47d93433e56$var$ValidatorResult(instance, schema, options, ctx);
+      result.addError('is required, but is undefined');
+      return result;
+    }
+    var result = this.validateSchema(instance, schema, options, ctx);
+    if (!result) {
+      throw new Error('Result undefined');
+    } else if (options.throwAll && result.errors.length) {
+      throw new $9cdb8ac535d7173eb5acc47d93433e56$var$ValidatorResultError(result);
+    }
+    return result;
+  };
+  /**
+  * @param Object schema
+  * @return mixed schema uri or false
+  */
+  function $9cdb8ac535d7173eb5acc47d93433e56$var$shouldResolve(schema) {
+    var ref = typeof schema === 'string' ? schema : schema.$ref;
+    if (typeof ref == 'string') return ref;
+    return false;
+  }
+  /**
+  * Validates an instance against the schema (the actual work horse)
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @private
+  * @return {ValidatorResult}
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.validateSchema = function validateSchema(instance, schema, options, ctx) {
+    var result = new $9cdb8ac535d7173eb5acc47d93433e56$var$ValidatorResult(instance, schema, options, ctx);
+    // Support for the true/false schemas
+    if (typeof schema === 'boolean') {
+      if (schema === true) {
+        // `true` is always valid
+        schema = {};
+      } else if (schema === false) {
+        // `false` is always invalid
+        schema = {
+          type: []
+        };
+      }
+    } else if (!schema) {
+      // This might be a string
+      throw new Error("schema is undefined");
+    }
+    if (schema['extends']) {
+      if (Array.isArray(schema['extends'])) {
+        var schemaobj = {
+          schema: schema,
+          ctx: ctx
+        };
+        schema['extends'].forEach(this.schemaTraverser.bind(this, schemaobj));
+        schema = schemaobj.schema;
+        schemaobj.schema = null;
+        schemaobj.ctx = null;
+        schemaobj = null;
+      } else {
+        schema = $ce4eec71ec4285d39f33d14254969864$export$deepMerge(schema, this.superResolve(schema['extends'], ctx));
+      }
+    }
+    // If passed a string argument, load that schema URI
+    var switchSchema = $9cdb8ac535d7173eb5acc47d93433e56$var$shouldResolve(schema);
+    if (switchSchema) {
+      var resolved = this.resolve(schema, switchSchema, ctx);
+      var subctx = new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaContext(resolved.subschema, options, ctx.path, resolved.switchSchema, ctx.schemas);
+      return this.validateSchema(instance, resolved.subschema, options, subctx);
+    }
+    var skipAttributes = options && options.skipAttributes || [];
+    // Validate each schema attribute against the instance
+    for (var key in schema) {
+      if (!$bfd17381112b94a0814e07dd5040defb$exports.ignoreProperties[key] && skipAttributes.indexOf(key) < 0) {
+        var validatorErr = null;
+        var validator = this.attributes[key];
+        if (validator) {
+          validatorErr = validator.call(this, instance, schema, options, ctx);
+        } else if (options.allowUnknownAttributes === false) {
+          // This represents an error with the schema itself, not an invalid instance
+          throw new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaError("Unsupported attribute: " + key, schema);
+        }
+        if (validatorErr) {
+          result.importErrors(validatorErr);
+        }
+      }
+    }
+    if (typeof options.rewrite == 'function') {
+      var value = options.rewrite.call(this, instance, schema, options, ctx);
+      result.instance = value;
+    }
+    return result;
+  };
+  /**
+  * @private
+  * @param Object schema
+  * @param SchemaContext ctx
+  * @returns Object schema or resolved schema
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.schemaTraverser = function schemaTraverser(schemaobj, s) {
+    schemaobj.schema = $ce4eec71ec4285d39f33d14254969864$export$deepMerge(schemaobj.schema, this.superResolve(s, schemaobj.ctx));
+  };
+  /**
+  * @private
+  * @param Object schema
+  * @param SchemaContext ctx
+  * @returns Object schema or resolved schema
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.superResolve = function superResolve(schema, ctx) {
+    var ref = $9cdb8ac535d7173eb5acc47d93433e56$var$shouldResolve(schema);
+    if (ref) {
+      return this.resolve(schema, ref, ctx).subschema;
+    }
+    return schema;
+  };
+  /**
+  * @private
+  * @param Object schema
+  * @param Object switchSchema
+  * @param SchemaContext ctx
+  * @return Object resolved schemas {subschema:String, switchSchema: String}
+  * @throws SchemaError
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.resolve = function resolve(schema, switchSchema, ctx) {
+    switchSchema = ctx.resolve(switchSchema);
+    // First see if the schema exists under the provided URI
+    if (ctx.schemas[switchSchema]) {
+      return {
+        subschema: ctx.schemas[switchSchema],
+        switchSchema: switchSchema
+      };
+    }
+    // Else try walking the property pointer
+    var parsed = $42c0ab72f3b39275783aaa4babb143cb$export$parse(switchSchema);
+    var fragment = parsed && parsed.hash;
+    var document = fragment && fragment.length && switchSchema.substr(0, switchSchema.length - fragment.length);
+    if (!document || !ctx.schemas[document]) {
+      throw new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaError("no such schema <" + switchSchema + ">", schema);
+    }
+    var subschema = $ce4eec71ec4285d39f33d14254969864$export$objectGetPath(ctx.schemas[document], fragment.substr(1));
+    if (subschema === undefined) {
+      throw new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaError("no such schema " + fragment + " located in <" + document + ">", schema);
+    }
+    return {
+      subschema: subschema,
+      switchSchema: switchSchema
+    };
+  };
+  /**
+  * Tests whether the instance if of a certain type.
+  * @private
+  * @param instance
+  * @param schema
+  * @param options
+  * @param ctx
+  * @param type
+  * @return {boolean}
+  */
+  $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.testType = function validateType(instance, schema, options, ctx, type) {
+    if (type === undefined) {
+      return;
+    } else if (type === null) {
+      throw new $9cdb8ac535d7173eb5acc47d93433e56$var$SchemaError('Unexpected null in "type" keyword');
+    }
+    if (typeof this.types[type] == 'function') {
+      return this.types[type].call(this, instance);
+    }
+    if (type && typeof type == 'object') {
+      var res = this.validateSchema(instance, type, options, ctx);
+      return res === undefined || !(res && res.errors.length);
+    }
+    // Undefined or properties not on the list are acceptable, same as not being defined
+    return true;
+  };
+  var $9cdb8ac535d7173eb5acc47d93433e56$var$types = $9cdb8ac535d7173eb5acc47d93433e56$var$Validator.prototype.types = {};
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.string = function testString(instance) {
+    return typeof instance == 'string';
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.number = function testNumber(instance) {
+    // isFinite returns false for NaN, Infinity, and -Infinity
+    return typeof instance == 'number' && isFinite(instance);
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.integer = function testInteger(instance) {
+    return typeof instance == 'number' && instance % 1 === 0;
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.boolean = function testBoolean(instance) {
+    return typeof instance == 'boolean';
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.array = function testArray(instance) {
+    return Array.isArray(instance);
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types['null'] = function testNull(instance) {
+    return instance === null;
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.date = function testDate(instance) {
+    return instance instanceof Date;
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.any = function testAny(instance) {
+    return true;
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$var$types.object = function testObject(instance) {
+    // TODO: fix this - see #15
+    return instance && typeof instance === 'object' && !Array.isArray(instance) && !(instance instanceof Date);
+  };
+  $9cdb8ac535d7173eb5acc47d93433e56$exports = $9cdb8ac535d7173eb5acc47d93433e56$var$Validator;
+  var $0cb2a726714ab9e25f66a914aaf55a06$var$Validator = $0cb2a726714ab9e25f66a914aaf55a06$export$Validator = $9cdb8ac535d7173eb5acc47d93433e56$exports;
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$ValidatorResult = $ce4eec71ec4285d39f33d14254969864$export$ValidatorResult;
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$ValidatorResultError = $ce4eec71ec4285d39f33d14254969864$export$ValidatorResultError;
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$ValidationError = $ce4eec71ec4285d39f33d14254969864$export$ValidationError;
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$SchemaError = $ce4eec71ec4285d39f33d14254969864$export$SchemaError;
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$SchemaScanResult = $88344eb976b27020930887e01ad42def$export$SchemaScanResult;
+  var $0cb2a726714ab9e25f66a914aaf55a06$export$scan = $88344eb976b27020930887e01ad42def$export$scan;
+  var $6e3deca82e40cc39adaf723a4debdf92$export$default = {
+    "schema": "https://json-schema.org/draft/2020-12/schema",
+    "id": "/visualization",
+    "title": "Visualization",
+    "description": "A webgl visualization made of a sequence of tracks",
+    "type": "object",
+    "required": ["tracks"],
+    "properties": {
+      "labels": {
+        "description": "set of labels to display on visualization, properties of labels can be any valid attribute for an svg text element",
+        "examples": [{
+          "x": 100,
+          "y": 200,
+          "text": "my favorite data point",
+          "rotate": -90
+        }, {
+          "x": -1.1,
+          "y": 0,
+          "text": "Track 1",
+          "color": "red",
+          "fixedX": true
+        }],
+        "type": "array",
+        "items": {
+          "properties": {
+            "x": {
+              "description": "x coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if x dimension is categorical or genomic",
+              "type": "number"
+            },
+            "y": {
+              "description": "y coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if y dimension is categorical or genomic",
+              "type": "number"
+            },
+            "fixedX": {
+              "description": "fix the x coordinate of the label, so it does not move when panning/zooming left or right",
+              "type": "boolean"
+            },
+            "fixedY": {
+              "description": "fix the y coordinate of the label, so it does not move when panning/zooming up or down",
+              "type": "boolean"
+            },
+            "required": ["x", "y"]
+          }
+        }
+      },
+      "xAxis": {
+        "description": "location of x-axis",
+        "enum": ["bottom", "top", "center", "none", "zero"]
+      },
+      "yAxis": {
+        "description": "location of y-axis",
+        "enum": ["left", "right", "center", "none", "zero"]
+      },
+      "tracks": {
+        "description": "A track is a map from the data to a sequence of marks",
+        "type": "array",
+        "items": {
+          "$ref": "/track"
+        }
+      },
+      "defaultData": {
+        "description": "A string of a csv href containing data or an object of inline data where each key is a column of values",
+        "examples": ["http://example.com/data.csv", {
+          "day": [1, 2],
+          "price": [10, 20]
+        }],
+        "type": ["string", "object"],
+        "additionalProperties": {
+          "type": "array"
+        },
+        "minProperties": 1
+      }
+    },
+    "allOf": [{
+      "description": "if there is no default data for the visualization require each track to have data property",
+      "if": {
+        "not": {
+          "required": ["defaultData"]
+        }
+      },
+      "then": {
+        "properties": {
+          "tracks": {
+            "items": {
+              "required": ["data"]
+            }
+          }
+        }
+      },
+      "else": {}
+    }]
+  };
+  var $305419b79a6a6ac176a05a7666939652$export$default = {
+    "schema": "https://json-schema.org/draft/2020-12/schema",
+    "id": "/track",
+    "title": "Track",
+    "description": "A track to visualize",
+    "type": "object",
+    "required": ["mark", "x", "y"],
+    "properties": {
+      "data": {
+        "description": "A string of a csv href containing data or an object of inline data where each key is an array of a data column",
+        "type": ["string", "object"],
+        "additionalProperties": {
+          "type": "array"
+        },
+        "minProperties": 1
+      },
+      "mark": {
+        "description": "type of mark to visualize",
+        "enum": ["point", "line", "area", "rect", "tick", "arc"]
+      },
+      "tooltips": {
+        "description": "a number between 0 and 1 where 0 is no tooltips, 1 is always show, and, for example, 0.1 would be show tooltips when zoomed in to 10% of the domain",
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "x": {
+        "description": "define the x coordinates of the marks",
+        "type": "object",
+        "allOf": [{
+          "$ref": "/channel"
+        }],
+        "examples": [{
+          "type": "genomic",
+          "chrAttribute": "chr",
+          "geneAttribute": "gene",
+          "domain": ["chr2:100", "chr2:300"]
+        }]
+      },
+      "y": {
+        "description": "define the y coordinates of the marks",
+        "type": "object",
+        "allOf": [{
+          "$ref": "/channel"
+        }],
+        "examples": [{
+          "type": "quantitative",
+          "attribute": "time",
+          "domain": [0, 10]
+        }, {
+          "attribute": "sample",
+          "type": "categorical",
+          "cardinality": 10
+        }]
+      },
+      "color": {
+        "description": "define the color of the marks, for fixed values can be any css3 color descriptor or a number that translates to a color in hex",
+        "type": "object",
+        "properties": {
+          "colorScheme": {
+            "description": "d3 continuous color scheme to use, see d3-scale-chromatic for options",
+            "examples": ["interpolateBlues", "interpolateReds", "interpolateRainbow"],
+            "type": "string"
+          }
+        },
+        "examples": [{
+          "value": "red"
+        }, {
+          "value": 16581375
+        }, {
+          "attribute": "sample",
+          "type": "categorical",
+          "cardinality": 10,
+          "colorScheme": "interpolateBuGn"
+        }],
+        "allOf": [{
+          "$ref": "/channel"
+        }]
+      },
+      "size": {
+        "description": "size of the mark, used only when mark type is point, use width or height for other mark types. The units of this channel correspond to 1/200th of the canvas e.g. a size of 100 is half the canvas.",
+        "type": "object",
+        "properties": {
+          "maxSize": {
+            "type": "number"
+          },
+          "minSize": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "examples": [{
+          "attribute": "population",
+          "type": "quantitative",
+          "domain": [0, 1000],
+          "maxSize": 10,
+          "minSize": 1
+        }],
+        "allOf": [{
+          "$ref": "/channel"
+        }]
+      },
+      "width": {
+        "description": "width of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the width of the canvas. This channel may be a genomic range type for arc tracks. If both height and width are specified for a tick mark, only width is used.",
+        "type": "object",
+        "properties": {
+          "maxWidth": {
+            "type": "number"
+          },
+          "minWidth": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "allOf": [{
+          "$ref": "/channel"
+        }]
+      },
+      "height": {
+        "description": "height of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the height of the canvas. This channel may be a genomic range type for arc tracks.",
+        "type": "object",
+        "properties": {
+          "maxHeight": {
+            "type": "number"
+          },
+          "minHeight": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "allOf": [{
+          "$ref": "/channel"
+        }]
+      },
+      "opacity": {
+        "description": "opacity of the mark, compatible with all mark types",
+        "type": "object",
+        "properties": {
+          "minOpacity": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMaximum": 1
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "allOf": [{
+          "$ref": "/channel"
+        }]
+      },
+      "shape": {
+        "description": "shape of the mark, used only for point marks",
+        "type": "object",
+        "properties": {
+          "value": {
+            "enum": ["dot", "circle", "diamond", "triangle"]
+          }
+        },
+        "allOf": [{
+          "$ref": "/channel"
+        }]
+      }
+    }
+  };
+  var $4c2857cbd557a8ec527654d7743dbce3$export$default = {
+    "schema": "https://json-schema.org/draft/2020-12/schema",
+    "id": "/channel",
+    "title": "Channel",
+    "description": "A channel of a visualization",
+    "type": "object",
+    "properties": {
+      "type": {
+        "description": "type of attribute, genomic range only compatible with x, y, width and height",
+        "enum": ["quantitative", "categorical", "genomic", "genomicRange"]
+      },
+      "attribute": {
+        "description": "column of data frame to use for mapping channel",
+        "type": "string"
+      },
+      "value": {
+        "description": "if fixing a channel, specify with value",
+        "type": ["string", "number", "boolean"]
+      },
+      "domain": {
+        "description": "domain of attribute to use for mapping, required if type is quantitative",
+        "type": "array"
+      },
+      "cardinality": {
+        "description": "number of attribute values to use for mapping, required if type is categorical",
+        "type": "integer"
+      },
+      "chrAttribute": {
+        "description": "if type is genomic or genomicRange, the attribute that contains the chromosome id",
+        "type": "string"
+      },
+      "startAttribute": {
+        "description": "if type is genomicRange, the attribute that contains the start of the range",
+        "type": "string"
+      },
+      "endAttribute": {
+        "description": "if type is genomicRange, the attribute that contains the end of the range",
+        "type": "string"
+      },
+      "genome": {
+        "description": "genome being mapped",
+        "enum": ["hg38", "hg19", "mm39"]
+      }
+    },
+    "allOf": [{
+      "description": "If type is genomic, require genomic attributes and forbid regular attributes",
+      "anyOf": [{
+        "not": {
+          "properties": {
+            "type": {
+              "const": "genomic"
+            }
+          },
+          "required": ["type"]
+        }
+      }, {
+        "required": ["chrAttribute", "geneAttribute", "genome"],
+        "not": {
+          "required": ["attribute", "startAttribute", "endAttribute"]
+        },
+        "properties": {
+          "domain": {
+            "items": [{
+              "type": "string",
+              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
+            }, {
+              "type": "string",
+              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
+            }]
+          }
+        }
+      }]
+    }, {
+      "description": "If type is genomicRange, require genomicRange attributes and forbid regular attribute",
+      "anyOf": [{
+        "not": {
+          "properties": {
+            "type": {
+              "const": "genomicRange"
+            }
+          },
+          "required": ["type"]
+        }
+      }, {
+        "required": ["chrAttribute", "startAttribute", "endAttribute", "genome"],
+        "not": {
+          "required": ["attribute", "geneAttribute"]
+        },
+        "properties": {
+          "domain": {
+            "items": [{
+              "type": "string",
+              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
+            }, {
+              "type": "string",
+              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
+            }]
+          }
+        }
+      }]
+    }, {
+      "description": "If type is quantitative, require domain and forbid cardinality",
+      "anyOf": [{
+        "not": {
+          "properties": {
+            "type": {
+              "const": "quantitative"
+            }
+          },
+          "required": ["type"]
+        }
+      }, {
+        "required": ["domain"],
+        "properties": {
+          "domain": {
+            "items": [{
+              "type": "number"
+            }, {
+              "type": "number"
+            }]
+          }
+        },
+        "not": {
+          "required": ["cardinality"]
+        }
+      }]
+    }, {
+      "description": "If type is categorical, require cardinality and forbid domain",
+      "anyOf": [{
+        "not": {
+          "properties": {
+            "type": {
+              "const": "categorical"
+            }
+          },
+          "required": ["type"]
+        }
+      }, {
+        "required": ["cardinality"],
+        "not": {
+          "required": ["domain"]
+        }
+      }]
+    }, {
+      "description": "If value is defined, disallow other attributes",
+      "anyOf": [{
+        "not": {
+          "properties": {
+            "value": {
+              "not": {
+                "type": "null"
+              }
+            }
+          },
+          "required": ["value"]
+        }
+      }, {
+        "allOf": [{
+          "not": {
+            "required": ["attribute"]
+          }
+        }, {
+          "not": {
+            "required": ["type"]
+          }
+        }, {
+          "not": {
+            "required": ["domain"]
+          }
+        }, {
+          "not": {
+            "required": ["cardinality"]
+          }
+        }]
+      }]
+    }, {
+      "description": "If value is not defined, require attribute or genomic attributes",
+      "anyOf": [{
+        "not": {
+          "properties": {
+            "value": {
+              "type": "null"
+            }
+          }
+        }
+      }, {
+        "oneOf": [{
+          "required": ["attribute"]
+        }, {
+          "required": ["chrAttribute", "genome"]
+        }]
+      }]
+    }]
+  };
+  const $5bd7316b1b971c16c065bbe70a894cf9$var$v = new $0cb2a726714ab9e25f66a914aaf55a06$export$Validator();
+  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($4c2857cbd557a8ec527654d7743dbce3$export$default, "/channel");
+  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($305419b79a6a6ac176a05a7666939652$export$default, "/track");
+  /**
+  * Utility method that returns a boolean on whether the json is a valid schema.
+  * console.errors the reason if it is not.
+  * @param {Object} json schema
+  * @returns boolean
+  */
+  const $5bd7316b1b971c16c065bbe70a894cf9$export$default = json => {
+    const validation = $5bd7316b1b971c16c065bbe70a894cf9$var$v.validate(json, $6e3deca82e40cc39adaf723a4debdf92$export$default);
+    if (!validation.valid) {
+      console.error(validation.errors);
+    }
+    return validation.valid;
+  };
   class $b24d98818d6efd81d9f858dfc1cbed2a$export$default {
     POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze(["lockedX", "lockedY", "tool", "viewport", "currentXRange", "currentYRange"]);
     /**
@@ -8407,9 +11603,9 @@
     * @returns boolean on whether the schema was accepted
     */
     setSchema(schema) {
-      // if (!isJSONValid(schema)) {
-      // return false;
-      // }
+      if (!$5bd7316b1b971c16c065bbe70a894cf9$export$default(schema)) {
+        return false;
+      }
       this._setMargins(schema);
       this.mouseReader.setSchema(schema);
       this.sendDrawerState(this.mouseReader.getViewport());
@@ -8565,4 +11761,4 @@
   });
 })();
 
-//# sourceMappingURL=index.7760c25e.js.map
+//# sourceMappingURL=index.d8751590.js.map
