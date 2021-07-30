@@ -1,5 +1,5 @@
 import { GenomeScale } from "./genome-sizes";
-const d3 = require("d3-color");
+import { color } from "d3-color";
 
 /**
  * Returns a linear scale to map elements in domain to elements in range.
@@ -37,7 +37,7 @@ function colorSpecifierToHex(specifier) {
     // Specifier is already a hex value
     return Math.floor(specifier);
   }
-  const asColor = d3.color(specifier);
+  const asColor = color(specifier);
   return rgbToHex(asColor.r, asColor.g, asColor.b);
 }
 

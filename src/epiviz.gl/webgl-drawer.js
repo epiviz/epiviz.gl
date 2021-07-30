@@ -5,7 +5,7 @@ import VertexCalculator from "./vertex-calculator";
 import SemanticZoomer from "./semantic-zoomer";
 import { VertexShader, varyingColorsFragmentShader } from "./webgl.js";
 
-const twgl = require("twgl.js");
+import * as twgl from "twgl.js";
 
 const ALL_POTENTIAL_ATTRIBUTES = VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.map(
   (attr) => `a_${attr}`

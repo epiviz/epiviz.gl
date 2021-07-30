@@ -1,8 +1,9 @@
 const buildGrid = (cellsPerRow) => {
-  const toReturn = [];
+  const toReturn = { x: [], y: [] };
   for (let i = 0; i < cellsPerRow; i++) {
     for (let j = 0; j < cellsPerRow; j++) {
-      toReturn.push(`${i / cellsPerRow},${j / cellsPerRow}`);
+      toReturn.x.push(i / cellsPerRow);
+      toReturn.y.push(j / cellsPerRow);
     }
   }
   return toReturn;
@@ -10,7 +11,7 @@ const buildGrid = (cellsPerRow) => {
 
 export default JSON.stringify(
   {
-    defaultData: ["x,y"].concat(buildGrid(5)),
+    defaultData: buildGrid(5),
     tracks: [
       {
         tooltips: 1,

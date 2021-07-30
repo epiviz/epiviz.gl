@@ -4,9 +4,9 @@ import {
   getDimAndMarginStyleForSchema,
 } from "./utilities";
 
-const d3Axis = require("d3-axis");
-const d3Scale = require("d3-scale");
-const d3Selection = require("d3-selection");
+import { axisBottom, axisLeft, axisTop, axisRight } from "d3-axis";
+import { scaleLinear } from "d3-scale";
+import { select } from "d3-selection";
 
 class SVGInteractor {
   /**
@@ -17,7 +17,7 @@ class SVGInteractor {
    */
   constructor(svg) {
     this.svg = svg;
-    this.d3SVG = d3Selection.select(this.svg);
+    this.d3SVG = select(this.svg);
     this.svg.style.width = "100%";
     this.svg.style.height = "100%";
     this.svg.style.position = "absolute";
@@ -55,9 +55,9 @@ class SVGInteractor {
 
     this.initialX = undefined; // used for updating labels
     this.initialY = undefined;
-    d3Selection.select(this._labelMarker).selectAll("*").remove();
+    select(this._labelMarker).selectAll("*").remove();
     for (const _ of this.schema.labels || []) {
-      d3Selection.select(this._labelMarker).append("text");
+      select(this._labelMarker).append("text");
     }
   }
 
@@ -129,8 +129,7 @@ class SVGInteractor {
       );
     }
 
-    d3Selection
-      .select(this._labelMarker)
+    select(this._labelMarker)
       .selectAll("text")
       .data(this.schema.labels)
       .text((d) => d.text)
@@ -152,7 +151,7 @@ class SVGInteractor {
           if (["x", "y", "text"].includes(property)) {
             continue;
           }
-          d3Selection.select(this).attr(property, d[property]);
+          select(this).attr(property, d[property]);
         }
       });
   }
@@ -167,25 +166,24 @@ class SVGInteractor {
           anchor.attr("transform", `translate(-1000000, -1000000)`);
           return null;
         case "top":
-          axis = d3Axis.axisTop();
+          axis = axisTop();
           anchor.attr("transform", `translate(0, 0)`);
           break;
         case "center":
-          axis = d3Axis.axisBottom();
+          axis = axisBottom();
           anchor.attr("transform", `translate(0, ${this.height / 2})`);
           break;
         case "zero":
-          const yScale = d3Scale
-            .scaleLinear()
+          const yScale = scaleLinear()
             .domain(this.currentYRange)
             .range([this.height, 0]);
 
-          axis = d3Axis.axisBottom();
+          axis = axisBottom();
           anchor.attr("transform", `translate(0, ${yScale(0)})`);
           break;
         case "bottom":
         default:
-          axis = d3Axis.axisBottom();
+          axis = axisBottom();
           anchor.attr("transform", `translate(0, ${this.height})`);
           break;
       }
@@ -199,25 +197,24 @@ class SVGInteractor {
           anchor.attr("transform", `translate(-1000000, -1000000)`);
           return null;
         case "center":
-          axis = d3Axis.axisRight();
+          axis = axisRight();
           anchor.attr("transform", `translate(${this.width / 2}, 0)`);
           break;
         case "right":
-          axis = d3Axis.axisRight();
+          axis = axisRight();
           anchor.attr("transform", `translate(${this.width}, 0)`);
           break;
         case "zero":
-          const xScale = d3Scale
-            .scaleLinear()
+          const xScale = scaleLinear()
             .domain(this.currentXRange)
             .range([0, this.width]);
 
-          axis = d3Axis.axisLeft();
+          axis = axisLeft();
           anchor.attr("transform", `translate(${xScale(0)}, 0)`);
           break;
         case "left": // left is default behavior
         default:
-          axis = d3Axis.axisLeft();
+          axis = axisLeft();
           anchor.attr("transform", `translate(0, 0)`);
           break;
       }
@@ -231,7 +228,7 @@ class SVGInteractor {
     }
 
     if (!genomic) {
-      return axis.scale(d3Scale.scaleLinear().domain(domain).range(range));
+      return axis.scale(scaleLinear().domain(domain).range(range));
     }
 
     let tickInfo;
@@ -242,7 +239,7 @@ class SVGInteractor {
     }
 
     return axis
-      .scale(d3Scale.scaleLinear().domain(domain).range(range))
+      .scale(scaleLinear().domain(domain).range(range))
       .tickValues(tickInfo.tickCoords)
       .tickFormat((_, index) => tickInfo.tickLabels[index]);
   }

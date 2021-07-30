@@ -1,16 +1,10 @@
 export default JSON.stringify(
   {
-    defaultData: [
-      "x,y,type",
-      "1,10,a",
-      "2,-10,b",
-      "3,5,c",
-      "4,15,b",
-      "5,-15,a",
-      "6,-1,c",
-      "7,1,b",
-      "8,15,c",
-    ],
+    defaultData: {
+      x: [1, 2, 3, 4, 5, 6, 7, 8],
+      y: [10, -10, 5, 15, -15, -1, 1, 15],
+      type: ["a", "b", "c", "b", "a", "c", "b", "c"],
+    },
     xAxis: "zero",
     yAxis: "right",
     tracks: [
