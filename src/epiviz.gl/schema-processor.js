@@ -223,9 +223,11 @@ class Track {
     let splitted;
     if (this.isInlineData) {
       splitted = this.headers.map((header) => this.data[header].pop());
+      this.dataLength--;
     } else {
       const currRow = this.data.pop();
       splitted = currRow.split(",");
+      this.dataLength--;
     }
 
     this.headers.forEach((header, index) => {
@@ -255,9 +257,11 @@ class Track {
     let splitted;
     if (this.isInlineData) {
       splitted = this.headers.map((header) => this.data[header].pop());
+      this.dataLength--;
     } else {
       const currRow = this.data.pop();
       splitted = currRow.split(",");
+      this.dataLength--;
     }
 
     this.channelMaps.forEach((mapper, channel) => {

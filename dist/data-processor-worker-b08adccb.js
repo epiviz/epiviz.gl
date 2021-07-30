@@ -1,602 +1,454 @@
-import { S as SchemaProcessor } from './schema-processor-66236800.js';
-import { G as GenomeScale } from './utilities-52abb45c.js';
+import { t as transformGenomicRangeToStandard, a as SIZE_UNITS, S as SchemaProcessor } from './schema-processor-b588b16b.js';
+import { b as getViewportForSchema } from './utilities-b398dcce.js';
 
-function sortKD(ids, coords, nodeSize, left, right, depth) {
-    if (right - left <= nodeSize) return;
+class FlatQueue {
 
-    const m = (left + right) >> 1;
-
-    select(ids, coords, m, left, right, depth % 2);
-
-    sortKD(ids, coords, nodeSize, left, m - 1, depth + 1);
-    sortKD(ids, coords, nodeSize, m + 1, right, depth + 1);
-}
-
-function select(ids, coords, k, left, right, inc) {
-
-    while (right > left) {
-        if (right - left > 600) {
-            const n = right - left + 1;
-            const m = k - left + 1;
-            const z = Math.log(n);
-            const s = 0.5 * Math.exp(2 * z / 3);
-            const sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * (m - n / 2 < 0 ? -1 : 1);
-            const newLeft = Math.max(left, Math.floor(k - m * s / n + sd));
-            const newRight = Math.min(right, Math.floor(k + (n - m) * s / n + sd));
-            select(ids, coords, k, newLeft, newRight, inc);
-        }
-
-        const t = coords[2 * k + inc];
-        let i = left;
-        let j = right;
-
-        swapItem(ids, coords, left, k);
-        if (coords[2 * right + inc] > t) swapItem(ids, coords, left, right);
-
-        while (i < j) {
-            swapItem(ids, coords, i, j);
-            i++;
-            j--;
-            while (coords[2 * i + inc] < t) i++;
-            while (coords[2 * j + inc] > t) j--;
-        }
-
-        if (coords[2 * left + inc] === t) swapItem(ids, coords, left, j);
-        else {
-            j++;
-            swapItem(ids, coords, j, right);
-        }
-
-        if (j <= k) left = j + 1;
-        if (k <= j) right = j - 1;
+    constructor() {
+        this.ids = [];
+        this.values = [];
+        this.length = 0;
     }
-}
 
-function swapItem(ids, coords, i, j) {
-    swap(ids, i, j);
-    swap(coords, 2 * i, 2 * j);
-    swap(coords, 2 * i + 1, 2 * j + 1);
-}
+    clear() {
+        this.length = 0;
+    }
 
-function swap(arr, i, j) {
-    const tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
-}
+    push(id, value) {
+        let pos = this.length++;
+        this.ids[pos] = id;
+        this.values[pos] = value;
 
-function range(ids, coords, minX, minY, maxX, maxY, nodeSize) {
-    const stack = [0, ids.length - 1, 0];
-    const result = [];
-    let x, y;
+        while (pos > 0) {
+            const parent = (pos - 1) >> 1;
+            const parentValue = this.values[parent];
+            if (value >= parentValue) break;
+            this.ids[pos] = this.ids[parent];
+            this.values[pos] = parentValue;
+            pos = parent;
+        }
 
-    while (stack.length) {
-        const axis = stack.pop();
-        const right = stack.pop();
-        const left = stack.pop();
+        this.ids[pos] = id;
+        this.values[pos] = value;
+    }
 
-        if (right - left <= nodeSize) {
-            for (let i = left; i <= right; i++) {
-                x = coords[2 * i];
-                y = coords[2 * i + 1];
-                if (x >= minX && x <= maxX && y >= minY && y <= maxY) result.push(ids[i]);
+    pop() {
+        if (this.length === 0) return undefined;
+
+        const top = this.ids[0];
+        this.length--;
+
+        if (this.length > 0) {
+            const id = this.ids[0] = this.ids[this.length];
+            const value = this.values[0] = this.values[this.length];
+            const halfLength = this.length >> 1;
+            let pos = 0;
+
+            while (pos < halfLength) {
+                let left = (pos << 1) + 1;
+                const right = left + 1;
+                let bestIndex = this.ids[left];
+                let bestValue = this.values[left];
+                const rightValue = this.values[right];
+
+                if (right < this.length && rightValue < bestValue) {
+                    left = right;
+                    bestIndex = this.ids[right];
+                    bestValue = rightValue;
+                }
+                if (bestValue >= value) break;
+
+                this.ids[pos] = bestIndex;
+                this.values[pos] = bestValue;
+                pos = left;
             }
-            continue;
+
+            this.ids[pos] = id;
+            this.values[pos] = value;
         }
 
-        const m = Math.floor((left + right) / 2);
-
-        x = coords[2 * m];
-        y = coords[2 * m + 1];
-
-        if (x >= minX && x <= maxX && y >= minY && y <= maxY) result.push(ids[m]);
-
-        const nextAxis = (axis + 1) % 2;
-
-        if (axis === 0 ? minX <= x : minY <= y) {
-            stack.push(left);
-            stack.push(m - 1);
-            stack.push(nextAxis);
-        }
-        if (axis === 0 ? maxX >= x : maxY >= y) {
-            stack.push(m + 1);
-            stack.push(right);
-            stack.push(nextAxis);
-        }
+        return top;
     }
 
-    return result;
-}
-
-function within(ids, coords, qx, qy, r, nodeSize) {
-    const stack = [0, ids.length - 1, 0];
-    const result = [];
-    const r2 = r * r;
-
-    while (stack.length) {
-        const axis = stack.pop();
-        const right = stack.pop();
-        const left = stack.pop();
-
-        if (right - left <= nodeSize) {
-            for (let i = left; i <= right; i++) {
-                if (sqDist(coords[2 * i], coords[2 * i + 1], qx, qy) <= r2) result.push(ids[i]);
-            }
-            continue;
-        }
-
-        const m = Math.floor((left + right) / 2);
-
-        const x = coords[2 * m];
-        const y = coords[2 * m + 1];
-
-        if (sqDist(x, y, qx, qy) <= r2) result.push(ids[m]);
-
-        const nextAxis = (axis + 1) % 2;
-
-        if (axis === 0 ? qx - r <= x : qy - r <= y) {
-            stack.push(left);
-            stack.push(m - 1);
-            stack.push(nextAxis);
-        }
-        if (axis === 0 ? qx + r >= x : qy + r >= y) {
-            stack.push(m + 1);
-            stack.push(right);
-            stack.push(nextAxis);
-        }
+    peek() {
+        if (this.length === 0) return undefined;
+        return this.ids[0];
     }
 
-    return result;
-}
-
-function sqDist(ax, ay, bx, by) {
-    const dx = ax - bx;
-    const dy = ay - by;
-    return dx * dx + dy * dy;
-}
-
-const defaultGetX = p => p[0];
-const defaultGetY = p => p[1];
-
-class KDBush {
-    constructor(points, getX = defaultGetX, getY = defaultGetY, nodeSize = 64, ArrayType = Float64Array) {
-        this.nodeSize = nodeSize;
-        this.points = points;
-
-        const IndexArrayType = points.length < 65536 ? Uint16Array : Uint32Array;
-
-        const ids = this.ids = new IndexArrayType(points.length);
-        const coords = this.coords = new ArrayType(points.length * 2);
-
-        for (let i = 0; i < points.length; i++) {
-            ids[i] = i;
-            coords[2 * i] = getX(points[i]);
-            coords[2 * i + 1] = getY(points[i]);
-        }
-
-        sortKD(ids, coords, nodeSize, 0, ids.length - 1, 0);
-    }
-
-    range(minX, minY, maxX, maxY) {
-        return range(this.ids, this.coords, minX, minY, maxX, maxY, this.nodeSize);
-    }
-
-    within(x, y, r) {
-        return within(this.ids, this.coords, x, y, r, this.nodeSize);
+    peekValue() {
+        if (this.length === 0) return undefined;
+        return this.values[0];
     }
 }
 
-const defaultOptions = {
-    minZoom: 0,   // min zoom to generate clusters on
-    maxZoom: 16,  // max zoom level to cluster the points on
-    minPoints: 2, // minimum points to form a cluster
-    radius: 40,   // cluster radius in pixels
-    extent: 512,  // tile extent (radius is calculated relative to it)
-    nodeSize: 64, // size of the KD-tree leaf node, affects performance
-    log: false,   // whether to log timing info
+const ARRAY_TYPES = [
+    Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array,
+    Int32Array, Uint32Array, Float32Array, Float64Array
+];
 
-    // whether to generate numeric ids for input features (in vector tiles)
-    generateId: false,
+const VERSION = 3; // serialized format version
 
-    // a reduce function for calculating custom cluster properties
-    reduce: null, // (accumulated, props) => { accumulated.sum += props.sum; }
+class Flatbush {
 
-    // properties to use for individual points when running the reducer
-    map: props => props // props => ({sum: props.my_value})
-};
+    static from(data) {
+        if (!(data instanceof ArrayBuffer)) {
+            throw new Error('Data must be an instance of ArrayBuffer.');
+        }
+        const [magic, versionAndType] = new Uint8Array(data, 0, 2);
+        if (magic !== 0xfb) {
+            throw new Error('Data does not appear to be in a Flatbush format.');
+        }
+        if (versionAndType >> 4 !== VERSION) {
+            throw new Error(`Got v${versionAndType >> 4} data when expected v${VERSION}.`);
+        }
+        const [nodeSize] = new Uint16Array(data, 2, 1);
+        const [numItems] = new Uint32Array(data, 4, 1);
 
-const fround = Math.fround || (tmp => ((x) => { tmp[0] = +x; return tmp[0]; }))(new Float32Array(1));
-
-class Supercluster {
-    constructor(options) {
-        this.options = extend(Object.create(defaultOptions), options);
-        this.trees = new Array(this.options.maxZoom + 1);
+        return new Flatbush(numItems, nodeSize, ARRAY_TYPES[versionAndType & 0x0f], data);
     }
 
-    load(points) {
-        const {log, minZoom, maxZoom, nodeSize} = this.options;
+    constructor(numItems, nodeSize = 16, ArrayType = Float64Array, data) {
+        if (numItems === undefined) throw new Error('Missing required argument: numItems.');
+        if (isNaN(numItems) || numItems <= 0) throw new Error(`Unpexpected numItems value: ${numItems}.`);
 
-        if (log) console.time('total time');
+        this.numItems = +numItems;
+        this.nodeSize = Math.min(Math.max(+nodeSize, 2), 65535);
 
-        const timerId = `prepare ${  points.length  } points`;
-        if (log) console.time(timerId);
+        // calculate the total number of nodes in the R-tree to allocate space for
+        // and the index of each tree level (used in search later)
+        let n = numItems;
+        let numNodes = n;
+        this._levelBounds = [n * 4];
+        do {
+            n = Math.ceil(n / this.nodeSize);
+            numNodes += n;
+            this._levelBounds.push(numNodes * 4);
+        } while (n !== 1);
 
-        this.points = points;
+        this.ArrayType = ArrayType || Float64Array;
+        this.IndexArrayType = numNodes < 16384 ? Uint16Array : Uint32Array;
 
-        // generate a cluster object for each point and index input points into a KD-tree
-        let clusters = [];
-        for (let i = 0; i < points.length; i++) {
-            if (!points[i].geometry) continue;
-            clusters.push(createPointCluster(points[i], i));
-        }
-        this.trees[maxZoom + 1] = new KDBush(clusters, getX, getY, nodeSize, Float32Array);
+        const arrayTypeIndex = ARRAY_TYPES.indexOf(this.ArrayType);
+        const nodesByteSize = numNodes * 4 * this.ArrayType.BYTES_PER_ELEMENT;
 
-        if (log) console.timeEnd(timerId);
-
-        // cluster points on max zoom, then cluster the results on previous zoom, etc.;
-        // results in a cluster hierarchy across zoom levels
-        for (let z = maxZoom; z >= minZoom; z--) {
-            const now = +Date.now();
-
-            // create a new set of clusters for the zoom and index them with a KD-tree
-            clusters = this._cluster(clusters, z);
-            this.trees[z] = new KDBush(clusters, getX, getY, nodeSize, Float32Array);
-
-            if (log) console.log('z%d: %d clusters in %dms', z, clusters.length, +Date.now() - now);
+        if (arrayTypeIndex < 0) {
+            throw new Error(`Unexpected typed array class: ${ArrayType}.`);
         }
 
-        if (log) console.timeEnd('total time');
+        if (data && (data instanceof ArrayBuffer)) {
+            this.data = data;
+            this._boxes = new this.ArrayType(this.data, 8, numNodes * 4);
+            this._indices = new this.IndexArrayType(this.data, 8 + nodesByteSize, numNodes);
 
-        return this;
+            this._pos = numNodes * 4;
+            this.minX = this._boxes[this._pos - 4];
+            this.minY = this._boxes[this._pos - 3];
+            this.maxX = this._boxes[this._pos - 2];
+            this.maxY = this._boxes[this._pos - 1];
+
+        } else {
+            this.data = new ArrayBuffer(8 + nodesByteSize + numNodes * this.IndexArrayType.BYTES_PER_ELEMENT);
+            this._boxes = new this.ArrayType(this.data, 8, numNodes * 4);
+            this._indices = new this.IndexArrayType(this.data, 8 + nodesByteSize, numNodes);
+            this._pos = 0;
+            this.minX = Infinity;
+            this.minY = Infinity;
+            this.maxX = -Infinity;
+            this.maxY = -Infinity;
+
+            new Uint8Array(this.data, 0, 2).set([0xfb, (VERSION << 4) + arrayTypeIndex]);
+            new Uint16Array(this.data, 2, 1)[0] = nodeSize;
+            new Uint32Array(this.data, 4, 1)[0] = numItems;
+        }
+
+        // a priority queue for k-nearest-neighbors queries
+        this._queue = new FlatQueue();
     }
 
-    getClusters(bbox, zoom) {
-        let minLng = ((bbox[0] + 180) % 360 + 360) % 360 - 180;
-        const minLat = Math.max(-90, Math.min(90, bbox[1]));
-        let maxLng = bbox[2] === 180 ? 180 : ((bbox[2] + 180) % 360 + 360) % 360 - 180;
-        const maxLat = Math.max(-90, Math.min(90, bbox[3]));
+    add(minX, minY, maxX, maxY) {
+        const index = this._pos >> 2;
+        this._indices[index] = index;
+        this._boxes[this._pos++] = minX;
+        this._boxes[this._pos++] = minY;
+        this._boxes[this._pos++] = maxX;
+        this._boxes[this._pos++] = maxY;
 
-        if (bbox[2] - bbox[0] >= 360) {
-            minLng = -180;
-            maxLng = 180;
-        } else if (minLng > maxLng) {
-            const easternHem = this.getClusters([minLng, minLat, 180, maxLat], zoom);
-            const westernHem = this.getClusters([-180, minLat, maxLng, maxLat], zoom);
-            return easternHem.concat(westernHem);
-        }
+        if (minX < this.minX) this.minX = minX;
+        if (minY < this.minY) this.minY = minY;
+        if (maxX > this.maxX) this.maxX = maxX;
+        if (maxY > this.maxY) this.maxY = maxY;
 
-        const tree = this.trees[this._limitZoom(zoom)];
-        const ids = tree.range(lngX(minLng), latY(maxLat), lngX(maxLng), latY(minLat));
-        const clusters = [];
-        for (const id of ids) {
-            const c = tree.points[id];
-            clusters.push(c.numPoints ? getClusterJSON(c) : this.points[c.index]);
-        }
-        return clusters;
+        return index;
     }
 
-    getChildren(clusterId) {
-        const originId = this._getOriginId(clusterId);
-        const originZoom = this._getOriginZoom(clusterId);
-        const errorMsg = 'No cluster with the specified id.';
+    finish() {
+        if (this._pos >> 2 !== this.numItems) {
+            throw new Error(`Added ${this._pos >> 2} items when expected ${this.numItems}.`);
+        }
 
-        const index = this.trees[originZoom];
-        if (!index) throw new Error(errorMsg);
+        if (this.numItems <= this.nodeSize) {
+            // only one node, skip sorting and just fill the root box
+            this._boxes[this._pos++] = this.minX;
+            this._boxes[this._pos++] = this.minY;
+            this._boxes[this._pos++] = this.maxX;
+            this._boxes[this._pos++] = this.maxY;
+            return;
+        }
 
-        const origin = index.points[originId];
-        if (!origin) throw new Error(errorMsg);
+        const width = this.maxX - this.minX;
+        const height = this.maxY - this.minY;
+        const hilbertValues = new Uint32Array(this.numItems);
+        const hilbertMax = (1 << 16) - 1;
 
-        const r = this.options.radius / (this.options.extent * Math.pow(2, originZoom - 1));
-        const ids = index.within(origin.x, origin.y, r);
-        const children = [];
-        for (const id of ids) {
-            const c = index.points[id];
-            if (c.parentId === clusterId) {
-                children.push(c.numPoints ? getClusterJSON(c) : this.points[c.index]);
+        // map item centers into Hilbert coordinate space and calculate Hilbert values
+        for (let i = 0; i < this.numItems; i++) {
+            let pos = 4 * i;
+            const minX = this._boxes[pos++];
+            const minY = this._boxes[pos++];
+            const maxX = this._boxes[pos++];
+            const maxY = this._boxes[pos++];
+            const x = Math.floor(hilbertMax * ((minX + maxX) / 2 - this.minX) / width);
+            const y = Math.floor(hilbertMax * ((minY + maxY) / 2 - this.minY) / height);
+            hilbertValues[i] = hilbert(x, y);
+        }
+
+        // sort items by their Hilbert value (for packing later)
+        sort(hilbertValues, this._boxes, this._indices, 0, this.numItems - 1, this.nodeSize);
+
+        // generate nodes at each tree level, bottom-up
+        for (let i = 0, pos = 0; i < this._levelBounds.length - 1; i++) {
+            const end = this._levelBounds[i];
+
+            // generate a parent node for each block of consecutive <nodeSize> nodes
+            while (pos < end) {
+                const nodeIndex = pos;
+
+                // calculate bbox for the new node
+                let nodeMinX = Infinity;
+                let nodeMinY = Infinity;
+                let nodeMaxX = -Infinity;
+                let nodeMaxY = -Infinity;
+                for (let i = 0; i < this.nodeSize && pos < end; i++) {
+                    nodeMinX = Math.min(nodeMinX, this._boxes[pos++]);
+                    nodeMinY = Math.min(nodeMinY, this._boxes[pos++]);
+                    nodeMaxX = Math.max(nodeMaxX, this._boxes[pos++]);
+                    nodeMaxY = Math.max(nodeMaxY, this._boxes[pos++]);
+                }
+
+                // add the new node to the tree data
+                this._indices[this._pos >> 2] = nodeIndex;
+                this._boxes[this._pos++] = nodeMinX;
+                this._boxes[this._pos++] = nodeMinY;
+                this._boxes[this._pos++] = nodeMaxX;
+                this._boxes[this._pos++] = nodeMaxY;
             }
         }
-
-        if (children.length === 0) throw new Error(errorMsg);
-
-        return children;
     }
 
-    getLeaves(clusterId, limit, offset) {
-        limit = limit || 10;
-        offset = offset || 0;
-
-        const leaves = [];
-        this._appendLeaves(leaves, clusterId, limit, offset, 0);
-
-        return leaves;
-    }
-
-    getTile(z, x, y) {
-        const tree = this.trees[this._limitZoom(z)];
-        const z2 = Math.pow(2, z);
-        const {extent, radius} = this.options;
-        const p = radius / extent;
-        const top = (y - p) / z2;
-        const bottom = (y + 1 + p) / z2;
-
-        const tile = {
-            features: []
-        };
-
-        this._addTileFeatures(
-            tree.range((x - p) / z2, top, (x + 1 + p) / z2, bottom),
-            tree.points, x, y, z2, tile);
-
-        if (x === 0) {
-            this._addTileFeatures(
-                tree.range(1 - p / z2, top, 1, bottom),
-                tree.points, z2, y, z2, tile);
-        }
-        if (x === z2 - 1) {
-            this._addTileFeatures(
-                tree.range(0, top, p / z2, bottom),
-                tree.points, -1, y, z2, tile);
+    search(minX, minY, maxX, maxY, filterFn) {
+        if (this._pos !== this._boxes.length) {
+            throw new Error('Data not yet indexed - call index.finish().');
         }
 
-        return tile.features.length ? tile : null;
-    }
+        let nodeIndex = this._boxes.length - 4;
+        const queue = [];
+        const results = [];
 
-    getClusterExpansionZoom(clusterId) {
-        let expansionZoom = this._getOriginZoom(clusterId) - 1;
-        while (expansionZoom <= this.options.maxZoom) {
-            const children = this.getChildren(clusterId);
-            expansionZoom++;
-            if (children.length !== 1) break;
-            clusterId = children[0].properties.cluster_id;
-        }
-        return expansionZoom;
-    }
+        while (nodeIndex !== undefined) {
+            // find the end index of the node
+            const end = Math.min(nodeIndex + this.nodeSize * 4, upperBound(nodeIndex, this._levelBounds));
 
-    _appendLeaves(result, clusterId, limit, offset, skipped) {
-        const children = this.getChildren(clusterId);
+            // search through child nodes
+            for (let pos = nodeIndex; pos < end; pos += 4) {
+                const index = this._indices[pos >> 2] | 0;
 
-        for (const child of children) {
-            const props = child.properties;
+                // check if node bbox intersects with query bbox
+                if (maxX < this._boxes[pos]) continue; // maxX < nodeMinX
+                if (maxY < this._boxes[pos + 1]) continue; // maxY < nodeMinY
+                if (minX > this._boxes[pos + 2]) continue; // minX > nodeMaxX
+                if (minY > this._boxes[pos + 3]) continue; // minY > nodeMaxY
 
-            if (props && props.cluster) {
-                if (skipped + props.point_count <= offset) {
-                    // skip the whole cluster
-                    skipped += props.point_count;
+                if (nodeIndex < this.numItems * 4) {
+                    if (filterFn === undefined || filterFn(index)) {
+                        results.push(index); // leaf item
+                    }
+
                 } else {
-                    // enter the cluster
-                    skipped = this._appendLeaves(result, props.cluster_id, limit, offset, skipped);
-                    // exit the cluster
+                    queue.push(index); // node; add it to the search queue
                 }
-            } else if (skipped < offset) {
-                // skip a single point
-                skipped++;
-            } else {
-                // add a single point
-                result.push(child);
             }
-            if (result.length === limit) break;
+
+            nodeIndex = queue.pop();
         }
 
-        return skipped;
+        return results;
     }
 
-    _addTileFeatures(ids, points, x, y, z2, tile) {
-        for (const i of ids) {
-            const c = points[i];
-            const isCluster = c.numPoints;
-
-            let tags, px, py;
-            if (isCluster) {
-                tags = getClusterProperties(c);
-                px = c.x;
-                py = c.y;
-            } else {
-                const p = this.points[c.index];
-                tags = p.properties;
-                px = lngX(p.geometry.coordinates[0]);
-                py = latY(p.geometry.coordinates[1]);
-            }
-
-            const f = {
-                type: 1,
-                geometry: [[
-                    Math.round(this.options.extent * (px * z2 - x)),
-                    Math.round(this.options.extent * (py * z2 - y))
-                ]],
-                tags
-            };
-
-            // assign id
-            let id;
-            if (isCluster) {
-                id = c.id;
-            } else if (this.options.generateId) {
-                // optionally generate id
-                id = c.index;
-            } else if (this.points[c.index].id) {
-                // keep id if already assigned
-                id = this.points[c.index].id;
-            }
-
-            if (id !== undefined) f.id = id;
-
-            tile.features.push(f);
+    neighbors(x, y, maxResults = Infinity, maxDistance = Infinity, filterFn) {
+        if (this._pos !== this._boxes.length) {
+            throw new Error('Data not yet indexed - call index.finish().');
         }
-    }
 
-    _limitZoom(z) {
-        return Math.max(this.options.minZoom, Math.min(+z, this.options.maxZoom + 1));
-    }
+        let nodeIndex = this._boxes.length - 4;
+        const q = this._queue;
+        const results = [];
+        const maxDistSquared = maxDistance * maxDistance;
 
-    _cluster(points, zoom) {
-        const clusters = [];
-        const {radius, extent, reduce, minPoints} = this.options;
-        const r = radius / (extent * Math.pow(2, zoom));
+        while (nodeIndex !== undefined) {
+            // find the end index of the node
+            const end = Math.min(nodeIndex + this.nodeSize * 4, upperBound(nodeIndex, this._levelBounds));
 
-        // loop through each point
-        for (let i = 0; i < points.length; i++) {
-            const p = points[i];
-            // if we've already visited the point at this zoom level, skip it
-            if (p.zoom <= zoom) continue;
-            p.zoom = zoom;
+            // add child nodes to the queue
+            for (let pos = nodeIndex; pos < end; pos += 4) {
+                const index = this._indices[pos >> 2] | 0;
 
-            // find all nearby points
-            const tree = this.trees[zoom + 1];
-            const neighborIds = tree.within(p.x, p.y, r);
+                const dx = axisDist(x, this._boxes[pos], this._boxes[pos + 2]);
+                const dy = axisDist(y, this._boxes[pos + 1], this._boxes[pos + 3]);
+                const dist = dx * dx + dy * dy;
 
-            const numPointsOrigin = p.numPoints || 1;
-            let numPoints = numPointsOrigin;
-
-            // count the number of points in a potential cluster
-            for (const neighborId of neighborIds) {
-                const b = tree.points[neighborId];
-                // filter out neighbors that are already processed
-                if (b.zoom > zoom) numPoints += b.numPoints || 1;
-            }
-
-            if (numPoints >= minPoints) { // enough points to form a cluster
-                let wx = p.x * numPointsOrigin;
-                let wy = p.y * numPointsOrigin;
-
-                let clusterProperties = reduce && numPointsOrigin > 1 ? this._map(p, true) : null;
-
-                // encode both zoom and point index on which the cluster originated -- offset by total length of features
-                const id = (i << 5) + (zoom + 1) + this.points.length;
-
-                for (const neighborId of neighborIds) {
-                    const b = tree.points[neighborId];
-
-                    if (b.zoom <= zoom) continue;
-                    b.zoom = zoom; // save the zoom (so it doesn't get processed twice)
-
-                    const numPoints2 = b.numPoints || 1;
-                    wx += b.x * numPoints2; // accumulate coordinates for calculating weighted center
-                    wy += b.y * numPoints2;
-
-                    b.parentId = id;
-
-                    if (reduce) {
-                        if (!clusterProperties) clusterProperties = this._map(p, true);
-                        reduce(clusterProperties, this._map(b));
+                if (nodeIndex < this.numItems * 4) { // leaf node
+                    if (filterFn === undefined || filterFn(index)) {
+                        // put a negative index if it's an item rather than a node, to recognize later
+                        q.push(-index - 1, dist);
                     }
-                }
-
-                p.parentId = id;
-                clusters.push(createCluster(wx / numPoints, wy / numPoints, id, numPoints, clusterProperties));
-
-            } else { // left points as unclustered
-                clusters.push(p);
-
-                if (numPoints > 1) {
-                    for (const neighborId of neighborIds) {
-                        const b = tree.points[neighborId];
-                        if (b.zoom <= zoom) continue;
-                        b.zoom = zoom;
-                        clusters.push(b);
-                    }
+                } else {
+                    q.push(index, dist);
                 }
             }
+
+            // pop items from the queue
+            while (q.length && q.peek() < 0) {
+                const dist = q.peekValue();
+                if (dist > maxDistSquared) {
+                    q.clear();
+                    return results;
+                }
+                results.push(-q.pop() - 1);
+
+                if (results.length === maxResults) {
+                    q.clear();
+                    return results;
+                }
+            }
+
+            nodeIndex = q.pop();
         }
 
-        return clusters;
+        q.clear();
+        return results;
     }
+}
 
-    // get index of the point from which the cluster originated
-    _getOriginId(clusterId) {
-        return (clusterId - this.points.length) >> 5;
-    }
+function axisDist(k, min, max) {
+    return k < min ? min - k : k <= max ? 0 : k - max;
+}
 
-    // get zoom of the point from which the cluster originated
-    _getOriginZoom(clusterId) {
-        return (clusterId - this.points.length) % 32;
-    }
-
-    _map(point, clone) {
-        if (point.numPoints) {
-            return clone ? extend({}, point.properties) : point.properties;
+// binary search for the first value in the array bigger than the given
+function upperBound(value, arr) {
+    let i = 0;
+    let j = arr.length - 1;
+    while (i < j) {
+        const m = (i + j) >> 1;
+        if (arr[m] > value) {
+            j = m;
+        } else {
+            i = m + 1;
         }
-        const original = this.points[point.index].properties;
-        const result = this.options.map(original);
-        return clone && result === original ? extend({}, result) : result;
     }
+    return arr[i];
 }
 
-function createCluster(x, y, id, numPoints, properties) {
-    return {
-        x: fround(x), // weighted cluster center; round for consistency with Float32Array index
-        y: fround(y),
-        zoom: Infinity, // the last zoom the cluster was processed at
-        id, // encodes index of the first child of the cluster and its zoom level
-        parentId: -1, // parent cluster id
-        numPoints,
-        properties
-    };
+// custom quicksort that partially sorts bbox data alongside the hilbert values
+function sort(values, boxes, indices, left, right, nodeSize) {
+    if (Math.floor(left / nodeSize) >= Math.floor(right / nodeSize)) return;
+
+    const pivot = values[(left + right) >> 1];
+    let i = left - 1;
+    let j = right + 1;
+
+    while (true) {
+        do i++; while (values[i] < pivot);
+        do j--; while (values[j] > pivot);
+        if (i >= j) break;
+        swap(values, boxes, indices, i, j);
+    }
+
+    sort(values, boxes, indices, left, j, nodeSize);
+    sort(values, boxes, indices, j + 1, right, nodeSize);
 }
 
-function createPointCluster(p, id) {
-    const [x, y] = p.geometry.coordinates;
-    return {
-        x: fround(lngX(x)), // projected point coordinates
-        y: fround(latY(y)),
-        zoom: Infinity, // the last zoom the point was processed at
-        index: id, // index of the source feature in the original input array,
-        parentId: -1 // parent cluster id
-    };
+// swap two values and two corresponding boxes
+function swap(values, boxes, indices, i, j) {
+    const temp = values[i];
+    values[i] = values[j];
+    values[j] = temp;
+
+    const k = 4 * i;
+    const m = 4 * j;
+
+    const a = boxes[k];
+    const b = boxes[k + 1];
+    const c = boxes[k + 2];
+    const d = boxes[k + 3];
+    boxes[k] = boxes[m];
+    boxes[k + 1] = boxes[m + 1];
+    boxes[k + 2] = boxes[m + 2];
+    boxes[k + 3] = boxes[m + 3];
+    boxes[m] = a;
+    boxes[m + 1] = b;
+    boxes[m + 2] = c;
+    boxes[m + 3] = d;
+
+    const e = indices[i];
+    indices[i] = indices[j];
+    indices[j] = e;
 }
 
-function getClusterJSON(cluster) {
-    return {
-        type: 'Feature',
-        id: cluster.id,
-        properties: getClusterProperties(cluster),
-        geometry: {
-            type: 'Point',
-            coordinates: [xLng(cluster.x), yLat(cluster.y)]
-        }
-    };
-}
+// Fast Hilbert curve algorithm by http://threadlocalmutex.com/
+// Ported from C++ https://github.com/rawrunprotected/hilbert_curves (public domain)
+function hilbert(x, y) {
+    let a = x ^ y;
+    let b = 0xFFFF ^ a;
+    let c = 0xFFFF ^ (x | y);
+    let d = x & (y ^ 0xFFFF);
 
-function getClusterProperties(cluster) {
-    const count = cluster.numPoints;
-    const abbrev =
-        count >= 10000 ? `${Math.round(count / 1000)  }k` :
-        count >= 1000 ? `${Math.round(count / 100) / 10  }k` : count;
-    return extend(extend({}, cluster.properties), {
-        cluster: true,
-        cluster_id: cluster.id,
-        point_count: count,
-        point_count_abbreviated: abbrev
-    });
-}
+    let A = a | (b >> 1);
+    let B = (a >> 1) ^ a;
+    let C = ((c >> 1) ^ (b & (d >> 1))) ^ c;
+    let D = ((a & (c >> 1)) ^ (d >> 1)) ^ d;
 
-// longitude/latitude to spherical mercator in [0..1] range
-function lngX(lng) {
-    return lng / 360 + 0.5;
-}
-function latY(lat) {
-    const sin = Math.sin(lat * Math.PI / 180);
-    const y = (0.5 - 0.25 * Math.log((1 + sin) / (1 - sin)) / Math.PI);
-    return y < 0 ? 0 : y > 1 ? 1 : y;
-}
+    a = A; b = B; c = C; d = D;
+    A = ((a & (a >> 2)) ^ (b & (b >> 2)));
+    B = ((a & (b >> 2)) ^ (b & ((a ^ b) >> 2)));
+    C ^= ((a & (c >> 2)) ^ (b & (d >> 2)));
+    D ^= ((b & (c >> 2)) ^ ((a ^ b) & (d >> 2)));
 
-// spherical mercator to longitude/latitude
-function xLng(x) {
-    return (x - 0.5) * 360;
-}
-function yLat(y) {
-    const y2 = (180 - y * 360) * Math.PI / 180;
-    return 360 * Math.atan(Math.exp(y2)) / Math.PI - 90;
-}
+    a = A; b = B; c = C; d = D;
+    A = ((a & (a >> 4)) ^ (b & (b >> 4)));
+    B = ((a & (b >> 4)) ^ (b & ((a ^ b) >> 4)));
+    C ^= ((a & (c >> 4)) ^ (b & (d >> 4)));
+    D ^= ((b & (c >> 4)) ^ ((a ^ b) & (d >> 4)));
 
-function extend(dest, src) {
-    for (const id in src) dest[id] = src[id];
-    return dest;
-}
+    a = A; b = B; c = C; d = D;
+    C ^= ((a & (c >> 8)) ^ (b & (d >> 8)));
+    D ^= ((b & (c >> 8)) ^ ((a ^ b) & (d >> 8)));
 
-function getX(p) {
-    return p.x;
-}
-function getY(p) {
-    return p.y;
+    a = C ^ (C >> 1);
+    b = D ^ (D >> 1);
+
+    let i0 = x ^ y;
+    let i1 = b | (0xFFFF ^ (i0 | a));
+
+    i0 = (i0 | (i0 << 8)) & 0x00FF00FF;
+    i0 = (i0 | (i0 << 4)) & 0x0F0F0F0F;
+    i0 = (i0 | (i0 << 2)) & 0x33333333;
+    i0 = (i0 | (i0 << 1)) & 0x55555555;
+
+    i1 = (i1 | (i1 << 8)) & 0x00FF00FF;
+    i1 = (i1 | (i1 << 4)) & 0x0F0F0F0F;
+    i1 = (i1 | (i1 << 2)) & 0x33333333;
+    i1 = (i1 | (i1 << 1)) & 0x55555555;
+
+    return ((i1 << 1) | i0) >>> 0;
 }
 
 /**
@@ -1677,6 +1529,158 @@ function checkValidity(ring) {
   );
 }
 
+class GeometryMapper {
+  constructor(schemaObject, trackObject) {
+    this.schemaObject = schemaObject;
+    this.trackObject = trackObject;
+    this.track = trackObject.track;
+
+    const viewportForSchema = getViewportForSchema(schemaObject.schema);
+    if (schemaObject.xScale.isGenomeScale) {
+      this.xDomainWidth = 2;
+    } else {
+      this.xDomainWidth = viewportForSchema[1] - viewportForSchema[0];
+    }
+
+    if (schemaObject.yScale.isGenomeScale) {
+      this.yDomainHeight = 2;
+    } else {
+      this.yDomainHeight = viewportForSchema[3] - viewportForSchema[2];
+    }
+
+    console.log(this.xDomainWidth, this.yDomainHeight);
+  }
+
+  modifyGeometry(geometry) {
+    if (
+      this.trackObject.track.x.type === "genomicRange" ||
+      this.trackObject.track.y.type === "genomicRange"
+    ) {
+      if (this.trackObject.track.mark === "arc") {
+        const standardized = transformGenomicRangeArcToStandard(
+          {
+            x: geometry.coordinates[0],
+            y: geometry.coordinates[1],
+            width: geometry.dimensions[0],
+            height: geometry.dimensions[1],
+          },
+          this.schemaObject.xScale,
+          this.schemaObject.yScale
+        );
+
+        geometry.coordinates = [standardized.x, standardized.y];
+        geometry.dimensions = [standardized.width, standardized.height];
+      } else {
+        const standardized = transformGenomicRangeToStandard(
+          {
+            x: geometry.coordinates[0],
+            y: geometry.coordinates[1],
+          },
+          this.schemaObject.xScale,
+          this.schemaObject.yScale
+        );
+        geometry.coordinates = [standardized.x, standardized.y];
+      }
+      if (!this.schemaObject.xScale.isGenomeScale && geometry.dimensions[0]) {
+        // No need to do !== undefined to handle 0 case as result would be the same either way
+        geometry.dimensions[0] *= (this.xDomainWidth * SIZE_UNITS) / 2;
+      } else if (
+        !this.schemaObject.yScale.isGenomeScale &&
+        geometry.dimensions[1]
+      ) {
+        geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+      }
+
+      return;
+    }
+    // If the x coordinate is a base pair, map it to a value between -1 and 1 for
+    // data indexing
+    console.log("before", geometry.dimensions);
+    console.log("before", [...geometry.coordinates]);
+
+    this._modifyX(geometry);
+    this._modifyY(geometry);
+
+    // As above but with y
+    if (this.schemaObject.yScale.isGenomeScale) {
+      geometry.coordinates[1] = this.schemaObject.yScale(
+        geometry.coordinates[1]
+      );
+
+      if (this.trackObject.track.y.type === "genomeRange") {
+        geometry.dimensions[1] =
+          this.schemaObject.yScale(geometry.coordinates[1]) -
+          geometry.coordinates[0];
+      }
+    }
+
+    // If the track is a rect or tick, the width and height properties are used in display
+    // so we need to calculate the width and height in data space for data retrieval
+    if (
+      this.trackObject.track.mark === "rect" ||
+      this.trackObject.track.mark === "tick" ||
+      this.trackObject.track.mark === "arc"
+    ) {
+      // Width is also a base pair, so we need to calculate the width in data space
+      if (Array.isArray(geometry.dimensions[0])) {
+        width =
+          this.schemaObject.xScale(geometry.dimensions[0]) -
+          geometry.coordinates[0];
+      } else if (geometry.dimensions[0]) {
+        // No need to do !== undefined to handle 0 case as result would be the same either way
+        geometry.dimensions[0] *= (this.xDomainWidth * SIZE_UNITS) / 2;
+      }
+      // Height is also a base pair, so we need to calculate the height in data space
+      if (Array.isArray(geometry.dimensions[1])) {
+        height =
+          this.schemaObject.yScale(geometry.dimensions[1]) -
+          geometry.coordinates[1];
+      } else if (geometry.dimensions[1]) {
+        geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+      }
+    }
+
+    // If width and height are undefined, make very small for indexer to treat as points
+    console.log("almost", geometry.dimensions);
+
+    geometry.dimensions[0] = geometry.dimensions[0] || 1e-10;
+    geometry.dimensions[1] = geometry.dimensions[1] || 1e-10;
+    console.log("after", geometry.dimensions);
+  }
+
+  _modifyX(geometry) {
+    // Need to map base pair to coordinate between -1 and 1
+    if (this.schemaObject.xScale.isGenomeScale) {
+      // If x is defined by genomic range, width is calculated here
+      if (this.trackObject.track.x.type === "genomicRange") ;
+      geometry.coordinates[0] = this.schemaObject.xScale(
+        geometry.coordinates[0]
+      );
+
+      // x is defined as a range so we need to calculate width
+      if (this.trackObject.track.x.type === "genomeRange") {
+        // When x is a genome range, coordinates[0] and [1] no longer refer to x and y respectively.
+        // They instead refer to 2-length arrays containing base pair info.
+        geometry.dimensions[0] =
+          this.schemaObject.xScale(geometry.coordinates[1]) -
+          geometry.coordinates[0];
+      }
+    }
+  }
+
+  _modifyY(geometry) {}
+
+  _mapHeightToDataSpace(geometry) {
+    geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+  }
+
+  _mapWidthToDataSpace(geometry) {
+    geometry.dimensions[0] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+  }
+
+  _remapGenomicRangeGeometry(geometry) {}
+}
+
 class DataProcessor {
   /**
    * A class meant to handle processing of data used in the scatterplot.
@@ -1687,7 +1691,7 @@ class DataProcessor {
    * @param {Array} data the processor is meant to handle and index
    */
   constructor(schema) {
-    this.schema = this.index = new Supercluster();
+    this.schema = schema;
 
     console.log("Loading data...");
 
@@ -1700,50 +1704,41 @@ class DataProcessor {
    * @param {SchemaProcessor} schemaHelper that is built in the constructor
    */
   indexData(schemaHelper) {
-    this.points = [];
-    let modifyGeometry;
-
-    // If we are using genome scales, we need to map the coordinates correctly
-    // We build mapping functions based on what needs to occur for each data
-    // point in order to avoid lots of checks in the potentially very long
-    // data loop.
-    if (schemaHelper.xScale instanceof GenomeScale) {
-      modifyGeometry = (point) => {
-        point.geometry.coordinates[0] =
-          schemaHelper.xScale.toClipSpaceFromParts(
-            point.geometry.coordinates[0][0],
-            point.geometry.coordinates[0][1]
-          );
-      };
+    let totalPoints = 0;
+    if (schemaHelper.data) {
+      // subtract 1 to not count header
+      totalPoints += schemaHelper.data.length - 1;
     }
 
-    if (schemaHelper.yScale instanceof GenomeScale) {
-      // This is a way to check if x is also a genome scale, so we don't
-      // include instanceof checks in the data loop
-      if (modifyGeometry) ; else {
-        modifyGeometry = (point) => {
-          point.geometry.coordinates[1] =
-            schemaHelper.yScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            );
-        };
-      }
-    }
+    schemaHelper.tracks
+      .filter((track) => track.hasOwnData)
+      .forEach((track) => (totalPoints += track.data.length - 1));
 
+    this.index = new Flatbush(totalPoints);
+    this.data = [];
     console.log("Reading data...");
 
     // Process the global data in the schema processor
     if (schemaHelper.data) {
       for (let track of schemaHelper.tracks) {
         if (!track.hasOwnData) {
+          const geometryMapper = new GeometryMapper(schemaHelper, track);
+
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
-            if (modifyGeometry) {
-              // only call if we need to
-              modifyGeometry(currentPoint);
-            }
-            this.points.push(currentPoint);
+            geometryMapper.modifyGeometry(currentPoint.geometry);
+
+            this.data[
+              this.index.add(
+                currentPoint.geometry.coordinates[0],
+                currentPoint.geometry.coordinates[1],
+                currentPoint.geometry.coordinates[0] +
+                  currentPoint.geometry.dimensions[0],
+                currentPoint.geometry.coordinates[1] +
+                  currentPoint.geometry.dimensions[1]
+              )
+            ] = currentPoint;
+
             currentPoint = track.getNextDataPoint();
           }
           break;
@@ -1755,18 +1750,29 @@ class DataProcessor {
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
       .forEach((track) => {
+        const geometryMapper = new GeometryMapper(schemaHelper, track);
+
         let currentPoint = track.getNextDataPoint();
         while (currentPoint) {
-          if (modifyGeometry) {
-            modifyGeometry(currentPoint);
-          }
-          this.points.push(currentPoint);
+          geometryMapper.modifyGeometry(currentPoint.geometry);
+
+          this.data[
+            this.index.add(
+              currentPoint.geometry.coordinates[0],
+              currentPoint.geometry.coordinates[1],
+              currentPoint.geometry.coordinates[0] +
+                currentPoint.geometry.dimensions[0],
+              currentPoint.geometry.coordinates[1] +
+                currentPoint.geometry.dimensions[1]
+            )
+          ] = currentPoint;
+
           currentPoint = track.getNextDataPoint();
         }
       });
 
     console.log("Indexing data...");
-    this.index.load(this.points);
+    this.index.finish();
 
     console.log("Data processing complete.");
   }
@@ -1807,13 +1813,15 @@ class DataProcessor {
    * @param {Integer} zoom to pass to supercluster
    * @returns points in bounding box
    */
-  selectBox(points, zoom = 16) {
+  selectBox(points) {
     const smallerX = Math.min(points[0], points[2]);
     const smallerY = Math.min(points[1], points[3]);
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    return this.index.getClusters([smallerX, smallerY, largerX, largerY], zoom);
+    return this.index
+      .search(smallerX, smallerY, largerX, largerY)
+      .map((i) => this.data[i]);
   }
 
   /**
@@ -1841,10 +1849,12 @@ class DataProcessor {
 
     polygonPoints.push([...polygonPoints[0]]); // First and last must be same position
 
-    const candidatePoints = this.index.getClusters(
-      [smallestX, smallestY, largestX, largestY],
-      zoom
-    );
+    const candidatePoints = this.selectBox([
+      smallestX,
+      smallestY,
+      largestX,
+      largestY,
+    ]);
 
     const boundingPolygon = polygon([polygonPoints]);
 

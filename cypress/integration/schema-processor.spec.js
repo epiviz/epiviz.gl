@@ -139,10 +139,14 @@ describe("Iteration", () => {
   beforeEach(() => {
     let callbackCalled = false;
 
-    schemaHelper = new SchemaProcessor(schema1, () => {
-      callbackCalled = true;
-    });
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      // Deep copy of schema since data.pop in the processor will modify the original object
+      JSON.parse(JSON.stringify(schema1)),
+      () => {
+        callbackCalled = true;
+      }
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
   });
 
   it("can stop iteration of tracks", () => {
@@ -182,8 +186,12 @@ describe("Mapping the channels with attributes correctly (schema 1)", () => {
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(schema1, () => (callbackCalled = true));
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      // Deep copy of schema since data.pop in the processor will modify the original object
+      JSON.parse(JSON.stringify(schema1)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
     track = schemaHelper.getNextTrack();
     marks = [];
@@ -201,46 +209,52 @@ describe("Mapping the channels with attributes correctly (schema 1)", () => {
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema1.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      schema1.defaultData.day.reverse()
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema1.defaultData.price
+      schema1.defaultData.price.reverse()
     );
   });
 
   it("can map the color scheme categorically correctly", () => {
-    expect(marks.map((mark) => mark.color)).to.deep.equal([
-      rgbToHex(255, 255, 255), // white
-      rgbToHex(0, 0, 0), // black
-      rgbToHex(0, 0, 0),
-      rgbToHex(255, 255, 255),
-      rgbToHex(0, 0, 0),
-      rgbToHex(0, 0, 0),
-      rgbToHex(255, 255, 255),
-    ]);
+    expect(marks.map((mark) => mark.color)).to.deep.equal(
+      [
+        rgbToHex(255, 255, 255), // white
+        rgbToHex(0, 0, 0), // black
+        rgbToHex(0, 0, 0),
+        rgbToHex(255, 255, 255),
+        rgbToHex(0, 0, 0),
+        rgbToHex(0, 0, 0),
+        rgbToHex(255, 255, 255),
+      ].reverse()
+    );
   });
 
   it("can map a dimension categorically correctly (width with 2 categories and min and max options", () => {
-    expect(marks.map((mark) => mark.width)).to.deep.equal([
-      1,
-      2, // black
-      2,
-      1,
-      2,
-      2,
-      1,
-    ]);
+    expect(marks.map((mark) => mark.width)).to.deep.equal(
+      [
+        1,
+        2, // black
+        2,
+        1,
+        2,
+        2,
+        1,
+      ].reverse()
+    );
   });
 
   it("can map a dimension quantitatively correctly (height with and min and max options", () => {
     expect(marks.map((mark) => mark.height)).to.deep.equal(
-      schema1.defaultData.day
+      schema1.defaultData.day.reverse()
     );
   });
 
   it("can map the opacity quantitatively correctly (with min opacity options)", () => {
     let opacityScale = scale([0, 30], [0.2, 1]);
     expect(marks.map((mark) => mark.opacity)).to.deep.equal(
-      schema1.defaultData.price.map((datum) => opacityScale(datum))
+      schema1.defaultData.price.map((datum) => opacityScale(datum)).reverse()
     );
   });
 });
@@ -256,8 +270,11 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(schema2, () => (callbackCalled = true));
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      JSON.parse(JSON.stringify(schema2)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
     track = schemaHelper.getNextTrack();
     marks = [];
@@ -275,23 +292,25 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema2.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      // Reverse the expected values as the schema processor iterates through the data starting from the end
+      schema2.defaultData.day.reverse()
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema2.defaultData.price
+      schema2.defaultData.price.reverse()
     );
   });
 
   it("can map the color scheme quantitatively correctly", () => {
     const zeroToOneScale = scale([1, 7], [0, 1]);
     expect(marks.map((mark) => mark.color)).to.deep.equal(
-      schema2.defaultData.day.map((datum) =>
-        rgbStringToHex(interpolateGreys(zeroToOneScale(datum)))
-      )
+      schema2.defaultData.day
+        .map((datum) => rgbStringToHex(interpolateGreys(zeroToOneScale(datum))))
+        .reverse()
     );
   });
 
   it("can map the opacity categorically correctly (with min opacity options)", () => {
-    console.log(marks.map((mark) => mark.opacity));
     const actual = marks.map((mark) => mark.opacity);
     const expected = [0.2, 1.0, 1.0, 0.2, 1.0, 1.0, 0.2];
 
@@ -301,20 +320,22 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
   });
 
   it("can map the shape categorically correctly", () => {
-    expect(marks.map((mark) => mark.shape)).to.deep.equal([
-      "dot",
-      "triangle",
-      "triangle",
-      "dot",
-      "triangle",
-      "triangle",
-      "dot",
-    ]);
+    expect(marks.map((mark) => mark.shape)).to.deep.equal(
+      [
+        "dot",
+        "triangle",
+        "triangle",
+        "dot",
+        "triangle",
+        "triangle",
+        "dot",
+      ].reverse()
+    );
   });
 
   it("can map the size quantitatively correctly (with min and max options)", () => {
     expect(marks.map((mark) => mark.size)).to.deep.equal(
-      schema2.defaultData.day
+      schema2.defaultData.day.reverse()
     );
   });
 });
@@ -330,8 +351,11 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(schema3, () => (callbackCalled = true));
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      JSON.parse(JSON.stringify(schema3)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
     track = schemaHelper.getNextTrack();
     marks = [];
@@ -355,9 +379,11 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
   };
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema3.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      schema3.defaultData.day.reverse()
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema3.defaultData.price
+      schema3.defaultData.price.reverse()
     );
   });
 

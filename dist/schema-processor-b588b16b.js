@@ -1,4 +1,4 @@
-import { R as Rgb, r as rgbConvert, d as define, e as extend, C as Color, f as brighter, h as darker, G as GenomeScale, i as getQuadraticBezierCurveForPoints, j as rgb, a as getScaleForSchema, c as colorSpecifierToHex, s as scale, k as rgbStringToHex } from './utilities-52abb45c.js';
+import { R as Rgb, r as rgbConvert, d as define, e as extend, C as Color, f as brighter, h as darker, i as getQuadraticBezierCurveForPoints, j as rgb, a as getScaleForSchema, c as colorSpecifierToHex, s as scale, k as rgbStringToHex } from './utilities-b398dcce.js';
 
 const radians = Math.PI / 180;
 const degrees = 180 / Math.PI;
@@ -105,6 +105,81 @@ const getCurveForArc = (P0, P2) => {
   );
 };
 
+/**
+ * Transform a mark with a range for coordinates into a simpler mark to draw.
+ *
+ * @param {Object} mark that contains ranges for x or y
+ * @returns mark with fixed x and y but with appropriate width and height for drawing
+ */
+const transformGenomicRangeToStandard = (mark, xScale, yScale) => {
+  let x, y, width, height;
+  if (Array.isArray(mark.x)) {
+    let x1 = xScale(mark.x[0]);
+    x = mark.x[0];
+    width = (xScale(mark.x[1]) - x1) / SIZE_UNITS;
+  } else {
+    x = mark.x;
+    width = mark.width;
+  }
+
+  if (Array.isArray(mark.y)) {
+    let y1 = yScale(mark.y[0]);
+    y = mark.y[0];
+    height = (yScale(mark.y[1]) - y1) / SIZE_UNITS;
+  } else {
+    y = mark.y;
+    height = mark.height;
+  }
+  return {
+    x,
+    y,
+    width,
+    height,
+  };
+};
+
+/**
+ * Transform a mark with a range for coordinates and a range for width or height into a simpler mark to draw.
+ *
+ * @param {Object} mark that contains ranges for x and y, and potentially ranges for width and height
+ * @returns mark with fixed x, y, width, and height for drawing
+ */
+const transformGenomicRangeArcToStandard = (mark, xScale, yScale) => {
+  let x, y, width, height;
+  if (Array.isArray(mark.x)) {
+    x = xScale.getMidpoint(...mark.x);
+    let x2 = xScale.getMidpoint(...mark.width);
+    let x1ClipSpace = xScale(x);
+    let x2ClipSpace = xScale(x2);
+
+    x = x1ClipSpace < x2ClipSpace ? x : x2;
+    width = Math.abs(xScale(x2) - x1ClipSpace) / SIZE_UNITS;
+  } else {
+    x = mark.x;
+    width = mark.width;
+  }
+
+  if (Array.isArray(mark.y)) {
+    y = yScale.getMidpoint(...mark.y);
+    let y2 = yScale.getMidpoint(...mark.height);
+
+    let y1ClipSpace = xScale(y);
+    let y2ClipSpace = xScale(y2);
+
+    y = y1ClipSpace < y2ClipSpace ? y : y2;
+    height = Math.abs(yScale(y2) - y1ClipSpace) / SIZE_UNITS;
+  } else {
+    y = mark.y;
+    height = mark.height;
+  }
+  return {
+    x,
+    y,
+    width,
+    height,
+  };
+};
+
 class VertexCalculator {
   /**
    * A class used to construct the vertices of marks that are given to the drawer to draw.
@@ -114,94 +189,11 @@ class VertexCalculator {
    * @param {Object} track from schema
    */
   constructor(xScale, yScale, track) {
-    if (xScale instanceof GenomeScale) {
-      this.xScale = xScale.toCallable();
-    } else {
-      this.xScale = xScale;
-    }
-
-    if (yScale instanceof GenomeScale) {
-      this.yScale = yScale.toCallable();
-    } else {
-      this.yScale = yScale;
-    }
+    this.xScale = xScale;
+    this.yScale = yScale;
 
     this.track = track;
     this.drawMode = getDrawModeForTrack(track);
-  }
-
-  /**
-   * Transform a mark with a range for coordinates into a simpler mark to draw.
-   *
-   * @param {Object} mark that contains ranges for x or y
-   * @returns mark with fixed x and y but with appropriate width and height for drawing
-   */
-  transformGenomicRangeToStandard(mark) {
-    let x, y, width, height;
-    if (Array.isArray(mark.x)) {
-      let x1 = this.xScale([mark.x[0], mark.x[1]]);
-      x = [mark.x[0], mark.x[1]];
-      width = (this.xScale([mark.x[2], mark.x[3]]) - x1) / SIZE_UNITS;
-    } else {
-      x = mark.x;
-      width = mark.width;
-    }
-
-    if (Array.isArray(mark.y)) {
-      y = this.yScale([mark.y[0], mark.y[1]]);
-      height = (this.yScale([mark.y[2], mark.y[3]]) - y) / SIZE_UNITS;
-    } else {
-      y = mark.y;
-      height = mark.height;
-    }
-    return {
-      x,
-      y,
-      width,
-      height,
-    };
-  }
-
-  /**
-   * Transform a mark with a range for coordinates and a range for width or height into a simpler mark to draw.
-   *
-   * @param {Object} mark that contains ranges for x and y, and potentially ranges for width and height
-   * @returns mark with fixed x, y, width, and height for drawing
-   */
-  transformGenomicRangeArcToStandard(mark) {
-    let x, y, width, height;
-    if (Array.isArray(mark.x)) {
-      x = this.xScale.getMidpoint(...mark.x);
-      let x2 = this.xScale.getMidpoint(...mark.width);
-      let x1ClipSpace = this.xScale(x);
-      let x2ClipSpace = this.xScale(x2);
-
-      x = x1ClipSpace < x2ClipSpace ? x : x2;
-      width = Math.abs(this.xScale(x2) - x1ClipSpace) / SIZE_UNITS;
-    } else {
-      x = mark.x;
-      width = mark.width;
-    }
-
-    if (Array.isArray(mark.y)) {
-      y = this.yScale.getMidpoint(...mark.y);
-      let y2 = this.yScale.getMidpoint(...mark.height);
-
-      let y1ClipSpace = this.xScale(y);
-      let y2ClipSpace = this.xScale(y2);
-
-      y = y1ClipSpace < y2ClipSpace ? y : y2;
-      height = Math.abs(this.yScale(y2) - y1ClipSpace) / SIZE_UNITS;
-    } else {
-      y = mark.y;
-      height = mark.height;
-    }
-    return {
-      x,
-      y,
-      width,
-      height,
-    };
   }
 
   /**
@@ -217,10 +209,12 @@ class VertexCalculator {
     ) {
       if (this.track.mark === "arc") {
         return this._calculateForMark(
-          this.transformGenomicRangeArcToStandard(mark)
+          transformGenomicRangeArcToStandard(mark, this.xScale, this.yScale)
         );
       }
-      return this._calculateForMark(this.transformGenomicRangeToStandard(mark));
+      return this._calculateForMark(
+        transformGenomicRangeToStandard(mark, this.xScale, this.yScale)
+      );
     }
     return this._calculateForMark(mark);
   }
@@ -1068,13 +1062,15 @@ const DEFAULT_CHANNELS = Object.freeze({
     type: null, // Will not interact with shader code
   },
   width: {
-    value: 1,
+    // Default values for width and height add complications
+    // to mapping geometry and creating tick vertices
+    value: undefined,
     numComponents: 1,
     type: "float",
   },
 
   height: {
-    value: 1,
+    value: undefined,
     numComponents: 1,
     type: "float",
   },
@@ -1179,7 +1175,6 @@ class Track {
    */
   constructor(schema, track) {
     this.track = track;
-    this.index = 1; // Start at 1 to skip headers
 
     if (typeof track.data === "string") {
       // Track has its own data to GET
@@ -1223,10 +1218,9 @@ class Track {
     if (this.isInlineData) {
       this.headers = Object.keys(this.data);
       this.dataLength = this.data[this.headers[0]].length;
-      this.index = 0;
     } else {
       this.headers = this.data[0].split(",");
-      this.dataLength = this.data.length;
+      this.dataLength = this.data.length - 1; // -1 to not count header
     }
 
     // Creating channel mappers
@@ -1241,28 +1235,33 @@ class Track {
    * @returns A data point with the x and y coordinates and other attributes from the header
    */
   getNextDataPoint() {
-    if (this.index >= this.dataLength) {
+    if (this.dataLength <= 0) {
       // TODO potentially erase this.data for garbage collection
       return null;
     }
 
-    const toReturn = { geometry: { coordinates: [] } };
+    const toReturn = { geometry: { coordinates: [], dimensions: [] } };
     let splitted;
     if (this.isInlineData) {
-      splitted = this.headers.map((header) => this.data[header][this.index]);
-      this.index++;
+      splitted = this.headers.map((header) => this.data[header].pop());
+      this.dataLength--;
     } else {
-      const currRow = this.data[this.index++];
+      const currRow = this.data.pop();
       splitted = currRow.split(",");
+      this.dataLength--;
     }
 
     this.headers.forEach((header, index) => {
       toReturn[header] = splitted[index];
     });
 
+    const rawHeight = this.channelMaps.get("height")(splitted);
+    const rawWidth = this.channelMaps.get("width")(splitted);
+    console.log(rawWidth);
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
     toReturn.geometry.coordinates.push(x, y);
+    toReturn.geometry.dimensions.push(rawWidth, rawHeight);
     return toReturn;
   }
 
@@ -1272,17 +1271,18 @@ class Track {
    * @returns An object containing information used to draw a mark for a row of data.
    */
   getNextMark() {
-    if (this.index >= this.dataLength) {
+    if (this.dataLength <= 0) {
       return null;
     }
     const toReturn = {};
     let splitted;
     if (this.isInlineData) {
-      splitted = this.headers.map((header) => this.data[header][this.index]);
-      this.index++;
+      splitted = this.headers.map((header) => this.data[header].pop());
+      this.dataLength--;
     } else {
-      const currRow = this.data[this.index++];
+      const currRow = this.data.pop();
       splitted = currRow.split(",");
+      this.dataLength--;
     }
 
     this.channelMaps.forEach((mapper, channel) => {
@@ -1517,7 +1517,10 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
     case "y":
       return (chr, genomeStart, genomeEnd) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return [chrId, parseInt(genomeStart), chrId, parseInt(genomeEnd)];
+        return [
+          [chrId, parseInt(genomeStart)],
+          [chrId, parseInt(genomeEnd)],
+        ];
       };
 
     default:
@@ -1527,4 +1530,4 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   }
 };
 
-export { DEFAULT_CHANNELS as D, SchemaProcessor as S, VertexCalculator as V, getDrawModeForTrack as g };
+export { DEFAULT_CHANNELS as D, SchemaProcessor as S, VertexCalculator as V, SIZE_UNITS as a, getDrawModeForTrack as g, transformGenomicRangeToStandard as t };

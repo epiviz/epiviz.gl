@@ -1,5 +1,5 @@
-import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, S as SchemaProcessor, V as VertexCalculator } from './schema-processor-66236800.js';
-import { G as GenomeScale, c as colorSpecifierToHex, s as scale } from './utilities-52abb45c.js';
+import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, S as SchemaProcessor, V as VertexCalculator } from './schema-processor-b588b16b.js';
+import { c as colorSpecifierToHex, s as scale } from './utilities-b398dcce.js';
 
 class Drawer {
   /**
@@ -72,13 +72,13 @@ class SemanticZoomer {
     }
 
     if (
-      !(this.schemaHelper.xScale instanceof GenomeScale) &&
-      !(this.schemaHelper.yScale instanceof GenomeScale)
+      !this.schemaHelper.xScale.isGenomeScale &&
+      !this.schemaHelper.yScale.isGenomeScale
     ) {
       // Currently only used for genome tracks
       return "TRIANGLES";
     }
-    if (this.schemaHelper.xScale instanceof GenomeScale) {
+    if (this.schemaHelper.xScale.isGenomeScale) {
       const numberOfGenes =
         this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(
           currentXRange[1]
@@ -90,7 +90,7 @@ class SemanticZoomer {
         return "TRIANGLES";
       }
     }
-    if (this.schemaHelper.yScale instanceof GenomeScale) {
+    if (this.schemaHelper.yScale.isGenomeScale) {
       const numberOfGenes =
         this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(
           currentYRange[1]
