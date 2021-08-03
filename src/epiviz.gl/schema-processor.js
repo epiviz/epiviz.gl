@@ -215,7 +215,6 @@ class Track {
    */
   getNextDataPoint() {
     if (this.dataLength <= 0) {
-      // TODO potentially erase this.data for garbage collection
       return null;
     }
 
@@ -236,7 +235,6 @@ class Track {
 
     const rawHeight = this.channelMaps.get("height")(splitted);
     const rawWidth = this.channelMaps.get("width")(splitted);
-    console.log(rawWidth);
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
     toReturn.geometry.coordinates.push(x, y);

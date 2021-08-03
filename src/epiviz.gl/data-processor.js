@@ -10,9 +10,6 @@ class DataProcessor {
   /**
    * A class meant to handle processing of data used in the scatterplot.
    *
-   * ** Can currently only handle data in a [-180,180] x [-90, 90] range due
-   * to use of {@link Supercluster}. May need to switch to KDBush at some point.
-   *
    * @param {Array} data the processor is meant to handle and index
    */
   constructor(schema) {
@@ -30,14 +27,16 @@ class DataProcessor {
    */
   indexData(schemaHelper) {
     let totalPoints = 0;
-    if (schemaHelper.data) {
-      // subtract 1 to not count header
-      totalPoints += schemaHelper.data.length - 1;
-    }
 
+    for (const track of schemaHelper.tracks) {
+      if (!track.hasOwnData) {
+        totalPoints += track.dataLength;
+        break;
+      }
+    }
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
-      .forEach((track) => (totalPoints += track.data.length - 1));
+      .forEach((track) => (totalPoints += track.dataLength));
 
     this.index = new Flatbush(totalPoints);
     this.data = [];
@@ -107,35 +106,16 @@ class DataProcessor {
    * sufficiently close.
    *
    * @param {Array} point of two floats to find closest point to
-   * @param {Integer} zoom to pass to supercluster
    * @returns closest point or undefined
    */
-  getClosestPoint(point, zoom = 16) {
-    const candidatePoints = this.index.getClusters(
-      [point[0] - 0.01, point[1] - 0.01, point[0] + 0.01, point[1] + 0.01],
-      zoom
-    );
-
-    let closestPoint;
-    let distanceToClosestPoint;
-    for (const candidate of candidatePoints) {
-      const dist =
-        (candidate.geometry.coordinates[0] - point[0]) ** 2 +
-        (candidate.geometry.coordinates[1] - point[1]) ** 2;
-      if (!closestPoint || dist < distanceToClosestPoint) {
-        closestPoint = candidate;
-        distanceToClosestPoint = dist;
-      }
-    }
-
-    return closestPoint;
+  getClosestPoint(point) {
+    return this.data[this.index.neighbors(point[0], point[1], 1)];
   }
 
   /**
    * Get points within a bounding box.
    *
    * @param {Array} points Bounding rectangle in the format of [x1, y1, x2, y2]
-   * @param {Integer} zoom to pass to supercluster
    * @returns points in bounding box
    */
   selectBox(points) {
@@ -155,10 +135,9 @@ class DataProcessor {
    * to determine what points are in polygon.
    *
    * @param {Array} points of a polygon to select points format: [x1,y1,x2,y2,x3,y3,...]
-   * @param {Integer} zoom to pass to supercluster
    * @returns points inside lasso
    */
-  selectLasso(points, zoom = 16) {
+  selectLasso(points) {
     let smallestX = Number.POSITIVE_INFINITY;
     let largestX = Number.NEGATIVE_INFINITY;
     let smallestY = Number.POSITIVE_INFINITY;

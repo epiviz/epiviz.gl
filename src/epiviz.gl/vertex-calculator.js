@@ -87,8 +87,18 @@ const transformGenomicRangeToStandard = (mark, xScale, yScale) => {
 const transformGenomicRangeArcToStandard = (mark, xScale, yScale) => {
   let x, y, width, height;
   if (Array.isArray(mark.x)) {
-    x = xScale.getMidpoint(...mark.x);
-    let x2 = xScale.getMidpoint(...mark.width);
+    x = xScale.getMidpoint(
+      mark.x[0][0],
+      mark.x[0][1],
+      mark.x[1][0],
+      mark.x[1][1]
+    );
+    let x2 = xScale.getMidpoint(
+      mark.width[0][0],
+      mark.width[0][1],
+      mark.width[1][0],
+      mark.width[1][1]
+    );
     let x1ClipSpace = xScale(x);
     let x2ClipSpace = xScale(x2);
 
@@ -100,8 +110,18 @@ const transformGenomicRangeArcToStandard = (mark, xScale, yScale) => {
   }
 
   if (Array.isArray(mark.y)) {
-    y = yScale.getMidpoint(...mark.y);
-    let y2 = yScale.getMidpoint(...mark.height);
+    y = yScale.getMidpoint(
+      mark.y[0][0],
+      mark.y[0][1],
+      mark.y[1][0],
+      mark.y[1][1]
+    );
+    let y2 = yScale.getMidpoint(
+      mark.height[0][0],
+      mark.height[0][1],
+      mark.height[1][0],
+      mark.height[1][1]
+    );
 
     let y1ClipSpace = xScale(y);
     let y2ClipSpace = xScale(y2);
@@ -234,6 +254,7 @@ class VertexCalculator {
       );
     }
 
+    console.log(vertices);
     return vertices;
   }
 
@@ -342,9 +363,9 @@ class VertexCalculator {
     // 1----2
     if (this.track.width) {
       return [
-        center[0] + (mark.width / 2) * SIZE_UNITS,
+        center[0],
         center[1],
-        center[0] - (mark.width / 2) * SIZE_UNITS,
+        center[0] + mark.width * SIZE_UNITS,
         center[1],
       ];
     }
@@ -356,9 +377,9 @@ class VertexCalculator {
       // default to mark value which has default if height never specified in track
       return [
         center[0],
-        center[1] + (mark.height / 2) * SIZE_UNITS,
+        center[1],
         center[0],
-        center[1] - (mark.height / 2) * SIZE_UNITS,
+        center[1] + mark.height * SIZE_UNITS,
       ];
     }
   }
