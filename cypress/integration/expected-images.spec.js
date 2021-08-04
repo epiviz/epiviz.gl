@@ -7,6 +7,7 @@ import {
 describe("The canvas should match test images", function () {
   before(() => {
     cy.visit("http://localhost:1234");
+    cy.wait(200);
   });
 
   const renderAndCheck = (presetName, wait = 1000) => {

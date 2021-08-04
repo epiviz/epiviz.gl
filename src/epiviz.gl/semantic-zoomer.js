@@ -1,5 +1,3 @@
-import { GenomeScale } from "./genome-sizes";
-
 const sizeOfGeneRangeForTriangles = 1000000;
 
 class SemanticZoomer {
@@ -19,13 +17,13 @@ class SemanticZoomer {
     }
 
     if (
-      !(this.schemaHelper.xScale instanceof GenomeScale) &&
-      !(this.schemaHelper.yScale instanceof GenomeScale)
+      !this.schemaHelper.xScale.isGenomeScale &&
+      !this.schemaHelper.yScale.isGenomeScale
     ) {
       // Currently only used for genome tracks
       return "TRIANGLES";
     }
-    if (this.schemaHelper.xScale instanceof GenomeScale) {
+    if (this.schemaHelper.xScale.isGenomeScale) {
       const numberOfGenes =
         this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(
           currentXRange[1]
@@ -37,7 +35,7 @@ class SemanticZoomer {
         return "TRIANGLES";
       }
     }
-    if (this.schemaHelper.yScale instanceof GenomeScale) {
+    if (this.schemaHelper.yScale.isGenomeScale) {
       const numberOfGenes =
         this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(
           currentYRange[1]

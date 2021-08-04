@@ -41,13 +41,15 @@ const DEFAULT_CHANNELS = Object.freeze({
     type: null, // Will not interact with shader code
   },
   width: {
-    value: 1,
+    // Default values for width and height add complications
+    // to mapping geometry and creating tick vertices
+    value: undefined,
     numComponents: 1,
     type: "float",
   },
 
   height: {
-    value: 1,
+    value: undefined,
     numComponents: 1,
     type: "float",
   },
@@ -152,7 +154,6 @@ class Track {
    */
   constructor(schema, track) {
     this.track = track;
-    this.index = 1; // Start at 1 to skip headers
 
     if (typeof track.data === "string") {
       // Track has its own data to GET
@@ -195,11 +196,11 @@ class Track {
     // Processing headers
     if (this.isInlineData) {
       this.headers = Object.keys(this.data);
-      this.dataLength = this.data[this.headers[0]].length;
+      this.data.length = this.data[this.headers[0]].length; // assign length to data object for iteration
       this.index = 0;
     } else {
       this.headers = this.data[0].split(",");
-      this.dataLength = this.data.length;
+      this.index = 1; // 1 to skip header
     }
 
     // Creating channel mappers
@@ -214,28 +215,31 @@ class Track {
    * @returns A data point with the x and y coordinates and other attributes from the header
    */
   getNextDataPoint() {
-    if (this.index >= this.dataLength) {
-      // TODO potentially erase this.data for garbage collection
+    if (this.index >= this.data.length) {
       return null;
     }
 
-    const toReturn = { geometry: { coordinates: [] } };
+    const toReturn = { geometry: { coordinates: [], dimensions: [] } };
     let splitted;
     if (this.isInlineData) {
       splitted = this.headers.map((header) => this.data[header][this.index]);
-      this.index++;
     } else {
-      const currRow = this.data[this.index++];
+      const currRow = this.data[this.index];
       splitted = currRow.split(",");
     }
+
+    this.index++;
 
     this.headers.forEach((header, index) => {
       toReturn[header] = splitted[index];
     });
 
+    const rawHeight = this.channelMaps.get("height")(splitted);
+    const rawWidth = this.channelMaps.get("width")(splitted);
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
     toReturn.geometry.coordinates.push(x, y);
+    toReturn.geometry.dimensions.push(rawWidth, rawHeight);
     return toReturn;
   }
 
@@ -245,18 +249,22 @@ class Track {
    * @returns An object containing information used to draw a mark for a row of data.
    */
   getNextMark() {
-    if (this.index >= this.dataLength) {
+    // Getting the next mark cannot modify the data objects as other tracks may refer to
+    // the same data
+    if (this.index >= this.data.length) {
       return null;
     }
+
     const toReturn = {};
     let splitted;
     if (this.isInlineData) {
       splitted = this.headers.map((header) => this.data[header][this.index]);
-      this.index++;
     } else {
-      const currRow = this.data[this.index++];
+      const currRow = this.data[this.index];
       splitted = currRow.split(",");
     }
+
+    this.index++;
 
     this.channelMaps.forEach((mapper, channel) => {
       toReturn[channel] = mapper(splitted);
@@ -492,7 +500,10 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
     case "y":
       return (chr, genomeStart, genomeEnd) => {
         let chrId = chr.startsWith("chr") ? chr.substring(3) : chr.toString();
-        return [chrId, parseInt(genomeStart), chrId, parseInt(genomeEnd)];
+        return [
+          [chrId, parseInt(genomeStart)],
+          [chrId, parseInt(genomeEnd)],
+        ];
       };
 
     default:
