@@ -254,7 +254,6 @@ class VertexCalculator {
       );
     }
 
-    console.log(vertices);
     return vertices;
   }
 

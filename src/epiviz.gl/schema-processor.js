@@ -196,10 +196,11 @@ class Track {
     // Processing headers
     if (this.isInlineData) {
       this.headers = Object.keys(this.data);
-      this.dataLength = this.data[this.headers[0]].length;
+      this.data.length = this.data[this.headers[0]].length; // assign length to data object for iteration
+      this.index = 0;
     } else {
       this.headers = this.data[0].split(",");
-      this.dataLength = this.data.length - 1; // -1 to not count header
+      this.index = 1; // 1 to skip header
     }
 
     // Creating channel mappers
@@ -214,20 +215,20 @@ class Track {
    * @returns A data point with the x and y coordinates and other attributes from the header
    */
   getNextDataPoint() {
-    if (this.dataLength <= 0) {
+    if (this.index >= this.data.length) {
       return null;
     }
 
     const toReturn = { geometry: { coordinates: [], dimensions: [] } };
     let splitted;
     if (this.isInlineData) {
-      splitted = this.headers.map((header) => this.data[header].pop());
-      this.dataLength--;
+      splitted = this.headers.map((header) => this.data[header][this.index]);
     } else {
-      const currRow = this.data.pop();
+      const currRow = this.data[this.index];
       splitted = currRow.split(",");
-      this.dataLength--;
     }
+
+    this.index++;
 
     this.headers.forEach((header, index) => {
       toReturn[header] = splitted[index];
@@ -248,19 +249,22 @@ class Track {
    * @returns An object containing information used to draw a mark for a row of data.
    */
   getNextMark() {
-    if (this.dataLength <= 0) {
+    // Getting the next mark cannot modify the data objects as other tracks may refer to
+    // the same data
+    if (this.index >= this.data.length) {
       return null;
     }
+
     const toReturn = {};
     let splitted;
     if (this.isInlineData) {
-      splitted = this.headers.map((header) => this.data[header].pop());
-      this.dataLength--;
+      splitted = this.headers.map((header) => this.data[header][this.index]);
     } else {
-      const currRow = this.data.pop();
+      const currRow = this.data[this.index];
       splitted = currRow.split(",");
-      this.dataLength--;
     }
+
+    this.index++;
 
     this.channelMaps.forEach((mapper, channel) => {
       toReturn[channel] = mapper(splitted);

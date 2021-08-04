@@ -30,13 +30,19 @@ class DataProcessor {
 
     for (const track of schemaHelper.tracks) {
       if (!track.hasOwnData) {
-        totalPoints += track.dataLength;
+        // index at 1 means a header needs to be skipped
+        totalPoints +=
+          track.index === 1 ? track.data.length - 1 : track.data.length;
         break;
       }
     }
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
-      .forEach((track) => (totalPoints += track.dataLength));
+      .forEach(
+        (track) =>
+          (totalPoints +=
+            track.index === 1 ? track.data.length - 1 : track.data.length)
+      );
 
     this.index = new Flatbush(totalPoints);
     this.data = [];
