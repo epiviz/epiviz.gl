@@ -7507,7 +7507,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-d88f706d.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-cd0a3a1e.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
