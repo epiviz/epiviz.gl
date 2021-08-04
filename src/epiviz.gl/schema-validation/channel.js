@@ -7,7 +7,7 @@ export default {
   "properties": {
     "type": {
       "description": "type of attribute, genomic range only compatible with x, y, width and height",
-      "enum": ["quantitative", "categorical", "genomic", "genomicRange"]
+      "enum": ["quantitative", "categorical", "genomic", "genomicRange", "inline"]
     },
     "attribute": {
       "description": "column of data frame to use for mapping channel",

@@ -3,7 +3,12 @@ import SchemaProcessor, {
 } from "../../src/epiviz.gl/schema-processor";
 import isJSONValid from "../../src/epiviz.gl/schema-validation";
 import { interpolateGreys } from "d3-scale-chromatic";
-import { scale, rgbToHex, rgbStringToHex } from "../../src/epiviz.gl/utilities";
+import {
+  scale,
+  rgbToHex,
+  rgbStringToHex,
+  colorSpecifierToHex,
+} from "../../src/epiviz.gl/utilities";
 
 const schema1 = {
   defaultData: {
@@ -128,6 +133,46 @@ const schema3 = {
       },
       size: {
         value: 10,
+      },
+    },
+  ],
+};
+
+const schema4 = {
+  defaultData: {
+    day: [1, 2, 3, 4, 5, 6],
+    price: [10, 20, 30, 20, 10, 5],
+    color: ["red", "blue", "#FFFFFF", 255 ** 3, 255 ** 2, "rgb(1,1,1)"],
+    shape: ["circle", "circle", "diamond", "dot", "triangle", "triangle"],
+  },
+  tracks: [
+    {
+      mark: "point",
+      x: {
+        attribute: "day",
+        type: "quantitative",
+        domain: [1, 7],
+      },
+      y: {
+        attribute: "price",
+        type: "quantitative",
+        domain: [0, 40],
+      },
+      color: {
+        attribute: "color",
+        type: "inline",
+      },
+      shape: {
+        attribute: "shape",
+        type: "inline",
+      },
+      width: {
+        attribute: "day",
+        type: "inline",
+      },
+      height: {
+        attribute: "price",
+        type: "inline",
       },
     },
   ],
@@ -399,6 +444,70 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
     expectAllElementsToEqual(
       marks.map((mark) => mark.size),
       10
+    );
+  });
+});
+
+describe("Mapping the channels with inline values (schema 4)", () => {
+  let schemaHelper;
+  let track;
+  let marks;
+
+  before(() => {
+    expect(isJSONValid(schema4)).to.eq(true);
+  });
+
+  beforeEach(() => {
+    let callbackCalled = false;
+    schemaHelper = new SchemaProcessor(
+      JSON.parse(JSON.stringify(schema4)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
+
+    track = schemaHelper.getNextTrack();
+    marks = [];
+
+    let currentPoint = track.getNextMark();
+
+    while (currentPoint !== null) {
+      marks.push(currentPoint);
+      currentPoint = track.getNextMark();
+    }
+
+    expect(marks).to.be.an("array").that.does.not.include(null);
+    expect(marks).to.be.an("array").that.does.not.include(undefined);
+    expect(marks).to.have.lengthOf(schema4.defaultData.day.length);
+  });
+
+  it("can get the x and y values back", () => {
+    expect(marks.map((mark) => mark.x)).to.deep.equal(schema4.defaultData.day);
+    expect(marks.map((mark) => mark.y)).to.deep.equal(
+      schema4.defaultData.price
+    );
+  });
+
+  it("can get the color from the data correctly", () => {
+    expect(marks.map((mark) => mark.color)).to.deep.equal(
+      schema4.defaultData.color.map(colorSpecifierToHex)
+    );
+  });
+
+  it("can get the shape from the data correctly", () => {
+    expect(marks.map((mark) => mark.shape)).to.deep.equal(
+      schema4.defaultData.shape
+    );
+  });
+
+  it("can get the width from the data correctly", () => {
+    expect(marks.map((mark) => mark.width)).to.deep.equal(
+      schema4.defaultData.day
+    );
+  });
+
+  it("can get the height from the data correctly", () => {
+    expect(marks.map((mark) => mark.height)).to.deep.equal(
+      schema4.defaultData.price
     );
   });
 });

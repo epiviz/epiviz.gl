@@ -21,6 +21,7 @@ import boxTrack from "../examples/box-track";
 import lineTrack from "../examples/line-track";
 import allTracks from "../examples/all-tracks";
 import matrix from "../examples/matrix";
+import dataDefinedChannels from "../examples/data-defined-channels";
 
 const exampleMap = new Map([
   ["area-chart", areaChart],
@@ -44,6 +45,7 @@ const exampleMap = new Map([
   ["all-tracks", allTracks],
   ["scatter-grid-margins", scatterGridMargins],
   ["matrix", matrix],
+  ["data-defined-channels", dataDefinedChannels],
 ]);
 
 class Toolbar {
