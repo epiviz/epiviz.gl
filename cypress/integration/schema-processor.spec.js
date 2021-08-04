@@ -209,52 +209,46 @@ describe("Mapping the channels with attributes correctly (schema 1)", () => {
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(
-      schema1.defaultData.day.reverse()
-    );
+    expect(marks.map((mark) => mark.x)).to.deep.equal(schema1.defaultData.day);
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema1.defaultData.price.reverse()
+      schema1.defaultData.price
     );
   });
 
   it("can map the color scheme categorically correctly", () => {
-    expect(marks.map((mark) => mark.color)).to.deep.equal(
-      [
-        rgbToHex(255, 255, 255), // white
-        rgbToHex(0, 0, 0), // black
-        rgbToHex(0, 0, 0),
-        rgbToHex(255, 255, 255),
-        rgbToHex(0, 0, 0),
-        rgbToHex(0, 0, 0),
-        rgbToHex(255, 255, 255),
-      ].reverse()
-    );
+    expect(marks.map((mark) => mark.color)).to.deep.equal([
+      rgbToHex(255, 255, 255), // white
+      rgbToHex(0, 0, 0), // black
+      rgbToHex(0, 0, 0),
+      rgbToHex(255, 255, 255),
+      rgbToHex(0, 0, 0),
+      rgbToHex(0, 0, 0),
+      rgbToHex(255, 255, 255),
+    ]);
   });
 
   it("can map a dimension categorically correctly (width with 2 categories and min and max options", () => {
-    expect(marks.map((mark) => mark.width)).to.deep.equal(
-      [
-        1,
-        2, // black
-        2,
-        1,
-        2,
-        2,
-        1,
-      ].reverse()
-    );
+    expect(marks.map((mark) => mark.width)).to.deep.equal([
+      1,
+      2, // black
+      2,
+      1,
+      2,
+      2,
+      1,
+    ]);
   });
 
   it("can map a dimension quantitatively correctly (height with and min and max options", () => {
     expect(marks.map((mark) => mark.height)).to.deep.equal(
-      schema1.defaultData.day.reverse()
+      schema1.defaultData.day
     );
   });
 
   it("can map the opacity quantitatively correctly (with min opacity options)", () => {
     let opacityScale = scale([0, 30], [0.2, 1]);
     expect(marks.map((mark) => mark.opacity)).to.deep.equal(
-      schema1.defaultData.price.map((datum) => opacityScale(datum)).reverse()
+      schema1.defaultData.price.map((datum) => opacityScale(datum))
     );
   });
 });
@@ -292,21 +286,18 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(
-      // Reverse the expected values as the schema processor iterates through the data starting from the end
-      schema2.defaultData.day.reverse()
-    );
+    expect(marks.map((mark) => mark.x)).to.deep.equal(schema2.defaultData.day);
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema2.defaultData.price.reverse()
+      schema2.defaultData.price
     );
   });
 
   it("can map the color scheme quantitatively correctly", () => {
     const zeroToOneScale = scale([1, 7], [0, 1]);
     expect(marks.map((mark) => mark.color)).to.deep.equal(
-      schema2.defaultData.day
-        .map((datum) => rgbStringToHex(interpolateGreys(zeroToOneScale(datum))))
-        .reverse()
+      schema2.defaultData.day.map((datum) =>
+        rgbStringToHex(interpolateGreys(zeroToOneScale(datum)))
+      )
     );
   });
 
@@ -320,22 +311,20 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
   });
 
   it("can map the shape categorically correctly", () => {
-    expect(marks.map((mark) => mark.shape)).to.deep.equal(
-      [
-        "dot",
-        "triangle",
-        "triangle",
-        "dot",
-        "triangle",
-        "triangle",
-        "dot",
-      ].reverse()
-    );
+    expect(marks.map((mark) => mark.shape)).to.deep.equal([
+      "dot",
+      "triangle",
+      "triangle",
+      "dot",
+      "triangle",
+      "triangle",
+      "dot",
+    ]);
   });
 
   it("can map the size quantitatively correctly (with min and max options)", () => {
     expect(marks.map((mark) => mark.size)).to.deep.equal(
-      schema2.defaultData.day.reverse()
+      schema2.defaultData.day
     );
   });
 });
@@ -379,11 +368,9 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
   };
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(
-      schema3.defaultData.day.reverse()
-    );
+    expect(marks.map((mark) => mark.x)).to.deep.equal(schema3.defaultData.day);
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema3.defaultData.price.reverse()
+      schema3.defaultData.price
     );
   });
 
