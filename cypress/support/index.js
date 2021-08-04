@@ -56,7 +56,7 @@ const allPresetNames = [
   "line-plot",
   "stacked-area-chart",
   "tick-chart",
-  // "tsne",
+  "tsne",
   "tsne-10th",
   "tsne-100th",
   "inline-data",
@@ -72,6 +72,6 @@ const allPresetNames = [
   "scatter-grid-margins",
 ];
 
-const longPresets = ["tsne"];
+const longPresets = ["tsne", "tsne-10th"];
 
 export { expectCanvasToLookLike, getCanvasImage, allPresetNames, longPresets };

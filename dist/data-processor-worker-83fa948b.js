@@ -1,4 +1,4 @@
-import { t as transformGenomicRangeToStandard, a as SIZE_UNITS, S as SchemaProcessor } from './schema-processor-b588b16b.js';
+import { a as SIZE_UNITS, t as transformGenomicRangeArcToStandard, b as transformGenomicRangeToStandard, S as SchemaProcessor } from './schema-processor-02fdb272.js';
 import { b as getViewportForSchema } from './utilities-b398dcce.js';
 
 class FlatQueue {
@@ -1534,159 +1534,120 @@ class GeometryMapper {
     this.schemaObject = schemaObject;
     this.trackObject = trackObject;
     this.track = trackObject.track;
+    this.xScale = this.schemaObject.xScale;
+    this.yScale = this.schemaObject.yScale;
 
     const viewportForSchema = getViewportForSchema(schemaObject.schema);
     if (schemaObject.xScale.isGenomeScale) {
-      this.xDomainWidth = 2;
+      this.xDomainWidth = 2 / 2;
     } else {
-      this.xDomainWidth = viewportForSchema[1] - viewportForSchema[0];
+      this.xDomainWidth = (viewportForSchema[1] - viewportForSchema[0]) / 2;
     }
 
     if (schemaObject.yScale.isGenomeScale) {
-      this.yDomainHeight = 2;
+      this.yDomainHeight = 2 / 2;
     } else {
-      this.yDomainHeight = viewportForSchema[3] - viewportForSchema[2];
+      this.yDomainHeight = (viewportForSchema[3] - viewportForSchema[2]) / 2;
     }
-
-    console.log(this.xDomainWidth, this.yDomainHeight);
   }
 
   modifyGeometry(geometry) {
-    if (
-      this.trackObject.track.x.type === "genomicRange" ||
-      this.trackObject.track.y.type === "genomicRange"
-    ) {
-      if (this.trackObject.track.mark === "arc") {
-        const standardized = transformGenomicRangeArcToStandard(
-          {
-            x: geometry.coordinates[0],
-            y: geometry.coordinates[1],
-            width: geometry.dimensions[0],
-            height: geometry.dimensions[1],
-          },
-          this.schemaObject.xScale,
-          this.schemaObject.yScale
-        );
-
-        geometry.coordinates = [standardized.x, standardized.y];
-        geometry.dimensions = [standardized.width, standardized.height];
-      } else {
-        const standardized = transformGenomicRangeToStandard(
-          {
-            x: geometry.coordinates[0],
-            y: geometry.coordinates[1],
-          },
-          this.schemaObject.xScale,
-          this.schemaObject.yScale
-        );
-        geometry.coordinates = [standardized.x, standardized.y];
+    if (this.xScale.isGenomeScale) {
+      // transforms x part into a standard format
+      if (this.trackObject.track.x.type === "genomicRange") {
+        this._modifyGenomicRangeX(geometry);
       }
-      if (!this.schemaObject.xScale.isGenomeScale && geometry.dimensions[0]) {
-        // No need to do !== undefined to handle 0 case as result would be the same either way
-        geometry.dimensions[0] *= (this.xDomainWidth * SIZE_UNITS) / 2;
-      } else if (
-        !this.schemaObject.yScale.isGenomeScale &&
-        geometry.dimensions[1]
-      ) {
-        geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
-      }
-
-      return;
+      geometry.coordinates[0] = this.xScale(geometry.coordinates[0]);
     }
-    // If the x coordinate is a base pair, map it to a value between -1 and 1 for
-    // data indexing
-    console.log("before", geometry.dimensions);
-    console.log("before", [...geometry.coordinates]);
+    this._modifyStandardX(geometry);
 
-    this._modifyX(geometry);
-    this._modifyY(geometry);
-
-    // As above but with y
-    if (this.schemaObject.yScale.isGenomeScale) {
-      geometry.coordinates[1] = this.schemaObject.yScale(
-        geometry.coordinates[1]
-      );
-
-      if (this.trackObject.track.y.type === "genomeRange") {
-        geometry.dimensions[1] =
-          this.schemaObject.yScale(geometry.coordinates[1]) -
-          geometry.coordinates[0];
+    if (this.yScale.isGenomeScale) {
+      // transforms y part into a standard format
+      if (this.trackObject.track.y.type === "genomicRange") {
+        this._modifyGenomicRangeY(geometry);
       }
+      geometry.coordinates[1] = this.yScale(geometry.coordinates[1]);
     }
+    this._modifyStandardY(geometry);
+  }
 
-    // If the track is a rect or tick, the width and height properties are used in display
-    // so we need to calculate the width and height in data space for data retrieval
-    if (
-      this.trackObject.track.mark === "rect" ||
-      this.trackObject.track.mark === "tick" ||
-      this.trackObject.track.mark === "arc"
-    ) {
-      // Width is also a base pair, so we need to calculate the width in data space
-      if (Array.isArray(geometry.dimensions[0])) {
-        width =
-          this.schemaObject.xScale(geometry.dimensions[0]) -
-          geometry.coordinates[0];
-      } else if (geometry.dimensions[0]) {
-        // No need to do !== undefined to handle 0 case as result would be the same either way
-        geometry.dimensions[0] *= (this.xDomainWidth * SIZE_UNITS) / 2;
-      }
-      // Height is also a base pair, so we need to calculate the height in data space
-      if (Array.isArray(geometry.dimensions[1])) {
-        height =
-          this.schemaObject.yScale(geometry.dimensions[1]) -
-          geometry.coordinates[1];
-      } else if (geometry.dimensions[1]) {
-        geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
-      }
+  _modifyStandardX(geometry) {
+    if (geometry.dimensions[0]) {
+      geometry.dimensions[0] *= this.xDomainWidth * SIZE_UNITS;
     }
-
-    // If width and height are undefined, make very small for indexer to treat as points
-    console.log("almost", geometry.dimensions);
 
     geometry.dimensions[0] = geometry.dimensions[0] || 1e-10;
-    geometry.dimensions[1] = geometry.dimensions[1] || 1e-10;
-    console.log("after", geometry.dimensions);
   }
 
-  _modifyX(geometry) {
-    // Need to map base pair to coordinate between -1 and 1
-    if (this.schemaObject.xScale.isGenomeScale) {
-      // If x is defined by genomic range, width is calculated here
-      if (this.trackObject.track.x.type === "genomicRange") ;
-      geometry.coordinates[0] = this.schemaObject.xScale(
-        geometry.coordinates[0]
+  _modifyStandardY(geometry) {
+    if (geometry.dimensions[1]) {
+      geometry.dimensions[1] *= this.yDomainHeight * SIZE_UNITS;
+    }
+    geometry.dimensions[1] = geometry.dimensions[1] || 1e-10;
+  }
+
+  _modifyGenomicRangeX(geometry) {
+    if (this.trackObject.track.mark === "arc") {
+      const standardized = transformGenomicRangeArcToStandard(
+        {
+          x: geometry.coordinates[0],
+          y: 0,
+          width: geometry.dimensions[0],
+          height: 0,
+        },
+        this.schemaObject.xScale,
+        this.schemaObject.yScale
       );
 
-      // x is defined as a range so we need to calculate width
-      if (this.trackObject.track.x.type === "genomeRange") {
-        // When x is a genome range, coordinates[0] and [1] no longer refer to x and y respectively.
-        // They instead refer to 2-length arrays containing base pair info.
-        geometry.dimensions[0] =
-          this.schemaObject.xScale(geometry.coordinates[1]) -
-          geometry.coordinates[0];
-      }
+      geometry.coordinates[0] = standardized.x;
+      geometry.dimensions[0] = standardized.width;
+    } else {
+      const standardized = transformGenomicRangeToStandard(
+        {
+          x: geometry.coordinates[0],
+          y: 0,
+        },
+        this.schemaObject.xScale,
+        this.schemaObject.yScale
+      );
+      geometry.coordinates[0] = standardized.x;
+      geometry.dimensions[0] = standardized.width;
     }
   }
 
-  _modifyY(geometry) {}
+  _modifyGenomicRangeY(geometry) {
+    if (this.trackObject.track.mark === "arc") {
+      const standardized = transformGenomicRangeArcToStandard(
+        {
+          x: 0,
+          y: geometry.coordinates[1],
+          width: 0,
+          height: geometry.coordinates[1],
+        },
+        this.schemaObject.xScale,
+        this.schemaObject.yScale
+      );
 
-  _mapHeightToDataSpace(geometry) {
-    geometry.dimensions[1] *= (this.yDomainHeight * SIZE_UNITS) / 2;
+      geometry.coordinates[1] = standardized.y;
+      geometry.dimensions[1] = standardized.height;
+    } else {
+      const standardized = transformGenomicRangeToStandard(
+        {
+          x: 0,
+          y: geometry.coordinates[1],
+        },
+        this.schemaObject.xScale,
+        this.schemaObject.yScale
+      );
+      geometry.coordinates[1] = standardized.y;
+      geometry.dimensions[1] = standardized.height;
+    }
   }
-
-  _mapWidthToDataSpace(geometry) {
-    geometry.dimensions[0] *= (this.yDomainHeight * SIZE_UNITS) / 2;
-  }
-
-  _remapGenomicRangeGeometry(geometry) {}
 }
 
 class DataProcessor {
   /**
    * A class meant to handle processing of data used in the scatterplot.
-   *
-   * ** Can currently only handle data in a [-180,180] x [-90, 90] range due
-   * to use of {@link Supercluster}. May need to switch to KDBush at some point.
    *
    * @param {Array} data the processor is meant to handle and index
    */
@@ -1705,14 +1666,22 @@ class DataProcessor {
    */
   indexData(schemaHelper) {
     let totalPoints = 0;
-    if (schemaHelper.data) {
-      // subtract 1 to not count header
-      totalPoints += schemaHelper.data.length - 1;
-    }
 
+    for (const track of schemaHelper.tracks) {
+      if (!track.hasOwnData) {
+        // index at 1 means a header needs to be skipped
+        totalPoints +=
+          track.index === 1 ? track.data.length - 1 : track.data.length;
+        break;
+      }
+    }
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
-      .forEach((track) => (totalPoints += track.data.length - 1));
+      .forEach(
+        (track) =>
+          (totalPoints +=
+            track.index === 1 ? track.data.length - 1 : track.data.length)
+      );
 
     this.index = new Flatbush(totalPoints);
     this.data = [];
@@ -1782,35 +1751,16 @@ class DataProcessor {
    * sufficiently close.
    *
    * @param {Array} point of two floats to find closest point to
-   * @param {Integer} zoom to pass to supercluster
    * @returns closest point or undefined
    */
-  getClosestPoint(point, zoom = 16) {
-    const candidatePoints = this.index.getClusters(
-      [point[0] - 0.01, point[1] - 0.01, point[0] + 0.01, point[1] + 0.01],
-      zoom
-    );
-
-    let closestPoint;
-    let distanceToClosestPoint;
-    for (const candidate of candidatePoints) {
-      const dist =
-        (candidate.geometry.coordinates[0] - point[0]) ** 2 +
-        (candidate.geometry.coordinates[1] - point[1]) ** 2;
-      if (!closestPoint || dist < distanceToClosestPoint) {
-        closestPoint = candidate;
-        distanceToClosestPoint = dist;
-      }
-    }
-
-    return closestPoint;
+  getClosestPoint(point) {
+    return this.data[this.index.neighbors(point[0], point[1], 1)];
   }
 
   /**
    * Get points within a bounding box.
    *
    * @param {Array} points Bounding rectangle in the format of [x1, y1, x2, y2]
-   * @param {Integer} zoom to pass to supercluster
    * @returns points in bounding box
    */
   selectBox(points) {
@@ -1830,10 +1780,9 @@ class DataProcessor {
    * to determine what points are in polygon.
    *
    * @param {Array} points of a polygon to select points format: [x1,y1,x2,y2,x3,y3,...]
-   * @param {Integer} zoom to pass to supercluster
    * @returns points inside lasso
    */
-  selectLasso(points, zoom = 16) {
+  selectLasso(points) {
     let smallestX = Number.POSITIVE_INFINITY;
     let largestX = Number.NEGATIVE_INFINITY;
     let smallestY = Number.POSITIVE_INFINITY;

@@ -7488,7 +7488,7 @@ class WebGLVis {
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-0c78726c.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-a01a51ca.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7507,7 +7507,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-b08adccb.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-83fa948b.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {

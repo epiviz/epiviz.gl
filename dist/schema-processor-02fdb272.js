@@ -147,8 +147,18 @@ const transformGenomicRangeToStandard = (mark, xScale, yScale) => {
 const transformGenomicRangeArcToStandard = (mark, xScale, yScale) => {
   let x, y, width, height;
   if (Array.isArray(mark.x)) {
-    x = xScale.getMidpoint(...mark.x);
-    let x2 = xScale.getMidpoint(...mark.width);
+    x = xScale.getMidpoint(
+      mark.x[0][0],
+      mark.x[0][1],
+      mark.x[1][0],
+      mark.x[1][1]
+    );
+    let x2 = xScale.getMidpoint(
+      mark.width[0][0],
+      mark.width[0][1],
+      mark.width[1][0],
+      mark.width[1][1]
+    );
     let x1ClipSpace = xScale(x);
     let x2ClipSpace = xScale(x2);
 
@@ -160,8 +170,18 @@ const transformGenomicRangeArcToStandard = (mark, xScale, yScale) => {
   }
 
   if (Array.isArray(mark.y)) {
-    y = yScale.getMidpoint(...mark.y);
-    let y2 = yScale.getMidpoint(...mark.height);
+    y = yScale.getMidpoint(
+      mark.y[0][0],
+      mark.y[0][1],
+      mark.y[1][0],
+      mark.y[1][1]
+    );
+    let y2 = yScale.getMidpoint(
+      mark.height[0][0],
+      mark.height[0][1],
+      mark.height[1][0],
+      mark.height[1][1]
+    );
 
     let y1ClipSpace = xScale(y);
     let y2ClipSpace = xScale(y2);
@@ -402,9 +422,9 @@ class VertexCalculator {
     // 1----2
     if (this.track.width) {
       return [
-        center[0] + (mark.width / 2) * SIZE_UNITS,
+        center[0],
         center[1],
-        center[0] - (mark.width / 2) * SIZE_UNITS,
+        center[0] + mark.width * SIZE_UNITS,
         center[1],
       ];
     }
@@ -416,9 +436,9 @@ class VertexCalculator {
       // default to mark value which has default if height never specified in track
       return [
         center[0],
-        center[1] + (mark.height / 2) * SIZE_UNITS,
+        center[1],
         center[0],
-        center[1] - (mark.height / 2) * SIZE_UNITS,
+        center[1] + mark.height * SIZE_UNITS,
       ];
     }
   }
@@ -1217,10 +1237,11 @@ class Track {
     // Processing headers
     if (this.isInlineData) {
       this.headers = Object.keys(this.data);
-      this.dataLength = this.data[this.headers[0]].length;
+      this.data.length = this.data[this.headers[0]].length; // assign length to data object for iteration
+      this.index = 0;
     } else {
       this.headers = this.data[0].split(",");
-      this.dataLength = this.data.length - 1; // -1 to not count header
+      this.index = 1; // 1 to skip header
     }
 
     // Creating channel mappers
@@ -1235,21 +1256,20 @@ class Track {
    * @returns A data point with the x and y coordinates and other attributes from the header
    */
   getNextDataPoint() {
-    if (this.dataLength <= 0) {
-      // TODO potentially erase this.data for garbage collection
+    if (this.index >= this.data.length) {
       return null;
     }
 
     const toReturn = { geometry: { coordinates: [], dimensions: [] } };
     let splitted;
     if (this.isInlineData) {
-      splitted = this.headers.map((header) => this.data[header].pop());
-      this.dataLength--;
+      splitted = this.headers.map((header) => this.data[header][this.index]);
     } else {
-      const currRow = this.data.pop();
+      const currRow = this.data[this.index];
       splitted = currRow.split(",");
-      this.dataLength--;
     }
+
+    this.index++;
 
     this.headers.forEach((header, index) => {
       toReturn[header] = splitted[index];
@@ -1257,7 +1277,6 @@ class Track {
 
     const rawHeight = this.channelMaps.get("height")(splitted);
     const rawWidth = this.channelMaps.get("width")(splitted);
-    console.log(rawWidth);
     const x = this.channelMaps.get("x")(splitted);
     const y = this.channelMaps.get("y")(splitted);
     toReturn.geometry.coordinates.push(x, y);
@@ -1271,19 +1290,22 @@ class Track {
    * @returns An object containing information used to draw a mark for a row of data.
    */
   getNextMark() {
-    if (this.dataLength <= 0) {
+    // Getting the next mark cannot modify the data objects as other tracks may refer to
+    // the same data
+    if (this.index >= this.data.length) {
       return null;
     }
+
     const toReturn = {};
     let splitted;
     if (this.isInlineData) {
-      splitted = this.headers.map((header) => this.data[header].pop());
-      this.dataLength--;
+      splitted = this.headers.map((header) => this.data[header][this.index]);
     } else {
-      const currRow = this.data.pop();
+      const currRow = this.data[this.index];
       splitted = currRow.split(",");
-      this.dataLength--;
     }
+
+    this.index++;
 
     this.channelMaps.forEach((mapper, channel) => {
       toReturn[channel] = mapper(splitted);
@@ -1530,4 +1552,4 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   }
 };
 
-export { DEFAULT_CHANNELS as D, SchemaProcessor as S, VertexCalculator as V, SIZE_UNITS as a, getDrawModeForTrack as g, transformGenomicRangeToStandard as t };
+export { DEFAULT_CHANNELS as D, SchemaProcessor as S, VertexCalculator as V, SIZE_UNITS as a, transformGenomicRangeToStandard as b, getDrawModeForTrack as g, transformGenomicRangeArcToStandard as t };
