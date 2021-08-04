@@ -1,22 +1,19 @@
 import SchemaProcessor from "./schema-processor";
 
-import Supercluster from "supercluster";
+import Flatbush from "flatbush";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon } from "@turf/helpers";
 import simplify from "@turf/simplify";
-import { GenomeScale } from "./genome-sizes";
+import GeometryMapper from "./geometry-mapper";
 
 class DataProcessor {
   /**
    * A class meant to handle processing of data used in the scatterplot.
    *
-   * ** Can currently only handle data in a [-180,180] x [-90, 90] range due
-   * to use of {@link Supercluster}. May need to switch to KDBush at some point.
-   *
    * @param {Array} data the processor is meant to handle and index
    */
   constructor(schema) {
-    this.schema = this.index = new Supercluster();
+    this.schema = schema;
 
     console.log("Loading data...");
 
@@ -29,64 +26,49 @@ class DataProcessor {
    * @param {SchemaProcessor} schemaHelper that is built in the constructor
    */
   indexData(schemaHelper) {
-    this.points = [];
-    let modifyGeometry;
+    let totalPoints = 0;
 
-    // If we are using genome scales, we need to map the coordinates correctly
-    // We build mapping functions based on what needs to occur for each data
-    // point in order to avoid lots of checks in the potentially very long
-    // data loop.
-    if (schemaHelper.xScale instanceof GenomeScale) {
-      modifyGeometry = (point) => {
-        point.geometry.coordinates[0] =
-          schemaHelper.xScale.toClipSpaceFromParts(
-            point.geometry.coordinates[0][0],
-            point.geometry.coordinates[0][1]
-          );
-      };
-    }
-
-    if (schemaHelper.yScale instanceof GenomeScale) {
-      // This is a way to check if x is also a genome scale, so we don't
-      // include instanceof checks in the data loop
-      if (modifyGeometry) {
-        // x dimension is also a genome scale
-        (point) => {
-          point.geometry.coordinates = [
-            schemaHelper.xScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            ),
-            schemaHelper.yScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            ),
-          ];
-        };
-      } else {
-        modifyGeometry = (point) => {
-          point.geometry.coordinates[1] =
-            schemaHelper.yScale.toClipSpaceFromParts(
-              point.geometry.coordinates[0][0],
-              point.geometry.coordinates[0][1]
-            );
-        };
+    for (const track of schemaHelper.tracks) {
+      if (!track.hasOwnData) {
+        // index at 1 means a header needs to be skipped
+        totalPoints +=
+          track.index === 1 ? track.data.length - 1 : track.data.length;
+        break;
       }
     }
+    schemaHelper.tracks
+      .filter((track) => track.hasOwnData)
+      .forEach(
+        (track) =>
+          (totalPoints +=
+            track.index === 1 ? track.data.length - 1 : track.data.length)
+      );
 
+    this.index = new Flatbush(totalPoints);
+    this.data = [];
     console.log("Reading data...");
 
     // Process the global data in the schema processor
     if (schemaHelper.data) {
       for (let track of schemaHelper.tracks) {
         if (!track.hasOwnData) {
+          const geometryMapper = new GeometryMapper(schemaHelper, track);
+
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
-            if (modifyGeometry) {
-              // only call if we need to
-              modifyGeometry(currentPoint);
-            }
-            this.points.push(currentPoint);
+            geometryMapper.modifyGeometry(currentPoint.geometry);
+
+            this.data[
+              this.index.add(
+                currentPoint.geometry.coordinates[0],
+                currentPoint.geometry.coordinates[1],
+                currentPoint.geometry.coordinates[0] +
+                  currentPoint.geometry.dimensions[0],
+                currentPoint.geometry.coordinates[1] +
+                  currentPoint.geometry.dimensions[1]
+              )
+            ] = currentPoint;
+
             currentPoint = track.getNextDataPoint();
           }
           break;
@@ -98,18 +80,29 @@ class DataProcessor {
     schemaHelper.tracks
       .filter((track) => track.hasOwnData)
       .forEach((track) => {
+        const geometryMapper = new GeometryMapper(schemaHelper, track);
+
         let currentPoint = track.getNextDataPoint();
         while (currentPoint) {
-          if (modifyGeometry) {
-            modifyGeometry(currentPoint);
-          }
-          this.points.push(currentPoint);
+          geometryMapper.modifyGeometry(currentPoint.geometry);
+
+          this.data[
+            this.index.add(
+              currentPoint.geometry.coordinates[0],
+              currentPoint.geometry.coordinates[1],
+              currentPoint.geometry.coordinates[0] +
+                currentPoint.geometry.dimensions[0],
+              currentPoint.geometry.coordinates[1] +
+                currentPoint.geometry.dimensions[1]
+            )
+          ] = currentPoint;
+
           currentPoint = track.getNextDataPoint();
         }
       });
 
     console.log("Indexing data...");
-    this.index.load(this.points);
+    this.index.finish();
 
     console.log("Data processing complete.");
   }
@@ -119,44 +112,27 @@ class DataProcessor {
    * sufficiently close.
    *
    * @param {Array} point of two floats to find closest point to
-   * @param {Integer} zoom to pass to supercluster
    * @returns closest point or undefined
    */
-  getClosestPoint(point, zoom = 16) {
-    const candidatePoints = this.index.getClusters(
-      [point[0] - 0.01, point[1] - 0.01, point[0] + 0.01, point[1] + 0.01],
-      zoom
-    );
-
-    let closestPoint;
-    let distanceToClosestPoint;
-    for (const candidate of candidatePoints) {
-      const dist =
-        (candidate.geometry.coordinates[0] - point[0]) ** 2 +
-        (candidate.geometry.coordinates[1] - point[1]) ** 2;
-      if (!closestPoint || dist < distanceToClosestPoint) {
-        closestPoint = candidate;
-        distanceToClosestPoint = dist;
-      }
-    }
-
-    return closestPoint;
+  getClosestPoint(point) {
+    return this.data[this.index.neighbors(point[0], point[1], 1)];
   }
 
   /**
    * Get points within a bounding box.
    *
    * @param {Array} points Bounding rectangle in the format of [x1, y1, x2, y2]
-   * @param {Integer} zoom to pass to supercluster
    * @returns points in bounding box
    */
-  selectBox(points, zoom = 16) {
+  selectBox(points) {
     const smallerX = Math.min(points[0], points[2]);
     const smallerY = Math.min(points[1], points[3]);
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    return this.index.getClusters([smallerX, smallerY, largerX, largerY], zoom);
+    return this.index
+      .search(smallerX, smallerY, largerX, largerY)
+      .map((i) => this.data[i]);
   }
 
   /**
@@ -165,10 +141,9 @@ class DataProcessor {
    * to determine what points are in polygon.
    *
    * @param {Array} points of a polygon to select points format: [x1,y1,x2,y2,x3,y3,...]
-   * @param {Integer} zoom to pass to supercluster
    * @returns points inside lasso
    */
-  selectLasso(points, zoom = 16) {
+  selectLasso(points) {
     let smallestX = Number.POSITIVE_INFINITY;
     let largestX = Number.NEGATIVE_INFINITY;
     let smallestY = Number.POSITIVE_INFINITY;
@@ -184,10 +159,12 @@ class DataProcessor {
 
     polygonPoints.push([...polygonPoints[0]]); // First and last must be same position
 
-    const candidatePoints = this.index.getClusters(
-      [smallestX, smallestY, largestX, largestY],
-      zoom
-    );
+    const candidatePoints = this.selectBox([
+      smallestX,
+      smallestY,
+      largestX,
+      largestY,
+    ]);
 
     const boundingPolygon = polygon([polygonPoints]);
 

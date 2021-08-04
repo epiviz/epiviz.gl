@@ -20,6 +20,7 @@ import arcTrack from "../examples/arc-track";
 import boxTrack from "../examples/box-track";
 import lineTrack from "../examples/line-track";
 import allTracks from "../examples/all-tracks";
+import matrix from "../examples/matrix";
 
 const exampleMap = new Map([
   ["area-chart", areaChart],
@@ -42,6 +43,7 @@ const exampleMap = new Map([
   ["line-track", lineTrack],
   ["all-tracks", allTracks],
   ["scatter-grid-margins", scatterGridMargins],
+  ["matrix", matrix],
 ]);
 
 class Toolbar {

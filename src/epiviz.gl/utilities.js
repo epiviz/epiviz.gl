@@ -144,7 +144,8 @@ const getScaleForSchema = (dimension, schema) => {
     }
   }
 
-  return new GenomeScale(genome, [smallestGene, largestGene]);
+  const asScale = new GenomeScale(genome, [smallestGene, largestGene]);
+  return asScale.toCallable();
 };
 
 const DEFAULT_MARGIN = "2em";

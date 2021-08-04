@@ -139,10 +139,14 @@ describe("Iteration", () => {
   beforeEach(() => {
     let callbackCalled = false;
 
-    schemaHelper = new SchemaProcessor(schema1, () => {
-      callbackCalled = true;
-    });
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      // Deep copy of schema since data.pop in the processor will modify the original object
+      JSON.parse(JSON.stringify(schema1)),
+      () => {
+        callbackCalled = true;
+      }
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
   });
 
   it("can stop iteration of tracks", () => {
@@ -182,8 +186,12 @@ describe("Mapping the channels with attributes correctly (schema 1)", () => {
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(schema1, () => (callbackCalled = true));
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      // Deep copy of schema since data.pop in the processor will modify the original object
+      JSON.parse(JSON.stringify(schema1)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
     track = schemaHelper.getNextTrack();
     marks = [];
@@ -256,8 +264,11 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(schema2, () => (callbackCalled = true));
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      JSON.parse(JSON.stringify(schema2)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
     track = schemaHelper.getNextTrack();
     marks = [];
@@ -291,7 +302,6 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
   });
 
   it("can map the opacity categorically correctly (with min opacity options)", () => {
-    console.log(marks.map((mark) => mark.opacity));
     const actual = marks.map((mark) => mark.opacity);
     const expected = [0.2, 1.0, 1.0, 0.2, 1.0, 1.0, 0.2];
 
@@ -330,8 +340,11 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(schema3, () => (callbackCalled = true));
-    // expect(callbackCalled).to.eq(true);
+    schemaHelper = new SchemaProcessor(
+      JSON.parse(JSON.stringify(schema3)),
+      () => (callbackCalled = true)
+    );
+    setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
     track = schemaHelper.getNextTrack();
     marks = [];

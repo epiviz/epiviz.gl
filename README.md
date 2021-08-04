@@ -62,9 +62,9 @@ All visualizations also include an ability to box or lasso select:
 
 Documentation for schemas can be found in [docs/schema_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/schema_doc.md). Documentation for the schemas can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
 
-```
-$ cd src/epiviz.gl/schema-validation
-$ generate-schema-doc visualization.json --config template_name=md
+```shell
+cd src/epiviz.gl/schema-validation
+generate-schema-doc visualization.json --config template_name=md
 ```
 
 ## Examples
@@ -298,37 +298,35 @@ $ generate-schema-doc visualization.json --config template_name=md
 
 ## Prepare the repository
 
-```
-$ yarn install
-$ yarn build
+```shell
+yarn install
+yarn build
 ```
 
 ## Use the app
 
-```
-$ yarn start
+```shell
+yarn start
 ```
 
 Then navigate to `localhost:1234`
 
 ## Run the tests
 
-```
-$ yarn start
-(In a seperate window)
-$ npx cypress open
+```shell
+yarn start
 ```
 
 Via command line:
 
-```
-$ npx cypress run
+```shell
+npx cypress run
 ```
 
 Via GUI:
 
-```
-$ npx cypress open
+```shell
+npx cypress open
 ```
 
 This will open an additional window, where tests can be run on a live version of chrome.
@@ -339,12 +337,18 @@ A method of doing of integration tests is to record the state of the application
 
 Check if current state matches recordings:
 
-```
-$ npx cypress run --spec "cypress/integration/expected-images.spec.js"
+```shell
+npx cypress run --spec "cypress/integration/expected-images.spec.js"
 ```
 
 Rerecord the tests:
 
+```shell
+npx cypress run --spec "cypress/integration/record-tests.spec.js" --env recording=true
 ```
-$ npx cypress run --spec "cypress/integration/record-tests.spec.js" --env recording=true
-```
+
+## Development Notes
+
+### Rasterization
+
+Essentially, the project works by building all of the vertices for a visualization upfront. When visualizing data at a large scale, this can cause some vertices and their primitives (triangles, points, lines) to be VERY small which may cause them to not rasterize (be displayed) consistently. This is most apparent when flickering occurs by zooming/panning on genomic tracks or on a large matrix. This problem has been partially solved via the `SemanticZoomer`, which will render rects in a box track as lines and then as actual rectangles (in the form of two triangles) when zoomed in sufficiently. Altogether, this paragraph is mostly written to recommend developers to consult the [OpenGL ES 3 Specification](https://www.khronos.org/registry/OpenGL/specs/es/3.0/es_spec_3.0.pdf) when encountering these issues, particularly Chapter 3 (Rasterization) to gain some insight on how some vertices will be rendered.

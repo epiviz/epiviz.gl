@@ -72,6 +72,6 @@ const allPresetNames = [
   "scatter-grid-margins",
 ];
 
-const longPresets = ["tsne"];
+const longPresets = ["tsne", "tsne-10th"];
 
 export { expectCanvasToLookLike, getCanvasImage, allPresetNames, longPresets };

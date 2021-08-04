@@ -1,4 +1,4 @@
-import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema } from './utilities-52abb45c.js';
+import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema } from './utilities-b398dcce.js';
 
 /*!
  * FPSMeter 0.3.1 - 9th May 2013
@@ -7488,7 +7488,7 @@ class WebGLVis {
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-a1ab5662.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-a01a51ca.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7507,7 +7507,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-d88f706d.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-83fa948b.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
