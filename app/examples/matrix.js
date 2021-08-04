@@ -10,7 +10,7 @@ export default JSON.stringify(
     defaultData: csv,
     tracks: [
       {
-        mark: "point",
+        mark: "tick",
         x: {
           attribute: "x",
           type: "quantitative",
@@ -35,9 +35,6 @@ export default JSON.stringify(
         },
         height: {
           value: 200 / 2700,
-        },
-        width: {
-          value: 200 / 32738,
         },
         size: {
           value: 200 / 2700, // 200 divided by x cardinality will produce flush rects
