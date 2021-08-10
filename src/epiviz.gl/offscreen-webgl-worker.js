@@ -15,7 +15,9 @@ class OffscreenWebGLDrawer extends WebGLDrawer {
 self.onmessage = (message) => {
   switch (message.data.type) {
     case "init":
-      self.drawer = new OffscreenWebGLDrawer(message.data);
+      self.drawer = message.data.displayFPSMeter
+        ? new OffscreenWebGLDrawer(message.data)
+        : new WebGLDrawer(message.data);
       break;
     case "viewport":
       self.drawer.receiveViewport(message.data);

@@ -29,6 +29,11 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   /**
+   * Called whenever a frame has been successfully animated.
+   */
+  tick() {}
+
+  /**
    * Calculates the viewport for this.gl.viewport to control zooming. Also calculates point size.
    * @returns Array of 5 elements, first 4 are viewport parameters, last is pointSizeMultiplier:
    *   [xOffset, yOffset, displayAsIfThisWide, displayAsIfThisHigh, pointSizeMultiplier]

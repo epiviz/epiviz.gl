@@ -9,7 +9,7 @@ class App {
   constructor() {
     const container = document.querySelector(".content");
     this.visualization = new WebGLVis(container);
-    this.visualization.addToDom();
+    this.visualization.addToDom(true);
 
     this.store = store;
     this.store.subscribe(this.subscription.bind(this));

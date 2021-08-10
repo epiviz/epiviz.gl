@@ -2601,6 +2601,11 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   /**
+   * Called whenever a frame has been successfully animated.
+   */
+  tick() {}
+
+  /**
    * Calculates the viewport for this.gl.viewport to control zooming. Also calculates point size.
    * @returns Array of 5 elements, first 4 are viewport parameters, last is pointSizeMultiplier:
    *   [xOffset, yOffset, displayAsIfThisWide, displayAsIfThisHigh, pointSizeMultiplier]
@@ -2800,7 +2805,9 @@ class OffscreenWebGLDrawer extends WebGLCanvasDrawer {
 self.onmessage = (message) => {
   switch (message.data.type) {
     case "init":
-      self.drawer = new OffscreenWebGLDrawer(message.data);
+      self.drawer = message.data.displayFPSMeter
+        ? new OffscreenWebGLDrawer(message.data)
+        : new WebGLCanvasDrawer(message.data);
       break;
     case "viewport":
       self.drawer.receiveViewport(message.data);

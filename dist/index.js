@@ -7470,8 +7470,10 @@ class WebGLVis {
    *  1. Add the canvas and mousereader to the DOM for use.
    *  2. Creates the WebWorkers that render and process the data.
    *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
+   *
+   * @param {Boolean} displayFPSMeter whether or not to display an fps meter
    */
-  addToDom() {
+  addToDom(displayFPSMeter) {
     this.container.appendChild(this.parent);
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
@@ -7484,17 +7486,20 @@ class WebGLVis {
 
     this.canvas.style.position = "absolute";
 
-    this.initFpsmeter();
+    if (displayFPSMeter) {
+      this.initFpsmeter();
+    }
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-a01a51ca.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-987d7ecd.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
       {
         type: "init",
         canvas: offscreenCanvas,
+        displayFPSMeter,
       },
       [offscreenCanvas]
     );
