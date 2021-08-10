@@ -11,6 +11,11 @@ declare class WebGLVis {
   selectPoints(points: Array<Number>): void;
   getClosestPoint(point: Array<Number>): void;
   initFpsmeter(): void;
+  addEventListener(
+    type: string,
+    listener: (event: CustomEvent) => void,
+    options: Object
+  );
 
   dataWorkerStream: Array<MessageEvent>;
 }
