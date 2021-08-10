@@ -61,6 +61,7 @@ const allPresetNames = [
   "tsne-100th",
   "inline-data",
   "double-inline-data",
+  "data-defined-channels",
   "tiny-scatter",
   "scatter-grid",
   "heatmap",
