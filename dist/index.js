@@ -3590,7 +3590,7 @@ class MouseReader {
 
   /**
    * Set the viewport in the format mouseReader.viewport = [minX, maxX, minY, maxY].
-   * Mostly used to make Scatterplot.setOptions simpler.
+   * Mostly used to make WebGLVis.setViewOptions simpler.
    */
   set viewport(toSet) {
     this.minX = toSet[0];
@@ -3650,10 +3650,26 @@ class MouseReader {
               .concat(
                 this._calculateViewportSpot(...getLayerXandYFromEvent(event))
               );
+            this.element.parentElement.dispatchEvent(
+              new CustomEvent("onSelection", {
+                detail: {
+                  bounds: this._currentSelectionPoints,
+                  type: this.tool,
+                },
+              })
+            );
             break;
           case "lasso":
             this._currentSelectionPoints.push(
               ...this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+            );
+            this.element.parentElement.dispatchEvent(
+              new CustomEvent("onSelection", {
+                detail: {
+                  bounds: this._currentSelectionPoints,
+                  type: this.tool,
+                },
+              })
             );
             break;
         }
@@ -3758,6 +3774,15 @@ class MouseReader {
       }
     }
 
+    this.element.parentElement.dispatchEvent(
+      new CustomEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
+        detail: {
+          viewport: this.getViewport(),
+          type: this.tool,
+        },
+      })
+    );
+
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
   }
@@ -3793,6 +3818,15 @@ class MouseReader {
         this.currentYRange = previousY;
       }
     }
+
+    this.element.parentElement.dispatchEvent(
+      new CustomEvent("pan", {
+        detail: {
+          viewport: this.getViewport(),
+          type: this.tool,
+        },
+      })
+    );
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
@@ -7512,6 +7546,9 @@ class WebGLVis {
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);
+      this.parent.dispatchEvent(
+        new CustomEvent("onSelectionEnd", { detail: message })
+      );
       console.log(this.dataWorkerStream);
     };
 
@@ -7630,6 +7667,10 @@ class WebGLVis {
       left: `${this.width / 2}px`,
       transform: "translateX(-100%)",
     });
+  }
+
+  addEventListener(type, listener, options) {
+    this.parent.addEventListener(type, listener, options);
   }
 }
 

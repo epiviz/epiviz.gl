@@ -11,6 +11,24 @@ class App {
     this.visualization = new WebGLVis(container);
     this.visualization.addToDom();
 
+    // Demonstration of adding mouse events
+    this.visualization.addEventListener("zoomIn", (event) =>
+      console.log("zoomIn", event)
+    );
+    this.visualization.addEventListener("zoomOut", (event) =>
+      console.log("zoomOut", event)
+    );
+    this.visualization.addEventListener("onSelection", (event) =>
+      console.log("onSelection", event)
+    );
+    this.visualization.addEventListener("onSelectionEnd", (event) =>
+      console.log("onSelectionEnd", event)
+    );
+
+    this.visualization.addEventListener("pan", (event) =>
+      console.log("pan", event)
+    );
+
     this.store = store;
     this.store.subscribe(this.subscription.bind(this));
 

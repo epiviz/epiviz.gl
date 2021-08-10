@@ -103,6 +103,9 @@ class WebGLVis {
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);
+      this.parent.dispatchEvent(
+        new CustomEvent("onSelectionEnd", { detail: message })
+      );
       console.log(this.dataWorkerStream);
     };
 
@@ -221,6 +224,10 @@ class WebGLVis {
       left: `${this.width / 2}px`,
       transform: "translateX(-100%)",
     });
+  }
+
+  addEventListener(type, listener, options) {
+    this.parent.addEventListener(type, listener, options);
   }
 }
 
