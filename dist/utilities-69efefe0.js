@@ -1206,4 +1206,4 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
-export { Color as C, Rgb as R, getScaleForSchema as a, getViewportForSchema as b, colorSpecifierToHex as c, define as d, extend as e, brighter as f, getDimAndMarginStyleForSchema as g, darker as h, getQuadraticBezierCurveForPoints as i, rgb as j, rgbStringToHex as k, rgbConvert as r, scale as s };
+export { Color as C, Rgb as R, getScaleForSchema as a, getViewportForSchema as b, brighter as c, define as d, extend as e, darker as f, getDimAndMarginStyleForSchema as g, getQuadraticBezierCurveForPoints as h, rgb as i, colorSpecifierToHex as j, rgbStringToHex as k, rgbConvert as r, scale as s };

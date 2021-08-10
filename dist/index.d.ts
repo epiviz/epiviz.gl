@@ -14,7 +14,7 @@ declare class WebGLVis {
   addEventListener(
     type: string,
     listener: (event: CustomEvent) => void,
-    options: Object
+    options?: Object
   );
 
   dataWorkerStream: Array<MessageEvent>;

@@ -1,4 +1,4 @@
-import { R as Rgb, r as rgbConvert, d as define, e as extend, C as Color, f as brighter, h as darker, i as getQuadraticBezierCurveForPoints, j as rgb, a as getScaleForSchema, c as colorSpecifierToHex, s as scale, k as rgbStringToHex } from './utilities-b398dcce.js';
+import { R as Rgb, r as rgbConvert, d as define, e as extend, C as Color, c as brighter, f as darker, h as getQuadraticBezierCurveForPoints, i as rgb, a as getScaleForSchema, j as colorSpecifierToHex, s as scale, k as rgbStringToHex } from './utilities-69efefe0.js';
 
 const radians = Math.PI / 180;
 const degrees = 180 / Math.PI;
@@ -1552,4 +1552,4 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   }
 };
 
-export { DEFAULT_CHANNELS as D, SchemaProcessor as S, VertexCalculator as V, SIZE_UNITS as a, transformGenomicRangeToStandard as b, getDrawModeForTrack as g, transformGenomicRangeArcToStandard as t };
+export { DEFAULT_CHANNELS as D, SIZE_UNITS as S, VertexCalculator as V, transformGenomicRangeToStandard as a, SchemaProcessor as b, getDrawModeForTrack as g, transformGenomicRangeArcToStandard as t };
