@@ -352,3 +352,45 @@ npx cypress run --spec "cypress/integration/record-tests.spec.js" --env recordin
 ### Rasterization
 
 Essentially, the project works by building all of the vertices for a visualization upfront. When visualizing data at a large scale, this can cause some vertices and their primitives (triangles, points, lines) to be VERY small which may cause them to not rasterize (be displayed) consistently. This is most apparent when flickering occurs by zooming/panning on genomic tracks or on a large matrix. This problem has been partially solved via the `SemanticZoomer`, which will render rects in a box track as lines and then as actual rectangles (in the form of two triangles) when zoomed in sufficiently. Altogether, this paragraph is mostly written to recommend developers to consult the [OpenGL ES 3 Specification](https://www.khronos.org/registry/OpenGL/specs/es/3.0/es_spec_3.0.pdf) when encountering these issues, particularly Chapter 3 (Rasterization) to gain some insight on how some vertices will be rendered.
+
+### Adding an Example
+
+1. Either add a .csv file to `app/examples/data` or specify inline data.
+2. Create an example in `app/examples/` which should follow this template:
+
+```javascript
+import yourData from "url:./data/your-data-if-you-put-it-here.csv";
+
+export default JSON.stringify(
+  {
+    defaultData: yourData, // or inline data
+    tracks: [
+      ...
+    ],
+  },
+  null,
+  2
+);
+```
+
+3. In `app/index.html` add an option to the `<select>` element:
+
+```html
+<option value="your-example">Your Example</option>
+```
+
+4. In `app/scripts/toolbar` import your example and add an entry to the exampleMap:
+
+```javascript
+import yourExample from "../examples/your-example";
+
+const exampleMap = new Map([
+  ...["your-example", yourExample], // first element is the value attribute from the <option> element
+]);
+```
+
+5. If you feel that your example is instructive of some functionality of the library and would be worth becoming an integration test, go to `cypress/support/index.js` and add the value attribute from the `<option>` element to [`allPresetNames`](https://github.com/epiviz/epiviz.gl/blob/main/cypress/support/index.js#:~:text=const-,allPresetNames,-%3D%20%5B).
+
+If your example is particularly long to render due to many vertices or a large amount of data, consider adding it to the [`longPresets`](https://github.com/epiviz/epiviz.gl/blob/main/cypress/support/index.js#:~:text=const-,longPresets,-%3D%20%5B%22tsne%22%2C%20%22tsne-10th) array.
+
+6. If you completed step 5, rerecord the tests, but be sure to **only commit only the test-image from your example (provided it is correct)**.
