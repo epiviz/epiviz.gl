@@ -140,8 +140,13 @@ class WebGLVis {
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
 
-    const canvasBox = this.canvas.getBoundingClientRect();
-    this.setCanvasSize(canvasBox.width, canvasBox.height);
+    if (isNaN(styles.width) || isNaN(styles.height)) {
+      // Using css calc
+      const canvasBox = this.canvas.getBoundingClientRect();
+      this.setCanvasSize(canvasBox.width, canvasBox.height);
+    } else {
+      this.setCanvasSize(styles.width, styles.height);
+    }
   }
 
   /**

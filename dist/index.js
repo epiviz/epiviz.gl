@@ -1,4 +1,4 @@
-import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema, D as DEFAULT_WIDTH, c as DEFAULT_HEIGHT } from './utilities-9d3a8849.js';
+import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema, D as DEFAULT_WIDTH, c as DEFAULT_HEIGHT } from './utilities-8745698b.js';
 
 /*!
  * FPSMeter 0.3.1 - 9th May 2013
@@ -7481,7 +7481,7 @@ class WebGLVis {
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-7e0511fd.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-b84f11c7.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7501,7 +7501,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-0522f2fa.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-ab0ba2fa.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
@@ -7545,8 +7545,13 @@ class WebGLVis {
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
 
-    const canvasBox = this.canvas.getBoundingClientRect();
-    this.setCanvasSize(canvasBox.width, canvasBox.height);
+    if (isNaN(styles.width) || isNaN(styles.height)) {
+      // Using css calc
+      const canvasBox = this.canvas.getBoundingClientRect();
+      this.setCanvasSize(canvasBox.width, canvasBox.height);
+    } else {
+      this.setCanvasSize(styles.width, styles.height);
+    }
   }
 
   /**
