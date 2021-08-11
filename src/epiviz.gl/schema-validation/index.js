@@ -1,7 +1,7 @@
 import { Validator } from "jsonschema";
-import visualization from "./visualization.js";
-import track from "./track.js";
-import channel from "./channel.js";
+import visualization from "./visualization.json";
+import track from "./track.json";
+import channel from "./channel.json";
 
 const v = new Validator();
 v.addSchema(channel, "/channel");
