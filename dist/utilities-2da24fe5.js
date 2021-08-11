@@ -1238,15 +1238,15 @@ const getDimAndMarginStyleForSchema = (schema) => {
   } else {
     // If user is using css units in their margins and dimensions, then use css calc
     toReturn.width = `calc(
-      ${schema.width || DEFAULT_WIDTH} - 
-      ${schema.margins.left || DEFAULT_MARGIN} - 
-      ${schema.margins.right || DEFAULT_MARGIN}
+      ${calculatedWidth} - 
+      ${calculatedMargins.left} - 
+      ${calculatedMargins.right}
     )`;
 
     toReturn.height = `calc(
-      ${schema.height || DEFAULT_HEIGHT} - 
-      ${schema.margins.top || DEFAULT_MARGIN} - 
-      ${schema.margins.bottom || DEFAULT_MARGIN}
+      ${calculatedHeight} - 
+      ${calculatedMargins.top} - 
+      ${calculatedMargins.bottom}
     )`;
   }
 

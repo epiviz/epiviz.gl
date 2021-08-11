@@ -1,5 +1,5 @@
-import { a as SIZE_UNITS, t as transformGenomicRangeArcToStandard, b as transformGenomicRangeToStandard, S as SchemaProcessor } from './schema-processor-472ae1a3.js';
-import { b as getViewportForSchema } from './utilities-8745698b.js';
+import { a as SIZE_UNITS, t as transformGenomicRangeArcToStandard, b as transformGenomicRangeToStandard, S as SchemaProcessor } from './schema-processor-98035df1.js';
+import { b as getViewportForSchema } from './utilities-2da24fe5.js';
 
 class FlatQueue {
 
