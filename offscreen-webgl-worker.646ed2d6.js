@@ -891,23 +891,59 @@ const $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema = (dimension, s
   const asScale = new $3ebbd6da2f6dbbd2ea0ba22bdc176caf$export$GenomeScale(genome, [smallestGene, largestGene]);
   return asScale.toCallable();
 };
-const $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN = "2em";
-const $ab472fc72a52ba79515db0c00f4f687a$export$getDimAndMarginStyleForSchema = schema => {
-  if (schema.margins === undefined) {
-    return {
-      width: `calc(100% - ${$ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN} - ${$ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN}`,
-      height: `calc(100% - ${$ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN} - ${$ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN}`,
-      margin: $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN
-    };
+const $ab472fc72a52ba79515db0c00f4f687a$var$RELATIVE_LENGTH_UNITS = ["em", "ex", "ch", "rem", "lh", "vw", "vh", "vmin", "vmax", "%"];
+const $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement = cssMeasurement => {
+  if ($ab472fc72a52ba79515db0c00f4f687a$var$RELATIVE_LENGTH_UNITS.some(unit => cssMeasurement.includes(unit))) {
+    return false;
   }
+  const asFloat = parseFloat(cssMeasurement);
+  return isNaN(asFloat) ? false : asFloat;
+};
+const $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN = "50px";
+const $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH = "100%";
+const $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_HEIGHT = $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH;
+const $ab472fc72a52ba79515db0c00f4f687a$export$getDimAndMarginStyleForSchema = schema => {
   let toReturn = {};
-  toReturn.width = `calc(100% - ${schema.margins.left || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN} - ${schema.margins.right || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN})`;
-  toReturn.height = `calc(100% - ${schema.margins.top || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN} - ${schema.margins.bottom || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN})`;
-  // Shorthand for top right bottom left
-  toReturn.margin = `${schema.margins.top || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN}
-                     ${schema.margins.right || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN}
-                     ${schema.margins.bottom || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN}
-                     ${schema.margins.left || $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN}`;
+  const calculatedMargins = {};
+  if (schema.margins === undefined) {
+    toReturn.margin = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
+    calculatedMargins.top = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
+    calculatedMargins.right = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
+    calculatedMargins.bottom = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
+    calculatedMargins.left = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
+  } else {
+    calculatedMargins.top = schema.margins.top === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.top;
+    calculatedMargins.right = schema.margins.right === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.right;
+    calculatedMargins.bottom = schema.margins.bottom === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.bottom;
+    calculatedMargins.left = schema.margins.left === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.left;
+    // Shorthand for top right bottom left
+    toReturn.margin = `${calculatedMargins.top}
+                       ${calculatedMargins.right}
+                       ${calculatedMargins.bottom}
+                       ${calculatedMargins.left}`;
+  }
+  const calculatedWidth = schema.width || $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH;
+  const calculatedHeight = schema.height || $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_HEIGHT;
+  const allMeasurements = [calculatedMargins.top, calculatedMargins.right, calculatedMargins.bottom, calculatedMargins.left, calculatedWidth, calculatedHeight];
+  console.log(allMeasurements.map($ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement));
+  if (allMeasurements.every($ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement)) {
+    // Let's encode as a number to allow users using typescript or doing weird DOM things able to define
+    // the width and height explicitly
+    toReturn.width = $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement(calculatedWidth) - $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement(calculatedMargins.left) - $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement(calculatedMargins.right);
+    toReturn.height = $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement(calculatedHeight) - $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement(calculatedMargins.bottom) - $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement(calculatedMargins.top);
+  } else {
+    // If user is using css units in their margins and dimensions, then use css calc
+    toReturn.width = `calc(
+      ${calculatedWidth} - 
+      ${calculatedMargins.left} - 
+      ${calculatedMargins.right}
+    )`;
+    toReturn.height = `calc(
+      ${calculatedHeight} - 
+      ${calculatedMargins.top} - 
+      ${calculatedMargins.bottom}
+    )`;
+  }
   return toReturn;
 };
 /**
@@ -2076,4 +2112,4 @@ function $2a4f8c7882dfdea78821148c89bf8779$init() {
 }
 export {$a482b49601c034373694faa8888ffe15$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init};
 
-//# sourceMappingURL=offscreen-webgl-worker.adafb6c8.js.map
+//# sourceMappingURL=offscreen-webgl-worker.646ed2d6.js.map

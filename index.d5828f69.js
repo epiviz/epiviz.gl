@@ -41,7 +41,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.359a1bca.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.5d8da284.js\",\"4qh26\":\"data-processor-worker.f2c682ad.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.d5828f69.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.5bdfe64a.js\",\"4qh26\":\"data-processor-worker.b9547f75.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3734,8 +3734,8 @@
     margins: {
       top: "4em",
       left: "3em",
-      bottom: 0,
-      right: 0
+      bottom: "0",
+      right: "0"
     },
     labels: [{
       x: -0.5,
@@ -6063,23 +6063,59 @@
     const asScale = new $2e9e6b6c3378724b336406626f99a6bc$export$GenomeScale(genome, [smallestGene, largestGene]);
     return asScale.toCallable();
   };
-  const $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN = "2em";
-  const $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema = schema => {
-    if (schema.margins === undefined) {
-      return {
-        width: `calc(100% - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`,
-        height: `calc(100% - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${$794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`,
-        margin: $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN
-      };
+  const $794bbb298c1fc0cc3157526701549b8c$var$RELATIVE_LENGTH_UNITS = ["em", "ex", "ch", "rem", "lh", "vw", "vh", "vmin", "vmax", "%"];
+  const $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement = cssMeasurement => {
+    if ($794bbb298c1fc0cc3157526701549b8c$var$RELATIVE_LENGTH_UNITS.some(unit => cssMeasurement.includes(unit))) {
+      return false;
     }
+    const asFloat = parseFloat(cssMeasurement);
+    return isNaN(asFloat) ? false : asFloat;
+  };
+  const $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN = "50px";
+  const $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH = "100%";
+  const $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT = $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
+  const $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema = schema => {
     let toReturn = {};
-    toReturn.width = `calc(100% - ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${schema.margins.right || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN})`;
-    toReturn.height = `calc(100% - ${schema.margins.top || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN} - ${schema.margins.bottom || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN})`;
-    // Shorthand for top right bottom left
-    toReturn.margin = `${schema.margins.top || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
-                     ${schema.margins.right || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
-                     ${schema.margins.bottom || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}
-                     ${schema.margins.left || $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN}`;
+    const calculatedMargins = {};
+    if (schema.margins === undefined) {
+      toReturn.margin = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
+      calculatedMargins.top = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
+      calculatedMargins.right = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
+      calculatedMargins.bottom = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
+      calculatedMargins.left = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
+    } else {
+      calculatedMargins.top = schema.margins.top === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.top;
+      calculatedMargins.right = schema.margins.right === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.right;
+      calculatedMargins.bottom = schema.margins.bottom === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.bottom;
+      calculatedMargins.left = schema.margins.left === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.left;
+      // Shorthand for top right bottom left
+      toReturn.margin = `${calculatedMargins.top}
+                       ${calculatedMargins.right}
+                       ${calculatedMargins.bottom}
+                       ${calculatedMargins.left}`;
+    }
+    const calculatedWidth = schema.width || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
+    const calculatedHeight = schema.height || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT;
+    const allMeasurements = [calculatedMargins.top, calculatedMargins.right, calculatedMargins.bottom, calculatedMargins.left, calculatedWidth, calculatedHeight];
+    console.log(allMeasurements.map($794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement));
+    if (allMeasurements.every($794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement)) {
+      // Let's encode as a number to allow users using typescript or doing weird DOM things able to define
+      // the width and height explicitly
+      toReturn.width = $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement(calculatedWidth) - $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement(calculatedMargins.left) - $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement(calculatedMargins.right);
+      toReturn.height = $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement(calculatedHeight) - $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement(calculatedMargins.bottom) - $794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement(calculatedMargins.top);
+    } else {
+      // If user is using css units in their margins and dimensions, then use css calc
+      toReturn.width = `calc(
+      ${calculatedWidth} - 
+      ${calculatedMargins.left} - 
+      ${calculatedMargins.right}
+    )`;
+      toReturn.height = `calc(
+      ${calculatedHeight} - 
+      ${calculatedMargins.top} - 
+      ${calculatedMargins.bottom}
+    )`;
+    }
     return toReturn;
   };
   /**
@@ -11124,466 +11160,21 @@
   var $0cb2a726714ab9e25f66a914aaf55a06$export$SchemaError = $ce4eec71ec4285d39f33d14254969864$export$SchemaError;
   var $0cb2a726714ab9e25f66a914aaf55a06$export$SchemaScanResult = $88344eb976b27020930887e01ad42def$export$SchemaScanResult;
   var $0cb2a726714ab9e25f66a914aaf55a06$export$scan = $88344eb976b27020930887e01ad42def$export$scan;
-  var $6e3deca82e40cc39adaf723a4debdf92$export$default = {
-    "schema": "https://json-schema.org/draft/2020-12/schema",
-    "id": "/visualization",
-    "title": "Visualization",
-    "description": "A webgl visualization made of a sequence of tracks",
-    "type": "object",
-    "required": ["tracks"],
-    "properties": {
-      "labels": {
-        "description": "set of labels to display on visualization, properties of labels can be any valid attribute for an svg text element",
-        "examples": [{
-          "x": 100,
-          "y": 200,
-          "text": "my favorite data point",
-          "rotate": -90
-        }, {
-          "x": -1.1,
-          "y": 0,
-          "text": "Track 1",
-          "color": "red",
-          "fixedX": true
-        }],
-        "type": "array",
-        "items": {
-          "properties": {
-            "x": {
-              "description": "x coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if x dimension is categorical or genomic",
-              "type": "number"
-            },
-            "y": {
-              "description": "y coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if y dimension is categorical or genomic",
-              "type": "number"
-            },
-            "fixedX": {
-              "description": "fix the x coordinate of the label, so it does not move when panning/zooming left or right",
-              "type": "boolean"
-            },
-            "fixedY": {
-              "description": "fix the y coordinate of the label, so it does not move when panning/zooming up or down",
-              "type": "boolean"
-            },
-            "required": ["x", "y"]
-          }
-        }
-      },
-      "xAxis": {
-        "description": "location of x-axis",
-        "enum": ["bottom", "top", "center", "none", "zero"]
-      },
-      "yAxis": {
-        "description": "location of y-axis",
-        "enum": ["left", "right", "center", "none", "zero"]
-      },
-      "tracks": {
-        "description": "A track is a map from the data to a sequence of marks",
-        "type": "array",
-        "items": {
-          "$ref": "/track"
-        }
-      },
-      "defaultData": {
-        "description": "A string of a csv href containing data or an object of inline data where each key is a column of values",
-        "examples": ["http://example.com/data.csv", {
-          "day": [1, 2],
-          "price": [10, 20]
-        }],
-        "type": ["string", "object"],
-        "additionalProperties": {
-          "type": "array"
-        },
-        "minProperties": 1
-      }
-    },
-    "allOf": [{
-      "description": "if there is no default data for the visualization require each track to have data property",
-      "if": {
-        "not": {
-          "required": ["defaultData"]
-        }
-      },
-      "then": {
-        "properties": {
-          "tracks": {
-            "items": {
-              "required": ["data"]
-            }
-          }
-        }
-      },
-      "else": {}
-    }]
-  };
-  var $305419b79a6a6ac176a05a7666939652$export$default = {
-    "schema": "https://json-schema.org/draft/2020-12/schema",
-    "id": "/track",
-    "title": "Track",
-    "description": "A track to visualize",
-    "type": "object",
-    "required": ["mark", "x", "y"],
-    "properties": {
-      "data": {
-        "description": "A string of a csv href containing data or an object of inline data where each key is an array of a data column",
-        "type": ["string", "object"],
-        "additionalProperties": {
-          "type": "array"
-        },
-        "minProperties": 1
-      },
-      "mark": {
-        "description": "type of mark to visualize",
-        "enum": ["point", "line", "area", "rect", "tick", "arc"]
-      },
-      "tooltips": {
-        "description": "a number between 0 and 1 where 0 is no tooltips, 1 is always show, and, for example, 0.1 would be show tooltips when zoomed in to 10% of the domain",
-        "type": "number",
-        "minimum": 0,
-        "maximum": 1
-      },
-      "x": {
-        "description": "define the x coordinates of the marks",
-        "type": "object",
-        "allOf": [{
-          "$ref": "/channel"
-        }],
-        "examples": [{
-          "type": "genomic",
-          "chrAttribute": "chr",
-          "geneAttribute": "gene",
-          "domain": ["chr2:100", "chr2:300"]
-        }]
-      },
-      "y": {
-        "description": "define the y coordinates of the marks",
-        "type": "object",
-        "allOf": [{
-          "$ref": "/channel"
-        }],
-        "examples": [{
-          "type": "quantitative",
-          "attribute": "time",
-          "domain": [0, 10]
-        }, {
-          "attribute": "sample",
-          "type": "categorical",
-          "cardinality": 10
-        }]
-      },
-      "color": {
-        "description": "define the color of the marks, for fixed values can be any css3 color descriptor or a number that translates to a color in hex",
-        "type": "object",
-        "properties": {
-          "colorScheme": {
-            "description": "d3 continuous color scheme to use, see d3-scale-chromatic for options",
-            "examples": ["interpolateBlues", "interpolateReds", "interpolateRainbow"],
-            "type": "string"
-          }
-        },
-        "examples": [{
-          "value": "red"
-        }, {
-          "value": 16581375
-        }, {
-          "attribute": "sample",
-          "type": "categorical",
-          "cardinality": 10,
-          "colorScheme": "interpolateBuGn"
-        }],
-        "allOf": [{
-          "$ref": "/channel"
-        }]
-      },
-      "size": {
-        "description": "size of the mark, used only when mark type is point, use width or height for other mark types. The units of this channel correspond to 1/200th of the canvas e.g. a size of 100 is half the canvas.",
-        "type": "object",
-        "properties": {
-          "maxSize": {
-            "type": "number"
-          },
-          "minSize": {
-            "type": "number"
-          },
-          "value": {
-            "type": "number"
-          }
-        },
-        "examples": [{
-          "attribute": "population",
-          "type": "quantitative",
-          "domain": [0, 1000],
-          "maxSize": 10,
-          "minSize": 1
-        }],
-        "allOf": [{
-          "$ref": "/channel"
-        }]
-      },
-      "width": {
-        "description": "width of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the width of the canvas. This channel may be a genomic range type for arc tracks. If both height and width are specified for a tick mark, only width is used.",
-        "type": "object",
-        "properties": {
-          "maxWidth": {
-            "type": "number"
-          },
-          "minWidth": {
-            "type": "number"
-          },
-          "value": {
-            "type": "number"
-          }
-        },
-        "allOf": [{
-          "$ref": "/channel"
-        }]
-      },
-      "height": {
-        "description": "height of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the height of the canvas. This channel may be a genomic range type for arc tracks.",
-        "type": "object",
-        "properties": {
-          "maxHeight": {
-            "type": "number"
-          },
-          "minHeight": {
-            "type": "number"
-          },
-          "value": {
-            "type": "number"
-          }
-        },
-        "allOf": [{
-          "$ref": "/channel"
-        }]
-      },
-      "opacity": {
-        "description": "opacity of the mark, compatible with all mark types",
-        "type": "object",
-        "properties": {
-          "minOpacity": {
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMaximum": 1
-          },
-          "value": {
-            "type": "number"
-          }
-        },
-        "allOf": [{
-          "$ref": "/channel"
-        }]
-      },
-      "shape": {
-        "description": "shape of the mark, used only for point marks",
-        "type": "object",
-        "properties": {
-          "value": {
-            "enum": ["dot", "circle", "diamond", "triangle"]
-          }
-        },
-        "allOf": [{
-          "$ref": "/channel"
-        }]
-      }
-    }
-  };
-  var $4c2857cbd557a8ec527654d7743dbce3$export$default = {
-    "schema": "https://json-schema.org/draft/2020-12/schema",
-    "id": "/channel",
-    "title": "Channel",
-    "description": "A channel of a visualization",
-    "type": "object",
-    "properties": {
-      "type": {
-        "description": "type of attribute, genomic range only compatible with x, y, width and height",
-        "enum": ["quantitative", "categorical", "genomic", "genomicRange", "inline"]
-      },
-      "attribute": {
-        "description": "column of data frame to use for mapping channel",
-        "type": "string"
-      },
-      "value": {
-        "description": "if fixing a channel, specify with value",
-        "type": ["string", "number", "boolean"]
-      },
-      "domain": {
-        "description": "domain of attribute to use for mapping, required if type is quantitative",
-        "type": "array"
-      },
-      "cardinality": {
-        "description": "number of attribute values to use for mapping, required if type is categorical",
-        "type": "integer"
-      },
-      "chrAttribute": {
-        "description": "if type is genomic or genomicRange, the attribute that contains the chromosome id",
-        "type": "string"
-      },
-      "startAttribute": {
-        "description": "if type is genomicRange, the attribute that contains the start of the range",
-        "type": "string"
-      },
-      "endAttribute": {
-        "description": "if type is genomicRange, the attribute that contains the end of the range",
-        "type": "string"
-      },
-      "genome": {
-        "description": "genome being mapped",
-        "enum": ["hg38", "hg19", "mm39"]
-      }
-    },
-    "allOf": [{
-      "description": "If type is genomic, require genomic attributes and forbid regular attributes",
-      "anyOf": [{
-        "not": {
-          "properties": {
-            "type": {
-              "const": "genomic"
-            }
-          },
-          "required": ["type"]
-        }
-      }, {
-        "required": ["chrAttribute", "geneAttribute", "genome"],
-        "not": {
-          "required": ["attribute", "startAttribute", "endAttribute"]
-        },
-        "properties": {
-          "domain": {
-            "items": [{
-              "type": "string",
-              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
-            }, {
-              "type": "string",
-              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
-            }]
-          }
-        }
-      }]
-    }, {
-      "description": "If type is genomicRange, require genomicRange attributes and forbid regular attribute",
-      "anyOf": [{
-        "not": {
-          "properties": {
-            "type": {
-              "const": "genomicRange"
-            }
-          },
-          "required": ["type"]
-        }
-      }, {
-        "required": ["chrAttribute", "startAttribute", "endAttribute", "genome"],
-        "not": {
-          "required": ["attribute", "geneAttribute"]
-        },
-        "properties": {
-          "domain": {
-            "items": [{
-              "type": "string",
-              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
-            }, {
-              "type": "string",
-              "pattern": "chr(\\d{1,2}|[XY]):\\d+"
-            }]
-          }
-        }
-      }]
-    }, {
-      "description": "If type is quantitative, require domain and forbid cardinality",
-      "anyOf": [{
-        "not": {
-          "properties": {
-            "type": {
-              "const": "quantitative"
-            }
-          },
-          "required": ["type"]
-        }
-      }, {
-        "required": ["domain"],
-        "properties": {
-          "domain": {
-            "items": [{
-              "type": "number"
-            }, {
-              "type": "number"
-            }]
-          }
-        },
-        "not": {
-          "required": ["cardinality"]
-        }
-      }]
-    }, {
-      "description": "If type is categorical, require cardinality and forbid domain",
-      "anyOf": [{
-        "not": {
-          "properties": {
-            "type": {
-              "const": "categorical"
-            }
-          },
-          "required": ["type"]
-        }
-      }, {
-        "required": ["cardinality"],
-        "not": {
-          "required": ["domain"]
-        }
-      }]
-    }, {
-      "description": "If value is defined, disallow other attributes",
-      "anyOf": [{
-        "not": {
-          "properties": {
-            "value": {
-              "not": {
-                "type": "null"
-              }
-            }
-          },
-          "required": ["value"]
-        }
-      }, {
-        "allOf": [{
-          "not": {
-            "required": ["attribute"]
-          }
-        }, {
-          "not": {
-            "required": ["type"]
-          }
-        }, {
-          "not": {
-            "required": ["domain"]
-          }
-        }, {
-          "not": {
-            "required": ["cardinality"]
-          }
-        }]
-      }]
-    }, {
-      "description": "If value is not defined, require attribute or genomic attributes",
-      "anyOf": [{
-        "not": {
-          "properties": {
-            "value": {
-              "type": "null"
-            }
-          }
-        }
-      }, {
-        "oneOf": [{
-          "required": ["attribute"]
-        }, {
-          "required": ["chrAttribute", "genome"]
-        }]
-      }]
-    }]
-  };
+  // ASSET: src/epiviz.gl/schema-validation/visualization.json
+  var $dcfca146b82b6460afb98fe424831121$exports = {};
+  $dcfca146b82b6460afb98fe424831121$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/visualization\",\"title\":\"Visualization\",\"description\":\"A webgl visualization made of a sequence of tracks\",\"type\":\"object\",\"required\":[\"tracks\"],\"properties\":{\"labels\":{\"description\":\"set of labels to display on visualization, properties of labels can be any valid attribute for an svg text element\",\"examples\":[{\"x\":100,\"y\":200,\"text\":\"my favorite data point\",\"rotate\":-90},{\"x\":-1.1,\"y\":0,\"text\":\"Track 1\",\"color\":\"red\",\"fixedX\":true}],\"type\":\"array\",\"items\":{\"properties\":{\"x\":{\"description\":\"x coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if x dimension is categorical or genomic\",\"type\":\"number\"},\"y\":{\"description\":\"y coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if y dimension is categorical or genomic\",\"type\":\"number\"},\"fixedX\":{\"description\":\"fix the x coordinate of the label, so it does not move when panning/zooming left or right\",\"type\":\"boolean\"},\"fixedY\":{\"description\":\"fix the y coordinate of the label, so it does not move when panning/zooming up or down\",\"type\":\"boolean\"},\"required\":[\"x\",\"y\"]}}},\"xAxis\":{\"description\":\"location of x-axis\",\"enum\":[\"bottom\",\"top\",\"center\",\"none\",\"zero\"]},\"yAxis\":{\"description\":\"location of y-axis\",\"enum\":[\"left\",\"right\",\"center\",\"none\",\"zero\"]},\"tracks\":{\"description\":\"A track is a map from the data to a sequence of marks\",\"type\":\"array\",\"items\":{\"$ref\":\"/track\"}},\"defaultData\":{\"description\":\"A string of a csv href containing data or an object of inline data where each key is a column of values\",\"examples\":[\"http://example.com/data.csv\",{\"day\":[1,2],\"price\":[10,20]}],\"type\":[\"string\",\"object\"],\"additionalProperties\":{\"type\":\"array\"},\"minProperties\":1},\"width\":{\"description\":\"Width of the visualization in css units\",\"examples\":[\"400px\",\"100%\",\"10em\",\"600\"],\"type\":\"string\"},\"height\":{\"description\":\"Height of the visualization in css units\",\"examples\":[\"400px\",\"100%\",\"10em\",\"600\"],\"type\":\"string\"},\"margins\":{\"description\":\"Margins for the visualization; gives more space for labels and axis to render\",\"properties\":{\"top\":{\"description\":\"Top margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"bottom\":{\"description\":\"Bottom margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"left\":{\"description\":\"Left margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"right\":{\"description\":\"Right margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]}}}},\"allOf\":[{\"description\":\"if there is no default data for the visualization require each track to have data property\",\"if\":{\"not\":{\"required\":[\"defaultData\"]}},\"then\":{\"properties\":{\"tracks\":{\"items\":{\"required\":[\"data\"]}}}},\"else\":{}}]}");
+  var $dcfca146b82b6460afb98fe424831121$$interop$default = /*@__PURE__*/$parcel$interopDefault($dcfca146b82b6460afb98fe424831121$exports);
+  // ASSET: src/epiviz.gl/schema-validation/track.json
+  var $d304442893938a2318426ba12a03873d$exports = {};
+  $d304442893938a2318426ba12a03873d$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/track\",\"title\":\"Track\",\"description\":\"A track to visualize\",\"type\":\"object\",\"required\":[\"mark\",\"x\",\"y\"],\"properties\":{\"data\":{\"description\":\"A string of a csv href containing data or an object of inline data where each key is an array of a data column\",\"type\":[\"string\",\"object\"],\"additionalProperties\":{\"type\":\"array\"},\"minProperties\":1},\"mark\":{\"description\":\"type of mark to visualize\",\"enum\":[\"point\",\"line\",\"area\",\"rect\",\"tick\",\"arc\"]},\"tooltips\":{\"description\":\"a number between 0 and 1 where 0 is no tooltips, 1 is always show, and, for example, 0.1 would be show tooltips when zoomed in to 10% of the domain\",\"type\":\"number\",\"minimum\":0,\"maximum\":1},\"x\":{\"description\":\"define the x coordinates of the marks\",\"type\":\"object\",\"allOf\":[{\"$ref\":\"/channel\"}],\"examples\":[{\"type\":\"genomic\",\"chrAttribute\":\"chr\",\"geneAttribute\":\"gene\",\"domain\":[\"chr2:100\",\"chr2:300\"]}]},\"y\":{\"description\":\"define the y coordinates of the marks\",\"type\":\"object\",\"allOf\":[{\"$ref\":\"/channel\"}],\"examples\":[{\"type\":\"quantitative\",\"attribute\":\"time\",\"domain\":[0,10]},{\"attribute\":\"sample\",\"type\":\"categorical\",\"cardinality\":10}]},\"color\":{\"description\":\"define the color of the marks, for fixed values can be any css3 color descriptor or a number that translates to a color in hex\",\"type\":\"object\",\"properties\":{\"colorScheme\":{\"description\":\"d3 continuous color scheme to use, see d3-scale-chromatic for options\",\"examples\":[\"interpolateBlues\",\"interpolateReds\",\"interpolateRainbow\"],\"type\":\"string\"}},\"examples\":[{\"value\":\"red\"},{\"value\":16581375},{\"attribute\":\"sample\",\"type\":\"categorical\",\"cardinality\":10,\"colorScheme\":\"interpolateBuGn\"}],\"allOf\":[{\"$ref\":\"/channel\"}]},\"size\":{\"description\":\"size of the mark, used only when mark type is point, use width or height for other mark types. The units of this channel correspond to 1/200th of the canvas e.g. a size of 100 is half the canvas.\",\"type\":\"object\",\"properties\":{\"maxSize\":{\"type\":\"number\"},\"minSize\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"examples\":[{\"attribute\":\"population\",\"type\":\"quantitative\",\"domain\":[0,1000],\"maxSize\":10,\"minSize\":1}],\"allOf\":[{\"$ref\":\"/channel\"}]},\"width\":{\"description\":\"width of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the width of the canvas. This channel may be a genomic range type for arc tracks. If both height and width are specified for a tick mark, only width is used.\",\"type\":\"object\",\"properties\":{\"maxWidth\":{\"type\":\"number\"},\"minWidth\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"height\":{\"description\":\"height of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the height of the canvas. This channel may be a genomic range type for arc tracks.\",\"type\":\"object\",\"properties\":{\"maxHeight\":{\"type\":\"number\"},\"minHeight\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"opacity\":{\"description\":\"opacity of the mark, compatible with all mark types\",\"type\":\"object\",\"properties\":{\"minOpacity\":{\"type\":\"number\",\"minimum\":0,\"exclusiveMaximum\":1},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"shape\":{\"description\":\"shape of the mark, used only for point marks\",\"type\":\"object\",\"properties\":{\"value\":{\"enum\":[\"dot\",\"circle\",\"diamond\",\"triangle\"]}},\"allOf\":[{\"$ref\":\"/channel\"}]}}}");
+  var $d304442893938a2318426ba12a03873d$$interop$default = /*@__PURE__*/$parcel$interopDefault($d304442893938a2318426ba12a03873d$exports);
+  // ASSET: src/epiviz.gl/schema-validation/channel.json
+  var $efdc490af13c2135de6efa4153e39a48$exports = {};
+  $efdc490af13c2135de6efa4153e39a48$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/channel\",\"title\":\"Channel\",\"description\":\"A channel of a visualization\",\"type\":\"object\",\"properties\":{\"type\":{\"description\":\"type of attribute, genomic range only compatible with x, y, width and height\",\"enum\":[\"quantitative\",\"categorical\",\"genomic\",\"genomicRange\",\"inline\"]},\"attribute\":{\"description\":\"column of data frame to use for mapping channel\",\"type\":\"string\"},\"value\":{\"description\":\"if fixing a channel, specify with value\",\"type\":[\"string\",\"number\",\"boolean\"]},\"domain\":{\"description\":\"domain of attribute to use for mapping, required if type is quantitative\",\"type\":\"array\"},\"cardinality\":{\"description\":\"number of attribute values to use for mapping, required if type is categorical\",\"type\":\"integer\"},\"chrAttribute\":{\"description\":\"if type is genomic or genomicRange, the attribute that contains the chromosome id\",\"type\":\"string\"},\"startAttribute\":{\"description\":\"if type is genomicRange, the attribute that contains the start of the range\",\"type\":\"string\"},\"endAttribute\":{\"description\":\"if type is genomicRange, the attribute that contains the end of the range\",\"type\":\"string\"},\"genome\":{\"description\":\"genome being mapped\",\"enum\":[\"hg38\",\"hg19\",\"mm39\"]}},\"allOf\":[{\"description\":\"If type is genomic, require genomic attributes and forbid regular attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"genomic\"}},\"required\":[\"type\"]}},{\"required\":[\"chrAttribute\",\"geneAttribute\",\"genome\"],\"not\":{\"required\":[\"attribute\",\"startAttribute\",\"endAttribute\"]},\"properties\":{\"domain\":{\"items\":[{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"},{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"}]}}}]},{\"description\":\"If type is genomicRange, require genomicRange attributes and forbid regular attribute\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"genomicRange\"}},\"required\":[\"type\"]}},{\"required\":[\"chrAttribute\",\"startAttribute\",\"endAttribute\",\"genome\"],\"not\":{\"required\":[\"attribute\",\"geneAttribute\"]},\"properties\":{\"domain\":{\"items\":[{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"},{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"}]}}}]},{\"description\":\"If type is quantitative, require domain and forbid cardinality\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"quantitative\"}},\"required\":[\"type\"]}},{\"required\":[\"domain\"],\"properties\":{\"domain\":{\"items\":[{\"type\":\"number\"},{\"type\":\"number\"}]}},\"not\":{\"required\":[\"cardinality\"]}}]},{\"description\":\"If type is categorical, require cardinality and forbid domain\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"categorical\"}},\"required\":[\"type\"]}},{\"required\":[\"cardinality\"],\"not\":{\"required\":[\"domain\"]}}]},{\"description\":\"If value is defined, disallow other attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"value\":{\"not\":{\"type\":\"null\"}}},\"required\":[\"value\"]}},{\"allOf\":[{\"not\":{\"required\":[\"attribute\"]}},{\"not\":{\"required\":[\"type\"]}},{\"not\":{\"required\":[\"domain\"]}},{\"not\":{\"required\":[\"cardinality\"]}}]}]},{\"description\":\"If value is not defined, require attribute or genomic attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"value\":{\"type\":\"null\"}}}},{\"oneOf\":[{\"required\":[\"attribute\"]},{\"required\":[\"chrAttribute\",\"genome\"]}]}]}]}");
+  var $efdc490af13c2135de6efa4153e39a48$$interop$default = /*@__PURE__*/$parcel$interopDefault($efdc490af13c2135de6efa4153e39a48$exports);
   const $5bd7316b1b971c16c065bbe70a894cf9$var$v = new $0cb2a726714ab9e25f66a914aaf55a06$export$Validator();
-  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($4c2857cbd557a8ec527654d7743dbce3$export$default, "/channel");
-  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($305419b79a6a6ac176a05a7666939652$export$default, "/track");
+  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($efdc490af13c2135de6efa4153e39a48$$interop$default, "/channel");
+  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($d304442893938a2318426ba12a03873d$$interop$default, "/track");
   /**
   * Utility method that returns a boolean on whether the json is a valid schema.
   * console.errors the reason if it is not.
@@ -11591,7 +11182,7 @@
   * @returns boolean
   */
   const $5bd7316b1b971c16c065bbe70a894cf9$export$default = json => {
-    const validation = $5bd7316b1b971c16c065bbe70a894cf9$var$v.validate(json, $6e3deca82e40cc39adaf723a4debdf92$export$default);
+    const validation = $5bd7316b1b971c16c065bbe70a894cf9$var$v.validate(json, $dcfca146b82b6460afb98fe424831121$$interop$default);
     if (!validation.valid) {
       console.error(validation.errors);
     }
@@ -11609,12 +11200,9 @@
       this.mouseReader = new $ea9fc8a1b0a7e0be7497639e5ed20241$export$default(document.createElement("div"), this);
       this.parent = document.createElement("div");
       this.parent.style.position = "relative";
-      this.parent.style.width = "100%";
-      this.parent.style.height = "100%";
       this.parent.style.overflow = "hidden";
       this.canvas = document.createElement("canvas");
-      this.canvas.style.width = "100%";
-      this.canvas.style.height = "100%";
+      this.canvas.style.position = "absolute";
     }
     /**
     * Resize the canvas to a particular size and rerender the data
@@ -11647,12 +11235,6 @@
       this.container.appendChild(this.parent);
       this.parent.appendChild(this.canvas);
       this.parent.appendChild(this.mouseReader.element);
-      const canvasBox = this.canvas.getBoundingClientRect();
-      this.width = this.parent.clientWidth;
-      this.height = this.parent.clientHeight;
-      this.canvas.width = canvasBox.width;
-      this.canvas.height = canvasBox.height;
-      this.canvas.style.position = "absolute";
       if (displayFPSMeter) {
         this.initFpsmeter();
       }
@@ -11706,11 +11288,18 @@
     }
     _setMargins(schema) {
       const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema(schema);
+      this.parent.style.width = schema.width || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
+      this.parent.style.height = schema.height || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT;
       this.canvas.style.width = styles.width;
       this.canvas.style.height = styles.height;
       this.canvas.style.margin = styles.margin;
-      const canvasBox = this.canvas.getBoundingClientRect();
-      this.setCanvasSize(canvasBox.width, canvasBox.height);
+      if (isNaN(styles.width) || isNaN(styles.height)) {
+        // Using css calc
+        const canvasBox = this.canvas.getBoundingClientRect();
+        this.setCanvasSize(canvasBox.width, canvasBox.height);
+      } else {
+        this.setCanvasSize(styles.width, styles.height);
+      }
     }
     /**
     * Set the schema of the visualization, and then render it.
@@ -11799,7 +11388,7 @@
         theme: "light",
         history: 25,
         top: "-20px",
-        left: `${this.width / 2}px`,
+        left: `100px`,
         transform: "translateX(-100%)"
       });
     }
@@ -11877,4 +11466,4 @@
   });
 })();
 
-//# sourceMappingURL=index.359a1bca.js.map
+//# sourceMappingURL=index.d5828f69.js.map
