@@ -221,6 +221,8 @@ class VertexCalculator {
         return this._getVerticesForPolygon(mark, 16);
       case "cross":
         return this._getVerticesForCross(mark);
+      default:
+        console.error(`${mark.shape} is not a valid shape!`);
     }
   }
 

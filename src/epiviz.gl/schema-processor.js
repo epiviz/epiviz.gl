@@ -294,6 +294,9 @@ class Track {
         let attrMapper;
 
         switch (channelInfo.type) {
+          case "inline":
+            attrMapper = buildMapperForInlineChannel(channel, channelInfo);
+            break;
           case "quantitative":
             attrMapper = buildMapperForQuantitiveChannel(channel, channelInfo);
             break;
@@ -332,6 +335,29 @@ class Track {
     }
   };
 }
+
+/**
+ * Build a function which maps an attribute that is a channel value to a compatible value.
+ *
+ * @param {String} channel the name of the channel to build an inline mapper for
+ * @param {Object} channelInfo the info of the channel from a track
+ * @returns a function that maps attribute values to appropriate channel values.
+ */
+const buildMapperForInlineChannel = (channel, channelInfo) => {
+  switch (channel) {
+    case "width":
+    case "height":
+    case "size":
+      return (dimension) => parseFloat(dimension);
+    case "color":
+      return (color) => colorSpecifierToHex(color);
+    default:
+      console.info(
+        `No special behavior for ${channel} as an inline attribute.`
+      );
+      return (inlineValue) => inlineValue;
+  }
+};
 
 /**
  * Build a function which maps a numerical value for an attribute to a property of a mark
