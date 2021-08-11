@@ -1,5 +1,5 @@
-import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, S as SchemaProcessor, V as VertexCalculator } from './schema-processor-02fdb272.js';
-import { c as colorSpecifierToHex, s as scale } from './utilities-b398dcce.js';
+import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, S as SchemaProcessor, V as VertexCalculator } from './schema-processor-ac01e92b.js';
+import { d as colorSpecifierToHex, s as scale } from './utilities-9d3a8849.js';
 
 class Drawer {
   /**

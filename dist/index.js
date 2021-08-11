@@ -1,4 +1,4 @@
-import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema } from './utilities-b398dcce.js';
+import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema, D as DEFAULT_WIDTH, c as DEFAULT_HEIGHT } from './utilities-9d3a8849.js';
 
 /*!
  * FPSMeter 0.3.1 - 9th May 2013
@@ -7215,7 +7215,7 @@ var channel = {
   "properties": {
     "type": {
       "description": "type of attribute, genomic range only compatible with x, y, width and height",
-      "enum": ["quantitative", "categorical", "genomic", "genomicRange"]
+      "enum": ["quantitative", "categorical", "genomic", "genomicRange", "inline"]
     },
     "attribute": {
       "description": "column of data frame to use for mapping channel",
@@ -7435,13 +7435,10 @@ class WebGLVis {
 
     this.parent = document.createElement("div");
     this.parent.style.position = "relative";
-    this.parent.style.width = "100%";
-    this.parent.style.height = "100%";
     this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.style.width = "100%";
-    this.canvas.style.height = "100%";
+    this.canvas.style.position = "absolute";
   }
 
   /**
@@ -7478,21 +7475,13 @@ class WebGLVis {
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
 
-    const canvasBox = this.canvas.getBoundingClientRect();
-    this.width = this.parent.clientWidth;
-    this.height = this.parent.clientHeight;
-    this.canvas.width = canvasBox.width;
-    this.canvas.height = canvasBox.height;
-
-    this.canvas.style.position = "absolute";
-
     if (displayFPSMeter) {
       this.initFpsmeter();
     }
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-987d7ecd.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-7e0511fd.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7512,7 +7501,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-acf75cb8.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-0522f2fa.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
@@ -7549,6 +7538,9 @@ class WebGLVis {
 
   _setMargins(schema) {
     const styles = getDimAndMarginStyleForSchema(schema);
+    this.parent.style.width = schema.width || DEFAULT_WIDTH;
+    this.parent.style.height = schema.height || DEFAULT_HEIGHT;
+
     this.canvas.style.width = styles.width;
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
@@ -7632,7 +7624,7 @@ class WebGLVis {
       theme: "light",
       history: 25,
       top: "-20px",
-      left: `${this.width / 2}px`,
+      left: `100px`,
       transform: "translateX(-100%)",
     });
   }

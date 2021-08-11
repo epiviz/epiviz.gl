@@ -149,21 +149,37 @@ const getScaleForSchema = (dimension, schema) => {
 };
 
 const DEFAULT_MARGIN = "2em";
+const DEFAULT_WIDTH = "400px";
+const DEFAULT_HEIGHT = DEFAULT_WIDTH;
 const getDimAndMarginStyleForSchema = (schema) => {
   if (schema.margins === undefined) {
     return {
-      width: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
-      height: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
+      width: `calc(
+        ${schema.width || DEFAULT_WIDTH} - 
+        ${DEFAULT_MARGIN} - 
+        ${DEFAULT_MARGIN}
+      )`,
+      height: `calc(
+        ${schema.height || DEFAULT_HEIGHT} - 
+        ${DEFAULT_MARGIN} - 
+        ${DEFAULT_MARGIN}
+      )`,
       margin: DEFAULT_MARGIN,
     };
   }
   let toReturn = {};
-  toReturn.width = `calc(100% - ${schema.margins.left || DEFAULT_MARGIN} - ${
-    schema.margins.right || DEFAULT_MARGIN
-  })`;
-  toReturn.height = `calc(100% - ${schema.margins.top || DEFAULT_MARGIN} - ${
-    schema.margins.bottom || DEFAULT_MARGIN
-  })`;
+  toReturn.width = `calc(
+    ${schema.width || DEFAULT_WIDTH} - 
+    ${schema.margins.left || DEFAULT_MARGIN} - 
+    ${schema.margins.right || DEFAULT_MARGIN}
+  )`;
+
+  toReturn.height = `calc(
+    ${schema.height || DEFAULT_HEIGHT} - 
+    ${schema.margins.top || DEFAULT_MARGIN} - 
+    ${schema.margins.bottom || DEFAULT_MARGIN}
+  )`;
+
   // Shorthand for top right bottom left
   toReturn.margin = `${schema.margins.top || DEFAULT_MARGIN}
                      ${schema.margins.right || DEFAULT_MARGIN}
@@ -202,4 +218,6 @@ export {
   getScaleForSchema,
   getDimAndMarginStyleForSchema,
   getQuadraticBezierCurveForPoints,
+  DEFAULT_WIDTH,
+  DEFAULT_HEIGHT,
 };

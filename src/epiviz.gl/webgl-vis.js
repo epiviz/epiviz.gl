@@ -1,7 +1,11 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
 import isJSONValid from "./schema-validation";
-import { getDimAndMarginStyleForSchema } from "./utilities";
+import {
+  getDimAndMarginStyleForSchema,
+  DEFAULT_HEIGHT,
+  DEFAULT_WIDTH,
+} from "./utilities";
 
 class WebGLVis {
   POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
@@ -24,13 +28,10 @@ class WebGLVis {
 
     this.parent = document.createElement("div");
     this.parent.style.position = "relative";
-    this.parent.style.width = "100%";
-    this.parent.style.height = "100%";
     this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.style.width = "100%";
-    this.canvas.style.height = "100%";
+    this.canvas.style.position = "absolute";
   }
 
   /**
@@ -66,14 +67,6 @@ class WebGLVis {
     this.container.appendChild(this.parent);
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
-
-    const canvasBox = this.canvas.getBoundingClientRect();
-    this.width = this.parent.clientWidth;
-    this.height = this.parent.clientHeight;
-    this.canvas.width = canvasBox.width;
-    this.canvas.height = canvasBox.height;
-
-    this.canvas.style.position = "absolute";
 
     if (displayFPSMeter) {
       this.initFpsmeter();
@@ -140,6 +133,9 @@ class WebGLVis {
 
   _setMargins(schema) {
     const styles = getDimAndMarginStyleForSchema(schema);
+    this.parent.style.width = schema.width || DEFAULT_WIDTH;
+    this.parent.style.height = schema.height || DEFAULT_HEIGHT;
+
     this.canvas.style.width = styles.width;
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
@@ -223,7 +219,7 @@ class WebGLVis {
       theme: "light",
       history: 25,
       top: "-20px",
-      left: `${this.width / 2}px`,
+      left: `100px`,
       transform: "translateX(-100%)",
     });
   }
