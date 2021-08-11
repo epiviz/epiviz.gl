@@ -1,7 +1,7 @@
 import {
   scale,
-  getScaleForSchema,
-  getDimAndMarginStyleForSchema,
+  getScaleForSpecification,
+  getDimAndMarginStyleForSpecification,
 } from "./utilities";
 
 import { axisBottom, axisLeft, axisTop, axisRight } from "d3-axis";
@@ -41,14 +41,14 @@ class SVGInteractor {
   }
 
   /**
-   * Set the schema for this class to refer to.
+   * Set the specification for this class to refer to.
    *
-   * @param {Object} schema
+   * @param {Object} specification
    */
-  setSchema(schema) {
-    this.schema = schema;
+  setSpecification(specification) {
+    this.specification = specification;
 
-    const styles = getDimAndMarginStyleForSchema(schema);
+    const styles = getDimAndMarginStyleForSpecification(specification);
     this.svg.style.width = styles.width;
     this.svg.style.height = styles.height;
     this.svg.style.margin = styles.margin;
@@ -56,7 +56,7 @@ class SVGInteractor {
     this.initialX = undefined; // used for updating labels
     this.initialY = undefined;
     select(this._labelMarker).selectAll("*").remove();
-    for (const _ of this.schema.labels || []) {
+    for (const _ of this.specification.labels || []) {
       select(this._labelMarker).append("text");
     }
   }
@@ -87,13 +87,13 @@ class SVGInteractor {
     if (this.currentXRange) {
       this.xAxis = this._calculateAxis(
         "x",
-        this.schema.xAxis,
-        this.schema,
-        getScaleForSchema("x", this.schema),
+        this.specification.xAxis,
+        this.specification,
+        getScaleForSpecification("x", this.specification),
         this.xAxisAnchor
       );
 
-      if (this.schema.labels) {
+      if (this.specification.labels) {
         this.updateLabels();
       }
     }
@@ -105,9 +105,9 @@ class SVGInteractor {
     if (this.currentYRange) {
       this.yAxis = this._calculateAxis(
         "y",
-        this.schema.yAxis,
-        this.schema,
-        getScaleForSchema("y", this.schema),
+        this.specification.yAxis,
+        this.specification,
+        getScaleForSpecification("y", this.specification),
         this.yAxisAnchor
       );
     }
@@ -118,20 +118,20 @@ class SVGInteractor {
   }
 
   updateLabels() {
-    if (!this.initialX && this.schema.labels) {
-      this.initialX = this.schema.labels.map(
+    if (!this.initialX && this.specification.labels) {
+      this.initialX = this.specification.labels.map(
         (label) => this._calculateViewportSpotInverse(label.x, label.y)[0]
       );
     }
-    if (!this.initialY && this.schema.labels) {
-      this.initialY = this.schema.labels.map(
+    if (!this.initialY && this.specification.labels) {
+      this.initialY = this.specification.labels.map(
         (label) => this._calculateViewportSpotInverse(label.x, label.y)[1]
       );
     }
 
     select(this._labelMarker)
       .selectAll("text")
-      .data(this.schema.labels)
+      .data(this.specification.labels)
       .text((d) => d.text)
       .attr("x", (d, i) => {
         if (d.fixedX) {
@@ -156,7 +156,7 @@ class SVGInteractor {
       });
   }
 
-  _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
+  _calculateAxis(dimension, orientation, specification, genomeScale, anchor) {
     let axis, domain, range;
     if (dimension === "x") {
       domain = this.currentXRange;
@@ -221,7 +221,7 @@ class SVGInteractor {
     }
 
     let genomic = false;
-    for (const track of schema.tracks) {
+    for (const track of specification.tracks) {
       if (track[dimension].type && track[dimension].type.includes("genomic")) {
         genomic = true;
       }

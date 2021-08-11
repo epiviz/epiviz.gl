@@ -1,4 +1,4 @@
-import { setSchema, setScroll, setTool } from "./reducers";
+import { setSpecification, setScroll, setTool } from "./reducers";
 
 import areaChart from "../examples/area-chart";
 import doubleLinePlot from "../examples/double-line-plot";
@@ -56,7 +56,7 @@ class Toolbar {
   constructor(dispatch) {
     this.dispatch = dispatch;
     this.mouseAction = "pan";
-    this.schema = "csv10";
+    this.specification = "csv10";
   }
 
   /**
@@ -71,14 +71,14 @@ class Toolbar {
       this.dispatch(setScroll({ axis: "y", checked: event.target.checked }));
     });
 
-    document.getElementById("schema-select").value = this.schema;
-    this.dispatch(setSchema(exampleMap.get(this.schema)));
+    document.getElementById("specification-select").value = this.specification;
+    this.dispatch(setSpecification(exampleMap.get(this.specification)));
 
     document
-      .getElementById("schema-select")
+      .getElementById("specification-select")
       .addEventListener("change", (event) => {
-        this.schema = event.target.value;
-        this.dispatch(setSchema(exampleMap.get(this.schema)));
+        this.specification = event.target.value;
+        this.dispatch(setSpecification(exampleMap.get(this.specification)));
       });
 
     this.prevIcon = null; // force only 1 icon to have selected class

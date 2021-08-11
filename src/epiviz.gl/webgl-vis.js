@@ -1,7 +1,7 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
-import isJSONValid from "./schema-validation";
-import { getDimAndMarginStyleForSchema } from "./utilities";
+import isJSONValid from "./specification-validation";
+import { getDimAndMarginStyleForSpecification } from "./utilities";
 
 class WebGLVis {
   POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
@@ -14,7 +14,7 @@ class WebGLVis {
   ]);
 
   /**
-   * A class meant to display a visualization based off a given schema using webgl.
+   * A class meant to display a visualization based off a given specification using webgl.
    *
    * @param {HTMLElement} container <div> or other container element meant to contain the visualization and its mousereader
    */
@@ -54,8 +54,8 @@ class WebGLVis {
   }
 
   /**
-   * This method does three things, and should only be called once. If changing the schema
-   * use setSchema.
+   * This method does three things, and should only be called once. If changing the specification
+   * use setSpecification.
    *  1. Add the canvas and mousereader to the DOM for use.
    *  2. Creates the WebWorkers that render and process the data.
    *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
@@ -138,8 +138,8 @@ class WebGLVis {
     this.sendDrawerState(this.mouseReader.getViewport());
   }
 
-  _setMargins(schema) {
-    const styles = getDimAndMarginStyleForSchema(schema);
+  _setMargins(specification) {
+    const styles = getDimAndMarginStyleForSpecification(specification);
     this.canvas.style.width = styles.width;
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
@@ -149,21 +149,21 @@ class WebGLVis {
   }
 
   /**
-   * Set the schema of the visualization, and then render it.
+   * Set the specification of the visualization, and then render it.
    *
-   * @param {Object} schema describing visualization
-   * @returns boolean on whether the schema was accepted
+   * @param {Object} specification describing visualization
+   * @returns boolean on whether the specification was accepted
    */
-  setSchema(schema) {
-    if (!isJSONValid(schema)) {
+  setSpecification(specification) {
+    if (!isJSONValid(specification)) {
       return false;
     }
 
-    this._setMargins(schema);
-    this.mouseReader.setSchema(schema);
+    this._setMargins(specification);
+    this.mouseReader.setSpecification(specification);
     this.sendDrawerState(this.mouseReader.getViewport());
-    this.webglWorker.postMessage({ type: "schema", schema });
-    this.dataWorker.postMessage({ type: "init", schema });
+    this.webglWorker.postMessage({ type: "specification", specification });
+    this.dataWorker.postMessage({ type: "init", specification });
     return true;
   }
 

@@ -1,5 +1,5 @@
 import Drawer from "./drawer";
-import SchemaProcessor from "./schema-processor";
+import SpecificationProcessor from "./specification-processor";
 import { scale } from "./utilities";
 import VertexCalculator from "./vertex-calculator";
 import SemanticZoomer from "./semantic-zoomer";
@@ -69,39 +69,39 @@ class WebGLCanvasDrawer extends Drawer {
   }
 
   /**
-   * Sets the schema and begins the process of drawing it.
+   * Sets the specification and begins the process of drawing it.
    *  1. Cancels any current animation
    *  2. Builds shaders for the tracks
    *  3. After data is loaded, calls populateBuffers.
    *
-   * @param {Object} schema of visualization
+   * @param {Object} specification of visualization
    */
-  setSchema(schema) {
+  setSpecification(specification) {
     super.render(); // Cancels current animation frame
 
     // Populate buffers needs a trackShader built to know what buffers to fill
-    this.trackShaders = VertexShader.fromSchema(schema);
+    this.trackShaders = VertexShader.fromSpecification(specification);
 
-    new SchemaProcessor(schema, this.populateBuffers.bind(this));
+    new SpecificationProcessor(specification, this.populateBuffers.bind(this));
   }
 
   /**
    * Populate the buffers that are fed to webgl for drawing.
    *
-   * @param {SchemaProcessor} schemaHelper created in the setSchema method
+   * @param {SpecificationProcessor} specificationHelper created in the setSpecification method
    */
-  populateBuffers(schemaHelper) {
-    let currentTrack = schemaHelper.getNextTrack();
+  populateBuffers(specificationHelper) {
+    let currentTrack = specificationHelper.getNextTrack();
     let currentTrackShaderIndex = 0;
 
-    this.semanticZoomer = new SemanticZoomer(schemaHelper);
+    this.semanticZoomer = new SemanticZoomer(specificationHelper);
 
     while (currentTrack) {
       // Construct calculator in track loop as calculator keeps internal state for each track
       let vertexCalculator = new VertexCalculator(
-        schemaHelper.xScale,
-        schemaHelper.yScale,
-        currentTrack.track // Access actual track schema
+        specificationHelper.xScale,
+        specificationHelper.yScale,
+        currentTrack.track // Access actual track specification
       );
 
       let currentMark = currentTrack.getNextMark();
@@ -116,7 +116,7 @@ class WebGLCanvasDrawer extends Drawer {
         currentMark = currentTrack.getNextMark();
       }
 
-      currentTrack = schemaHelper.getNextTrack();
+      currentTrack = specificationHelper.getNextTrack();
       currentTrackShaderIndex++;
     }
 

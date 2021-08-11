@@ -1,6 +1,6 @@
 # epiviz.gl
 
-The `epiviz.gl` project is meant to visualize genomic data using webgl and webworkers, in an effort to give a fluid, high-performance user experience. Visualizations are defined via a declarative schema.
+The `epiviz.gl` project is meant to visualize genomic data using webgl and webworkers, in an effort to give a fluid, high-performance user experience. Visualizations are defined via a declarative specification.
 
 **Live demo: https://epiviz.github.io/epiviz.gl/**
 
@@ -21,7 +21,7 @@ const container = document.createElement("div");
 
 const visualization = new WebGLVis(container);
 visualization.addToDom();
-visualization.setSchema({
+visualization.setSpecification({
   defaultData: ["day,price", "1,10", "2,22", "3,35"],
   tracks: [
     {
@@ -58,12 +58,12 @@ All visualizations also include an ability to box or lasso select:
 
 ![selection](./docs/images/selection.gif)
 
-# Schemas
+# Specifications
 
-Documentation for schemas can be found in [docs/schema_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/schema_doc.md). Documentation for the schemas can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
+Documentation for specifications can be found in [docs/specification_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/specification_doc.md). Documentation for the specifications can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
 
 ```shell
-cd src/epiviz.gl/schema-validation
+cd src/epiviz.gl/specification-validation
 generate-schema-doc visualization.json --config template_name=md
 ```
 
@@ -71,7 +71,7 @@ generate-schema-doc visualization.json --config template_name=md
 
 ### Scatterplot
 
-**Schema:**
+**Specification:**
 
 ```json
 {
@@ -107,7 +107,7 @@ generate-schema-doc visualization.json --config template_name=md
 
 ### Box Track
 
-**Schema:**
+**Specification:**
 
 ```json
 {
@@ -159,7 +159,7 @@ generate-schema-doc visualization.json --config template_name=md
 
 ### Line Track
 
-**Schema:**
+**Specification:**
 
 ```json
 {
@@ -197,7 +197,7 @@ generate-schema-doc visualization.json --config template_name=md
 
 ### Arc Track
 
-**Schema:**
+**Specification:**
 
 ```json
 {

@@ -2,8 +2,8 @@ import { getCanvasImage, allPresetNames, longPresets } from "../support";
 
 describe("Integration test recording test suite", function () {
   const recordPreset = (presetName, wait = 1000) => {
-    cy.get("#schema-select").select(presetName);
-    cy.get("#refresh-schema").click();
+    cy.get("#specification-select").select(presetName);
+    cy.get("#refresh-specification").click();
     cy.window().then((win) => {
       win.app.visualization.setCanvasSize(200, 200);
     });

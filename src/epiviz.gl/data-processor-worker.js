@@ -11,7 +11,7 @@ import DataProcessor from "./data-processor";
 self.onmessage = (message) => {
   switch (message.data.type) {
     case "init":
-      self.processor = new DataProcessor(message.data.schema);
+      self.processor = new DataProcessor(message.data.specification);
       break;
     case "selectBox":
       postMessage({

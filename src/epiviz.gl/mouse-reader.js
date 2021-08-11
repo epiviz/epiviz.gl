@@ -1,7 +1,7 @@
 import {
   scale,
-  getViewportForSchema,
-  getDimAndMarginStyleForSchema,
+  getViewportForSpecification,
+  getDimAndMarginStyleForSpecification,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
 
@@ -47,17 +47,17 @@ class MouseReader {
   }
 
   /**
-   * Set the schema of the mouse reader and the svg interaction
-   * @param {Object} schema
+   * Set the specification of the mouse reader and the svg interaction
+   * @param {Object} specification
    */
-  setSchema(schema) {
-    const styles = getDimAndMarginStyleForSchema(schema);
+  setSpecification(specification) {
+    const styles = getDimAndMarginStyleForSpecification(specification);
     this.element.style.width = styles.width;
     this.element.style.height = styles.height;
     this.element.style.margin = styles.margin;
 
-    this.viewport = getViewportForSchema(schema);
-    this.SVGInteractor.setSchema(schema);
+    this.viewport = getViewportForSpecification(specification);
+    this.SVGInteractor.setSpecification(specification);
     this._updateSVG();
   }
 

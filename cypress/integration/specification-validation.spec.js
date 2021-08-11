@@ -1,7 +1,7 @@
 import { Validator } from "jsonschema";
-import isJSONValid from "../../src/epiviz.gl/schema-validation";
+import isJSONValid from "../../src/epiviz.gl/specification-validation";
 
-import { channel, track } from "../../src/epiviz.gl/schema-validation";
+import { channel, track } from "../../src/epiviz.gl/specification-validation";
 
 const baseValidTrack = {
   mark: "point",
@@ -18,7 +18,7 @@ const baseValidTrack = {
   },
 };
 
-describe("Visualization Schema Validation", function () {
+describe("Visualization Specification Validation", function () {
   const channelValidator = new Validator();
 
   const trackValidator = new Validator();

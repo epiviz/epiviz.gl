@@ -5,13 +5,13 @@ const controlsSlice = createSlice({
   name: "webglControls",
   initialState: {
     tool: "pan",
-    schema: csv10,
+    specification: csv10,
     lockedX: false,
     lockedY: false,
   },
   reducers: {
-    setSchema(state, action) {
-      state.schema = action.payload;
+    setSpecification(state, action) {
+      state.specification = action.payload;
     },
 
     setTool(state, action) {
@@ -28,6 +28,6 @@ const controlsSlice = createSlice({
   },
 });
 
-export const { setSchema, setTool, setScroll } = controlsSlice.actions;
+export const { setSpecification, setTool, setScroll } = controlsSlice.actions;
 
 export default controlsSlice.reducer;

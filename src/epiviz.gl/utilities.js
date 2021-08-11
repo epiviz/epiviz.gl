@@ -42,21 +42,21 @@ function colorSpecifierToHex(specifier) {
 }
 
 /**
- * Get the VIEWPORT of the schema to be used by the mouseReader.
+ * Get the VIEWPORT of the specification to be used by the mouseReader.
  * If all types for a dimension across tracks are categorical or genomic,
  * will default to [-1, 1] for that dimension for the mouseReader. If X or Y
  * has a fixed value, it will consider the width or height channel domains.
  *
- * @param {Object} schema of visualization
+ * @param {Object} specification of visualization
  * @returns [smallestX, largestX, smallestY, largestY] of viewport
  */
-function getViewportForSchema(schema) {
+function getViewportForSpecification(specification) {
   let smallestX = Number.POSITIVE_INFINITY;
   let largestX = Number.NEGATIVE_INFINITY;
   let smallestY = Number.POSITIVE_INFINITY;
   let largestY = Number.NEGATIVE_INFINITY;
 
-  schema.tracks.forEach((track) => {
+  specification.tracks.forEach((track) => {
     let xDomain = track.x.domain;
     if (
       !xDomain &&
@@ -93,20 +93,20 @@ function getViewportForSchema(schema) {
 }
 
 /**
- * Given a schema, return a SCALE to be used for mapping data points to clip space
+ * Given a specification, return a SCALE to be used for mapping data points to clip space
  * for the drawer.
  *
  * @param {String} dimension either x or y
- * @param {Object} schema for the visualization
+ * @param {Object} specification for the visualization
  * @returns function which can be used to map to an "x" or "y" value
  */
-const getScaleForSchema = (dimension, schema) => {
+const getScaleForSpecification = (dimension, specification) => {
   if (dimension !== "x" && dimension !== "y") {
     console.error(`${dimension} is not x or y!`);
   }
   let genomic = false;
   let genome;
-  for (const track of schema.tracks) {
+  for (const track of specification.tracks) {
     if (track[dimension].type && track[dimension].type.includes("genomic")) {
       genome = track[dimension].genome;
       genomic = true;
@@ -115,7 +115,7 @@ const getScaleForSchema = (dimension, schema) => {
   }
 
   if (!genomic) {
-    const viewport = getViewportForSchema(schema);
+    const viewport = getViewportForSpecification(specification);
     if (dimension === "x") {
       return scale([viewport[0], viewport[1]], [-1, 1]);
     }
@@ -129,7 +129,7 @@ const getScaleForSchema = (dimension, schema) => {
   let largestGene = undefined;
   let largestGeneValue = Number.NEGATIVE_INFINITY;
 
-  for (const track of schema.tracks) {
+  for (const track of specification.tracks) {
     let xDomain = track[dimension].domain;
     if (xDomain) {
       if (geneScale.toClipSpaceFromString(xDomain[0]) < smallestGeneValue) {
@@ -149,8 +149,8 @@ const getScaleForSchema = (dimension, schema) => {
 };
 
 const DEFAULT_MARGIN = "2em";
-const getDimAndMarginStyleForSchema = (schema) => {
-  if (schema.margins === undefined) {
+const getDimAndMarginStyleForSpecification = (specification) => {
+  if (specification.margins === undefined) {
     return {
       width: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
       height: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
@@ -158,17 +158,17 @@ const getDimAndMarginStyleForSchema = (schema) => {
     };
   }
   let toReturn = {};
-  toReturn.width = `calc(100% - ${schema.margins.left || DEFAULT_MARGIN} - ${
-    schema.margins.right || DEFAULT_MARGIN
-  })`;
-  toReturn.height = `calc(100% - ${schema.margins.top || DEFAULT_MARGIN} - ${
-    schema.margins.bottom || DEFAULT_MARGIN
-  })`;
+  toReturn.width = `calc(100% - ${
+    specification.margins.left || DEFAULT_MARGIN
+  } - ${specification.margins.right || DEFAULT_MARGIN})`;
+  toReturn.height = `calc(100% - ${
+    specification.margins.top || DEFAULT_MARGIN
+  } - ${specification.margins.bottom || DEFAULT_MARGIN})`;
   // Shorthand for top right bottom left
-  toReturn.margin = `${schema.margins.top || DEFAULT_MARGIN}
-                     ${schema.margins.right || DEFAULT_MARGIN}
-                     ${schema.margins.bottom || DEFAULT_MARGIN}
-                     ${schema.margins.left || DEFAULT_MARGIN}`;
+  toReturn.margin = `${specification.margins.top || DEFAULT_MARGIN}
+                     ${specification.margins.right || DEFAULT_MARGIN}
+                     ${specification.margins.bottom || DEFAULT_MARGIN}
+                     ${specification.margins.left || DEFAULT_MARGIN}`;
   return toReturn;
 };
 
@@ -197,9 +197,9 @@ export {
   scale,
   rgbToHex,
   rgbStringToHex,
-  getViewportForSchema,
+  getViewportForSpecification,
   colorSpecifierToHex,
-  getScaleForSchema,
-  getDimAndMarginStyleForSchema,
+  getScaleForSpecification,
+  getDimAndMarginStyleForSpecification,
   getQuadraticBezierCurveForPoints,
 };

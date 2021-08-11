@@ -1,4 +1,4 @@
-import { g as getDimAndMarginStyleForSchema, a as getScaleForSchema, s as scale, b as getViewportForSchema } from './utilities-b398dcce.js';
+import { g as getDimAndMarginStyleForSpecification, a as getScaleForSpecification, s as scale, b as getViewportForSpecification } from './utilities-be86c49e.js';
 
 /*!
  * FPSMeter 0.3.1 - 9th May 2013
@@ -3259,14 +3259,14 @@ class SVGInteractor {
   }
 
   /**
-   * Set the schema for this class to refer to.
+   * Set the specification for this class to refer to.
    *
-   * @param {Object} schema
+   * @param {Object} specification
    */
-  setSchema(schema) {
-    this.schema = schema;
+  setSpecification(specification) {
+    this.specification = specification;
 
-    const styles = getDimAndMarginStyleForSchema(schema);
+    const styles = getDimAndMarginStyleForSpecification(specification);
     this.svg.style.width = styles.width;
     this.svg.style.height = styles.height;
     this.svg.style.margin = styles.margin;
@@ -3274,7 +3274,7 @@ class SVGInteractor {
     this.initialX = undefined; // used for updating labels
     this.initialY = undefined;
     select(this._labelMarker).selectAll("*").remove();
-    for (const _ of this.schema.labels || []) {
+    for (const _ of this.specification.labels || []) {
       select(this._labelMarker).append("text");
     }
   }
@@ -3305,13 +3305,13 @@ class SVGInteractor {
     if (this.currentXRange) {
       this.xAxis = this._calculateAxis(
         "x",
-        this.schema.xAxis,
-        this.schema,
-        getScaleForSchema("x", this.schema),
+        this.specification.xAxis,
+        this.specification,
+        getScaleForSpecification("x", this.specification),
         this.xAxisAnchor
       );
 
-      if (this.schema.labels) {
+      if (this.specification.labels) {
         this.updateLabels();
       }
     }
@@ -3323,9 +3323,9 @@ class SVGInteractor {
     if (this.currentYRange) {
       this.yAxis = this._calculateAxis(
         "y",
-        this.schema.yAxis,
-        this.schema,
-        getScaleForSchema("y", this.schema),
+        this.specification.yAxis,
+        this.specification,
+        getScaleForSpecification("y", this.specification),
         this.yAxisAnchor
       );
     }
@@ -3336,20 +3336,20 @@ class SVGInteractor {
   }
 
   updateLabels() {
-    if (!this.initialX && this.schema.labels) {
-      this.initialX = this.schema.labels.map(
+    if (!this.initialX && this.specification.labels) {
+      this.initialX = this.specification.labels.map(
         (label) => this._calculateViewportSpotInverse(label.x, label.y)[0]
       );
     }
-    if (!this.initialY && this.schema.labels) {
-      this.initialY = this.schema.labels.map(
+    if (!this.initialY && this.specification.labels) {
+      this.initialY = this.specification.labels.map(
         (label) => this._calculateViewportSpotInverse(label.x, label.y)[1]
       );
     }
 
     select(this._labelMarker)
       .selectAll("text")
-      .data(this.schema.labels)
+      .data(this.specification.labels)
       .text((d) => d.text)
       .attr("x", (d, i) => {
         if (d.fixedX) {
@@ -3374,7 +3374,7 @@ class SVGInteractor {
       });
   }
 
-  _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
+  _calculateAxis(dimension, orientation, specification, genomeScale, anchor) {
     let axis, domain, range;
     if (dimension === "x") {
       domain = this.currentXRange;
@@ -3439,7 +3439,7 @@ class SVGInteractor {
     }
 
     let genomic = false;
-    for (const track of schema.tracks) {
+    for (const track of specification.tracks) {
       if (track[dimension].type && track[dimension].type.includes("genomic")) {
         genomic = true;
       }
@@ -3574,17 +3574,17 @@ class MouseReader {
   }
 
   /**
-   * Set the schema of the mouse reader and the svg interaction
-   * @param {Object} schema
+   * Set the specification of the mouse reader and the svg interaction
+   * @param {Object} specification
    */
-  setSchema(schema) {
-    const styles = getDimAndMarginStyleForSchema(schema);
+  setSpecification(specification) {
+    const styles = getDimAndMarginStyleForSpecification(specification);
     this.element.style.width = styles.width;
     this.element.style.height = styles.height;
     this.element.style.margin = styles.margin;
 
-    this.viewport = getViewportForSchema(schema);
-    this.SVGInteractor.setSchema(schema);
+    this.viewport = getViewportForSpecification(specification);
+    this.SVGInteractor.setSpecification(specification);
     this._updateSVG();
   }
 
@@ -7215,7 +7215,7 @@ var channel = {
   "properties": {
     "type": {
       "description": "type of attribute, genomic range only compatible with x, y, width and height",
-      "enum": ["quantitative", "categorical", "genomic", "genomicRange"]
+      "enum": ["quantitative", "categorical", "genomic", "genomicRange", "inline"]
     },
     "attribute": {
       "description": "column of data frame to use for mapping channel",
@@ -7425,7 +7425,7 @@ class WebGLVis {
   ]);
 
   /**
-   * A class meant to display a visualization based off a given schema using webgl.
+   * A class meant to display a visualization based off a given specification using webgl.
    *
    * @param {HTMLElement} container <div> or other container element meant to contain the visualization and its mousereader
    */
@@ -7465,8 +7465,8 @@ class WebGLVis {
   }
 
   /**
-   * This method does three things, and should only be called once. If changing the schema
-   * use setSchema.
+   * This method does three things, and should only be called once. If changing the specification
+   * use setSpecification.
    *  1. Add the canvas and mousereader to the DOM for use.
    *  2. Creates the WebWorkers that render and process the data.
    *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
@@ -7492,7 +7492,7 @@ class WebGLVis {
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-987d7ecd.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-5f267c7b.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7512,7 +7512,7 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-acf75cb8.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-b1a37f77.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
@@ -7547,8 +7547,8 @@ class WebGLVis {
     this.sendDrawerState(this.mouseReader.getViewport());
   }
 
-  _setMargins(schema) {
-    const styles = getDimAndMarginStyleForSchema(schema);
+  _setMargins(specification) {
+    const styles = getDimAndMarginStyleForSpecification(specification);
     this.canvas.style.width = styles.width;
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
@@ -7558,21 +7558,21 @@ class WebGLVis {
   }
 
   /**
-   * Set the schema of the visualization, and then render it.
+   * Set the specification of the visualization, and then render it.
    *
-   * @param {Object} schema describing visualization
-   * @returns boolean on whether the schema was accepted
+   * @param {Object} specification describing visualization
+   * @returns boolean on whether the specification was accepted
    */
-  setSchema(schema) {
-    if (!isJSONValid(schema)) {
+  setSpecification(specification) {
+    if (!isJSONValid(specification)) {
       return false;
     }
 
-    this._setMargins(schema);
-    this.mouseReader.setSchema(schema);
+    this._setMargins(specification);
+    this.mouseReader.setSpecification(specification);
     this.sendDrawerState(this.mouseReader.getViewport());
-    this.webglWorker.postMessage({ type: "schema", schema });
-    this.dataWorker.postMessage({ type: "init", schema });
+    this.webglWorker.postMessage({ type: "specification", specification });
+    this.dataWorker.postMessage({ type: "init", specification });
     return true;
   }
 

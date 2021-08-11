@@ -1,4 +1,4 @@
-import { getDrawModeForTrack } from "./schema-processor";
+import { getDrawModeForTrack } from "./specification-processor";
 import { getQuadraticBezierCurveForPoints } from "./utilities";
 
 // Each size unit refers to 1/200 of the clip space
@@ -146,7 +146,7 @@ class VertexCalculator {
    *
    * @param {Function or GenomeScale} xScale maps the x values of the data to clip space [-1, 1]
    * @param {Function or GenomeScale} yScale maps the y values of the data to clip space [-1, 1]
-   * @param {Object} track from schema
+   * @param {Object} track from specification
    */
   constructor(xScale, yScale, track) {
     this.xScale = xScale;
