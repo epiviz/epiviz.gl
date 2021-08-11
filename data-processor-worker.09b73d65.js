@@ -2588,6 +2588,15 @@ function $e13ada66fa7c4e11a60260c32accc77e$var$checkValidity(ring) {
 $2a4f8c7882dfdea78821148c89bf8779$init();
 $ab472fc72a52ba79515db0c00f4f687a$init();
 class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
+  /**
+  * A class meant to modify data points from the getNextDataPoint method of the {@link Track} object
+  * to geometries that coincide with their visibility on the canvas i.e. with a proper width, height,
+  * x and y. This class is NOT meant to be used by the WebGLDrawer for rendering. It is solely used
+  * by the DataProcessor to properly index the data.
+  *
+  * @param {SchemaProcessor} schemaObject of the visualization for these geometries
+  * @param {Track} trackObject containing track info for track that these geometries are a part of
+  */
   constructor(schemaObject, trackObject) {
     this.schemaObject = schemaObject;
     this.trackObject = trackObject;
@@ -2606,6 +2615,11 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
       this.yDomainHeight = (viewportForSchema[3] - viewportForSchema[2]) / 2;
     }
   }
+  /**
+  * Modifies a geometry object in place based on the schema.
+  *
+  * @param {Object} geometry an object of the form {dimensions: Array(2), coordinates: Array(2)}
+  */
   modifyGeometry(geometry) {
     if (this.xScale.isGenomeScale) {
       // transforms x part into a standard format
@@ -2626,18 +2640,35 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
   }
   _modifyStandardX(geometry) {
     if (geometry.dimensions[0]) {
+      // Transform width from the data point into visible width on the canvas
       geometry.dimensions[0] *= this.xDomainWidth * $2a4f8c7882dfdea78821148c89bf8779$init().SIZE_UNITS;
     }
+    // If there is no width, give very small width for flatbush indexing
     geometry.dimensions[0] = geometry.dimensions[0] || 1e-10;
   }
   _modifyStandardY(geometry) {
     if (geometry.dimensions[1]) {
+      // Transform height from the data point into visible height on the canvas
       geometry.dimensions[1] *= this.yDomainHeight * $2a4f8c7882dfdea78821148c89bf8779$init().SIZE_UNITS;
     }
+    // If there is no height, give very small height for flatbush indexing
     geometry.dimensions[1] = geometry.dimensions[1] || 1e-10;
   }
   _modifyGenomicRangeX(geometry) {
     if (this.trackObject.track.mark === "arc") {
+      /**
+      * Geometry is in the form
+      * {
+      *   coordinates: [[[chr1,gene1], [chr2,gene2]], <y-coord handled in _modifyGenomicRangeY>]
+      *   dimensions: [[[chr3,gene3], [chr3,gene3]], <height handled in _modifyGenomicRangeY>]
+      * }
+      *
+      * and is transformed to
+      * {
+      *   coordinates: [x-coord between -1 and 1, <y handled elsewhere>]
+      *   dimensions: [width, <height handled elsewhere>]
+      * }
+      */
       const standardized = $2a4f8c7882dfdea78821148c89bf8779$init().transformGenomicRangeArcToStandard({
         x: geometry.coordinates[0],
         y: 0,
@@ -2647,6 +2678,19 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
       geometry.coordinates[0] = standardized.x;
       geometry.dimensions[0] = standardized.width;
     } else {
+      /**
+      * Geometry is in the form
+      * {
+      *   coordinates: [[[chr1,gene1], [chr2,gene2]], <y-coord handled in _modifyGenomicRangeY>]
+      *   dimensions: [<ignored value>, <height handled elsewhere>]
+      * }
+      *
+      * and is transformed to
+      * {
+      *   coordinates: [x-coord between -1 and 1, <y handled elsewhere>]
+      *   dimensions: [width, <height handled elsewhere>]
+      * }
+      */
       const standardized = $2a4f8c7882dfdea78821148c89bf8779$init().transformGenomicRangeToStandard({
         x: geometry.coordinates[0],
         y: 0
@@ -2656,6 +2700,7 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
     }
   }
   _modifyGenomicRangeY(geometry) {
+    // See comments in _modifyGenomicRangeX
     if (this.trackObject.track.mark === "arc") {
       const standardized = $2a4f8c7882dfdea78821148c89bf8779$init().transformGenomicRangeArcToStandard({
         x: 0,
@@ -2820,4 +2865,4 @@ self.onmessage = message => {
   }
 };
 
-//# sourceMappingURL=data-processor-worker.cae1195e.js.map
+//# sourceMappingURL=data-processor-worker.09b73d65.js.map

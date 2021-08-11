@@ -41,7 +41,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.dff7aaf3.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.10263f78.js\",\"4qh26\":\"data-processor-worker.cae1195e.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.18896600.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.fc01949e.js\",\"4qh26\":\"data-processor-worker.09b73d65.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -11576,8 +11576,10 @@
     *  1. Add the canvas and mousereader to the DOM for use.
     *  2. Creates the WebWorkers that render and process the data.
     *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
+    *
+    * @param {Boolean} displayFPSMeter whether or not to display an fps meter
     */
-    addToDom() {
+    addToDom(displayFPSMeter) {
       this.container.appendChild(this.parent);
       this.parent.appendChild(this.canvas);
       this.parent.appendChild(this.mouseReader.element);
@@ -11587,14 +11589,17 @@
       this.canvas.width = canvasBox.width;
       this.canvas.height = canvasBox.height;
       this.canvas.style.position = "absolute";
-      this.initFpsmeter();
+      if (displayFPSMeter) {
+        this.initFpsmeter();
+      }
       const offscreenCanvas = this.canvas.transferControlToOffscreen();
       this.webglWorker = new Worker($c9d5ca6e724a0143245d479c7295c336$init(), {
         type: "module"
       });
       this.webglWorker.postMessage({
         type: "init",
-        canvas: offscreenCanvas
+        canvas: offscreenCanvas,
+        displayFPSMeter
       }, [offscreenCanvas]);
       // Allow OffScreenWebGLDrawer to tick FPS meter
       this.webglWorker.onmessage = e => {
@@ -11771,7 +11776,7 @@
     constructor() {
       const container = document.querySelector(".content");
       this.visualization = new $d3dfc027196df876626c47bef188877c$export$default(container);
-      this.visualization.addToDom();
+      this.visualization.addToDom(true);
       this.store = $5e201880271bd6cdc5df36305bdf55c4$export$default;
       this.store.subscribe(this.subscription.bind(this));
       const toolbar = new $361b32f374cb657bf7d3a299cf1eb93a$export$default(this.store.dispatch);
@@ -11808,4 +11813,4 @@
   });
 })();
 
-//# sourceMappingURL=index.dff7aaf3.js.map
+//# sourceMappingURL=index.18896600.js.map

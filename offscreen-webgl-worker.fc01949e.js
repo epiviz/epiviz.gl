@@ -9362,6 +9362,10 @@ class $326516539047a160c1125b95ce446f70$export$default extends $1ef1a7c693c135c8
     }
   }
   /**
+  * Called whenever a frame has been successfully animated.
+  */
+  tick() {}
+  /**
   * Calculates the viewport for this.gl.viewport to control zooming. Also calculates point size.
   * @returns Array of 5 elements, first 4 are viewport parameters, last is pointSizeMultiplier:
   *   [xOffset, yOffset, displayAsIfThisWide, displayAsIfThisHigh, pointSizeMultiplier]
@@ -9477,7 +9481,7 @@ class $bb1644802fa52abd8008af04b1612a65$var$OffscreenWebGLDrawer extends $326516
 self.onmessage = message => {
   switch (message.data.type) {
     case "init":
-      self.drawer = new $bb1644802fa52abd8008af04b1612a65$var$OffscreenWebGLDrawer(message.data);
+      self.drawer = message.data.displayFPSMeter ? new $bb1644802fa52abd8008af04b1612a65$var$OffscreenWebGLDrawer(message.data) : new $326516539047a160c1125b95ce446f70$export$default(message.data);
       break;
     case "viewport":
       self.drawer.receiveViewport(message.data);
@@ -9502,4 +9506,4 @@ self.onmessage = message => {
   }
 };
 
-//# sourceMappingURL=offscreen-webgl-worker.10263f78.js.map
+//# sourceMappingURL=offscreen-webgl-worker.fc01949e.js.map
