@@ -17,7 +17,7 @@
     }
   },
   "scripts": {
-    "start": "parcel serve app/index.html --open",
+    "start": "parcel serve app/index.html --open --dist-dir dist-app",
     "build": "rm -rf dist-app/ && parcel build app/index.html --target app",
     "build-package": "rm -rf dist/ && rollup -c && cp src/index.d.ts dist/index.d.ts",
     "predeploy": "yarn build",
