@@ -41,7 +41,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.18896600.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.fc01949e.js\",\"4qh26\":\"data-processor-worker.09b73d65.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.359a1bca.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.5d8da284.js\",\"4qh26\":\"data-processor-worker.f2c682ad.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -4242,7 +4242,71 @@
       }
     }]
   }, null, 2);
-  const $361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap = new Map([["area-chart", $b2b06bbc34da9c97d03e2103f126b73d$export$default], ["double-line-plot", $28b5c2186bde29d144c6c25132c73834$export$default], ["line-plot", $64fb7f98bb40bce9aedc0741b7fb08f7$export$default], ["stacked-area-chart", $c35df55c918803ed3924bc428794d449$export$default], ["tick-chart", $f9fba8d8af875065e61ce1daddb9f8bc$export$default], ["tsne", $2a9839b00cf841def758e0be20e22c6f$export$default], ["tsne-10th", $0211b2fb0a3f771e39d61213a7d704bf$export$default], ["tsne-100th", $0e7ae96a73d4d148eada0a3a939a96c9$export$default], ["inline-data", $06e40a23570870f8a83f3aaf907d82c8$export$default], ["double-inline-data", $685eef2c83a2c0cb7a78bba1269cadc0$export$default], ["tiny-scatter", $e846c1d03922ee59f48b09e88821c117$export$default], ["scatter-grid", $cd4e733a1254aa9bac58e47aad354d6e$export$default], ["heatmap", $3ae04e195465ab057b9d0859c8bca45e$export$default], ["signed-bar-chart", $ee1e30ff6b3c6ac12a412718c8b0e4af$export$default], ["vertical-signed-bar-chart", $0f5ae853568c24a4e290b25dc33e6e49$export$default], ["arc-track", $e28e2e6485a5501afc478d0e6ffa1a3c$export$default], ["box-track", $cb39b387c6fd45b9532e71fe77fa9820$export$default], ["line-track", $c2231ef3fd017e34a47a19f07032fdc1$export$default], ["all-tracks", $1e24c4d0dd6463602be771b38449f5c1$export$default], ["scatter-grid-margins", $dc5329828972700f257f79472a39bdd7$export$default], ["matrix", $ae497fe441c4ba0544a2cf88a0651b26$export$default]]);
+  var $973689bf694d926b50d3b83b4f2bb1ee$export$default = JSON.stringify({
+    defaultData: {
+      x: [1, 2, 3, 4],
+      y: [1, 2, 3, 4],
+      width: [20, 12, 5, 10],
+      height: [10, 5, 12, 30],
+      size: [10, 20, 30, 40],
+      color: ["red", "#00FF00", 255 ** 3, "rgb(0,0,200)"]
+    },
+    tracks: [{
+      mark: "rect",
+      x: {
+        attribute: "x",
+        type: "quantitative",
+        domain: [0, 5]
+      },
+      y: {
+        attribute: "y",
+        type: "quantitative",
+        domain: [0, 5]
+      },
+      color: {
+        attribute: "color",
+        type: "inline"
+      },
+      width: {
+        type: "inline",
+        attribute: "width"
+      },
+      height: {
+        type: "inline",
+        attribute: "height"
+      },
+      opacity: {
+        value: 0.4
+      }
+    }, {
+      mark: "point",
+      x: {
+        attribute: "x",
+        type: "quantitative",
+        domain: [0, 5]
+      },
+      y: {
+        attribute: "y",
+        type: "quantitative",
+        domain: [0, 5]
+      },
+      color: {
+        attribute: "color",
+        type: "inline"
+      },
+      size: {
+        type: "inline",
+        attribute: "size"
+      },
+      opacity: {
+        value: 0.4
+      },
+      shape: {
+        value: "diamond"
+      }
+    }]
+  }, null, 2);
+  const $361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap = new Map([["area-chart", $b2b06bbc34da9c97d03e2103f126b73d$export$default], ["double-line-plot", $28b5c2186bde29d144c6c25132c73834$export$default], ["line-plot", $64fb7f98bb40bce9aedc0741b7fb08f7$export$default], ["stacked-area-chart", $c35df55c918803ed3924bc428794d449$export$default], ["tick-chart", $f9fba8d8af875065e61ce1daddb9f8bc$export$default], ["tsne", $2a9839b00cf841def758e0be20e22c6f$export$default], ["tsne-10th", $0211b2fb0a3f771e39d61213a7d704bf$export$default], ["tsne-100th", $0e7ae96a73d4d148eada0a3a939a96c9$export$default], ["inline-data", $06e40a23570870f8a83f3aaf907d82c8$export$default], ["double-inline-data", $685eef2c83a2c0cb7a78bba1269cadc0$export$default], ["tiny-scatter", $e846c1d03922ee59f48b09e88821c117$export$default], ["scatter-grid", $cd4e733a1254aa9bac58e47aad354d6e$export$default], ["heatmap", $3ae04e195465ab057b9d0859c8bca45e$export$default], ["signed-bar-chart", $ee1e30ff6b3c6ac12a412718c8b0e4af$export$default], ["vertical-signed-bar-chart", $0f5ae853568c24a4e290b25dc33e6e49$export$default], ["arc-track", $e28e2e6485a5501afc478d0e6ffa1a3c$export$default], ["box-track", $cb39b387c6fd45b9532e71fe77fa9820$export$default], ["line-track", $c2231ef3fd017e34a47a19f07032fdc1$export$default], ["all-tracks", $1e24c4d0dd6463602be771b38449f5c1$export$default], ["scatter-grid-margins", $dc5329828972700f257f79472a39bdd7$export$default], ["matrix", $ae497fe441c4ba0544a2cf88a0651b26$export$default], ["data-defined-channels", $973689bf694d926b50d3b83b4f2bb1ee$export$default]]);
   class $361b32f374cb657bf7d3a299cf1eb93a$export$default {
     /**
     * A class meant to handle changing options on the scatter plot
@@ -11332,7 +11396,7 @@
     "properties": {
       "type": {
         "description": "type of attribute, genomic range only compatible with x, y, width and height",
-        "enum": ["quantitative", "categorical", "genomic", "genomicRange"]
+        "enum": ["quantitative", "categorical", "genomic", "genomicRange", "inline"]
       },
       "attribute": {
         "description": "column of data frame to use for mapping channel",
@@ -11813,4 +11877,4 @@
   });
 })();
 
-//# sourceMappingURL=index.18896600.js.map
+//# sourceMappingURL=index.359a1bca.js.map

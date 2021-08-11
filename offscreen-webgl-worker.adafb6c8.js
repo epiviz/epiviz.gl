@@ -1109,6 +1109,8 @@ class $2a4f8c7882dfdea78821148c89bf8779$export$default {
         return this._getVerticesForPolygon(mark, 16);
       case "cross":
         return this._getVerticesForCross(mark);
+      default:
+        console.error(`${mark.shape} is not a valid shape!`);
     }
   }
   _mapToGPUSpace(vertices) {
@@ -1888,6 +1890,9 @@ class $a482b49601c034373694faa8888ffe15$var$Track {
         const attributeIndex = this.headers.indexOf(channelInfo.attribute);
         let attrMapper;
         switch (channelInfo.type) {
+          case "inline":
+            attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForInlineChannel(channel, channelInfo);
+            break;
           case "quantitative":
             attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForQuantitiveChannel(channel, channelInfo);
             break;
@@ -1912,6 +1917,26 @@ class $a482b49601c034373694faa8888ffe15$var$Track {
     }
   };
 }
+/**
+* Build a function which maps an attribute that is a channel value to a compatible value.
+*
+* @param {String} channel the name of the channel to build an inline mapper for
+* @param {Object} channelInfo the info of the channel from a track
+* @returns a function that maps attribute values to appropriate channel values.
+*/
+const $a482b49601c034373694faa8888ffe15$var$buildMapperForInlineChannel = (channel, channelInfo) => {
+  switch (channel) {
+    case "width":
+    case "height":
+    case "size":
+      return dimension => parseFloat(dimension);
+    case "color":
+      return color => $ab472fc72a52ba79515db0c00f4f687a$export$colorSpecifierToHex(color);
+    default:
+      console.info(`No special behavior for ${channel} as an inline attribute.`);
+      return inlineValue => inlineValue;
+  }
+};
 /**
 * Build a function which maps a numerical value for an attribute to a property of a mark
 * @param {*} channel the name of the quantitative channel to map
@@ -2051,4 +2076,4 @@ function $2a4f8c7882dfdea78821148c89bf8779$init() {
 }
 export {$a482b49601c034373694faa8888ffe15$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init};
 
-//# sourceMappingURL=offscreen-webgl-worker.87561fd7.js.map
+//# sourceMappingURL=offscreen-webgl-worker.adafb6c8.js.map
