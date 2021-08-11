@@ -169,7 +169,7 @@ const getPixelMeasurement = (cssMeasurement) => {
 };
 
 const DEFAULT_MARGIN = "50px";
-const DEFAULT_WIDTH = "400px";
+const DEFAULT_WIDTH = "100%";
 const DEFAULT_HEIGHT = DEFAULT_WIDTH;
 const getDimAndMarginStyleForSchema = (schema) => {
   let toReturn = {};

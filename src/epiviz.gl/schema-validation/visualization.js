@@ -72,6 +72,41 @@ export default {
       "type": ["string", "object"],
       "additionalProperties": { "type": "array" },
       "minProperties": 1
+    },
+    "width": {
+      "description": "Width of the visualization in css units",
+      "examples": ["400px", "100%", "10em", "600"],
+      "type": "string"
+    },
+    "height": {
+      "description": "Height of the visualization in css units",
+      "examples": ["400px", "100%", "10em", "600"],
+      "type": "string"
+    },
+    "margins": {
+      "description": "Margins for the visualization; gives more space for labels and axis to render",
+      "properties": {
+        "top": {
+          "description": "Top margin of the visualization in css units",
+          "type": "string",
+          "examples": ["100px", "5%", "5em"]
+        },
+        "bottom": {
+          "description": "Bottom margin of the visualization in css units",
+          "type": "string",
+          "examples": ["100px", "5%", "5em"]
+        },
+        "left": {
+          "description": "Left margin of the visualization in css units",
+          "type": "string",
+          "examples": ["100px", "5%", "5em"]
+        },
+        "right": {
+          "description": "Right margin of the visualization in css units",
+          "type": "string",
+          "examples": ["100px", "5%", "5em"]
+        }
+      }
     }
   },
 
