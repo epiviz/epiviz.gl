@@ -7469,13 +7469,13 @@ class WebGLVis {
 
     this.parent = document.createElement("div");
     this.parent.style.position = "relative";
-    this.parent.style.width = "800px";
-    this.parent.style.height = "800px";
+    this.parent.style.width = "100%";
+    this.parent.style.height = "100%";
     this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.style.width = "800px";
-    this.canvas.style.height = "800px";
+    this.canvas.style.width = "100%";
+    this.canvas.style.height = "100%";
   }
 
   /**
@@ -7510,13 +7510,11 @@ class WebGLVis {
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
 
-    this.canvas.getBoundingClientRect();
-    this.width = 800;
-    this.height = 800;
-    this.canvas.width = 800;
-    this.canvas.height = 800;
-    this.canvas.style.width = "800px";
-    this.canvas.style.height = "800px";
+    const canvasBox = this.canvas.getBoundingClientRect();
+    this.width = this.parent.clientWidth;
+    this.height = this.parent.clientHeight;
+    this.canvas.width = canvasBox.width;
+    this.canvas.height = canvasBox.height;
 
     this.canvas.style.position = "absolute";
 
@@ -7583,11 +7581,12 @@ class WebGLVis {
 
   _setMargins(schema) {
     const styles = getDimAndMarginStyleForSchema(schema);
-    this.canvas.style.width = "800px";
-    this.canvas.style.height = "800px";
+    this.canvas.style.width = styles.width;
+    this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
 
-    this.setCanvasSize(800, 800);
+    const canvasBox = this.canvas.getBoundingClientRect();
+    this.setCanvasSize(canvasBox.width, canvasBox.height);
   }
 
   /**
@@ -7670,6 +7669,22 @@ class WebGLVis {
     });
   }
 
+  /**
+   * Adds an event listener to visualization on the appropriate component.
+   * Current event types that are supported are
+   * "zoomIn": fires when user zooms in
+   * "zoomOut": fires when user zooms out
+   * "pan": fires when user pans
+   * "onSelection": fires while user is changing the selection box/lasso
+   * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+   *
+   * For information on the parameters and functionality see:
+   *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+   *
+   * @param {String} type
+   * @param {Function} listener
+   * @param {Object} options
+   */
   addEventListener(type, listener, options) {
     this.parent.addEventListener(type, listener, options);
   }
