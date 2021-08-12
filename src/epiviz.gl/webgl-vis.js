@@ -24,13 +24,13 @@ class WebGLVis {
 
     this.parent = document.createElement("div");
     this.parent.style.position = "relative";
-    this.parent.style.width = "800px";
-    this.parent.style.height = "800px";
+    this.parent.style.width = "100%";
+    this.parent.style.height = "100%";
     this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.style.width = "800px";
-    this.canvas.style.height = "800px";
+    this.canvas.style.width = "100%";
+    this.canvas.style.height = "100%";
   }
 
   /**
@@ -66,12 +66,10 @@ class WebGLVis {
     this.parent.appendChild(this.mouseReader.element);
 
     const canvasBox = this.canvas.getBoundingClientRect();
-    this.width = 800;
-    this.height = 800;
-    this.canvas.width = 800;
-    this.canvas.height = 800;
-    this.canvas.style.width = "800px";
-    this.canvas.style.height = "800px";
+    this.width = this.parent.clientWidth;
+    this.height = this.parent.clientHeight;
+    this.canvas.width = canvasBox.width;
+    this.canvas.height = canvasBox.height;
 
     this.canvas.style.position = "absolute";
 
@@ -140,11 +138,12 @@ class WebGLVis {
 
   _setMargins(schema) {
     const styles = getDimAndMarginStyleForSchema(schema);
-    this.canvas.style.width = "800px";
-    this.canvas.style.height = "800px";
+    this.canvas.style.width = styles.width;
+    this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
 
-    this.setCanvasSize(800, 800);
+    const canvasBox = this.canvas.getBoundingClientRect();
+    this.setCanvasSize(canvasBox.width, canvasBox.height);
   }
 
   /**
