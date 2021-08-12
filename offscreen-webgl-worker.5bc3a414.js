@@ -4,8 +4,8 @@ function $parcel$export(e, n, v) {
     enumerable: true
   });
 }
-// ASSET: src/epiviz.gl/schema-processor.js
-var $a482b49601c034373694faa8888ffe15$exports = {};
+// ASSET: src/epiviz.gl/specification-processor.js
+var $455e5d40a513c54585dfe04e9ebcda36$exports = {};
 // ASSET: src/epiviz.gl/utilities.js
 var $ab472fc72a52ba79515db0c00f4f687a$exports = {};
 var $44fb33f33a3822970af32be817e1e34b$export$default = function (x) {
@@ -805,20 +805,20 @@ function $ab472fc72a52ba79515db0c00f4f687a$export$colorSpecifierToHex(specifier)
   return $ab472fc72a52ba79515db0c00f4f687a$export$rgbToHex(asColor.r, asColor.g, asColor.b);
 }
 /**
-* Get the VIEWPORT of the schema to be used by the mouseReader.
+* Get the VIEWPORT of the specification to be used by the mouseReader.
 * If all types for a dimension across tracks are categorical or genomic,
 * will default to [-1, 1] for that dimension for the mouseReader. If X or Y
 * has a fixed value, it will consider the width or height channel domains.
 *
-* @param {Object} schema of visualization
+* @param {Object} specification of visualization
 * @returns [smallestX, largestX, smallestY, largestY] of viewport
 */
-function $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSchema(schema) {
+function $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSpecification(specification) {
   let smallestX = Number.POSITIVE_INFINITY;
   let largestX = Number.NEGATIVE_INFINITY;
   let smallestY = Number.POSITIVE_INFINITY;
   let largestY = Number.NEGATIVE_INFINITY;
-  schema.tracks.forEach(track => {
+  specification.tracks.forEach(track => {
     let xDomain = track.x.domain;
     if (!xDomain && track.x.value !== undefined && track.width.domain !== undefined) {
       xDomain = track.width.domain;
@@ -843,20 +843,20 @@ function $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSchema(schema) {
   return [smallestX, largestX, smallestY, largestY];
 }
 /**
-* Given a schema, return a SCALE to be used for mapping data points to clip space
+* Given a specification, return a SCALE to be used for mapping data points to clip space
 * for the drawer.
 *
 * @param {String} dimension either x or y
-* @param {Object} schema for the visualization
+* @param {Object} specification for the visualization
 * @returns function which can be used to map to an "x" or "y" value
 */
-const $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema = (dimension, schema) => {
+const $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSpecification = (dimension, specification) => {
   if (dimension !== "x" && dimension !== "y") {
     console.error(`${dimension} is not x or y!`);
   }
   let genomic = false;
   let genome;
-  for (const track of schema.tracks) {
+  for (const track of specification.tracks) {
     if (track[dimension].type && track[dimension].type.includes("genomic")) {
       genome = track[dimension].genome;
       genomic = true;
@@ -864,7 +864,7 @@ const $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema = (dimension, s
     }
   }
   if (!genomic) {
-    const viewport = $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSchema(schema);
+    const viewport = $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSpecification(specification);
     if (dimension === "x") {
       return $ab472fc72a52ba79515db0c00f4f687a$export$scale([viewport[0], viewport[1]], [-1, 1]);
     }
@@ -875,7 +875,7 @@ const $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema = (dimension, s
   let smallestGeneValue = Number.POSITIVE_INFINITY;
   let largestGene = undefined;
   let largestGeneValue = Number.NEGATIVE_INFINITY;
-  for (const track of schema.tracks) {
+  for (const track of specification.tracks) {
     let xDomain = track[dimension].domain;
     if (xDomain) {
       if (geneScale.toClipSpaceFromString(xDomain[0]) < smallestGeneValue) {
@@ -902,30 +902,29 @@ const $ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement = cssMeasurement
 const $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN = "50px";
 const $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH = "100%";
 const $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_HEIGHT = $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH;
-const $ab472fc72a52ba79515db0c00f4f687a$export$getDimAndMarginStyleForSchema = schema => {
+const $ab472fc72a52ba79515db0c00f4f687a$export$getDimAndMarginStyleForSpecification = specification => {
   let toReturn = {};
   const calculatedMargins = {};
-  if (schema.margins === undefined) {
+  if (specification.margins === undefined) {
     toReturn.margin = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
     calculatedMargins.top = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
     calculatedMargins.right = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
     calculatedMargins.bottom = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
     calculatedMargins.left = $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN;
   } else {
-    calculatedMargins.top = schema.margins.top === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.top;
-    calculatedMargins.right = schema.margins.right === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.right;
-    calculatedMargins.bottom = schema.margins.bottom === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.bottom;
-    calculatedMargins.left = schema.margins.left === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : schema.margins.left;
+    calculatedMargins.top = specification.margins.top === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : specification.margins.top;
+    calculatedMargins.right = specification.margins.right === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : specification.margins.right;
+    calculatedMargins.bottom = specification.margins.bottom === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : specification.margins.bottom;
+    calculatedMargins.left = specification.margins.left === undefined ? $ab472fc72a52ba79515db0c00f4f687a$var$DEFAULT_MARGIN : specification.margins.left;
     // Shorthand for top right bottom left
     toReturn.margin = `${calculatedMargins.top}
                        ${calculatedMargins.right}
                        ${calculatedMargins.bottom}
                        ${calculatedMargins.left}`;
   }
-  const calculatedWidth = schema.width || $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH;
-  const calculatedHeight = schema.height || $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_HEIGHT;
+  const calculatedWidth = specification.width || $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_WIDTH;
+  const calculatedHeight = specification.height || $ab472fc72a52ba79515db0c00f4f687a$export$DEFAULT_HEIGHT;
   const allMeasurements = [calculatedMargins.top, calculatedMargins.right, calculatedMargins.bottom, calculatedMargins.left, calculatedWidth, calculatedHeight];
-  console.log(allMeasurements.map($ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement));
   if (allMeasurements.every($ab472fc72a52ba79515db0c00f4f687a$var$getPixelMeasurement)) {
     // Let's encode as a number to allow users using typescript or doing weird DOM things able to define
     // the width and height explicitly
@@ -967,14 +966,14 @@ const $ab472fc72a52ba79515db0c00f4f687a$export$getQuadraticBezierCurveForPoints 
 $parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "getQuadraticBezierCurveForPoints", function () {
   return $ab472fc72a52ba79515db0c00f4f687a$export$getQuadraticBezierCurveForPoints;
 });
-$parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "getScaleForSchema", function () {
-  return $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema;
+$parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "getScaleForSpecification", function () {
+  return $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSpecification;
 });
 $parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "colorSpecifierToHex", function () {
   return $ab472fc72a52ba79515db0c00f4f687a$export$colorSpecifierToHex;
 });
-$parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "getViewportForSchema", function () {
-  return $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSchema;
+$parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "getViewportForSpecification", function () {
+  return $ab472fc72a52ba79515db0c00f4f687a$export$getViewportForSpecification;
 });
 $parcel$export($ab472fc72a52ba79515db0c00f4f687a$exports, "rgbStringToHex", function () {
   return $ab472fc72a52ba79515db0c00f4f687a$export$rgbStringToHex;
@@ -1085,13 +1084,13 @@ class $2a4f8c7882dfdea78821148c89bf8779$export$default {
   *
   * @param {Function or GenomeScale} xScale maps the x values of the data to clip space [-1, 1]
   * @param {Function or GenomeScale} yScale maps the y values of the data to clip space [-1, 1]
-  * @param {Object} track from schema
+  * @param {Object} track from specification
   */
   constructor(xScale, yScale, track) {
     this.xScale = xScale;
     this.yScale = yScale;
     this.track = track;
-    this.drawMode = $a482b49601c034373694faa8888ffe15$export$getDrawModeForTrack(track);
+    this.drawMode = $455e5d40a513c54585dfe04e9ebcda36$export$getDrawModeForTrack(track);
   }
   /**
   * Construct the vertices of a mark.
@@ -1667,8 +1666,8 @@ $parcel$export($a6585f17c7dfd9074a79b848521aadca$exports, "interpolateMagma", fu
 $parcel$export($a6585f17c7dfd9074a79b848521aadca$exports, "interpolateViridis", function () {
   return $d93ff3e8625ab11206964e3bd0e6b61c$export$default;
 });
-// Default channel values of schema which is passed to webgl drawer
-const $a482b49601c034373694faa8888ffe15$export$DEFAULT_CHANNELS = Object.freeze({
+// Default channel values of specification which is passed to webgl drawer
+const $455e5d40a513c54585dfe04e9ebcda36$export$DEFAULT_CHANNELS = Object.freeze({
   size: {
     value: 1,
     numComponents: 1,
@@ -1713,23 +1712,23 @@ const $a482b49601c034373694faa8888ffe15$export$DEFAULT_CHANNELS = Object.freeze(
     type: "float"
   }
 });
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_SIZE = 100;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_SIZE = 0;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_OPACITY = 0;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_WIDTH = 0;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_HEIGHT = 0;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_WIDTH = 1 / $2a4f8c7882dfdea78821148c89bf8779$export$SIZE_UNITS;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_HEIGHT = 1 / $2a4f8c7882dfdea78821148c89bf8779$export$SIZE_UNITS;
-const $a482b49601c034373694faa8888ffe15$var$DEFAULT_COLOR_SCHEME = "interpolateBrBG";
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_SIZE = 100;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_SIZE = 0;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_OPACITY = 0;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_WIDTH = 0;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_HEIGHT = 0;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_WIDTH = 1 / $2a4f8c7882dfdea78821148c89bf8779$export$SIZE_UNITS;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_HEIGHT = 1 / $2a4f8c7882dfdea78821148c89bf8779$export$SIZE_UNITS;
+const $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_COLOR_SCHEME = "interpolateBrBG";
 // first value is undefined as categories are 1-indexed
-const $a482b49601c034373694faa8888ffe15$var$SHAPES = [undefined, "dot", "triangle", "circle", "diamond"];
+const $455e5d40a513c54585dfe04e9ebcda36$var$SHAPES = [undefined, "dot", "triangle", "circle", "diamond"];
 /**
 * Given a track, determine the WebGL draw mode for it
 *
-* @param {Object} track from schema
+* @param {Object} track from specification
 * @returns WebGLDrawMode as a string
 */
-const $a482b49601c034373694faa8888ffe15$export$getDrawModeForTrack = track => {
+const $455e5d40a513c54585dfe04e9ebcda36$export$getDrawModeForTrack = track => {
   switch (track.mark) {
     case "line":
       return "LINE_STRIP";
@@ -1747,33 +1746,33 @@ const $a482b49601c034373694faa8888ffe15$export$getDrawModeForTrack = track => {
       return "TRIANGLES";
   }
 };
-class $a482b49601c034373694faa8888ffe15$export$default {
+class $455e5d40a513c54585dfe04e9ebcda36$export$default {
   /**
-  * Process a schema by reading in the data, the channel information, and producing an
+  * Process a specification by reading in the data, the channel information, and producing an
   * iterator like interface with getNextTrack to feed to a drawer.
   *
-  * @param {Object} schema user defined schema
+  * @param {Object} specification user defined specification
   * @param {Function} callback function to call after all the data has been loaded
   */
-  constructor(schema, callback) {
+  constructor(specification, callback) {
     this.index = 0;
-    this.schema = schema;
-    if (typeof schema.defaultData === "string") {
+    this.specification = specification;
+    if (typeof specification.defaultData === "string") {
       // data is a url to get
-      this.dataPromise = fetch(schema.defaultData).then(response => response.text()).then(text => this.data = text.split("\n"));
-    } else if (schema.defaultData) {
+      this.dataPromise = fetch(specification.defaultData).then(response => response.text()).then(text => this.data = text.split("\n"));
+    } else if (specification.defaultData) {
       // default data is defined, assumed to be an object
-      this.data = schema.defaultData;
+      this.data = specification.defaultData;
       this.isInlineData = true;
     }
-    this.tracks = schema.tracks.map(track => new $a482b49601c034373694faa8888ffe15$var$Track(this, track));
+    this.tracks = specification.tracks.map(track => new $455e5d40a513c54585dfe04e9ebcda36$var$Track(this, track));
     const allPromises = this.tracks.map(track => track.dataPromise).filter(p => p);
     // Removes undefined
     if (this.dataPromise) {
       allPromises.push(this.dataPromise);
     }
-    this.xScale = $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema("x", schema);
-    this.yScale = $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSchema("y", schema);
+    this.xScale = $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSpecification("x", specification);
+    this.yScale = $ab472fc72a52ba79515db0c00f4f687a$export$getScaleForSpecification("y", specification);
     // When all tracks have acquired their data, call the callback
     // TODO: Allow tracks to be processed while waiting for others, need to keep in mind order
     Promise.all(allPromises).then(() => callback(this));
@@ -1789,15 +1788,15 @@ class $a482b49601c034373694faa8888ffe15$export$default {
     return this.tracks[this.index++];
   }
 }
-class $a482b49601c034373694faa8888ffe15$var$Track {
+class $455e5d40a513c54585dfe04e9ebcda36$var$Track {
   /**
-  * Process a track from a schema by loading data and producing an iterator
+  * Process a track from a specification by loading data and producing an iterator
   * like interface with getNextDataPoint or getNextMark.
   *
-  * @param {Object} schema user defined visualization
+  * @param {Object} specification user defined visualization
   * @param {Object} track user defined track
   */
-  constructor(schema, track) {
+  constructor(specification, track) {
     this.track = track;
     if (typeof track.data === "string") {
       // Track has its own data to GET
@@ -1812,19 +1811,19 @@ class $a482b49601c034373694faa8888ffe15$var$Track {
       this.isInlineData = true;
       this.processHeadersAndMappers();
       this.hasOwnData = true;
-    } else if (schema.data) {
-      // Track does not have its own data, but the schema has default data
-      this.data = schema.data;
-      this.isInlineData = schema.isInlineData;
+    } else if (specification.data) {
+      // Track does not have its own data, but the specification has default data
+      this.data = specification.data;
+      this.isInlineData = specification.isInlineData;
       this.processHeadersAndMappers();
-    } else if (schema.dataPromise) {
-      // Track does not have its own data, but the schema is GETting default data
-      schema.dataPromise.then(() => {
-        this.data = schema.data;
+    } else if (specification.dataPromise) {
+      // Track does not have its own data, but the specification is GETting default data
+      specification.dataPromise.then(() => {
+        this.data = specification.data;
         this.processHeadersAndMappers();
       });
     } else {
-      console.error(`Could not find data (no defaultData in schema and no data specified for this track) for track ${track}.`);
+      console.error(`Could not find data (no defaultData in specification and no data specified for this track) for track ${track}.`);
     }
   }
   /**
@@ -1844,7 +1843,7 @@ class $a482b49601c034373694faa8888ffe15$var$Track {
     }
     // Creating channel mappers
     this.channelMaps = new Map();
-    Object.keys($a482b49601c034373694faa8888ffe15$export$DEFAULT_CHANNELS).forEach(channel => {
+    Object.keys($455e5d40a513c54585dfe04e9ebcda36$export$DEFAULT_CHANNELS).forEach(channel => {
       this.channelMaps.set(channel, this.buildMapperForChannel(channel));
     });
   }
@@ -1927,29 +1926,29 @@ class $a482b49601c034373694faa8888ffe15$var$Track {
         let attrMapper;
         switch (channelInfo.type) {
           case "inline":
-            attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForInlineChannel(channel, channelInfo);
+            attrMapper = $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForInlineChannel(channel, channelInfo);
             break;
           case "quantitative":
-            attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForQuantitiveChannel(channel, channelInfo);
+            attrMapper = $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForQuantitiveChannel(channel, channelInfo);
             break;
           case "categorical":
-            attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForCategoricalChannel(channel, channelInfo);
+            attrMapper = $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForCategoricalChannel(channel, channelInfo);
             break;
           case "genomic":
             const chrAttributeIndex = this.headers.indexOf(channelInfo.chrAttribute);
             const geneAttributeIndex = this.headers.indexOf(channelInfo.geneAttribute);
-            attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForGenomicChannel(channel, channelInfo);
+            attrMapper = $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForGenomicChannel(channel, channelInfo);
             return row => attrMapper(row[chrAttributeIndex], row[geneAttributeIndex]);
           case "genomicRange":
             const genomicAttributeIndices = [this.headers.indexOf(channelInfo.chrAttribute), this.headers.indexOf(channelInfo.startAttribute), this.headers.indexOf(channelInfo.endAttribute)];
-            attrMapper = $a482b49601c034373694faa8888ffe15$var$buildMapperForGenomicRangeChannel(channel, channelInfo);
+            attrMapper = $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForGenomicRangeChannel(channel, channelInfo);
             return row => // Pass in values for the genomic attributes to mapper
             attrMapper(...genomicAttributeIndices.map(index => row[index]));
         }
         return row => attrMapper(row[attributeIndex]);
       }
     } else {
-      return () => $a482b49601c034373694faa8888ffe15$export$DEFAULT_CHANNELS[channel].value;
+      return () => $455e5d40a513c54585dfe04e9ebcda36$export$DEFAULT_CHANNELS[channel].value;
     }
   };
 }
@@ -1960,7 +1959,7 @@ class $a482b49601c034373694faa8888ffe15$var$Track {
 * @param {Object} channelInfo the info of the channel from a track
 * @returns a function that maps attribute values to appropriate channel values.
 */
-const $a482b49601c034373694faa8888ffe15$var$buildMapperForInlineChannel = (channel, channelInfo) => {
+const $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForInlineChannel = (channel, channelInfo) => {
   switch (channel) {
     case "width":
     case "height":
@@ -1976,27 +1975,27 @@ const $a482b49601c034373694faa8888ffe15$var$buildMapperForInlineChannel = (chann
 /**
 * Build a function which maps a numerical value for an attribute to a property of a mark
 * @param {*} channel the name of the quantitative channel to map
-* @param {*} channelInfo the object containing info for this channel from the schema
+* @param {*} channelInfo the object containing info for this channel from the specification
 * @returns a function that maps a data attribute value to a channel value
 */
-const $a482b49601c034373694faa8888ffe15$var$buildMapperForQuantitiveChannel = (channel, channelInfo) => {
+const $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForQuantitiveChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
       // Map x and y to itself, but we need a function to do it
       return coord => parseFloat(coord);
     case "opacity":
-      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minOpacity || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_OPACITY, 1]);
+      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minOpacity || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_OPACITY, 1]);
     case "size":
-      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minSize || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_SIZE, channelInfo.maxSize || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_SIZE]);
+      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minSize || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_SIZE, channelInfo.maxSize || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_SIZE]);
     case "color":
-      const d3colorScale = !channelInfo.colorScheme || !((channelInfo.colorScheme in $a6585f17c7dfd9074a79b848521aadca$exports)) ? $a6585f17c7dfd9074a79b848521aadca$exports[$a482b49601c034373694faa8888ffe15$var$DEFAULT_COLOR_SCHEME] : $a6585f17c7dfd9074a79b848521aadca$exports[channelInfo.colorScheme];
+      const d3colorScale = !channelInfo.colorScheme || !((channelInfo.colorScheme in $a6585f17c7dfd9074a79b848521aadca$exports)) ? $a6585f17c7dfd9074a79b848521aadca$exports[$455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_COLOR_SCHEME] : $a6585f17c7dfd9074a79b848521aadca$exports[channelInfo.colorScheme];
       const zeroToOneScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [0, 1]);
       return attrValue => $ab472fc72a52ba79515db0c00f4f687a$export$rgbStringToHex(d3colorScale(zeroToOneScale(attrValue)));
     case "width":
-      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minWidth || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_WIDTH, channelInfo.maxWidth || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_WIDTH]);
+      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minWidth || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_WIDTH, channelInfo.maxWidth || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_WIDTH]);
     case "height":
-      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minHeight || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_HEIGHT, channelInfo.maxHeight || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_WIDTH]);
+      return $ab472fc72a52ba79515db0c00f4f687a$export$scale(channelInfo.domain, [channelInfo.minHeight || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_HEIGHT, channelInfo.maxHeight || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_WIDTH]);
     default:
       console.error(`${channel} is not a supported channel for quantitative attributes!`);
   }
@@ -2005,10 +2004,10 @@ const $a482b49601c034373694faa8888ffe15$var$buildMapperForQuantitiveChannel = (c
 * Build a function which maps a discrete (integers are possible) value for an attribute
 * to a property of a mark
 * @param {*} channel the name of the categorical channel to map
-* @param {*} channelInfo the object containing info for this channel from the schema
+* @param {*} channelInfo the object containing info for this channel from the specification
 * @returns a function that maps a data attribute value to a channel value
 */
-const $a482b49601c034373694faa8888ffe15$var$buildMapperForCategoricalChannel = (channel, channelInfo) => {
+const $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForCategoricalChannel = (channel, channelInfo) => {
   const categoryTracker = new Map();
   let channelScale;
   switch (channel) {
@@ -2018,28 +2017,28 @@ const $a482b49601c034373694faa8888ffe15$var$buildMapperForCategoricalChannel = (
       channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality + 1], [-1, 1]);
       break;
     case "opacity":
-      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minOpacity || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_OPACITY, 1]);
+      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minOpacity || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_OPACITY, 1]);
       break;
     case "size":
-      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minSize || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_SIZE, channelInfo.maxSize || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_SIZE]);
+      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minSize || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_SIZE, channelInfo.maxSize || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_SIZE]);
       break;
     case "shape":
-      channelScale = categoryId => $a482b49601c034373694faa8888ffe15$var$SHAPES[categoryId % $a482b49601c034373694faa8888ffe15$var$SHAPES.length];
+      channelScale = categoryId => $455e5d40a513c54585dfe04e9ebcda36$var$SHAPES[categoryId % $455e5d40a513c54585dfe04e9ebcda36$var$SHAPES.length];
       break;
     case "color":
-      let d3colorScale = !channelInfo.colorScheme || !((channelInfo.colorScheme in $a6585f17c7dfd9074a79b848521aadca$exports)) ? $a6585f17c7dfd9074a79b848521aadca$exports[$a482b49601c034373694faa8888ffe15$var$DEFAULT_COLOR_SCHEME] : $a6585f17c7dfd9074a79b848521aadca$exports[channelInfo.colorScheme];
+      let d3colorScale = !channelInfo.colorScheme || !((channelInfo.colorScheme in $a6585f17c7dfd9074a79b848521aadca$exports)) ? $a6585f17c7dfd9074a79b848521aadca$exports[$455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_COLOR_SCHEME] : $a6585f17c7dfd9074a79b848521aadca$exports[channelInfo.colorScheme];
       if (Array.isArray(d3colorScale)) {
         console.error("Currenty only interpolating color schemes are supported, using default");
-        d3colorScale = $a6585f17c7dfd9074a79b848521aadca$exports[$a482b49601c034373694faa8888ffe15$var$DEFAULT_COLOR_SCHEME];
+        d3colorScale = $a6585f17c7dfd9074a79b848521aadca$exports[$455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_COLOR_SCHEME];
       }
       const zeroToOneScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [0, 1]);
       channelScale = categoryId => $ab472fc72a52ba79515db0c00f4f687a$export$rgbStringToHex(d3colorScale(zeroToOneScale(categoryId)));
       break;
     case "width":
-      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minWidth || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_WIDTH, channelInfo.maxWidth || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_WIDTH]);
+      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minWidth || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_WIDTH, channelInfo.maxWidth || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_WIDTH]);
       break;
     case "height":
-      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minHeight || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MIN_HEIGHT, channelInfo.maxHeight || $a482b49601c034373694faa8888ffe15$var$DEFAULT_MAX_HEIGHT]);
+      channelScale = $ab472fc72a52ba79515db0c00f4f687a$export$scale([1, channelInfo.cardinality], [channelInfo.minHeight || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MIN_HEIGHT, channelInfo.maxHeight || $455e5d40a513c54585dfe04e9ebcda36$var$DEFAULT_MAX_HEIGHT]);
       break;
     default:
       console.error(`${channel} is not a supported channel for categorical attributes!`);
@@ -2054,11 +2053,11 @@ const $a482b49601c034373694faa8888ffe15$var$buildMapperForCategoricalChannel = (
 /**
 * Build a function which maps a genome chr, gene, to an object consumable by a GenomeScale
 * @param {*} channel either x or y
-* @param {*} channelInfo the object containing info for this channel from the schema
+* @param {*} channelInfo the object containing info for this channel from the specification
 * @returns a function that maps (genomeChr, geneLoc) -> [chrId, geneLocation]
 *  ex: ["X", 200]
 */
-const $a482b49601c034373694faa8888ffe15$var$buildMapperForGenomicChannel = (channel, channelInfo) => {
+const $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForGenomicChannel = (channel, channelInfo) => {
   switch (channel) {
     case "x":
     case "y":
@@ -2073,12 +2072,12 @@ const $a482b49601c034373694faa8888ffe15$var$buildMapperForGenomicChannel = (chan
 /**
 * Build a function which maps a genome chr, start, and end to an object consumable by a scale
 * @param {*} channel either x or y, width or height may be included if doing arc marks
-* @param {*} channelInfo the object containing info for this channel from the schema
+* @param {*} channelInfo the object containing info for this channel from the specification
 * @returns a function that maps (genomeChr, genomeStart, genomeEnd) -> an object containing mark metadata for position
 *  format: [chrId, geneLocation, chrId2, geneLocation2]
 *  ex: ["1", 1000, "X", 2000]
 */
-const $a482b49601c034373694faa8888ffe15$var$buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
+const $455e5d40a513c54585dfe04e9ebcda36$var$buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   switch (channel) {
     case "width":
     case "height":
@@ -2092,17 +2091,17 @@ const $a482b49601c034373694faa8888ffe15$var$buildMapperForGenomicRangeChannel = 
       console.error(`${channel} is not a supported channel for genomic attributes!`);
   }
 };
-$parcel$export($a482b49601c034373694faa8888ffe15$exports, "default", function () {
-  return $a482b49601c034373694faa8888ffe15$export$default;
+$parcel$export($455e5d40a513c54585dfe04e9ebcda36$exports, "default", function () {
+  return $455e5d40a513c54585dfe04e9ebcda36$export$default;
 });
-$parcel$export($a482b49601c034373694faa8888ffe15$exports, "getDrawModeForTrack", function () {
-  return $a482b49601c034373694faa8888ffe15$export$getDrawModeForTrack;
+$parcel$export($455e5d40a513c54585dfe04e9ebcda36$exports, "getDrawModeForTrack", function () {
+  return $455e5d40a513c54585dfe04e9ebcda36$export$getDrawModeForTrack;
 });
-$parcel$export($a482b49601c034373694faa8888ffe15$exports, "DEFAULT_CHANNELS", function () {
-  return $a482b49601c034373694faa8888ffe15$export$DEFAULT_CHANNELS;
+$parcel$export($455e5d40a513c54585dfe04e9ebcda36$exports, "DEFAULT_CHANNELS", function () {
+  return $455e5d40a513c54585dfe04e9ebcda36$export$DEFAULT_CHANNELS;
 });
-function $a482b49601c034373694faa8888ffe15$init() {
-  return $a482b49601c034373694faa8888ffe15$exports;
+function $455e5d40a513c54585dfe04e9ebcda36$init() {
+  return $455e5d40a513c54585dfe04e9ebcda36$exports;
 }
 function $ab472fc72a52ba79515db0c00f4f687a$init() {
   return $ab472fc72a52ba79515db0c00f4f687a$exports;
@@ -2110,6 +2109,6 @@ function $ab472fc72a52ba79515db0c00f4f687a$init() {
 function $2a4f8c7882dfdea78821148c89bf8779$init() {
   return $2a4f8c7882dfdea78821148c89bf8779$exports;
 }
-export {$a482b49601c034373694faa8888ffe15$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init};
+export {$455e5d40a513c54585dfe04e9ebcda36$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init};
 
-//# sourceMappingURL=offscreen-webgl-worker.646ed2d6.js.map
+//# sourceMappingURL=offscreen-webgl-worker.5bc3a414.js.map

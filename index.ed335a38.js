@@ -41,7 +41,7 @@
   }
   var $7d806a7a603c235ec027b73d847f4d95$export$register = $7d806a7a603c235ec027b73d847f4d95$var$register;
   var $7d806a7a603c235ec027b73d847f4d95$export$resolve = $7d806a7a603c235ec027b73d847f4d95$var$resolve;
-  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.d5828f69.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.5bdfe64a.js\",\"4qh26\":\"data-processor-worker.b9547f75.js\"}"));
+  $7d806a7a603c235ec027b73d847f4d95$export$register(JSON.parse("{\"113Az\":\"index.ed335a38.js\",\"62uiH\":\"tsne_tenth.55e43465.csv\",\"62nMj\":\"strawberries.11a42acc.csv\",\"7mFce\":\"broccoli.36a995d8.csv\",\"726aj\":\"signals.1a70087f.csv\",\"45IwR\":\"tsne.31f8a0af.csv\",\"6y5OA\":\"tsne_hundreth.33d06bad.csv\",\"3E5zL\":\"heatmap.7058ecef.csv\",\"4POnk\":\"arcs.952090dc.csv\",\"5zpZj\":\"box-track.13d5c735.csv\",\"3qbgb\":\"matrix.7ffba982.csv\",\"5hunV\":\"offscreen-webgl-worker.89116158.js\",\"4qh26\":\"data-processor-worker.a546b874.js\"}"));
   // ASSET: node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
   var $a5a79905d7f29b6c9078769d5e01bfa0$exports = {};
   // ASSET: node_modules/redux/es/redux.js
@@ -3260,13 +3260,13 @@
     name: "webglControls",
     initialState: {
       tool: "pan",
-      schema: $0211b2fb0a3f771e39d61213a7d704bf$export$default,
+      specification: $0211b2fb0a3f771e39d61213a7d704bf$export$default,
       lockedX: false,
       lockedY: false
     },
     reducers: {
-      setSchema: function (state, action) {
-        state.schema = action.payload;
+      setSpecification: function (state, action) {
+        state.specification = action.payload;
       },
       setTool: function (state, action) {
         state.tool = action.payload;
@@ -3280,7 +3280,7 @@
       }
     }
   });
-  const {setSchema: $fed51f82549545858aa2253463b56601$export$setSchema, setTool: $fed51f82549545858aa2253463b56601$export$setTool, setScroll: $fed51f82549545858aa2253463b56601$export$setScroll} = $fed51f82549545858aa2253463b56601$var$controlsSlice.actions;
+  const {setSpecification: $fed51f82549545858aa2253463b56601$export$setSpecification, setTool: $fed51f82549545858aa2253463b56601$export$setTool, setScroll: $fed51f82549545858aa2253463b56601$export$setScroll} = $fed51f82549545858aa2253463b56601$var$controlsSlice.actions;
   var $fed51f82549545858aa2253463b56601$export$default = $fed51f82549545858aa2253463b56601$var$controlsSlice.reducer;
   // ASSET: node_modules/@parcel/runtime-js/lib/JSRuntime.js
   var $3cc48254b118e24d3f4b5a6f3e6563fc$exports = {};
@@ -4315,7 +4315,7 @@
     constructor(dispatch) {
       this.dispatch = dispatch;
       this.mouseAction = "pan";
-      this.schema = "csv10";
+      this.specification = "csv10";
     }
     /**
     * Initializes the tool bar by adding event listeners
@@ -4333,11 +4333,11 @@
           checked: event.target.checked
         }));
       });
-      document.getElementById("schema-select").value = this.schema;
-      this.dispatch($fed51f82549545858aa2253463b56601$export$setSchema($361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap.get(this.schema)));
-      document.getElementById("schema-select").addEventListener("change", event => {
-        this.schema = event.target.value;
-        this.dispatch($fed51f82549545858aa2253463b56601$export$setSchema($361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap.get(this.schema)));
+      document.getElementById("specification-select").value = this.specification;
+      this.dispatch($fed51f82549545858aa2253463b56601$export$setSpecification($361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap.get(this.specification)));
+      document.getElementById("specification-select").addEventListener("change", event => {
+        this.specification = event.target.value;
+        this.dispatch($fed51f82549545858aa2253463b56601$export$setSpecification($361b32f374cb657bf7d3a299cf1eb93a$var$exampleMap.get(this.specification)));
       });
       this.prevIcon = null;
       // force only 1 icon to have selected class
@@ -5977,20 +5977,20 @@
     return $794bbb298c1fc0cc3157526701549b8c$export$rgbToHex(asColor.r, asColor.g, asColor.b);
   }
   /**
-  * Get the VIEWPORT of the schema to be used by the mouseReader.
+  * Get the VIEWPORT of the specification to be used by the mouseReader.
   * If all types for a dimension across tracks are categorical or genomic,
   * will default to [-1, 1] for that dimension for the mouseReader. If X or Y
   * has a fixed value, it will consider the width or height channel domains.
   *
-  * @param {Object} schema of visualization
+  * @param {Object} specification of visualization
   * @returns [smallestX, largestX, smallestY, largestY] of viewport
   */
-  function $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSchema(schema) {
+  function $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSpecification(specification) {
     let smallestX = Number.POSITIVE_INFINITY;
     let largestX = Number.NEGATIVE_INFINITY;
     let smallestY = Number.POSITIVE_INFINITY;
     let largestY = Number.NEGATIVE_INFINITY;
-    schema.tracks.forEach(track => {
+    specification.tracks.forEach(track => {
       let xDomain = track.x.domain;
       if (!xDomain && track.x.value !== undefined && track.width.domain !== undefined) {
         xDomain = track.width.domain;
@@ -6015,20 +6015,20 @@
     return [smallestX, largestX, smallestY, largestY];
   }
   /**
-  * Given a schema, return a SCALE to be used for mapping data points to clip space
+  * Given a specification, return a SCALE to be used for mapping data points to clip space
   * for the drawer.
   *
   * @param {String} dimension either x or y
-  * @param {Object} schema for the visualization
+  * @param {Object} specification for the visualization
   * @returns function which can be used to map to an "x" or "y" value
   */
-  const $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema = (dimension, schema) => {
+  const $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSpecification = (dimension, specification) => {
     if (dimension !== "x" && dimension !== "y") {
       console.error(`${dimension} is not x or y!`);
     }
     let genomic = false;
     let genome;
-    for (const track of schema.tracks) {
+    for (const track of specification.tracks) {
       if (track[dimension].type && track[dimension].type.includes("genomic")) {
         genome = track[dimension].genome;
         genomic = true;
@@ -6036,7 +6036,7 @@
       }
     }
     if (!genomic) {
-      const viewport = $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSchema(schema);
+      const viewport = $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSpecification(specification);
       if (dimension === "x") {
         return $794bbb298c1fc0cc3157526701549b8c$export$scale([viewport[0], viewport[1]], [-1, 1]);
       }
@@ -6047,7 +6047,7 @@
     let smallestGeneValue = Number.POSITIVE_INFINITY;
     let largestGene = undefined;
     let largestGeneValue = Number.NEGATIVE_INFINITY;
-    for (const track of schema.tracks) {
+    for (const track of specification.tracks) {
       let xDomain = track[dimension].domain;
       if (xDomain) {
         if (geneScale.toClipSpaceFromString(xDomain[0]) < smallestGeneValue) {
@@ -6074,30 +6074,29 @@
   const $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN = "50px";
   const $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH = "100%";
   const $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT = $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
-  const $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema = schema => {
+  const $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSpecification = specification => {
     let toReturn = {};
     const calculatedMargins = {};
-    if (schema.margins === undefined) {
+    if (specification.margins === undefined) {
       toReturn.margin = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
       calculatedMargins.top = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
       calculatedMargins.right = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
       calculatedMargins.bottom = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
       calculatedMargins.left = $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN;
     } else {
-      calculatedMargins.top = schema.margins.top === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.top;
-      calculatedMargins.right = schema.margins.right === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.right;
-      calculatedMargins.bottom = schema.margins.bottom === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.bottom;
-      calculatedMargins.left = schema.margins.left === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : schema.margins.left;
+      calculatedMargins.top = specification.margins.top === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : specification.margins.top;
+      calculatedMargins.right = specification.margins.right === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : specification.margins.right;
+      calculatedMargins.bottom = specification.margins.bottom === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : specification.margins.bottom;
+      calculatedMargins.left = specification.margins.left === undefined ? $794bbb298c1fc0cc3157526701549b8c$var$DEFAULT_MARGIN : specification.margins.left;
       // Shorthand for top right bottom left
       toReturn.margin = `${calculatedMargins.top}
                        ${calculatedMargins.right}
                        ${calculatedMargins.bottom}
                        ${calculatedMargins.left}`;
     }
-    const calculatedWidth = schema.width || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
-    const calculatedHeight = schema.height || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT;
+    const calculatedWidth = specification.width || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
+    const calculatedHeight = specification.height || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT;
     const allMeasurements = [calculatedMargins.top, calculatedMargins.right, calculatedMargins.bottom, calculatedMargins.left, calculatedWidth, calculatedHeight];
-    console.log(allMeasurements.map($794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement));
     if (allMeasurements.every($794bbb298c1fc0cc3157526701549b8c$var$getPixelMeasurement)) {
       // Let's encode as a number to allow users using typescript or doing weird DOM things able to define
       // the width and height explicitly
@@ -7994,13 +7993,13 @@
       this._labelMarker = document.createElementNS("http://www.w3.org/2000/svg", "g");
     }
     /**
-    * Set the schema for this class to refer to.
+    * Set the specification for this class to refer to.
     *
-    * @param {Object} schema
+    * @param {Object} specification
     */
-    setSchema(schema) {
-      this.schema = schema;
-      const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema(schema);
+    setSpecification(specification) {
+      this.specification = specification;
+      const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSpecification(specification);
       this.svg.style.width = styles.width;
       this.svg.style.height = styles.height;
       this.svg.style.margin = styles.margin;
@@ -8008,7 +8007,7 @@
       // used for updating labels
       this.initialY = undefined;
       $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).selectAll("*").remove();
-      for (const _ of this.schema.labels || []) {
+      for (const _ of this.specification.labels || []) {
         $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).append("text");
       }
     }
@@ -8034,8 +8033,8 @@
       this.width = width;
       this.height = height;
       if (this.currentXRange) {
-        this.xAxis = this._calculateAxis("x", this.schema.xAxis, this.schema, $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema("x", this.schema), this.xAxisAnchor);
-        if (this.schema.labels) {
+        this.xAxis = this._calculateAxis("x", this.specification.xAxis, this.specification, $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSpecification("x", this.specification), this.xAxisAnchor);
+        if (this.specification.labels) {
           this.updateLabels();
         }
       }
@@ -8043,20 +8042,20 @@
         this.xAxisAnchor.call(this.xAxis);
       }
       if (this.currentYRange) {
-        this.yAxis = this._calculateAxis("y", this.schema.yAxis, this.schema, $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSchema("y", this.schema), this.yAxisAnchor);
+        this.yAxis = this._calculateAxis("y", this.specification.yAxis, this.specification, $794bbb298c1fc0cc3157526701549b8c$export$getScaleForSpecification("y", this.specification), this.yAxisAnchor);
       }
       if (this.yAxis) {
         this.yAxisAnchor.call(this.yAxis);
       }
     }
     updateLabels() {
-      if (!this.initialX && this.schema.labels) {
-        this.initialX = this.schema.labels.map(label => this._calculateViewportSpotInverse(label.x, label.y)[0]);
+      if (!this.initialX && this.specification.labels) {
+        this.initialX = this.specification.labels.map(label => this._calculateViewportSpotInverse(label.x, label.y)[0]);
       }
-      if (!this.initialY && this.schema.labels) {
-        this.initialY = this.schema.labels.map(label => this._calculateViewportSpotInverse(label.x, label.y)[1]);
+      if (!this.initialY && this.specification.labels) {
+        this.initialY = this.specification.labels.map(label => this._calculateViewportSpotInverse(label.x, label.y)[1]);
       }
-      $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).selectAll("text").data(this.schema.labels).text(d => d.text).attr("x", (d, i) => {
+      $e993fd4cd330c3edbc4011f7539819bb$export$default(this._labelMarker).selectAll("text").data(this.specification.labels).text(d => d.text).attr("x", (d, i) => {
         if (d.fixedX) {
           return this.initialX[i];
         }
@@ -8076,7 +8075,7 @@
         }
       });
     }
-    _calculateAxis(dimension, orientation, schema, genomeScale, anchor) {
+    _calculateAxis(dimension, orientation, specification, genomeScale, anchor) {
       let axis, domain, range;
       if (dimension === "x") {
         domain = this.currentXRange;
@@ -8133,7 +8132,7 @@
         }
       }
       let genomic = false;
-      for (const track of schema.tracks) {
+      for (const track of specification.tracks) {
         if (track[dimension].type && track[dimension].type.includes("genomic")) {
           genomic = true;
         }
@@ -8234,21 +8233,21 @@
       this.SVGInteractor = new $d3f60a93bd10b483e21045daeca73e8b$export$default(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
     }
     /**
-    * Set the schema of the mouse reader and the svg interaction
-    * @param {Object} schema
+    * Set the specification of the mouse reader and the svg interaction
+    * @param {Object} specification
     */
-    setSchema(schema) {
-      const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema(schema);
+    setSpecification(specification) {
+      const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSpecification(specification);
       this.element.style.width = styles.width;
       this.element.style.height = styles.height;
       this.element.style.margin = styles.margin;
-      this.viewport = $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSchema(schema);
-      this.SVGInteractor.setSchema(schema);
+      this.viewport = $794bbb298c1fc0cc3157526701549b8c$export$getViewportForSpecification(specification);
+      this.SVGInteractor.setSpecification(specification);
       this._updateSVG();
     }
     /**
     * Set the viewport in the format mouseReader.viewport = [minX, maxX, minY, maxY].
-    * Mostly used to make Scatterplot.setOptions simpler.
+    * Mostly used to make WebGLVis.setViewOptions simpler.
     */
     set viewport(toSet) {
       this.minX = toSet[0];
@@ -8290,9 +8289,21 @@
             break;
           case "box":
             this._currentSelectionPoints = this._currentSelectionPoints.slice(0, 2).concat(this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event)));
+            this.element.parentElement.dispatchEvent(new CustomEvent("onSelection", {
+              detail: {
+                bounds: this._currentSelectionPoints,
+                type: this.tool
+              }
+            }));
             break;
           case "lasso":
             this._currentSelectionPoints.push(...this._calculateViewportSpot(...$ea9fc8a1b0a7e0be7497639e5ed20241$var$getLayerXandYFromEvent(event)));
+            this.element.parentElement.dispatchEvent(new CustomEvent("onSelection", {
+              detail: {
+                bounds: this._currentSelectionPoints,
+                type: this.tool
+              }
+            }));
             break;
           case "tooltip":
             break;
@@ -8385,6 +8396,12 @@
           this.currentYRange = previousY;
         }
       }
+      this.element.parentElement.dispatchEvent(new CustomEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
+        detail: {
+          viewport: this.getViewport(),
+          type: this.tool
+        }
+      }));
       this.handler.sendDrawerState(this.getViewport());
       this._updateSVG();
     }
@@ -8417,6 +8434,12 @@
           this.currentYRange = previousY;
         }
       }
+      this.element.parentElement.dispatchEvent(new CustomEvent("pan", {
+        detail: {
+          viewport: this.getViewport(),
+          type: this.tool
+        }
+      }));
       this.handler.sendDrawerState(this.getViewport());
       this._updateSVG();
     }
@@ -11160,29 +11183,29 @@
   var $0cb2a726714ab9e25f66a914aaf55a06$export$SchemaError = $ce4eec71ec4285d39f33d14254969864$export$SchemaError;
   var $0cb2a726714ab9e25f66a914aaf55a06$export$SchemaScanResult = $88344eb976b27020930887e01ad42def$export$SchemaScanResult;
   var $0cb2a726714ab9e25f66a914aaf55a06$export$scan = $88344eb976b27020930887e01ad42def$export$scan;
-  // ASSET: src/epiviz.gl/schema-validation/visualization.json
-  var $dcfca146b82b6460afb98fe424831121$exports = {};
-  $dcfca146b82b6460afb98fe424831121$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/visualization\",\"title\":\"Visualization\",\"description\":\"A webgl visualization made of a sequence of tracks\",\"type\":\"object\",\"required\":[\"tracks\"],\"properties\":{\"labels\":{\"description\":\"set of labels to display on visualization, properties of labels can be any valid attribute for an svg text element\",\"examples\":[{\"x\":100,\"y\":200,\"text\":\"my favorite data point\",\"rotate\":-90},{\"x\":-1.1,\"y\":0,\"text\":\"Track 1\",\"color\":\"red\",\"fixedX\":true}],\"type\":\"array\",\"items\":{\"properties\":{\"x\":{\"description\":\"x coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if x dimension is categorical or genomic\",\"type\":\"number\"},\"y\":{\"description\":\"y coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if y dimension is categorical or genomic\",\"type\":\"number\"},\"fixedX\":{\"description\":\"fix the x coordinate of the label, so it does not move when panning/zooming left or right\",\"type\":\"boolean\"},\"fixedY\":{\"description\":\"fix the y coordinate of the label, so it does not move when panning/zooming up or down\",\"type\":\"boolean\"},\"required\":[\"x\",\"y\"]}}},\"xAxis\":{\"description\":\"location of x-axis\",\"enum\":[\"bottom\",\"top\",\"center\",\"none\",\"zero\"]},\"yAxis\":{\"description\":\"location of y-axis\",\"enum\":[\"left\",\"right\",\"center\",\"none\",\"zero\"]},\"tracks\":{\"description\":\"A track is a map from the data to a sequence of marks\",\"type\":\"array\",\"items\":{\"$ref\":\"/track\"}},\"defaultData\":{\"description\":\"A string of a csv href containing data or an object of inline data where each key is a column of values\",\"examples\":[\"http://example.com/data.csv\",{\"day\":[1,2],\"price\":[10,20]}],\"type\":[\"string\",\"object\"],\"additionalProperties\":{\"type\":\"array\"},\"minProperties\":1},\"width\":{\"description\":\"Width of the visualization in css units\",\"examples\":[\"400px\",\"100%\",\"10em\",\"600\"],\"type\":\"string\"},\"height\":{\"description\":\"Height of the visualization in css units\",\"examples\":[\"400px\",\"100%\",\"10em\",\"600\"],\"type\":\"string\"},\"margins\":{\"description\":\"Margins for the visualization; gives more space for labels and axis to render\",\"properties\":{\"top\":{\"description\":\"Top margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"bottom\":{\"description\":\"Bottom margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"left\":{\"description\":\"Left margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"right\":{\"description\":\"Right margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]}}}},\"allOf\":[{\"description\":\"if there is no default data for the visualization require each track to have data property\",\"if\":{\"not\":{\"required\":[\"defaultData\"]}},\"then\":{\"properties\":{\"tracks\":{\"items\":{\"required\":[\"data\"]}}}},\"else\":{}}]}");
-  var $dcfca146b82b6460afb98fe424831121$$interop$default = /*@__PURE__*/$parcel$interopDefault($dcfca146b82b6460afb98fe424831121$exports);
-  // ASSET: src/epiviz.gl/schema-validation/track.json
-  var $d304442893938a2318426ba12a03873d$exports = {};
-  $d304442893938a2318426ba12a03873d$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/track\",\"title\":\"Track\",\"description\":\"A track to visualize\",\"type\":\"object\",\"required\":[\"mark\",\"x\",\"y\"],\"properties\":{\"data\":{\"description\":\"A string of a csv href containing data or an object of inline data where each key is an array of a data column\",\"type\":[\"string\",\"object\"],\"additionalProperties\":{\"type\":\"array\"},\"minProperties\":1},\"mark\":{\"description\":\"type of mark to visualize\",\"enum\":[\"point\",\"line\",\"area\",\"rect\",\"tick\",\"arc\"]},\"tooltips\":{\"description\":\"a number between 0 and 1 where 0 is no tooltips, 1 is always show, and, for example, 0.1 would be show tooltips when zoomed in to 10% of the domain\",\"type\":\"number\",\"minimum\":0,\"maximum\":1},\"x\":{\"description\":\"define the x coordinates of the marks\",\"type\":\"object\",\"allOf\":[{\"$ref\":\"/channel\"}],\"examples\":[{\"type\":\"genomic\",\"chrAttribute\":\"chr\",\"geneAttribute\":\"gene\",\"domain\":[\"chr2:100\",\"chr2:300\"]}]},\"y\":{\"description\":\"define the y coordinates of the marks\",\"type\":\"object\",\"allOf\":[{\"$ref\":\"/channel\"}],\"examples\":[{\"type\":\"quantitative\",\"attribute\":\"time\",\"domain\":[0,10]},{\"attribute\":\"sample\",\"type\":\"categorical\",\"cardinality\":10}]},\"color\":{\"description\":\"define the color of the marks, for fixed values can be any css3 color descriptor or a number that translates to a color in hex\",\"type\":\"object\",\"properties\":{\"colorScheme\":{\"description\":\"d3 continuous color scheme to use, see d3-scale-chromatic for options\",\"examples\":[\"interpolateBlues\",\"interpolateReds\",\"interpolateRainbow\"],\"type\":\"string\"}},\"examples\":[{\"value\":\"red\"},{\"value\":16581375},{\"attribute\":\"sample\",\"type\":\"categorical\",\"cardinality\":10,\"colorScheme\":\"interpolateBuGn\"}],\"allOf\":[{\"$ref\":\"/channel\"}]},\"size\":{\"description\":\"size of the mark, used only when mark type is point, use width or height for other mark types. The units of this channel correspond to 1/200th of the canvas e.g. a size of 100 is half the canvas.\",\"type\":\"object\",\"properties\":{\"maxSize\":{\"type\":\"number\"},\"minSize\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"examples\":[{\"attribute\":\"population\",\"type\":\"quantitative\",\"domain\":[0,1000],\"maxSize\":10,\"minSize\":1}],\"allOf\":[{\"$ref\":\"/channel\"}]},\"width\":{\"description\":\"width of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the width of the canvas. This channel may be a genomic range type for arc tracks. If both height and width are specified for a tick mark, only width is used.\",\"type\":\"object\",\"properties\":{\"maxWidth\":{\"type\":\"number\"},\"minWidth\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"height\":{\"description\":\"height of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the height of the canvas. This channel may be a genomic range type for arc tracks.\",\"type\":\"object\",\"properties\":{\"maxHeight\":{\"type\":\"number\"},\"minHeight\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"opacity\":{\"description\":\"opacity of the mark, compatible with all mark types\",\"type\":\"object\",\"properties\":{\"minOpacity\":{\"type\":\"number\",\"minimum\":0,\"exclusiveMaximum\":1},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"shape\":{\"description\":\"shape of the mark, used only for point marks\",\"type\":\"object\",\"properties\":{\"value\":{\"enum\":[\"dot\",\"circle\",\"diamond\",\"triangle\"]}},\"allOf\":[{\"$ref\":\"/channel\"}]}}}");
-  var $d304442893938a2318426ba12a03873d$$interop$default = /*@__PURE__*/$parcel$interopDefault($d304442893938a2318426ba12a03873d$exports);
-  // ASSET: src/epiviz.gl/schema-validation/channel.json
-  var $efdc490af13c2135de6efa4153e39a48$exports = {};
-  $efdc490af13c2135de6efa4153e39a48$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/channel\",\"title\":\"Channel\",\"description\":\"A channel of a visualization\",\"type\":\"object\",\"properties\":{\"type\":{\"description\":\"type of attribute, genomic range only compatible with x, y, width and height\",\"enum\":[\"quantitative\",\"categorical\",\"genomic\",\"genomicRange\",\"inline\"]},\"attribute\":{\"description\":\"column of data frame to use for mapping channel\",\"type\":\"string\"},\"value\":{\"description\":\"if fixing a channel, specify with value\",\"type\":[\"string\",\"number\",\"boolean\"]},\"domain\":{\"description\":\"domain of attribute to use for mapping, required if type is quantitative\",\"type\":\"array\"},\"cardinality\":{\"description\":\"number of attribute values to use for mapping, required if type is categorical\",\"type\":\"integer\"},\"chrAttribute\":{\"description\":\"if type is genomic or genomicRange, the attribute that contains the chromosome id\",\"type\":\"string\"},\"startAttribute\":{\"description\":\"if type is genomicRange, the attribute that contains the start of the range\",\"type\":\"string\"},\"endAttribute\":{\"description\":\"if type is genomicRange, the attribute that contains the end of the range\",\"type\":\"string\"},\"genome\":{\"description\":\"genome being mapped\",\"enum\":[\"hg38\",\"hg19\",\"mm39\"]}},\"allOf\":[{\"description\":\"If type is genomic, require genomic attributes and forbid regular attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"genomic\"}},\"required\":[\"type\"]}},{\"required\":[\"chrAttribute\",\"geneAttribute\",\"genome\"],\"not\":{\"required\":[\"attribute\",\"startAttribute\",\"endAttribute\"]},\"properties\":{\"domain\":{\"items\":[{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"},{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"}]}}}]},{\"description\":\"If type is genomicRange, require genomicRange attributes and forbid regular attribute\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"genomicRange\"}},\"required\":[\"type\"]}},{\"required\":[\"chrAttribute\",\"startAttribute\",\"endAttribute\",\"genome\"],\"not\":{\"required\":[\"attribute\",\"geneAttribute\"]},\"properties\":{\"domain\":{\"items\":[{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"},{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"}]}}}]},{\"description\":\"If type is quantitative, require domain and forbid cardinality\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"quantitative\"}},\"required\":[\"type\"]}},{\"required\":[\"domain\"],\"properties\":{\"domain\":{\"items\":[{\"type\":\"number\"},{\"type\":\"number\"}]}},\"not\":{\"required\":[\"cardinality\"]}}]},{\"description\":\"If type is categorical, require cardinality and forbid domain\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"categorical\"}},\"required\":[\"type\"]}},{\"required\":[\"cardinality\"],\"not\":{\"required\":[\"domain\"]}}]},{\"description\":\"If value is defined, disallow other attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"value\":{\"not\":{\"type\":\"null\"}}},\"required\":[\"value\"]}},{\"allOf\":[{\"not\":{\"required\":[\"attribute\"]}},{\"not\":{\"required\":[\"type\"]}},{\"not\":{\"required\":[\"domain\"]}},{\"not\":{\"required\":[\"cardinality\"]}}]}]},{\"description\":\"If value is not defined, require attribute or genomic attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"value\":{\"type\":\"null\"}}}},{\"oneOf\":[{\"required\":[\"attribute\"]},{\"required\":[\"chrAttribute\",\"genome\"]}]}]}]}");
-  var $efdc490af13c2135de6efa4153e39a48$$interop$default = /*@__PURE__*/$parcel$interopDefault($efdc490af13c2135de6efa4153e39a48$exports);
-  const $5bd7316b1b971c16c065bbe70a894cf9$var$v = new $0cb2a726714ab9e25f66a914aaf55a06$export$Validator();
-  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($efdc490af13c2135de6efa4153e39a48$$interop$default, "/channel");
-  $5bd7316b1b971c16c065bbe70a894cf9$var$v.addSchema($d304442893938a2318426ba12a03873d$$interop$default, "/track");
+  // ASSET: src/epiviz.gl/specification-validation/visualization.json
+  var $101aba70bda50df01edb7e6771256b5b$exports = {};
+  $101aba70bda50df01edb7e6771256b5b$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/visualization\",\"title\":\"Visualization\",\"description\":\"A webgl visualization made of a sequence of tracks\",\"type\":\"object\",\"required\":[\"tracks\"],\"properties\":{\"labels\":{\"description\":\"set of labels to display on visualization, properties of labels can be any valid attribute for an svg text element\",\"examples\":[{\"x\":100,\"y\":200,\"text\":\"my favorite data point\",\"rotate\":-90},{\"x\":-1.1,\"y\":0,\"text\":\"Track 1\",\"color\":\"red\",\"fixedX\":true}],\"type\":\"array\",\"items\":{\"properties\":{\"x\":{\"description\":\"x coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if x dimension is categorical or genomic\",\"type\":\"number\"},\"y\":{\"description\":\"y coordinate of label with respect to data coordinates, should be on scale with [-1, 1] if y dimension is categorical or genomic\",\"type\":\"number\"},\"fixedX\":{\"description\":\"fix the x coordinate of the label, so it does not move when panning/zooming left or right\",\"type\":\"boolean\"},\"fixedY\":{\"description\":\"fix the y coordinate of the label, so it does not move when panning/zooming up or down\",\"type\":\"boolean\"},\"required\":[\"x\",\"y\"]}}},\"xAxis\":{\"description\":\"location of x-axis\",\"enum\":[\"bottom\",\"top\",\"center\",\"none\",\"zero\"]},\"yAxis\":{\"description\":\"location of y-axis\",\"enum\":[\"left\",\"right\",\"center\",\"none\",\"zero\"]},\"tracks\":{\"description\":\"A track is a map from the data to a sequence of marks\",\"type\":\"array\",\"items\":{\"$ref\":\"/track\"}},\"defaultData\":{\"description\":\"A string of a csv href containing data or an object of inline data where each key is a column of values\",\"examples\":[\"http://example.com/data.csv\",{\"day\":[1,2],\"price\":[10,20]}],\"type\":[\"string\",\"object\"],\"additionalProperties\":{\"type\":\"array\"},\"minProperties\":1},\"width\":{\"description\":\"Width of the visualization in css units\",\"examples\":[\"400px\",\"100%\",\"10em\",\"600\"],\"type\":\"string\"},\"height\":{\"description\":\"Height of the visualization in css units\",\"examples\":[\"400px\",\"100%\",\"10em\",\"600\"],\"type\":\"string\"},\"margins\":{\"description\":\"Margins for the visualization; gives more space for labels and axis to render\",\"properties\":{\"top\":{\"description\":\"Top margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"bottom\":{\"description\":\"Bottom margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"left\":{\"description\":\"Left margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]},\"right\":{\"description\":\"Right margin of the visualization in css units\",\"type\":\"string\",\"examples\":[\"100px\",\"5%\",\"5em\"]}}}},\"allOf\":[{\"description\":\"if there is no default data for the visualization require each track to have data property\",\"if\":{\"not\":{\"required\":[\"defaultData\"]}},\"then\":{\"properties\":{\"tracks\":{\"items\":{\"required\":[\"data\"]}}}},\"else\":{}}]}");
+  var $101aba70bda50df01edb7e6771256b5b$$interop$default = /*@__PURE__*/$parcel$interopDefault($101aba70bda50df01edb7e6771256b5b$exports);
+  // ASSET: src/epiviz.gl/specification-validation/track.json
+  var $c9a52753a99f13530c6e8a0a899f1d5a$exports = {};
+  $c9a52753a99f13530c6e8a0a899f1d5a$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/track\",\"title\":\"Track\",\"description\":\"A track to visualize\",\"type\":\"object\",\"required\":[\"mark\",\"x\",\"y\"],\"properties\":{\"data\":{\"description\":\"A string of a csv href containing data or an object of inline data where each key is an array of a data column\",\"type\":[\"string\",\"object\"],\"additionalProperties\":{\"type\":\"array\"},\"minProperties\":1},\"mark\":{\"description\":\"type of mark to visualize\",\"enum\":[\"point\",\"line\",\"area\",\"rect\",\"tick\",\"arc\"]},\"tooltips\":{\"description\":\"a number between 0 and 1 where 0 is no tooltips, 1 is always show, and, for example, 0.1 would be show tooltips when zoomed in to 10% of the domain\",\"type\":\"number\",\"minimum\":0,\"maximum\":1},\"x\":{\"description\":\"define the x coordinates of the marks\",\"type\":\"object\",\"allOf\":[{\"$ref\":\"/channel\"}],\"examples\":[{\"type\":\"genomic\",\"chrAttribute\":\"chr\",\"geneAttribute\":\"gene\",\"domain\":[\"chr2:100\",\"chr2:300\"]}]},\"y\":{\"description\":\"define the y coordinates of the marks\",\"type\":\"object\",\"allOf\":[{\"$ref\":\"/channel\"}],\"examples\":[{\"type\":\"quantitative\",\"attribute\":\"time\",\"domain\":[0,10]},{\"attribute\":\"sample\",\"type\":\"categorical\",\"cardinality\":10}]},\"color\":{\"description\":\"define the color of the marks, for fixed values can be any css3 color descriptor or a number that translates to a color in hex\",\"type\":\"object\",\"properties\":{\"colorScheme\":{\"description\":\"d3 continuous color scheme to use, see d3-scale-chromatic for options\",\"examples\":[\"interpolateBlues\",\"interpolateReds\",\"interpolateRainbow\"],\"type\":\"string\"}},\"examples\":[{\"value\":\"red\"},{\"value\":16581375},{\"attribute\":\"sample\",\"type\":\"categorical\",\"cardinality\":10,\"colorScheme\":\"interpolateBuGn\"}],\"allOf\":[{\"$ref\":\"/channel\"}]},\"size\":{\"description\":\"size of the mark, used only when mark type is point, use width or height for other mark types. The units of this channel correspond to 1/200th of the canvas e.g. a size of 100 is half the canvas.\",\"type\":\"object\",\"properties\":{\"maxSize\":{\"type\":\"number\"},\"minSize\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"examples\":[{\"attribute\":\"population\",\"type\":\"quantitative\",\"domain\":[0,1000],\"maxSize\":10,\"minSize\":1}],\"allOf\":[{\"$ref\":\"/channel\"}]},\"width\":{\"description\":\"width of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the width of the canvas. This channel may be a genomic range type for arc tracks. If both height and width are specified for a tick mark, only width is used.\",\"type\":\"object\",\"properties\":{\"maxWidth\":{\"type\":\"number\"},\"minWidth\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"height\":{\"description\":\"height of the mark, used for rect, arc, and tick marks only. The units of this channel correspond to 1/200th of the height of the canvas. This channel may be a genomic range type for arc tracks.\",\"type\":\"object\",\"properties\":{\"maxHeight\":{\"type\":\"number\"},\"minHeight\":{\"type\":\"number\"},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"opacity\":{\"description\":\"opacity of the mark, compatible with all mark types\",\"type\":\"object\",\"properties\":{\"minOpacity\":{\"type\":\"number\",\"minimum\":0,\"exclusiveMaximum\":1},\"value\":{\"type\":\"number\"}},\"allOf\":[{\"$ref\":\"/channel\"}]},\"shape\":{\"description\":\"shape of the mark, used only for point marks\",\"type\":\"object\",\"properties\":{\"value\":{\"enum\":[\"dot\",\"circle\",\"diamond\",\"triangle\"]}},\"allOf\":[{\"$ref\":\"/channel\"}]}}}");
+  var $c9a52753a99f13530c6e8a0a899f1d5a$$interop$default = /*@__PURE__*/$parcel$interopDefault($c9a52753a99f13530c6e8a0a899f1d5a$exports);
+  // ASSET: src/epiviz.gl/specification-validation/channel.json
+  var $ea6f078afdcc134fcffa791fd86fc908$exports = {};
+  $ea6f078afdcc134fcffa791fd86fc908$exports = JSON.parse("{\"schema\":\"https://json-schema.org/draft/2020-12/schema\",\"id\":\"/channel\",\"title\":\"Channel\",\"description\":\"A channel of a visualization\",\"type\":\"object\",\"properties\":{\"type\":{\"description\":\"type of attribute, genomic range only compatible with x, y, width and height\",\"enum\":[\"quantitative\",\"categorical\",\"genomic\",\"genomicRange\",\"inline\"]},\"attribute\":{\"description\":\"column of data frame to use for mapping channel\",\"type\":\"string\"},\"value\":{\"description\":\"if fixing a channel, specify with value\",\"type\":[\"string\",\"number\",\"boolean\"]},\"domain\":{\"description\":\"domain of attribute to use for mapping, required if type is quantitative\",\"type\":\"array\"},\"cardinality\":{\"description\":\"number of attribute values to use for mapping, required if type is categorical\",\"type\":\"integer\"},\"chrAttribute\":{\"description\":\"if type is genomic or genomicRange, the attribute that contains the chromosome id\",\"type\":\"string\"},\"startAttribute\":{\"description\":\"if type is genomicRange, the attribute that contains the start of the range\",\"type\":\"string\"},\"endAttribute\":{\"description\":\"if type is genomicRange, the attribute that contains the end of the range\",\"type\":\"string\"},\"genome\":{\"description\":\"genome being mapped\",\"enum\":[\"hg38\",\"hg19\",\"mm39\"]}},\"allOf\":[{\"description\":\"If type is genomic, require genomic attributes and forbid regular attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"genomic\"}},\"required\":[\"type\"]}},{\"required\":[\"chrAttribute\",\"geneAttribute\",\"genome\"],\"not\":{\"required\":[\"attribute\",\"startAttribute\",\"endAttribute\"]},\"properties\":{\"domain\":{\"items\":[{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"},{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"}]}}}]},{\"description\":\"If type is genomicRange, require genomicRange attributes and forbid regular attribute\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"genomicRange\"}},\"required\":[\"type\"]}},{\"required\":[\"chrAttribute\",\"startAttribute\",\"endAttribute\",\"genome\"],\"not\":{\"required\":[\"attribute\",\"geneAttribute\"]},\"properties\":{\"domain\":{\"items\":[{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"},{\"type\":\"string\",\"pattern\":\"chr(\\\\d{1,2}|[XY]):\\\\d+\"}]}}}]},{\"description\":\"If type is quantitative, require domain and forbid cardinality\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"quantitative\"}},\"required\":[\"type\"]}},{\"required\":[\"domain\"],\"properties\":{\"domain\":{\"items\":[{\"type\":\"number\"},{\"type\":\"number\"}]}},\"not\":{\"required\":[\"cardinality\"]}}]},{\"description\":\"If type is categorical, require cardinality and forbid domain\",\"anyOf\":[{\"not\":{\"properties\":{\"type\":{\"const\":\"categorical\"}},\"required\":[\"type\"]}},{\"required\":[\"cardinality\"],\"not\":{\"required\":[\"domain\"]}}]},{\"description\":\"If value is defined, disallow other attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"value\":{\"not\":{\"type\":\"null\"}}},\"required\":[\"value\"]}},{\"allOf\":[{\"not\":{\"required\":[\"attribute\"]}},{\"not\":{\"required\":[\"type\"]}},{\"not\":{\"required\":[\"domain\"]}},{\"not\":{\"required\":[\"cardinality\"]}}]}]},{\"description\":\"If value is not defined, require attribute or genomic attributes\",\"anyOf\":[{\"not\":{\"properties\":{\"value\":{\"type\":\"null\"}}}},{\"oneOf\":[{\"required\":[\"attribute\"]},{\"required\":[\"chrAttribute\",\"genome\"]}]}]}]}");
+  var $ea6f078afdcc134fcffa791fd86fc908$$interop$default = /*@__PURE__*/$parcel$interopDefault($ea6f078afdcc134fcffa791fd86fc908$exports);
+  const $3f5b70d90544f3fe5b87de83695c0b4f$var$v = new $0cb2a726714ab9e25f66a914aaf55a06$export$Validator();
+  $3f5b70d90544f3fe5b87de83695c0b4f$var$v.addSchema($ea6f078afdcc134fcffa791fd86fc908$$interop$default, "/channel");
+  $3f5b70d90544f3fe5b87de83695c0b4f$var$v.addSchema($c9a52753a99f13530c6e8a0a899f1d5a$$interop$default, "/track");
   /**
-  * Utility method that returns a boolean on whether the json is a valid schema.
+  * Utility method that returns a boolean on whether the json is a valid specification.
   * console.errors the reason if it is not.
-  * @param {Object} json schema
+  * @param {Object} json specification
   * @returns boolean
   */
-  const $5bd7316b1b971c16c065bbe70a894cf9$export$default = json => {
-    const validation = $5bd7316b1b971c16c065bbe70a894cf9$var$v.validate(json, $dcfca146b82b6460afb98fe424831121$$interop$default);
+  const $3f5b70d90544f3fe5b87de83695c0b4f$export$default = json => {
+    const validation = $3f5b70d90544f3fe5b87de83695c0b4f$var$v.validate(json, $101aba70bda50df01edb7e6771256b5b$$interop$default);
     if (!validation.valid) {
       console.error(validation.errors);
     }
@@ -11191,7 +11214,7 @@
   class $b24d98818d6efd81d9f858dfc1cbed2a$export$default {
     POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze(["lockedX", "lockedY", "tool", "viewport", "currentXRange", "currentYRange"]);
     /**
-    * A class meant to display a visualization based off a given schema using webgl.
+    * A class meant to display a visualization based off a given specification using webgl.
     *
     * @param {HTMLElement} container <div> or other container element meant to contain the visualization and its mousereader
     */
@@ -11223,8 +11246,8 @@
       this.sendDrawerState(this.mouseReader.getViewport());
     }
     /**
-    * This method does three things, and should only be called once. If changing the schema
-    * use setSchema.
+    * This method does three things, and should only be called once. If changing the specification
+    * use setSpecification.
     *  1. Add the canvas and mousereader to the DOM for use.
     *  2. Creates the WebWorkers that render and process the data.
     *  3. Exposes the messages the webworkers send back to the main thread under this.dataWorkerStream
@@ -11259,6 +11282,9 @@
       });
       this.dataWorker.onmessage = message => {
         this.dataWorkerStream.push(message);
+        this.parent.dispatchEvent(new CustomEvent("onSelectionEnd", {
+          detail: message
+        }));
         console.log(this.dataWorkerStream);
       };
       // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
@@ -11286,10 +11312,10 @@
       }
       this.sendDrawerState(this.mouseReader.getViewport());
     }
-    _setMargins(schema) {
-      const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSchema(schema);
-      this.parent.style.width = schema.width || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
-      this.parent.style.height = schema.height || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT;
+    _setMargins(specification) {
+      const styles = $794bbb298c1fc0cc3157526701549b8c$export$getDimAndMarginStyleForSpecification(specification);
+      this.parent.style.width = specification.width || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_WIDTH;
+      this.parent.style.height = specification.height || $794bbb298c1fc0cc3157526701549b8c$export$DEFAULT_HEIGHT;
       this.canvas.style.width = styles.width;
       this.canvas.style.height = styles.height;
       this.canvas.style.margin = styles.margin;
@@ -11302,25 +11328,25 @@
       }
     }
     /**
-    * Set the schema of the visualization, and then render it.
+    * Set the specification of the visualization, and then render it.
     *
-    * @param {Object} schema describing visualization
-    * @returns boolean on whether the schema was accepted
+    * @param {Object} specification describing visualization
+    * @returns boolean on whether the specification was accepted
     */
-    setSchema(schema) {
-      if (!$5bd7316b1b971c16c065bbe70a894cf9$export$default(schema)) {
+    setSpecification(specification) {
+      if (!$3f5b70d90544f3fe5b87de83695c0b4f$export$default(specification)) {
         return false;
       }
-      this._setMargins(schema);
-      this.mouseReader.setSchema(schema);
+      this._setMargins(specification);
+      this.mouseReader.setSpecification(specification);
       this.sendDrawerState(this.mouseReader.getViewport());
       this.webglWorker.postMessage({
-        type: "schema",
-        schema
+        type: "specification",
+        specification
       });
       this.dataWorker.postMessage({
         type: "init",
-        schema
+        specification
       });
       return true;
     }
@@ -11392,6 +11418,25 @@
         transform: "translateX(-100%)"
       });
     }
+    /**
+    * Adds an event listener to visualization on the appropriate component.
+    * Current event types that are supported are
+    * "zoomIn": fires when user zooms in
+    * "zoomOut": fires when user zooms out
+    * "pan": fires when user pans
+    * "onSelection": fires while user is changing the selection box/lasso
+    * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+    *
+    * For information on the parameters and functionality see:
+    *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+    *
+    * @param {String} type
+    * @param {Function} listener
+    * @param {Object} options
+    */
+    addEventListener(type, listener, options) {
+      this.parent.addEventListener(type, listener, options);
+    }
   }
   var $d3dfc027196df876626c47bef188877c$export$default = $b24d98818d6efd81d9f858dfc1cbed2a$export$default;
   const $5e201880271bd6cdc5df36305bdf55c4$export$default = $a5a79905d7f29b6c9078769d5e01bfa0$exports.configureStore({
@@ -11430,11 +11475,17 @@
       const container = document.querySelector(".content");
       this.visualization = new $d3dfc027196df876626c47bef188877c$export$default(container);
       this.visualization.addToDom(true);
+      // Demonstration of adding mouse events
+      this.visualization.addEventListener("zoomIn", event => console.log("zoomIn", event));
+      this.visualization.addEventListener("zoomOut", event => console.log("zoomOut", event));
+      this.visualization.addEventListener("onSelection", event => console.log("onSelection", event));
+      this.visualization.addEventListener("onSelectionEnd", event => console.log("onSelectionEnd", event));
+      this.visualization.addEventListener("pan", event => console.log("pan", event));
       this.store = $5e201880271bd6cdc5df36305bdf55c4$export$default;
       this.store.subscribe(this.subscription.bind(this));
       const toolbar = new $361b32f374cb657bf7d3a299cf1eb93a$export$default(this.store.dispatch);
       toolbar.init();
-      document.getElementById("refresh-schema").onclick = this.onSchemaSubmit.bind(this);
+      document.getElementById("refresh-specification").onclick = this.onSpecificationSubmit.bind(this);
       window.addEventListener("resize", this.onWindowResize.bind(this));
     }
     /**
@@ -11444,18 +11495,18 @@
     */
     subscription() {
       const currState = this.store.getState();
-      const schema = $5e201880271bd6cdc5df36305bdf55c4$export$getIfChanged("schema");
-      if (schema) {
-        document.getElementById("schema-editor").value = schema;
+      const specification = $5e201880271bd6cdc5df36305bdf55c4$export$getIfChanged("specification");
+      if (specification) {
+        document.getElementById("specification-editor").value = specification;
       }
       this.visualization.setViewOptions({
         ...currState
       });
     }
-    onSchemaSubmit() {
-      const schemaAsString = document.getElementById("schema-editor").value;
-      const schema = JSON.parse(schemaAsString);
-      this.visualization.setSchema(schema);
+    onSpecificationSubmit() {
+      const specificationAsString = document.getElementById("specification-editor").value;
+      const specification = JSON.parse(specificationAsString);
+      this.visualization.setSpecification(specification);
     }
     onWindowResize() {
       this.visualization.setCanvasSize(this.visualization.parent.clientWidth, this.visualization.parent.clientHeight);
@@ -11466,4 +11517,4 @@
   });
 })();
 
-//# sourceMappingURL=index.d5828f69.js.map
+//# sourceMappingURL=index.ed335a38.js.map

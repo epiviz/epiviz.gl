@@ -1,4 +1,4 @@
-import {$a482b49601c034373694faa8888ffe15$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init} from "./offscreen-webgl-worker.646ed2d6.js";
+import {$455e5d40a513c54585dfe04e9ebcda36$init, $ab472fc72a52ba79515db0c00f4f687a$init, $2a4f8c7882dfdea78821148c89bf8779$init} from "./offscreen-webgl-worker.5bc3a414.js";
 class $1ef1a7c693c135c8fefb2c851c556f34$export$default {
   /**
   * An interface for drawing on a canvas.
@@ -45,7 +45,7 @@ class $1ef1a7c693c135c8fefb2c851c556f34$export$default {
     }
   }
 }
-$a482b49601c034373694faa8888ffe15$init();
+$455e5d40a513c54585dfe04e9ebcda36$init();
 $ab472fc72a52ba79515db0c00f4f687a$init();
 $2a4f8c7882dfdea78821148c89bf8779$init();
 const $7f25dd9a115200d6593ed5980850d05a$var$sizeOfGeneRangeForTriangles = 1000000;
@@ -54,27 +54,27 @@ class $7f25dd9a115200d6593ed5980850d05a$export$default {
   * Gives guidance or takes control over canvas when semantic zooming
   * is necessary. Developers should extend this class to create semantic zooming
   * behavior.
-  * @param {SchemaProcessor} schemaHelper
+  * @param {SpecificationProcessor} specificationHelper
   */
-  constructor(schemaHelper) {
-    this.schemaHelper = schemaHelper;
+  constructor(specificationHelper) {
+    this.specificationHelper = specificationHelper;
   }
   getRecommendedDrawingMode(trackShader, currentXRange, currentYRange) {
     if (trackShader.drawMode !== "TRIANGLES") {
       return trackShader.drawMode;
     }
-    if (!this.schemaHelper.xScale.isGenomeScale && !this.schemaHelper.yScale.isGenomeScale) {
+    if (!this.specificationHelper.xScale.isGenomeScale && !this.specificationHelper.yScale.isGenomeScale) {
       // Currently only used for genome tracks
       return "TRIANGLES";
     }
-    if (this.schemaHelper.xScale.isGenomeScale) {
-      const numberOfGenes = this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[1]) - this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[0]);
+    if (this.specificationHelper.xScale.isGenomeScale) {
+      const numberOfGenes = this.specificationHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[1]) - this.specificationHelper.xScale.mapGenomeIndexToClipSpaceInverse(currentXRange[0]);
       if (numberOfGenes < $7f25dd9a115200d6593ed5980850d05a$var$sizeOfGeneRangeForTriangles) {
         return "TRIANGLES";
       }
     }
-    if (this.schemaHelper.yScale.isGenomeScale) {
-      const numberOfGenes = this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[1]) - this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[0]);
+    if (this.specificationHelper.yScale.isGenomeScale) {
+      const numberOfGenes = this.specificationHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[1]) - this.specificationHelper.yScale.mapGenomeIndexToClipSpaceInverse(currentYRange[0]);
       if (numberOfGenes < $7f25dd9a115200d6593ed5980850d05a$var$sizeOfGeneRangeForTriangles) {
         return "TRIANGLES";
       }
@@ -82,7 +82,7 @@ class $7f25dd9a115200d6593ed5980850d05a$export$default {
     return "LINES";
   }
 }
-$a482b49601c034373694faa8888ffe15$init();
+$455e5d40a513c54585dfe04e9ebcda36$init();
 $ab472fc72a52ba79515db0c00f4f687a$init();
 /**
 * A vertex shader meant to take in positions, colors, and contain uniforms for zooming and panning.
@@ -146,7 +146,7 @@ class $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader {
   static SUPPORTED_CHANNEL_ATTRIBUTES = Object.freeze(["color", "size", "opacity"]);
   /**
   * A class meant to contain all the relevant information for a shader program, such as uniforms
-  * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSchema
+  * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSpecification
   * or fromTrack instead.
   */
   constructor() {
@@ -164,7 +164,7 @@ class $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader {
   * Add a mark to the buffers by calculating its vertices, then adding its
   * attributes such as size, color, or opacity to the buffers.
   *
-  * @param {Object} mark passed in from SchemaHelper in webgl-drawer.js
+  * @param {Object} mark passed in from SpecificationHelper in webgl-drawer.js
   * @param {VertexCalculator} vertexCalculator used to calculate vertices for a track
   */
   addMarkToBuffers(mark, vertexCalculator) {
@@ -235,32 +235,32 @@ class $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader {
     return this.shader;
   }
   /**
-  * Construct the vertex shaders for each track in the schema.
+  * Construct the vertex shaders for each track in the specification.
   *
-  * @param {Object} schema of visualization
+  * @param {Object} specification of visualization
   * @returns an array of {@link VertexShaders}s
   */
-  static fromSchema(schema) {
+  static fromSpecification(specification) {
     // Returns one per track
-    return schema.tracks.map($74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader.fromTrack);
+    return specification.tracks.map($74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader.fromTrack);
   }
   /**
   * Construct the vertex shader a track including setting attributes, uniforms, drawMode.
   *
-  * @param {Object} track from schema
+  * @param {Object} track from specification
   * @returns a {@link VertexShaders}
   */
   static fromTrack(track) {
     // Given a track produce attributes and uniforms that describe a webgl drawing
     const vsBuilder = new $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader();
-    vsBuilder.setDrawMode($a482b49601c034373694faa8888ffe15$init().getDrawModeForTrack(track));
-    for (let channel of Object.keys($a482b49601c034373694faa8888ffe15$init().DEFAULT_CHANNELS)) {
+    vsBuilder.setDrawMode($455e5d40a513c54585dfe04e9ebcda36$init().getDrawModeForTrack(track));
+    for (let channel of Object.keys($455e5d40a513c54585dfe04e9ebcda36$init().DEFAULT_CHANNELS)) {
       if (channel === "shape") {
         // Changes vertex positions and draw mode, does not change shader code
         continue;
       }
       if ((channel in track)) {
-        // Schema specifies channel
+        // Specification specifies channel
         if (track[channel].value) {
           // Channel has default value
           if (channel === "color") {
@@ -275,13 +275,13 @@ class $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader {
           }
           // These are currently the only supported channels for shader usage
           if ($74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
-            vsBuilder.addChannelBuffer(channel, $a482b49601c034373694faa8888ffe15$init().DEFAULT_CHANNELS[channel].numComponents);
+            vsBuilder.addChannelBuffer(channel, $455e5d40a513c54585dfe04e9ebcda36$init().DEFAULT_CHANNELS[channel].numComponents);
           }
         }
       } else {
         // Channel not listed, set default
         if ($74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
-          vsBuilder.setChannelUniform(channel, $a482b49601c034373694faa8888ffe15$init().DEFAULT_CHANNELS[channel].value);
+          vsBuilder.setChannelUniform(channel, $455e5d40a513c54585dfe04e9ebcda36$init().DEFAULT_CHANNELS[channel].value);
         }
       }
     }
@@ -9382,39 +9382,39 @@ class $326516539047a160c1125b95ce446f70$export$default extends $1ef1a7c693c135c8
     return [scaleXWindowSpace(this.currentXRange[0]), scaleYWindowSpace(this.currentYRange[0]), scaleXWindowSpace(this.currentXRange[1]), scaleYWindowSpace(this.currentYRange[1]), pointSize];
   }
   /**
-  * Sets the schema and begins the process of drawing it.
+  * Sets the specification and begins the process of drawing it.
   *  1. Cancels any current animation
   *  2. Builds shaders for the tracks
   *  3. After data is loaded, calls populateBuffers.
   *
-  * @param {Object} schema of visualization
+  * @param {Object} specification of visualization
   */
-  setSchema(schema) {
+  setSpecification(specification) {
     super.render();
     // Cancels current animation frame
     // Populate buffers needs a trackShader built to know what buffers to fill
-    this.trackShaders = $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader.fromSchema(schema);
-    new ($a482b49601c034373694faa8888ffe15$init().default)(schema, this.populateBuffers.bind(this));
+    this.trackShaders = $74ed5e72d89dacbe0cb5db6ddb9ed9af$export$VertexShader.fromSpecification(specification);
+    new ($455e5d40a513c54585dfe04e9ebcda36$init().default)(specification, this.populateBuffers.bind(this));
   }
   /**
   * Populate the buffers that are fed to webgl for drawing.
   *
-  * @param {SchemaProcessor} schemaHelper created in the setSchema method
+  * @param {SpecificationProcessor} specificationHelper created in the setSpecification method
   */
-  populateBuffers(schemaHelper) {
-    let currentTrack = schemaHelper.getNextTrack();
+  populateBuffers(specificationHelper) {
+    let currentTrack = specificationHelper.getNextTrack();
     let currentTrackShaderIndex = 0;
-    this.semanticZoomer = new $7f25dd9a115200d6593ed5980850d05a$export$default(schemaHelper);
+    this.semanticZoomer = new $7f25dd9a115200d6593ed5980850d05a$export$default(specificationHelper);
     while (currentTrack) {
       // Construct calculator in track loop as calculator keeps internal state for each track
-      let vertexCalculator = new ($2a4f8c7882dfdea78821148c89bf8779$init().default)(schemaHelper.xScale, schemaHelper.yScale, currentTrack.track);
+      let vertexCalculator = new ($2a4f8c7882dfdea78821148c89bf8779$init().default)(specificationHelper.xScale, specificationHelper.yScale, currentTrack.track);
       let currentMark = currentTrack.getNextMark();
       while (currentMark) {
         // A lot of the heavy lifting occurs in the track shaders, this class is mostly boilerplate for webgl
         this.trackShaders[currentTrackShaderIndex].addMarkToBuffers(currentMark, vertexCalculator);
         currentMark = currentTrack.getNextMark();
       }
-      currentTrack = schemaHelper.getNextTrack();
+      currentTrack = specificationHelper.getNextTrack();
       currentTrackShaderIndex++;
     }
     this.render();
@@ -9490,8 +9490,8 @@ self.onmessage = message => {
       self.drawer.receiveViewport(message.data);
       self.drawer.render();
       break;
-    case "schema":
-      self.drawer.setSchema(message.data.schema);
+    case "specification":
+      self.drawer.setSpecification(message.data.specification);
       break;
     case "clearBuffers":
       self.drawer.clearBuffers();
@@ -9506,4 +9506,4 @@ self.onmessage = message => {
   }
 };
 
-//# sourceMappingURL=offscreen-webgl-worker.5bdfe64a.js.map
+//# sourceMappingURL=offscreen-webgl-worker.89116158.js.map

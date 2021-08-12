@@ -1,5 +1,5 @@
-import {$a482b49601c034373694faa8888ffe15$init, $2a4f8c7882dfdea78821148c89bf8779$init, $ab472fc72a52ba79515db0c00f4f687a$init} from "./offscreen-webgl-worker.646ed2d6.js";
-$a482b49601c034373694faa8888ffe15$init();
+import {$455e5d40a513c54585dfe04e9ebcda36$init, $2a4f8c7882dfdea78821148c89bf8779$init, $ab472fc72a52ba79515db0c00f4f687a$init} from "./offscreen-webgl-worker.5bc3a414.js";
+$455e5d40a513c54585dfe04e9ebcda36$init();
 class $b3042ce1474423235b6886488ccdefbb$export$default {
   constructor() {
     this.ids = [];
@@ -2594,29 +2594,29 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
   * x and y. This class is NOT meant to be used by the WebGLDrawer for rendering. It is solely used
   * by the DataProcessor to properly index the data.
   *
-  * @param {SchemaProcessor} schemaObject of the visualization for these geometries
+  * @param {SpecificationProcessor} specificationObject of the visualization for these geometries
   * @param {Track} trackObject containing track info for track that these geometries are a part of
   */
-  constructor(schemaObject, trackObject) {
-    this.schemaObject = schemaObject;
+  constructor(specificationObject, trackObject) {
+    this.specificationObject = specificationObject;
     this.trackObject = trackObject;
     this.track = trackObject.track;
-    this.xScale = this.schemaObject.xScale;
-    this.yScale = this.schemaObject.yScale;
-    const viewportForSchema = $ab472fc72a52ba79515db0c00f4f687a$init().getViewportForSchema(schemaObject.schema);
-    if (schemaObject.xScale.isGenomeScale) {
+    this.xScale = this.specificationObject.xScale;
+    this.yScale = this.specificationObject.yScale;
+    const viewportForSpecification = $ab472fc72a52ba79515db0c00f4f687a$init().getViewportForSpecification(specificationObject.specification);
+    if (specificationObject.xScale.isGenomeScale) {
       this.xDomainWidth = 2 / 2;
     } else {
-      this.xDomainWidth = (viewportForSchema[1] - viewportForSchema[0]) / 2;
+      this.xDomainWidth = (viewportForSpecification[1] - viewportForSpecification[0]) / 2;
     }
-    if (schemaObject.yScale.isGenomeScale) {
+    if (specificationObject.yScale.isGenomeScale) {
       this.yDomainHeight = 2 / 2;
     } else {
-      this.yDomainHeight = (viewportForSchema[3] - viewportForSchema[2]) / 2;
+      this.yDomainHeight = (viewportForSpecification[3] - viewportForSpecification[2]) / 2;
     }
   }
   /**
-  * Modifies a geometry object in place based on the schema.
+  * Modifies a geometry object in place based on the specification.
   *
   * @param {Object} geometry an object of the form {dimensions: Array(2), coordinates: Array(2)}
   */
@@ -2674,7 +2674,7 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
         y: 0,
         width: geometry.dimensions[0],
         height: 0
-      }, this.schemaObject.xScale, this.schemaObject.yScale);
+      }, this.specificationObject.xScale, this.specificationObject.yScale);
       geometry.coordinates[0] = standardized.x;
       geometry.dimensions[0] = standardized.width;
     } else {
@@ -2694,7 +2694,7 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
       const standardized = $2a4f8c7882dfdea78821148c89bf8779$init().transformGenomicRangeToStandard({
         x: geometry.coordinates[0],
         y: 0
-      }, this.schemaObject.xScale, this.schemaObject.yScale);
+      }, this.specificationObject.xScale, this.specificationObject.yScale);
       geometry.coordinates[0] = standardized.x;
       geometry.dimensions[0] = standardized.width;
     }
@@ -2707,14 +2707,14 @@ class $ce00a97f3a6e0cbf06246b9d897b5516$export$default {
         y: geometry.coordinates[1],
         width: 0,
         height: geometry.coordinates[1]
-      }, this.schemaObject.xScale, this.schemaObject.yScale);
+      }, this.specificationObject.xScale, this.specificationObject.yScale);
       geometry.coordinates[1] = standardized.y;
       geometry.dimensions[1] = standardized.height;
     } else {
       const standardized = $2a4f8c7882dfdea78821148c89bf8779$init().transformGenomicRangeToStandard({
         x: 0,
         y: geometry.coordinates[1]
-      }, this.schemaObject.xScale, this.schemaObject.yScale);
+      }, this.specificationObject.xScale, this.specificationObject.yScale);
       geometry.coordinates[1] = standardized.y;
       geometry.dimensions[1] = standardized.height;
     }
@@ -2726,34 +2726,34 @@ class $a766a508761edee757e2f1e9b8864eca$export$default {
   *
   * @param {Array} data the processor is meant to handle and index
   */
-  constructor(schema) {
-    this.schema = schema;
+  constructor(specification) {
+    this.specification = specification;
     console.log("Loading data...");
-    new ($a482b49601c034373694faa8888ffe15$init().default)(schema, this.indexData.bind(this));
+    new ($455e5d40a513c54585dfe04e9ebcda36$init().default)(specification, this.indexData.bind(this));
   }
   /**
-  * Callback function that occurs after the schema processor has loaded the appropriate data
+  * Callback function that occurs after the specification processor has loaded the appropriate data
   *
-  * @param {SchemaProcessor} schemaHelper that is built in the constructor
+  * @param {SpecificationProcessor} specificationHelper that is built in the constructor
   */
-  indexData(schemaHelper) {
+  indexData(specificationHelper) {
     let totalPoints = 0;
-    for (const track of schemaHelper.tracks) {
+    for (const track of specificationHelper.tracks) {
       if (!track.hasOwnData) {
         // index at 1 means a header needs to be skipped
         totalPoints += track.index === 1 ? track.data.length - 1 : track.data.length;
         break;
       }
     }
-    schemaHelper.tracks.filter(track => track.hasOwnData).forEach(track => totalPoints += track.index === 1 ? track.data.length - 1 : track.data.length);
+    specificationHelper.tracks.filter(track => track.hasOwnData).forEach(track => totalPoints += track.index === 1 ? track.data.length - 1 : track.data.length);
     this.index = new $b31f345e5a6edb41e082b70a5e13a40c$export$default(totalPoints);
     this.data = [];
     console.log("Reading data...");
-    // Process the global data in the schema processor
-    if (schemaHelper.data) {
-      for (let track of schemaHelper.tracks) {
+    // Process the global data in the specification processor
+    if (specificationHelper.data) {
+      for (let track of specificationHelper.tracks) {
         if (!track.hasOwnData) {
-          const geometryMapper = new $ce00a97f3a6e0cbf06246b9d897b5516$export$default(schemaHelper, track);
+          const geometryMapper = new $ce00a97f3a6e0cbf06246b9d897b5516$export$default(specificationHelper, track);
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
             geometryMapper.modifyGeometry(currentPoint.geometry);
@@ -2765,8 +2765,8 @@ class $a766a508761edee757e2f1e9b8864eca$export$default {
       }
     }
     // Process the data that is local to each track
-    schemaHelper.tracks.filter(track => track.hasOwnData).forEach(track => {
-      const geometryMapper = new $ce00a97f3a6e0cbf06246b9d897b5516$export$default(schemaHelper, track);
+    specificationHelper.tracks.filter(track => track.hasOwnData).forEach(track => {
+      const geometryMapper = new $ce00a97f3a6e0cbf06246b9d897b5516$export$default(specificationHelper, track);
       let currentPoint = track.getNextDataPoint();
       while (currentPoint) {
         geometryMapper.modifyGeometry(currentPoint.geometry);
@@ -2838,7 +2838,7 @@ class $a766a508761edee757e2f1e9b8864eca$export$default {
 self.onmessage = message => {
   switch (message.data.type) {
     case "init":
-      self.processor = new $a766a508761edee757e2f1e9b8864eca$export$default(message.data.schema);
+      self.processor = new $a766a508761edee757e2f1e9b8864eca$export$default(message.data.specification);
       break;
     case "selectBox":
       postMessage({
@@ -2865,4 +2865,4 @@ self.onmessage = message => {
   }
 };
 
-//# sourceMappingURL=data-processor-worker.b9547f75.js.map
+//# sourceMappingURL=data-processor-worker.a546b874.js.map

@@ -5,14 +5,14 @@
     <meta name="description" content="A demo of an interactive point visualization using WebGL">
     <link rel="stylesheet" href="index.227bf4dc.css">
     <link rel="icon" href="favicon.0961d3ce.ico" type="image/x-icon">
-    <script src="index.d5828f69.js"></script>
+    <script src="index.ed335a38.js"></script>
   </head>
   <body>
     <main>
       <div class="toolbar">
-        <div class="schema-select">
-          <label for="schema-select">To render:</label>
-          <select name="schema-select" id="schema-select">
+        <div class="specification-select">
+          <label for="specification-select">To render:</label>
+          <select name="specification-select" id="specification-select">
             <option value="line-plot">Line Plot</option>
             <option value="double-line-plot">Double Line Plot</option>
             <option value="area-chart">Area Chart</option>
@@ -58,9 +58,9 @@
       </div>
       <div class="panes">
         <div class="json-editor">
-          <label for="schema-editor">Visualization Schema</label>
-          <textarea id="schema-editor" name="schema-editor"></textarea>
-          <button id="refresh-schema">Show</button>
+          <label for="specification-editor">Visualization Specification</label>
+          <textarea id="specification-editor" name="specification-editor"></textarea>
+          <button id="refresh-specification">Show</button>
         </div>
         <div class="content"></div>
       </div>
