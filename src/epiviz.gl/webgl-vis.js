@@ -1,7 +1,11 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
 import isJSONValid from "./specification-validation";
-import { getDimAndMarginStyleForSpecification } from "./utilities";
+import {
+  getDimAndMarginStyleForSpecification,
+  DEFAULT_HEIGHT,
+  DEFAULT_WIDTH,
+} from "./utilities";
 
 class WebGLVis {
   POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
@@ -24,13 +28,10 @@ class WebGLVis {
 
     this.parent = document.createElement("div");
     this.parent.style.position = "relative";
-    this.parent.style.width = "100%";
-    this.parent.style.height = "100%";
     this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.style.width = "100%";
-    this.canvas.style.height = "100%";
+    this.canvas.style.position = "absolute";
   }
 
   /**
@@ -67,14 +68,6 @@ class WebGLVis {
     this.parent.appendChild(this.canvas);
     this.parent.appendChild(this.mouseReader.element);
 
-    const canvasBox = this.canvas.getBoundingClientRect();
-    this.width = this.parent.clientWidth;
-    this.height = this.parent.clientHeight;
-    this.canvas.width = canvasBox.width;
-    this.canvas.height = canvasBox.height;
-
-    this.canvas.style.position = "absolute";
-
     if (displayFPSMeter) {
       this.initFpsmeter();
     }
@@ -108,6 +101,9 @@ class WebGLVis {
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);
+      this.parent.dispatchEvent(
+        new CustomEvent("onSelectionEnd", { detail: message })
+      );
       console.log(this.dataWorkerStream);
     };
 
@@ -140,12 +136,19 @@ class WebGLVis {
 
   _setMargins(specification) {
     const styles = getDimAndMarginStyleForSpecification(specification);
+    this.parent.style.width = specification.width || DEFAULT_WIDTH;
+    this.parent.style.height = specification.height || DEFAULT_HEIGHT;
     this.canvas.style.width = styles.width;
     this.canvas.style.height = styles.height;
     this.canvas.style.margin = styles.margin;
 
-    const canvasBox = this.canvas.getBoundingClientRect();
-    this.setCanvasSize(canvasBox.width, canvasBox.height);
+    if (isNaN(styles.width) || isNaN(styles.height)) {
+      // Using css calc
+      const canvasBox = this.canvas.getBoundingClientRect();
+      this.setCanvasSize(canvasBox.width, canvasBox.height);
+    } else {
+      this.setCanvasSize(styles.width, styles.height);
+    }
   }
 
   /**
@@ -223,9 +226,29 @@ class WebGLVis {
       theme: "light",
       history: 25,
       top: "-20px",
-      left: `${this.width / 2}px`,
+      left: `100px`,
       transform: "translateX(-100%)",
     });
+  }
+
+  /**
+   * Adds an event listener to visualization on the appropriate component.
+   * Current event types that are supported are
+   * "zoomIn": fires when user zooms in
+   * "zoomOut": fires when user zooms out
+   * "pan": fires when user pans
+   * "onSelection": fires while user is changing the selection box/lasso
+   * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+   *
+   * For information on the parameters and functionality see:
+   *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+   *
+   * @param {String} type
+   * @param {Function} listener
+   * @param {Object} options
+   */
+  addEventListener(type, listener, options) {
+    this.parent.addEventListener(type, listener, options);
   }
 }
 

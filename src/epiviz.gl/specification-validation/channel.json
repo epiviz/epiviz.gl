@@ -1,4 +1,4 @@
-export default {
+{
   "schema": "https://json-schema.org/draft/2020-12/schema",
   "id": "/channel",
   "title": "Channel",
@@ -7,7 +7,13 @@ export default {
   "properties": {
     "type": {
       "description": "type of attribute, genomic range only compatible with x, y, width and height",
-      "enum": ["quantitative", "categorical", "genomic", "genomicRange", "inline"]
+      "enum": [
+        "quantitative",
+        "categorical",
+        "genomic",
+        "genomicRange",
+        "inline"
+      ]
     },
     "attribute": {
       "description": "column of data frame to use for mapping channel",
