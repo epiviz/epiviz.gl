@@ -1182,7 +1182,7 @@ const getPixelMeasurement = (cssMeasurement) => {
 };
 
 const DEFAULT_MARGIN = "50px";
-const DEFAULT_WIDTH = "400px";
+const DEFAULT_WIDTH = "100%";
 const DEFAULT_HEIGHT = DEFAULT_WIDTH;
 const getDimAndMarginStyleForSchema = (schema) => {
   let toReturn = {};
@@ -1274,4 +1274,4 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
-export { Color as C, DEFAULT_WIDTH as D, Rgb as R, getScaleForSchema as a, getViewportForSchema as b, DEFAULT_HEIGHT as c, colorSpecifierToHex as d, define as e, extend as f, getDimAndMarginStyleForSchema as g, brighter as h, darker as i, getQuadraticBezierCurveForPoints as j, rgb as k, rgbStringToHex as l, rgbConvert as r, scale as s };
+export { Color as C, DEFAULT_WIDTH as D, Rgb as R, getScaleForSchema as a, getViewportForSchema as b, DEFAULT_HEIGHT as c, define as d, extend as e, brighter as f, getDimAndMarginStyleForSchema as g, darker as h, getQuadraticBezierCurveForPoints as i, rgb as j, colorSpecifierToHex as k, rgbStringToHex as l, rgbConvert as r, scale as s };
