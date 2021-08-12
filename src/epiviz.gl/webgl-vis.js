@@ -100,11 +100,23 @@ class WebGLVis {
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
-      this.dataWorkerStream.push(message);
-      this.parent.dispatchEvent(
-        new CustomEvent("onSelectionEnd", { detail: message })
-      );
-      console.log(this.dataWorkerStream);
+      if (message.data.type === "getClosestPoint") {
+        if (message.data.point === undefined) {
+          return;
+        }
+        this.parent.dispatchEvent(
+          new CustomEvent("pointHovered", { detail: message })
+        );
+      } else if (
+        message.data.type === "selectBox" ||
+        message.data.type === "selectLasso"
+      ) {
+        this.parent.dispatchEvent(
+          new CustomEvent("onSelectionEnd", { detail: message })
+        );
+        this.dataWorkerStream.push(message);
+        console.log(this.dataWorkerStream);
+      }
     };
 
     // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
@@ -211,9 +223,14 @@ class WebGLVis {
    * Does not return, posts result to this.dataWorkerStream.
    *
    * @param {Array} point to get closest point to
+   * @param {Number} maxDistance only check points within a max distance
    */
-  getClosestPoint(point) {
-    this.dataWorker.postMessage({ type: "getClosestPoint", point });
+  getClosestPoint(point, maxDistance) {
+    this.dataWorker.postMessage({
+      type: "getClosestPoint",
+      point,
+      maxDistance,
+    });
   }
 
   /**
@@ -239,6 +256,7 @@ class WebGLVis {
    * "pan": fires when user pans
    * "onSelection": fires while user is changing the selection box/lasso
    * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+   * "pointHovered": fires when pointer hovers over a datapoint
    *
    * For information on the parameters and functionality see:
    *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener

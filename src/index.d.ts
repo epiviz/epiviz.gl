@@ -9,7 +9,7 @@ declare class WebGLVis {
   sendDrawerState(viewport: Object): void;
   forceDrawerRender(): void;
   selectPoints(points: Array<Number>): void;
-  getClosestPoint(point: Array<Number>): void;
+  getClosestPoint(point: Array<Number>, maxDistance: Number): void;
   initFpsmeter(): void;
   addEventListener(
     type: string,

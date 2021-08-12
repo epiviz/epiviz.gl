@@ -782,6 +782,46 @@ describe("Get closest point", () => {
       });
   });
 
+  it("can get the closest point in cartesian space with a max distance", () => {
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationPoints))
+    );
+
+    cy.wrap(dataProcessor)
+      .should("have.property", "index")
+      .then(() => {
+        let closest = dataProcessor.getClosestPoint([1, 1], 0);
+        expect(closest.category).to.eq("a");
+        expect(closest.x).to.eq(1);
+        expect(closest.y).to.eq(1);
+
+        closest = dataProcessor.getClosestPoint([1.1, 1.1], 0.01);
+        expect(closest).to.eq(undefined);
+      });
+  });
+
+  it("can get the closest point in a rectangle in cartesian space with a max distance", () => {
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationRects))
+    );
+
+    cy.wrap(dataProcessor)
+      .should("have.property", "index")
+      .then(() => {
+        let closest = dataProcessor.getClosestPoint([1.1, 1.1], 0);
+        expect(closest.category).to.eq("a");
+        expect(closest.x).to.eq(1);
+        expect(closest.y).to.eq(1);
+
+        closest = dataProcessor.getClosestPoint([1.1, 1.1], 0.01);
+        expect(closest.category).to.eq("a");
+        expect(closest.x).to.eq(1);
+        expect(closest.y).to.eq(1);
+      });
+  });
+
   it("can get the closest point in genomic space", () => {
     // Deep copy to since specification processor modifies original object
     dataProcessor = new DataProcessor(

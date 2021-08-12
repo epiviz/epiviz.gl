@@ -24,7 +24,9 @@ class App {
     this.visualization.addEventListener("onSelectionEnd", (event) =>
       console.log("onSelectionEnd", event)
     );
-
+    this.visualization.addEventListener("pointHovered", (event) =>
+      console.log("pointHovered", event)
+    );
     this.visualization.addEventListener("pan", (event) =>
       console.log("pan", event)
     );

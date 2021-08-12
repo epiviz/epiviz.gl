@@ -30,7 +30,10 @@ self.onmessage = (message) => {
     case "getClosestPoint":
       postMessage({
         type: message.data.type,
-        point: self.processor.getClosestPoint(message.data.point),
+        point: self.processor.getClosestPoint(
+          message.data.point,
+          message.data.maxDistance
+        ),
       });
       break;
     default:
