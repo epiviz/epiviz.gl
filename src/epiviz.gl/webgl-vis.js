@@ -108,6 +108,9 @@ class WebGLVis {
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);
+      this.parent.dispatchEvent(
+        new CustomEvent("onSelectionEnd", { detail: message })
+      );
       console.log(this.dataWorkerStream);
     };
 
@@ -226,6 +229,26 @@ class WebGLVis {
       left: `${this.width / 2}px`,
       transform: "translateX(-100%)",
     });
+  }
+
+  /**
+   * Adds an event listener to visualization on the appropriate component.
+   * Current event types that are supported are
+   * "zoomIn": fires when user zooms in
+   * "zoomOut": fires when user zooms out
+   * "pan": fires when user pans
+   * "onSelection": fires while user is changing the selection box/lasso
+   * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+   *
+   * For information on the parameters and functionality see:
+   *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+   *
+   * @param {String} type
+   * @param {Function} listener
+   * @param {Object} options
+   */
+  addEventListener(type, listener, options) {
+    this.parent.addEventListener(type, listener, options);
   }
 }
 
