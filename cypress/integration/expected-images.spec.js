@@ -11,8 +11,8 @@ describe("The canvas should match test images", function () {
   });
 
   const renderAndCheck = (presetName, wait = 1000) => {
-    cy.get("#schema-select").select(presetName);
-    cy.get("#refresh-schema").click();
+    cy.get("#specification-select").select(presetName);
+    cy.get("#refresh-specification").click();
     cy.window().then((win) => {
       win.app.visualization.setCanvasSize(200, 200);
     });

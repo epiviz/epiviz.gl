@@ -35,8 +35,8 @@ class App {
     const toolbar = new Toolbar(this.store.dispatch);
     toolbar.init();
 
-    document.getElementById("refresh-schema").onclick =
-      this.onSchemaSubmit.bind(this);
+    document.getElementById("refresh-specification").onclick =
+      this.onSpecificationSubmit.bind(this);
 
     window.addEventListener("resize", this.onWindowResize.bind(this));
   }
@@ -48,18 +48,20 @@ class App {
    */
   subscription() {
     const currState = this.store.getState();
-    const schema = getIfChanged("schema");
-    if (schema) {
-      document.getElementById("schema-editor").value = schema;
+    const specification = getIfChanged("specification");
+    if (specification) {
+      document.getElementById("specification-editor").value = specification;
     }
 
     this.visualization.setViewOptions({ ...currState });
   }
 
-  onSchemaSubmit() {
-    const schemaAsString = document.getElementById("schema-editor").value;
-    const schema = JSON.parse(schemaAsString);
-    this.visualization.setSchema(schema);
+  onSpecificationSubmit() {
+    const specificationAsString = document.getElementById(
+      "specification-editor"
+    ).value;
+    const specification = JSON.parse(specificationAsString);
+    this.visualization.setSpecification(specification);
   }
 
   onWindowResize() {

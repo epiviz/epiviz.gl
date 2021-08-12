@@ -1,4 +1,7 @@
-import { DEFAULT_CHANNELS, getDrawModeForTrack } from "./schema-processor";
+import {
+  DEFAULT_CHANNELS,
+  getDrawModeForTrack,
+} from "./specification-processor";
 import { colorSpecifierToHex } from "./utilities";
 
 /**
@@ -71,7 +74,7 @@ class VertexShader {
 
   /**
    * A class meant to contain all the relevant information for a shader program, such as uniforms
-   * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSchema
+   * attributes, and ultimately the vertices. Do not use the constructor. Use VertexShader.fromSpecification
    * or fromTrack instead.
    */
   constructor() {
@@ -91,7 +94,7 @@ class VertexShader {
    * Add a mark to the buffers by calculating its vertices, then adding its
    * attributes such as size, color, or opacity to the buffers.
    *
-   * @param {Object} mark passed in from SchemaHelper in webgl-drawer.js
+   * @param {Object} mark passed in from SpecificationHelper in webgl-drawer.js
    * @param {VertexCalculator} vertexCalculator used to calculate vertices for a track
    */
   addMarkToBuffers(mark, vertexCalculator) {
@@ -170,20 +173,20 @@ class VertexShader {
   }
 
   /**
-   * Construct the vertex shaders for each track in the schema.
+   * Construct the vertex shaders for each track in the specification.
    *
-   * @param {Object} schema of visualization
+   * @param {Object} specification of visualization
    * @returns an array of {@link VertexShaders}s
    */
-  static fromSchema(schema) {
+  static fromSpecification(specification) {
     // Returns one per track
-    return schema.tracks.map(VertexShader.fromTrack);
+    return specification.tracks.map(VertexShader.fromTrack);
   }
 
   /**
    * Construct the vertex shader a track including setting attributes, uniforms, drawMode.
    *
-   * @param {Object} track from schema
+   * @param {Object} track from specification
    * @returns a {@link VertexShaders}
    */
   static fromTrack(track) {
@@ -198,7 +201,7 @@ class VertexShader {
         continue;
       }
       if (channel in track) {
-        // Schema specifies channel
+        // Specification specifies channel
         if (track[channel].value) {
           // Channel has default value
           if (channel === "color") {

@@ -5,10 +5,10 @@ class SemanticZoomer {
    * Gives guidance or takes control over canvas when semantic zooming
    * is necessary. Developers should extend this class to create semantic zooming
    * behavior.
-   * @param {SchemaProcessor} schemaHelper
+   * @param {SpecificationProcessor} specificationHelper
    */
-  constructor(schemaHelper) {
-    this.schemaHelper = schemaHelper;
+  constructor(specificationHelper) {
+    this.specificationHelper = specificationHelper;
   }
 
   getRecommendedDrawingMode(trackShader, currentXRange, currentYRange) {
@@ -17,30 +17,30 @@ class SemanticZoomer {
     }
 
     if (
-      !this.schemaHelper.xScale.isGenomeScale &&
-      !this.schemaHelper.yScale.isGenomeScale
+      !this.specificationHelper.xScale.isGenomeScale &&
+      !this.specificationHelper.yScale.isGenomeScale
     ) {
       // Currently only used for genome tracks
       return "TRIANGLES";
     }
-    if (this.schemaHelper.xScale.isGenomeScale) {
+    if (this.specificationHelper.xScale.isGenomeScale) {
       const numberOfGenes =
-        this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(
+        this.specificationHelper.xScale.mapGenomeIndexToClipSpaceInverse(
           currentXRange[1]
         ) -
-        this.schemaHelper.xScale.mapGenomeIndexToClipSpaceInverse(
+        this.specificationHelper.xScale.mapGenomeIndexToClipSpaceInverse(
           currentXRange[0]
         );
       if (numberOfGenes < sizeOfGeneRangeForTriangles) {
         return "TRIANGLES";
       }
     }
-    if (this.schemaHelper.yScale.isGenomeScale) {
+    if (this.specificationHelper.yScale.isGenomeScale) {
       const numberOfGenes =
-        this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(
+        this.specificationHelper.yScale.mapGenomeIndexToClipSpaceInverse(
           currentYRange[1]
         ) -
-        this.schemaHelper.yScale.mapGenomeIndexToClipSpaceInverse(
+        this.specificationHelper.yScale.mapGenomeIndexToClipSpaceInverse(
           currentYRange[0]
         );
       if (numberOfGenes < sizeOfGeneRangeForTriangles) {

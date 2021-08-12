@@ -6,8 +6,8 @@ describe("The mouse reader should handle zooming and panning", function () {
   let mouseReader;
   before(() => {
     cy.visit("http://localhost:1234");
-    cy.get("#schema-select").select("scatter-grid");
-    cy.get("#refresh-schema").click();
+    cy.get("#specification-select").select("scatter-grid");
+    cy.get("#refresh-specification").click();
 
     cy.window().then((win) => {
       console.log("SET SIZE");
@@ -171,8 +171,8 @@ describe("The mouse reader should select points appropriately", () => {
 
   before(() => {
     cy.visit("http://localhost:1234");
-    cy.get("#schema-select").select("scatter-grid");
-    cy.get("#refresh-schema").click();
+    cy.get("#specification-select").select("scatter-grid");
+    cy.get("#refresh-specification").click();
 
     cy.window().then((win) => {
       win.app.visualization.setCanvasSize(200, 200);

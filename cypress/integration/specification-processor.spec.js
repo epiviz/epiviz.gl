@@ -1,7 +1,7 @@
-import SchemaProcessor, {
+import SpecificationProcessor, {
   DEFAULT_CHANNELS,
-} from "../../src/epiviz.gl/schema-processor";
-import isJSONValid from "../../src/epiviz.gl/schema-validation";
+} from "../../src/epiviz.gl/specification-processor";
+import isJSONValid from "../../src/epiviz.gl/specification-validation";
 import { interpolateGreys } from "d3-scale-chromatic";
 import {
   scale,
@@ -10,7 +10,7 @@ import {
   colorSpecifierToHex,
 } from "../../src/epiviz.gl/utilities";
 
-const schema1 = {
+const specification1 = {
   defaultData: {
     day: [1, 2, 3, 4, 5, 6, 7],
     price: [10, 20, 30, 20, 10, 5, 1],
@@ -59,7 +59,7 @@ const schema1 = {
   ],
 };
 
-const schema2 = {
+const specification2 = {
   defaultData: {
     day: [1, 2, 3, 4, 5, 6, 7],
     price: [10, 20, 30, 20, 10, 5, 1],
@@ -106,7 +106,7 @@ const schema2 = {
   ],
 };
 
-const schema3 = {
+const specification3 = {
   defaultData: {
     day: [1, 2, 3, 4, 5, 6, 7],
     price: [10, 20, 30, 20, 10, 5, 1],
@@ -138,7 +138,7 @@ const schema3 = {
   ],
 };
 
-const schema4 = {
+const specification4 = {
   defaultData: {
     day: [1, 2, 3, 4, 5, 6],
     price: [10, 20, 30, 20, 10, 5],
@@ -179,14 +179,14 @@ const schema4 = {
 };
 
 describe("Iteration", () => {
-  let schemaHelper;
+  let specificationHelper;
 
   beforeEach(() => {
     let callbackCalled = false;
 
-    schemaHelper = new SchemaProcessor(
-      // Deep copy of schema since data.pop in the processor will modify the original object
-      JSON.parse(JSON.stringify(schema1)),
+    specificationHelper = new SpecificationProcessor(
+      // Deep copy of specification since data.pop in the processor will modify the original object
+      JSON.parse(JSON.stringify(specification1)),
       () => {
         callbackCalled = true;
       }
@@ -195,16 +195,16 @@ describe("Iteration", () => {
   });
 
   it("can stop iteration of tracks", () => {
-    let track = schemaHelper.getNextTrack();
+    let track = specificationHelper.getNextTrack();
     expect(track).to.not.eq(undefined);
     expect(track).to.not.eq(null);
 
-    let noTrack = schemaHelper.getNextTrack();
+    let noTrack = specificationHelper.getNextTrack();
     expect(noTrack).to.eq(null);
   });
 
   it("can stop iteration of marks", () => {
-    let track = schemaHelper.getNextTrack();
+    let track = specificationHelper.getNextTrack();
     let marks = [];
 
     let currentPoint = track.getNextMark();
@@ -216,29 +216,29 @@ describe("Iteration", () => {
     expect(marks).to.be.an("array").that.does.not.include(null);
     expect(marks).to.be.an("array").that.does.not.include(undefined);
 
-    expect(marks).to.have.lengthOf(schema1.defaultData.day.length);
+    expect(marks).to.have.lengthOf(specification1.defaultData.day.length);
   });
 });
 
-describe("Mapping the channels with attributes correctly (schema 1)", () => {
-  let schemaHelper;
+describe("Mapping the channels with attributes correctly (specification 1)", () => {
+  let specificationHelper;
   let track;
   let marks;
 
   before(() => {
-    expect(isJSONValid(schema1)).to.eq(true);
+    expect(isJSONValid(specification1)).to.eq(true);
   });
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(
-      // Deep copy of schema since data.pop in the processor will modify the original object
-      JSON.parse(JSON.stringify(schema1)),
+    specificationHelper = new SpecificationProcessor(
+      // Deep copy of specification since data.pop in the processor will modify the original object
+      JSON.parse(JSON.stringify(specification1)),
       () => (callbackCalled = true)
     );
     setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
-    track = schemaHelper.getNextTrack();
+    track = specificationHelper.getNextTrack();
     marks = [];
 
     let currentPoint = track.getNextMark();
@@ -250,13 +250,15 @@ describe("Mapping the channels with attributes correctly (schema 1)", () => {
 
     expect(marks).to.be.an("array").that.does.not.include(null);
     expect(marks).to.be.an("array").that.does.not.include(undefined);
-    expect(marks).to.have.lengthOf(schema1.defaultData.day.length);
+    expect(marks).to.have.lengthOf(specification1.defaultData.day.length);
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema1.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      specification1.defaultData.day
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema1.defaultData.price
+      specification1.defaultData.price
     );
   });
 
@@ -286,36 +288,36 @@ describe("Mapping the channels with attributes correctly (schema 1)", () => {
 
   it("can map a dimension quantitatively correctly (height with and min and max options", () => {
     expect(marks.map((mark) => mark.height)).to.deep.equal(
-      schema1.defaultData.day
+      specification1.defaultData.day
     );
   });
 
   it("can map the opacity quantitatively correctly (with min opacity options)", () => {
     let opacityScale = scale([0, 30], [0.2, 1]);
     expect(marks.map((mark) => mark.opacity)).to.deep.equal(
-      schema1.defaultData.price.map((datum) => opacityScale(datum))
+      specification1.defaultData.price.map((datum) => opacityScale(datum))
     );
   });
 });
 
-describe("Mapping the channels with attributes correctly (schema 2)", () => {
-  let schemaHelper;
+describe("Mapping the channels with attributes correctly (specification 2)", () => {
+  let specificationHelper;
   let track;
   let marks;
 
   before(() => {
-    expect(isJSONValid(schema2)).to.eq(true);
+    expect(isJSONValid(specification2)).to.eq(true);
   });
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(
-      JSON.parse(JSON.stringify(schema2)),
+    specificationHelper = new SpecificationProcessor(
+      JSON.parse(JSON.stringify(specification2)),
       () => (callbackCalled = true)
     );
     setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
-    track = schemaHelper.getNextTrack();
+    track = specificationHelper.getNextTrack();
     marks = [];
 
     let currentPoint = track.getNextMark();
@@ -327,20 +329,22 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
 
     expect(marks).to.be.an("array").that.does.not.include(null);
     expect(marks).to.be.an("array").that.does.not.include(undefined);
-    expect(marks).to.have.lengthOf(schema1.defaultData.day.length);
+    expect(marks).to.have.lengthOf(specification1.defaultData.day.length);
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema2.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      specification2.defaultData.day
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema2.defaultData.price
+      specification2.defaultData.price
     );
   });
 
   it("can map the color scheme quantitatively correctly", () => {
     const zeroToOneScale = scale([1, 7], [0, 1]);
     expect(marks.map((mark) => mark.color)).to.deep.equal(
-      schema2.defaultData.day.map((datum) =>
+      specification2.defaultData.day.map((datum) =>
         rgbStringToHex(interpolateGreys(zeroToOneScale(datum)))
       )
     );
@@ -369,29 +373,29 @@ describe("Mapping the channels with attributes correctly (schema 2)", () => {
 
   it("can map the size quantitatively correctly (with min and max options)", () => {
     expect(marks.map((mark) => mark.size)).to.deep.equal(
-      schema2.defaultData.day
+      specification2.defaultData.day
     );
   });
 });
 
-describe("Mapping the channels with values and defaults correctly (schema 3)", () => {
-  let schemaHelper;
+describe("Mapping the channels with values and defaults correctly (specification 3)", () => {
+  let specificationHelper;
   let track;
   let marks;
 
   before(() => {
-    expect(isJSONValid(schema3)).to.eq(true);
+    expect(isJSONValid(specification3)).to.eq(true);
   });
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(
-      JSON.parse(JSON.stringify(schema3)),
+    specificationHelper = new SpecificationProcessor(
+      JSON.parse(JSON.stringify(specification3)),
       () => (callbackCalled = true)
     );
     setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
-    track = schemaHelper.getNextTrack();
+    track = specificationHelper.getNextTrack();
     marks = [];
 
     let currentPoint = track.getNextMark();
@@ -403,7 +407,7 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
 
     expect(marks).to.be.an("array").that.does.not.include(null);
     expect(marks).to.be.an("array").that.does.not.include(undefined);
-    expect(marks).to.have.lengthOf(schema1.defaultData.day.length);
+    expect(marks).to.have.lengthOf(specification1.defaultData.day.length);
   });
 
   const expectAllElementsToEqual = (elements, expectedValue) => {
@@ -413,9 +417,11 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
   };
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema3.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      specification3.defaultData.day
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema3.defaultData.price
+      specification3.defaultData.price
     );
   });
 
@@ -448,24 +454,24 @@ describe("Mapping the channels with values and defaults correctly (schema 3)", (
   });
 });
 
-describe("Mapping the channels with inline values (schema 4)", () => {
-  let schemaHelper;
+describe("Mapping the channels with inline values (specification 4)", () => {
+  let specificationHelper;
   let track;
   let marks;
 
   before(() => {
-    expect(isJSONValid(schema4)).to.eq(true);
+    expect(isJSONValid(specification4)).to.eq(true);
   });
 
   beforeEach(() => {
     let callbackCalled = false;
-    schemaHelper = new SchemaProcessor(
-      JSON.parse(JSON.stringify(schema4)),
+    specificationHelper = new SpecificationProcessor(
+      JSON.parse(JSON.stringify(specification4)),
       () => (callbackCalled = true)
     );
     setTimeout(() => expect(callbackCalled).to.eq(true), 1);
 
-    track = schemaHelper.getNextTrack();
+    track = specificationHelper.getNextTrack();
     marks = [];
 
     let currentPoint = track.getNextMark();
@@ -477,37 +483,39 @@ describe("Mapping the channels with inline values (schema 4)", () => {
 
     expect(marks).to.be.an("array").that.does.not.include(null);
     expect(marks).to.be.an("array").that.does.not.include(undefined);
-    expect(marks).to.have.lengthOf(schema4.defaultData.day.length);
+    expect(marks).to.have.lengthOf(specification4.defaultData.day.length);
   });
 
   it("can get the x and y values back", () => {
-    expect(marks.map((mark) => mark.x)).to.deep.equal(schema4.defaultData.day);
+    expect(marks.map((mark) => mark.x)).to.deep.equal(
+      specification4.defaultData.day
+    );
     expect(marks.map((mark) => mark.y)).to.deep.equal(
-      schema4.defaultData.price
+      specification4.defaultData.price
     );
   });
 
   it("can get the color from the data correctly", () => {
     expect(marks.map((mark) => mark.color)).to.deep.equal(
-      schema4.defaultData.color.map(colorSpecifierToHex)
+      specification4.defaultData.color.map(colorSpecifierToHex)
     );
   });
 
   it("can get the shape from the data correctly", () => {
     expect(marks.map((mark) => mark.shape)).to.deep.equal(
-      schema4.defaultData.shape
+      specification4.defaultData.shape
     );
   });
 
   it("can get the width from the data correctly", () => {
     expect(marks.map((mark) => mark.width)).to.deep.equal(
-      schema4.defaultData.day
+      specification4.defaultData.day
     );
   });
 
   it("can get the height from the data correctly", () => {
     expect(marks.map((mark) => mark.height)).to.deep.equal(
-      schema4.defaultData.price
+      specification4.defaultData.price
     );
   });
 });

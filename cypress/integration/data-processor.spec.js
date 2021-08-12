@@ -14,7 +14,7 @@ const getDefaultGenomicData = () => ({
   category: ["a", "a", "b", "a", "a", "b", "a"],
 });
 
-const schemaPoints = {
+const specificationPoints = {
   defaultData: getDefaultData(),
   tracks: [
     {
@@ -33,7 +33,7 @@ const schemaPoints = {
   ],
 };
 
-const schemaRects = {
+const specificationRects = {
   defaultData: getDefaultData(),
   tracks: [
     {
@@ -58,7 +58,7 @@ const schemaRects = {
   ],
 };
 
-const schemaTicks = {
+const specificationTicks = {
   defaultData: getDefaultData(),
   tracks: [
     {
@@ -80,11 +80,11 @@ const schemaTicks = {
   ],
 };
 
-const schemaTicksWidth = JSON.parse(JSON.stringify(schemaTicks));
-schemaTicksWidth.tracks[0].height = { value: 0 };
-schemaTicksWidth.tracks[0].width = { value: 10 };
+const specificationTicksWidth = JSON.parse(JSON.stringify(specificationTicks));
+specificationTicksWidth.tracks[0].height = { value: 0 };
+specificationTicksWidth.tracks[0].width = { value: 10 };
 
-const schemaArcs = {
+const specificationArcs = {
   defaultData: getDefaultData(),
   tracks: [
     {
@@ -109,7 +109,7 @@ const schemaArcs = {
   ],
 };
 
-const schemaGenomicPoints = {
+const specificationGenomicPoints = {
   defaultData: getDefaultGenomicData(),
   tracks: [
     {
@@ -126,7 +126,7 @@ const schemaGenomicPoints = {
   ],
 };
 
-const schemaGenomicRange = {
+const specificationGenomicRange = {
   defaultData: getDefaultGenomicData(),
   tracks: [
     {
@@ -145,7 +145,7 @@ const schemaGenomicRange = {
   ],
 };
 
-const schemaGenomicArcs = {
+const specificationGenomicArcs = {
   defaultData: {
     ...getDefaultGenomicData(),
     start2: [2, 101, 201, 301, 401, 501, 601],
@@ -182,16 +182,20 @@ describe("Box selection", () => {
   let dataProcessor;
 
   it("can select points with a box", () => {
-    // Deep copy to since schema processor modifies original object
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaPoints)));
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationPoints))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
-        expect(allPoints).to.have.lengthOf(schemaPoints.defaultData.x.length);
+        expect(allPoints).to.have.lengthOf(
+          specificationPoints.defaultData.x.length
+        );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaPoints.defaultData.category
+          specificationPoints.defaultData.category
         );
 
         const somePoints = dataProcessor.selectBox([2, 2, 4, 4]);
@@ -206,15 +210,19 @@ describe("Box selection", () => {
   });
 
   it("can select rects with a box", () => {
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaRects)));
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationRects))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
-        expect(allPoints).to.have.lengthOf(schemaPoints.defaultData.x.length);
+        expect(allPoints).to.have.lengthOf(
+          specificationPoints.defaultData.x.length
+        );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaPoints.defaultData.category
+          specificationPoints.defaultData.category
         );
 
         // some points
@@ -248,15 +256,19 @@ describe("Box selection", () => {
   });
 
   it("can select ticks with a box (height)", () => {
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaTicks)));
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationTicks))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
-        expect(allPoints).to.have.lengthOf(schemaPoints.defaultData.x.length);
+        expect(allPoints).to.have.lengthOf(
+          specificationPoints.defaultData.x.length
+        );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaPoints.defaultData.category
+          specificationPoints.defaultData.category
         );
 
         // some points
@@ -281,16 +293,18 @@ describe("Box selection", () => {
 
   it("can select ticks with a box (width)", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaTicksWidth))
+      JSON.parse(JSON.stringify(specificationTicksWidth))
     );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
-        expect(allPoints).to.have.lengthOf(schemaTicks.defaultData.x.length);
+        expect(allPoints).to.have.lengthOf(
+          specificationTicks.defaultData.x.length
+        );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaTicks.defaultData.category
+          specificationTicks.defaultData.category
         );
 
         // some points
@@ -312,15 +326,19 @@ describe("Box selection", () => {
   });
 
   it("can select arcs with a box", () => {
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaArcs)));
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationArcs))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
-        expect(allPoints).to.have.lengthOf(schemaArcs.defaultData.x.length);
+        expect(allPoints).to.have.lengthOf(
+          specificationArcs.defaultData.x.length
+        );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaPoints.defaultData.category
+          specificationPoints.defaultData.category
         );
 
         // some points, arc bbox only includes the endpoints
@@ -345,7 +363,7 @@ describe("Box selection", () => {
 
   it("can select genomic ranges with a box", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicRange))
+      JSON.parse(JSON.stringify(specificationGenomicRange))
     );
 
     cy.wrap(dataProcessor)
@@ -358,10 +376,10 @@ describe("Box selection", () => {
           1,
         ]);
         expect(allPoints).to.have.lengthOf(
-          schemaGenomicPoints.defaultData.start.length
+          specificationGenomicPoints.defaultData.start.length
         );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaGenomicPoints.defaultData.category
+          specificationGenomicPoints.defaultData.category
         );
         expect(
           dataProcessor.selectBox([
@@ -424,7 +442,7 @@ describe("Box selection", () => {
 
   it("can select genomic points with a box", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicPoints))
+      JSON.parse(JSON.stringify(specificationGenomicPoints))
     );
 
     cy.wrap(dataProcessor)
@@ -437,10 +455,10 @@ describe("Box selection", () => {
           1,
         ]);
         expect(allPoints).to.have.lengthOf(
-          schemaGenomicPoints.defaultData.start.length
+          specificationGenomicPoints.defaultData.start.length
         );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaGenomicPoints.defaultData.category
+          specificationGenomicPoints.defaultData.category
         );
         expect(
           dataProcessor.selectBox([
@@ -503,7 +521,7 @@ describe("Box selection", () => {
 
   it("can select genomic arcs with a box", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicArcs))
+      JSON.parse(JSON.stringify(specificationGenomicArcs))
     );
 
     cy.wrap(dataProcessor)
@@ -516,10 +534,10 @@ describe("Box selection", () => {
           1,
         ]);
         expect(allPoints).to.have.lengthOf(
-          schemaGenomicArcs.defaultData.start.length
+          specificationGenomicArcs.defaultData.start.length
         );
         expect(allPoints.map((datum) => datum.category)).to.include.members(
-          schemaGenomicArcs.defaultData.category
+          specificationGenomicArcs.defaultData.category
         );
         expect(
           dataProcessor.selectBox([
@@ -588,8 +606,10 @@ describe("Lasso selection", () => {
   let dataProcessor;
 
   it("can select points with a lasso", () => {
-    // Deep copy to since schema processor modifies original object
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaPoints)));
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationPoints))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
@@ -601,7 +621,9 @@ describe("Lasso selection", () => {
   });
 
   it("can select rects with a lasso", () => {
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaRects)));
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationRects))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
@@ -613,7 +635,9 @@ describe("Lasso selection", () => {
   });
 
   it("can select ticks with a lasso (height)", () => {
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaTicks)));
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationTicks))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
@@ -626,7 +650,7 @@ describe("Lasso selection", () => {
 
   it("can select ticks with a lasso (width)", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaTicksWidth))
+      JSON.parse(JSON.stringify(specificationTicksWidth))
     );
 
     cy.wrap(dataProcessor)
@@ -639,7 +663,9 @@ describe("Lasso selection", () => {
   });
 
   it("can select arcs with a lasso", () => {
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaArcs)));
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationArcs))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
@@ -652,7 +678,7 @@ describe("Lasso selection", () => {
 
   it("can select genomic ranges with a lasso", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicPoints))
+      JSON.parse(JSON.stringify(specificationGenomicPoints))
     );
 
     cy.wrap(dataProcessor)
@@ -679,7 +705,7 @@ describe("Lasso selection", () => {
 
   it("can select genomic points with a lasso", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicPoints))
+      JSON.parse(JSON.stringify(specificationGenomicPoints))
     );
 
     cy.wrap(dataProcessor)
@@ -706,7 +732,7 @@ describe("Lasso selection", () => {
 
   it("can select genomic arcs with a lasso", () => {
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicArcs))
+      JSON.parse(JSON.stringify(specificationGenomicArcs))
     );
 
     cy.wrap(dataProcessor)
@@ -736,8 +762,10 @@ describe("Get closest point", () => {
   let dataProcessor;
 
   it("can get the closest point in cartesian space", () => {
-    // Deep copy to since schema processor modifies original object
-    dataProcessor = new DataProcessor(JSON.parse(JSON.stringify(schemaPoints)));
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationPoints))
+    );
 
     cy.wrap(dataProcessor)
       .should("have.property", "index")
@@ -755,9 +783,9 @@ describe("Get closest point", () => {
   });
 
   it("can get the closest point in genomic space", () => {
-    // Deep copy to since schema processor modifies original object
+    // Deep copy to since specification processor modifies original object
     dataProcessor = new DataProcessor(
-      JSON.parse(JSON.stringify(schemaGenomicPoints))
+      JSON.parse(JSON.stringify(specificationGenomicPoints))
     );
 
     cy.wrap(dataProcessor)

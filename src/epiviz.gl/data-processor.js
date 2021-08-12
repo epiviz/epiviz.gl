@@ -1,4 +1,4 @@
-import SchemaProcessor from "./schema-processor";
+import SpecificationProcessor from "./specification-processor";
 
 import Flatbush from "flatbush";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
@@ -12,23 +12,23 @@ class DataProcessor {
    *
    * @param {Array} data the processor is meant to handle and index
    */
-  constructor(schema) {
-    this.schema = schema;
+  constructor(specification) {
+    this.specification = specification;
 
     console.log("Loading data...");
 
-    new SchemaProcessor(schema, this.indexData.bind(this));
+    new SpecificationProcessor(specification, this.indexData.bind(this));
   }
 
   /**
-   * Callback function that occurs after the schema processor has loaded the appropriate data
+   * Callback function that occurs after the specification processor has loaded the appropriate data
    *
-   * @param {SchemaProcessor} schemaHelper that is built in the constructor
+   * @param {SpecificationProcessor} specificationHelper that is built in the constructor
    */
-  indexData(schemaHelper) {
+  indexData(specificationHelper) {
     let totalPoints = 0;
 
-    for (const track of schemaHelper.tracks) {
+    for (const track of specificationHelper.tracks) {
       if (!track.hasOwnData) {
         // index at 1 means a header needs to be skipped
         totalPoints +=
@@ -36,7 +36,7 @@ class DataProcessor {
         break;
       }
     }
-    schemaHelper.tracks
+    specificationHelper.tracks
       .filter((track) => track.hasOwnData)
       .forEach(
         (track) =>
@@ -48,11 +48,11 @@ class DataProcessor {
     this.data = [];
     console.log("Reading data...");
 
-    // Process the global data in the schema processor
-    if (schemaHelper.data) {
-      for (let track of schemaHelper.tracks) {
+    // Process the global data in the specification processor
+    if (specificationHelper.data) {
+      for (let track of specificationHelper.tracks) {
         if (!track.hasOwnData) {
-          const geometryMapper = new GeometryMapper(schemaHelper, track);
+          const geometryMapper = new GeometryMapper(specificationHelper, track);
 
           let currentPoint = track.getNextDataPoint();
           while (currentPoint) {
@@ -77,10 +77,10 @@ class DataProcessor {
     }
 
     // Process the data that is local to each track
-    schemaHelper.tracks
+    specificationHelper.tracks
       .filter((track) => track.hasOwnData)
       .forEach((track) => {
-        const geometryMapper = new GeometryMapper(schemaHelper, track);
+        const geometryMapper = new GeometryMapper(specificationHelper, track);
 
         let currentPoint = track.getNextDataPoint();
         while (currentPoint) {
