@@ -111,8 +111,7 @@ class MouseReader {
       "mousemove",
       (event) => {
         this.handler.getClosestPoint(
-          this._calculateViewportSpot(...getLayerXandYFromEvent(event)),
-          1e-10
+          this._calculateViewportSpot(...getLayerXandYFromEvent(event))
         );
         if (!mouseDown) {
           return;

@@ -111,18 +111,22 @@ class DataProcessor {
    * Find the closest point in the data to a given point.
    *
    * @param {Array} point of two floats to find closest point to
-   * @param {Number} maxDistance only check points within a max distance
    * @returns closest point or undefined
    */
-  getClosestPoint(point, maxDistance) {
-    return this.data[
-      this.index.neighbors(
-        point[0],
-        point[1],
-        1,
-        maxDistance === undefined ? Infinity : maxDistance
-      )
-    ];
+  getClosestPoint(point) {
+    let pointToReturn =
+      this.data[this.index.neighbors(point[0], point[1], 1, 0)];
+    let distance = 0;
+    let isInside = true;
+    if (pointToReturn === undefined) {
+      pointToReturn = this.data[this.index.neighbors(point[0], point[1], 1)];
+      distance = Math.sqrt(
+        (pointToReturn.geometry.coordinates[0] - point[0]) ** 2 +
+          (pointToReturn.geometry.coordinates[1] - point[1]) ** 2
+      );
+      isInside = false;
+    }
+    return { closestPoint: pointToReturn, distance, isInside };
   }
 
   /**

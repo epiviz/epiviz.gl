@@ -101,7 +101,7 @@ class WebGLVis {
     );
     this.dataWorker.onmessage = (message) => {
       if (message.data.type === "getClosestPoint") {
-        if (message.data.point === undefined) {
+        if (message.data.closestPoint === undefined) {
           return;
         }
         this.parent.dispatchEvent(
@@ -223,13 +223,11 @@ class WebGLVis {
    * Does not return, posts result to this.dataWorkerStream.
    *
    * @param {Array} point to get closest point to
-   * @param {Number} maxDistance only check points within a max distance
    */
-  getClosestPoint(point, maxDistance) {
+  getClosestPoint(point) {
     this.dataWorker.postMessage({
       type: "getClosestPoint",
       point,
-      maxDistance,
     });
   }
 
