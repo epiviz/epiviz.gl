@@ -5,8 +5,8 @@ export default JSON.stringify(
     margins: {
       top: "4em",
       left: "3em",
-      bottom: 0,
-      right: 0,
+      bottom: "0",
+      right: "0",
     },
     labels: [
       {

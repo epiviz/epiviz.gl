@@ -148,27 +148,95 @@ const getScaleForSchema = (dimension, schema) => {
   return asScale.toCallable();
 };
 
-const DEFAULT_MARGIN = "2em";
-const getDimAndMarginStyleForSchema = (schema) => {
-  if (schema.margins === undefined) {
-    return {
-      width: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
-      height: `calc(100% - ${DEFAULT_MARGIN} - ${DEFAULT_MARGIN}`,
-      margin: DEFAULT_MARGIN,
-    };
+const RELATIVE_LENGTH_UNITS = [
+  "em",
+  "ex",
+  "ch",
+  "rem",
+  "lh",
+  "vw",
+  "vh",
+  "vmin",
+  "vmax",
+  "%",
+];
+const getPixelMeasurement = (cssMeasurement) => {
+  if (RELATIVE_LENGTH_UNITS.some((unit) => cssMeasurement.includes(unit))) {
+    return false;
   }
+  const asFloat = parseFloat(cssMeasurement);
+  return isNaN(asFloat) ? false : asFloat;
+};
+
+const DEFAULT_MARGIN = "50px";
+const DEFAULT_WIDTH = "100%";
+const DEFAULT_HEIGHT = DEFAULT_WIDTH;
+const getDimAndMarginStyleForSchema = (schema) => {
   let toReturn = {};
-  toReturn.width = `calc(100% - ${schema.margins.left || DEFAULT_MARGIN} - ${
-    schema.margins.right || DEFAULT_MARGIN
-  })`;
-  toReturn.height = `calc(100% - ${schema.margins.top || DEFAULT_MARGIN} - ${
-    schema.margins.bottom || DEFAULT_MARGIN
-  })`;
-  // Shorthand for top right bottom left
-  toReturn.margin = `${schema.margins.top || DEFAULT_MARGIN}
-                     ${schema.margins.right || DEFAULT_MARGIN}
-                     ${schema.margins.bottom || DEFAULT_MARGIN}
-                     ${schema.margins.left || DEFAULT_MARGIN}`;
+  const calculatedMargins = {};
+  if (schema.margins === undefined) {
+    toReturn.margin = DEFAULT_MARGIN;
+    calculatedMargins.top = DEFAULT_MARGIN;
+    calculatedMargins.right = DEFAULT_MARGIN;
+    calculatedMargins.bottom = DEFAULT_MARGIN;
+    calculatedMargins.left = DEFAULT_MARGIN;
+  } else {
+    calculatedMargins.top =
+      schema.margins.top === undefined ? DEFAULT_MARGIN : schema.margins.top;
+    calculatedMargins.right =
+      schema.margins.right === undefined
+        ? DEFAULT_MARGIN
+        : schema.margins.right;
+    calculatedMargins.bottom =
+      schema.margins.bottom === undefined
+        ? DEFAULT_MARGIN
+        : schema.margins.bottom;
+    calculatedMargins.left =
+      schema.margins.left === undefined ? DEFAULT_MARGIN : schema.margins.left;
+    // Shorthand for top right bottom left
+    toReturn.margin = `${calculatedMargins.top}
+                       ${calculatedMargins.right}
+                       ${calculatedMargins.bottom}
+                       ${calculatedMargins.left}`;
+  }
+
+  const calculatedWidth = schema.width || DEFAULT_WIDTH;
+  const calculatedHeight = schema.height || DEFAULT_HEIGHT;
+  const allMeasurements = [
+    calculatedMargins.top,
+    calculatedMargins.right,
+    calculatedMargins.bottom,
+    calculatedMargins.left,
+    calculatedWidth,
+    calculatedHeight,
+  ];
+  console.log(allMeasurements.map(getPixelMeasurement));
+  if (allMeasurements.every(getPixelMeasurement)) {
+    // Let's encode as a number to allow users using typescript or doing weird DOM things able to define
+    // the width and height explicitly
+    toReturn.width =
+      getPixelMeasurement(calculatedWidth) -
+      getPixelMeasurement(calculatedMargins.left) -
+      getPixelMeasurement(calculatedMargins.right);
+    toReturn.height =
+      getPixelMeasurement(calculatedHeight) -
+      getPixelMeasurement(calculatedMargins.bottom) -
+      getPixelMeasurement(calculatedMargins.top);
+  } else {
+    // If user is using css units in their margins and dimensions, then use css calc
+    toReturn.width = `calc(
+      ${calculatedWidth} - 
+      ${calculatedMargins.left} - 
+      ${calculatedMargins.right}
+    )`;
+
+    toReturn.height = `calc(
+      ${calculatedHeight} - 
+      ${calculatedMargins.top} - 
+      ${calculatedMargins.bottom}
+    )`;
+  }
+
   return toReturn;
 };
 
@@ -202,4 +270,6 @@ export {
   getScaleForSchema,
   getDimAndMarginStyleForSchema,
   getQuadraticBezierCurveForPoints,
+  DEFAULT_WIDTH,
+  DEFAULT_HEIGHT,
 };

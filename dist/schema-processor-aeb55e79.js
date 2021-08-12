@@ -1,4 +1,4 @@
-import { R as Rgb, r as rgbConvert, d as define, e as extend, C as Color, f as brighter, h as darker, i as getQuadraticBezierCurveForPoints, j as rgb, a as getScaleForSchema, c as colorSpecifierToHex, s as scale, k as rgbStringToHex } from './utilities-b398dcce.js';
+import { R as Rgb, r as rgbConvert, d as define, e as extend, C as Color, f as brighter, h as darker, i as getQuadraticBezierCurveForPoints, j as rgb, a as getScaleForSchema, k as colorSpecifierToHex, s as scale, l as rgbStringToHex } from './utilities-ccbbe267.js';
 
 const radians = Math.PI / 180;
 const degrees = 180 / Math.PI;
@@ -281,6 +281,8 @@ class VertexCalculator {
         return this._getVerticesForPolygon(mark, 16);
       case "cross":
         return this._getVerticesForCross(mark);
+      default:
+        console.error(`${mark.shape} is not a valid shape!`);
     }
   }
 
@@ -1335,6 +1337,9 @@ class Track {
         let attrMapper;
 
         switch (channelInfo.type) {
+          case "inline":
+            attrMapper = buildMapperForInlineChannel(channel);
+            break;
           case "quantitative":
             attrMapper = buildMapperForQuantitiveChannel(channel, channelInfo);
             break;
@@ -1371,6 +1376,29 @@ class Track {
     }
   };
 }
+
+/**
+ * Build a function which maps an attribute that is a channel value to a compatible value.
+ *
+ * @param {String} channel the name of the channel to build an inline mapper for
+ * @param {Object} channelInfo the info of the channel from a track
+ * @returns a function that maps attribute values to appropriate channel values.
+ */
+const buildMapperForInlineChannel = (channel, channelInfo) => {
+  switch (channel) {
+    case "width":
+    case "height":
+    case "size":
+      return (dimension) => parseFloat(dimension);
+    case "color":
+      return (color) => colorSpecifierToHex(color);
+    default:
+      console.info(
+        `No special behavior for ${channel} as an inline attribute.`
+      );
+      return (inlineValue) => inlineValue;
+  }
+};
 
 /**
  * Build a function which maps a numerical value for an attribute to a property of a mark
@@ -1552,4 +1580,4 @@ const buildMapperForGenomicRangeChannel = (channel, channelInfo) => {
   }
 };
 
-export { DEFAULT_CHANNELS as D, SchemaProcessor as S, VertexCalculator as V, SIZE_UNITS as a, transformGenomicRangeToStandard as b, getDrawModeForTrack as g, transformGenomicRangeArcToStandard as t };
+export { DEFAULT_CHANNELS as D, SIZE_UNITS as S, VertexCalculator as V, transformGenomicRangeToStandard as a, SchemaProcessor as b, getDrawModeForTrack as g, transformGenomicRangeArcToStandard as t };
