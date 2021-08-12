@@ -3590,7 +3590,7 @@ class MouseReader {
 
   /**
    * Set the viewport in the format mouseReader.viewport = [minX, maxX, minY, maxY].
-   * Mostly used to make Scatterplot.setOptions simpler.
+   * Mostly used to make WebGLVis.setViewOptions simpler.
    */
   set viewport(toSet) {
     this.minX = toSet[0];
@@ -3650,10 +3650,26 @@ class MouseReader {
               .concat(
                 this._calculateViewportSpot(...getLayerXandYFromEvent(event))
               );
+            this.element.parentElement.dispatchEvent(
+              new CustomEvent("onSelection", {
+                detail: {
+                  bounds: this._currentSelectionPoints,
+                  type: this.tool,
+                },
+              })
+            );
             break;
           case "lasso":
             this._currentSelectionPoints.push(
               ...this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+            );
+            this.element.parentElement.dispatchEvent(
+              new CustomEvent("onSelection", {
+                detail: {
+                  bounds: this._currentSelectionPoints,
+                  type: this.tool,
+                },
+              })
             );
             break;
         }
@@ -3758,6 +3774,15 @@ class MouseReader {
       }
     }
 
+    this.element.parentElement.dispatchEvent(
+      new CustomEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
+        detail: {
+          viewport: this.getViewport(),
+          type: this.tool,
+        },
+      })
+    );
+
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
   }
@@ -3793,6 +3818,15 @@ class MouseReader {
         this.currentYRange = previousY;
       }
     }
+
+    this.element.parentElement.dispatchEvent(
+      new CustomEvent("pan", {
+        detail: {
+          viewport: this.getViewport(),
+          type: this.tool,
+        },
+      })
+    );
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
@@ -7506,6 +7540,9 @@ class WebGLVis {
     );
     this.dataWorker.onmessage = (message) => {
       this.dataWorkerStream.push(message);
+      this.parent.dispatchEvent(
+        new CustomEvent("onSelectionEnd", { detail: message })
+      );
       console.log(this.dataWorkerStream);
     };
 
@@ -7632,6 +7669,26 @@ class WebGLVis {
       left: `100px`,
       transform: "translateX(-100%)",
     });
+  }
+
+  /**
+   * Adds an event listener to visualization on the appropriate component.
+   * Current event types that are supported are
+   * "zoomIn": fires when user zooms in
+   * "zoomOut": fires when user zooms out
+   * "pan": fires when user pans
+   * "onSelection": fires while user is changing the selection box/lasso
+   * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+   *
+   * For information on the parameters and functionality see:
+   *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+   *
+   * @param {String} type
+   * @param {Function} listener
+   * @param {Object} options
+   */
+  addEventListener(type, listener, options) {
+    this.parent.addEventListener(type, listener, options);
   }
 }
 
