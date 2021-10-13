@@ -38,7 +38,7 @@ class MouseReader {
 
     this._currentSelectionPoints = [];
 
-    this.tool = "box";
+    this.tool = "pan";
 
     // Initializing elements to show user their current selection
     this.SVGInteractor = new SVGInteractor(
