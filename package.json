@@ -6,8 +6,10 @@
   "author": "Sam Rosen",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "source": "src/index.js",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
   "app": "dist-app/index.html",
   "targets": {
     "app": {
@@ -17,38 +19,36 @@
     }
   },
   "scripts": {
-    "start": "parcel serve app/index.html --open --dist-dir dist-app",
-    "build": "rm -rf dist-app/ && parcel build app/index.html --target app",
-    "build-package": "rm -rf dist/ && rollup -c && cp src/index.d.ts dist/index.d.ts",
-    "predeploy": "yarn build",
+    "watch": "parcel watch",
+    "build": "yarn clean && parcel build",
+    "clean": "rm -rf dist dist-app",
+    "serve-app": "parcel serve app/index.html --open --dist-dir dist-app",
+    "build-app": "parcel build app/index.html --dist-dir dist-app",
+    "predeploy": "yarn clean && yarn build && yarn build-app",
     "deploy": "gh-pages -d dist-app",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
     "cypress:open": "cypress open"
   },
   "dependencies": {
-    "@surma/rollup-plugin-off-main-thread": "^2.2.2",
-    "@turf/boolean-point-in-polygon": "^6.3.0",
-    "@turf/helpers": "^6.3.0",
-    "@turf/simplify": "6.3.0",
+    "@reduxjs/toolkit": "^1.6.2",
+    "@turf/boolean-point-in-polygon": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
+    "@turf/simplify": "^6.5.0",
     "d3-axis": "^3.0.0",
     "d3-color": "^3.0.1",
-    "d3-format": "3.0.1",
-    "d3-scale": "^3.0.0",
+    "d3-format": "^3.0.1",
+    "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.0.0",
     "d3-selection": "^3.0.0",
-    "flatbush": "3.3.0",
-    "fpsmeter": "0.3.1",
-    "jsonschema": "1.4.0",
-    "twgl.js": "^4.19.1"
+    "flatbush": "^3.3.0",
+    "fpsmeter": "^0.3.1",
+    "jsonschema": "^1.4.0",
+    "twgl.js": "^4.21.2"
   },
   "devDependencies": {
-    "@reduxjs/toolkit": "^1.6.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-commonjs": "^19.0.2",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "cypress": "^7.6.0",
-    "gh-pages": "^3.2.0",
-    "parcel": "2.0.0-beta.2",
-    "rollup": "2.54.0"
+    "@parcel/transformer-image": "2.0.0-rc.0",
+    "cypress": "^8.6.0",
+    "parcel": "^2.0.0-rc.0",
+    "gh-pages": "^3.2.0"
   }
 }
