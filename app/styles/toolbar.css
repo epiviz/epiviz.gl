@@ -8,8 +8,9 @@
 }
 
 .controls {
-  display: grid;
-  grid-template-columns: auto auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .controls img {
@@ -19,4 +20,9 @@
 .controls img.selected {
   padding: 2px;
   box-shadow: 0 0 5px black;
+}
+
+.scroll-state {
+  display: flex;
+  justify-content: space-around;
 }

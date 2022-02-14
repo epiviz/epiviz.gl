@@ -1,5 +1,10 @@
 .json-editor {
   padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+  /* justify-content: space-evenly; */
 }
 
 .json-editor > textarea {

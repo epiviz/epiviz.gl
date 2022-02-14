@@ -2,8 +2,8 @@ import csv from "url:./data/tsne.csv";
 
 export default JSON.stringify(
   {
-    xAxis: "center",
-    yAxis: "center",
+    xAxis: "none",
+    yAxis: "none",
     defaultData: csv,
     tracks: [
       {
@@ -28,7 +28,7 @@ export default JSON.stringify(
           cardinality: 32,
           colorScheme: "interpolateRainbow",
         },
-        opacity: { value: 0.05 },
+        opacity: { value: 0.7 },
       },
     ],
   },
