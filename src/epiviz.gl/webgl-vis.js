@@ -1,6 +1,6 @@
 import "fpsmeter";
 import MouseReader from "./mouse-reader";
-import isJSONValid from "./specification-validation";
+import isJSONValid from "./specification-validation/index";
 import {
   getDimAndMarginStyleForSpecification,
   DEFAULT_HEIGHT,
