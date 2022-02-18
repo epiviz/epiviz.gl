@@ -47,7 +47,7 @@ class WebGLCanvasDrawer extends Drawer {
 
     // Multiply point size by the ratio of max dimension and current width
     const pointSize = Math.max(
-      1,
+      1.75,
       Math.min(
         1 /
           (scaleXWindowSpace(this.currentXRange[1]) -

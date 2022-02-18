@@ -70,7 +70,7 @@
         }
       ],
       "type": ["string", "object"],
-      "additionalProperties": { "type": "array" },
+      "additionalProperties": true,
       "minProperties": 1
     },
     "width": {
