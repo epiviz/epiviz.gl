@@ -7,8 +7,7 @@
   "license": "MIT",
   "type": "module",
   "source": "src/index.js",
-  "main": "dist/index.js",
-  "module": "dist/module.js",
+  "module": "dist/index.js",
   "types": "dist/types.d.ts",
   "app": "dist-app/index.html",
   "targets": {
