@@ -297,6 +297,7 @@ function formatLocale(locale) {
 
 var locale;
 var format;
+var formatPrefix;
 
 defaultLocale({
   thousands: ",",
@@ -307,6 +308,7 @@ defaultLocale({
 function defaultLocale(definition) {
   locale = formatLocale(definition);
   format = locale.format;
+  formatPrefix = locale.formatPrefix;
   return locale;
 }
 
@@ -872,7 +874,7 @@ function rgbConvert(o) {
   return new Rgb(o.r, o.g, o.b, o.opacity);
 }
 
-function rgb(r, g, b, opacity) {
+function rgb$1(r, g, b, opacity) {
   return arguments.length === 1 ? rgbConvert(r) : new Rgb(r, g, b, opacity == null ? 1 : opacity);
 }
 
@@ -883,7 +885,7 @@ function Rgb(r, g, b, opacity) {
   this.opacity = +opacity;
 }
 
-define(Rgb, rgb, extend(Color, {
+define(Rgb, rgb$1, extend(Color, {
   brighter: function(k) {
     k = k == null ? brighter : Math.pow(brighter, k);
     return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
@@ -1277,4 +1279,104 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
-export { Color as C, DEFAULT_WIDTH as D, Rgb as R, getScaleForSpecification as a, getViewportForSpecification as b, DEFAULT_HEIGHT as c, define as d, extend as e, brighter as f, getDimAndMarginStyleForSpecification as g, darker as h, getQuadraticBezierCurveForPoints as i, rgb as j, colorSpecifierToHex as k, rgbStringToHex as l, rgbConvert as r, scale as s };
+function basis(t1, v0, v1, v2, v3) {
+  var t2 = t1 * t1, t3 = t2 * t1;
+  return ((1 - 3 * t1 + 3 * t2 - t3) * v0
+      + (4 - 6 * t2 + 3 * t3) * v1
+      + (1 + 3 * t1 + 3 * t2 - 3 * t3) * v2
+      + t3 * v3) / 6;
+}
+
+function basis$1(values) {
+  var n = values.length - 1;
+  return function(t) {
+    var i = t <= 0 ? (t = 0) : t >= 1 ? (t = 1, n - 1) : Math.floor(t * n),
+        v1 = values[i],
+        v2 = values[i + 1],
+        v0 = i > 0 ? values[i - 1] : 2 * v1 - v2,
+        v3 = i < n - 1 ? values[i + 2] : 2 * v2 - v1;
+    return basis((t - i / n) * n, v0, v1, v2, v3);
+  };
+}
+
+var constant = x => () => x;
+
+function linear(a, d) {
+  return function(t) {
+    return a + t * d;
+  };
+}
+
+function exponential(a, b, y) {
+  return a = Math.pow(a, y), b = Math.pow(b, y) - a, y = 1 / y, function(t) {
+    return Math.pow(a + t * b, y);
+  };
+}
+
+function hue(a, b) {
+  var d = b - a;
+  return d ? linear(a, d > 180 || d < -180 ? d - 360 * Math.round(d / 360) : d) : constant(isNaN(a) ? b : a);
+}
+
+function gamma(y) {
+  return (y = +y) === 1 ? nogamma : function(a, b) {
+    return b - a ? exponential(a, b, y) : constant(isNaN(a) ? b : a);
+  };
+}
+
+function nogamma(a, b) {
+  var d = b - a;
+  return d ? linear(a, d) : constant(isNaN(a) ? b : a);
+}
+
+var rgb = (function rgbGamma(y) {
+  var color = gamma(y);
+
+  function rgb(start, end) {
+    var r = color((start = rgb$1(start)).r, (end = rgb$1(end)).r),
+        g = color(start.g, end.g),
+        b = color(start.b, end.b),
+        opacity = nogamma(start.opacity, end.opacity);
+    return function(t) {
+      start.r = r(t);
+      start.g = g(t);
+      start.b = b(t);
+      start.opacity = opacity(t);
+      return start + "";
+    };
+  }
+
+  rgb.gamma = rgbGamma;
+
+  return rgb;
+})(1);
+
+function rgbSpline(spline) {
+  return function(colors) {
+    var n = colors.length,
+        r = new Array(n),
+        g = new Array(n),
+        b = new Array(n),
+        i, color;
+    for (i = 0; i < n; ++i) {
+      color = rgb$1(colors[i]);
+      r[i] = color.r || 0;
+      g[i] = color.g || 0;
+      b[i] = color.b || 0;
+    }
+    r = spline(r);
+    g = spline(g);
+    b = spline(b);
+    color.opacity = 1;
+    return function(t) {
+      color.r = r(t);
+      color.g = g(t);
+      color.b = b(t);
+      return color + "";
+    };
+  };
+}
+
+var rgbBasis = rgbSpline(basis$1);
+
+export { Color as C, DEFAULT_WIDTH as D, Rgb as R, color as a, formatPrefix as b, constant as c, format as d, exponent as e, formatSpecifier as f, getDimAndMarginStyleForSpecification as g, getScaleForSpecification as h, getViewportForSpecification as i, DEFAULT_HEIGHT as j, rgbConvert as k, define as l, extend as m, brighter as n, darker as o, precisionRound as p, nogamma as q, rgb as r, scale as s, hue as t, getQuadraticBezierCurveForPoints as u, rgbBasis as v, rgb$1 as w, colorSpecifierToHex as x, rgbStringToHex as y };

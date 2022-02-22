@@ -1,5 +1,5 @@
-import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, b as SpecificationProcessor, V as VertexCalculator } from './specification-processor-ddf3cd75.js';
-import { k as colorSpecifierToHex, s as scale } from './utilities-2e08b1bd.js';
+import { g as getDrawModeForTrack, D as DEFAULT_CHANNELS, b as SpecificationProcessor, V as VertexCalculator } from './specification-processor-c0c3027c.js';
+import { x as colorSpecifierToHex, s as scale } from './rgb-390029e9.js';
 
 class Drawer {
   /**
@@ -163,8 +163,15 @@ const varyingColorsFragmentShader = `#version 300 es
   in vec4 vColor;
 
   out vec4 outColor;
+
   void main(void) {
-    outColor = vColor;
+    // outColor = vColor;
+    float d = distance(gl_PointCoord, vec2(0.5, 0.5));
+    
+    if(d < .5) { 
+        outColor = vColor;
+    }
+    else { discard; }
   }
 `;
 
@@ -338,7 +345,7 @@ class VertexShader {
   }
 }
 
-/* @license twgl.js 4.19.1 Copyright (c) 2015, Gregg Tavares All Rights Reserved.
+/* @license twgl.js 4.21.2 Copyright (c) 2015, Gregg Tavares All Rights Reserved.
 Available via the MIT license.
 see: http://github.com/greggman/twgl.js for details */
 
@@ -1403,30 +1410,30 @@ function samplerArraySetter(gl, type, unit, location, size) {
 }
 
 typeMap[FLOAT$3]                         = { Type: Float32Array, size:  4, setter: floatSetter,      arraySetter: floatArraySetter, };
-typeMap[FLOAT_VEC2]                    = { Type: Float32Array, size:  8, setter: floatVec2Setter,  };
-typeMap[FLOAT_VEC3]                    = { Type: Float32Array, size: 12, setter: floatVec3Setter,  };
-typeMap[FLOAT_VEC4]                    = { Type: Float32Array, size: 16, setter: floatVec4Setter,  };
+typeMap[FLOAT_VEC2]                    = { Type: Float32Array, size:  8, setter: floatVec2Setter,  cols: 2, };
+typeMap[FLOAT_VEC3]                    = { Type: Float32Array, size: 12, setter: floatVec3Setter,  cols: 3, };
+typeMap[FLOAT_VEC4]                    = { Type: Float32Array, size: 16, setter: floatVec4Setter,  cols: 4, };
 typeMap[INT$3]                           = { Type: Int32Array,   size:  4, setter: intSetter,        arraySetter: intArraySetter, };
-typeMap[INT_VEC2]                      = { Type: Int32Array,   size:  8, setter: intVec2Setter,    };
-typeMap[INT_VEC3]                      = { Type: Int32Array,   size: 12, setter: intVec3Setter,    };
-typeMap[INT_VEC4]                      = { Type: Int32Array,   size: 16, setter: intVec4Setter,    };
+typeMap[INT_VEC2]                      = { Type: Int32Array,   size:  8, setter: intVec2Setter,    cols: 2, };
+typeMap[INT_VEC3]                      = { Type: Int32Array,   size: 12, setter: intVec3Setter,    cols: 3, };
+typeMap[INT_VEC4]                      = { Type: Int32Array,   size: 16, setter: intVec4Setter,    cols: 4, };
 typeMap[UNSIGNED_INT$3]                  = { Type: Uint32Array,  size:  4, setter: uintSetter,       arraySetter: uintArraySetter, };
-typeMap[UNSIGNED_INT_VEC2]             = { Type: Uint32Array,  size:  8, setter: uintVec2Setter,   };
-typeMap[UNSIGNED_INT_VEC3]             = { Type: Uint32Array,  size: 12, setter: uintVec3Setter,   };
-typeMap[UNSIGNED_INT_VEC4]             = { Type: Uint32Array,  size: 16, setter: uintVec4Setter,   };
+typeMap[UNSIGNED_INT_VEC2]             = { Type: Uint32Array,  size:  8, setter: uintVec2Setter,   cols: 2, };
+typeMap[UNSIGNED_INT_VEC3]             = { Type: Uint32Array,  size: 12, setter: uintVec3Setter,   cols: 3, };
+typeMap[UNSIGNED_INT_VEC4]             = { Type: Uint32Array,  size: 16, setter: uintVec4Setter,   cols: 4, };
 typeMap[BOOL]                          = { Type: Uint32Array,  size:  4, setter: intSetter,        arraySetter: intArraySetter, };
-typeMap[BOOL_VEC2]                     = { Type: Uint32Array,  size:  8, setter: intVec2Setter,    };
-typeMap[BOOL_VEC3]                     = { Type: Uint32Array,  size: 12, setter: intVec3Setter,    };
-typeMap[BOOL_VEC4]                     = { Type: Uint32Array,  size: 16, setter: intVec4Setter,    };
-typeMap[FLOAT_MAT2]                    = { Type: Float32Array, size: 16, setter: floatMat2Setter,  };
-typeMap[FLOAT_MAT3]                    = { Type: Float32Array, size: 36, setter: floatMat3Setter,  };
-typeMap[FLOAT_MAT4]                    = { Type: Float32Array, size: 64, setter: floatMat4Setter,  };
-typeMap[FLOAT_MAT2x3]                  = { Type: Float32Array, size: 24, setter: floatMat23Setter, };
-typeMap[FLOAT_MAT2x4]                  = { Type: Float32Array, size: 32, setter: floatMat24Setter, };
-typeMap[FLOAT_MAT3x2]                  = { Type: Float32Array, size: 24, setter: floatMat32Setter, };
-typeMap[FLOAT_MAT3x4]                  = { Type: Float32Array, size: 48, setter: floatMat34Setter, };
-typeMap[FLOAT_MAT4x2]                  = { Type: Float32Array, size: 32, setter: floatMat42Setter, };
-typeMap[FLOAT_MAT4x3]                  = { Type: Float32Array, size: 48, setter: floatMat43Setter, };
+typeMap[BOOL_VEC2]                     = { Type: Uint32Array,  size:  8, setter: intVec2Setter,    cols: 2, };
+typeMap[BOOL_VEC3]                     = { Type: Uint32Array,  size: 12, setter: intVec3Setter,    cols: 3, };
+typeMap[BOOL_VEC4]                     = { Type: Uint32Array,  size: 16, setter: intVec4Setter,    cols: 4, };
+typeMap[FLOAT_MAT2]                    = { Type: Float32Array, size: 32, setter: floatMat2Setter,  rows: 2, cols: 2, };
+typeMap[FLOAT_MAT3]                    = { Type: Float32Array, size: 48, setter: floatMat3Setter,  rows: 3, cols: 3, };
+typeMap[FLOAT_MAT4]                    = { Type: Float32Array, size: 64, setter: floatMat4Setter,  rows: 4, cols: 4, };
+typeMap[FLOAT_MAT2x3]                  = { Type: Float32Array, size: 32, setter: floatMat23Setter, rows: 2, cols: 3, };
+typeMap[FLOAT_MAT2x4]                  = { Type: Float32Array, size: 32, setter: floatMat24Setter, rows: 2, cols: 4, };
+typeMap[FLOAT_MAT3x2]                  = { Type: Float32Array, size: 48, setter: floatMat32Setter, rows: 3, cols: 2, };
+typeMap[FLOAT_MAT3x4]                  = { Type: Float32Array, size: 48, setter: floatMat34Setter, rows: 3, cols: 4, };
+typeMap[FLOAT_MAT4x2]                  = { Type: Float32Array, size: 64, setter: floatMat42Setter, rows: 4, cols: 2, };
+typeMap[FLOAT_MAT4x3]                  = { Type: Float32Array, size: 64, setter: floatMat43Setter, rows: 4, cols: 3, };
 typeMap[SAMPLER_2D]                    = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D$1,       };
 typeMap[SAMPLER_CUBE]                  = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP$1, };
 typeMap[SAMPLER_3D]                    = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D$1,       };
@@ -1874,6 +1881,43 @@ function isBuiltIn(info) {
   return name.startsWith("gl_") || name.startsWith("webgl_");
 }
 
+const tokenRE = /(\.|\[|]|\w+)/g;
+const isDigit = s => s >= '0' && s <= '9';
+function addSetterToUniformTree(fullPath, setter, node, uniformSetters) {
+  const tokens = fullPath.split(tokenRE).filter(s => s !== '');
+  let tokenNdx = 0;
+  let path = '';
+
+  for (;;) {
+    const token = tokens[tokenNdx++];  // has to be name or number
+    path += token;
+    const isArrayIndex = isDigit(token[0]);
+    const accessor = isArrayIndex
+        ? parseInt(token)
+        : token;
+    if (isArrayIndex) {
+      path += tokens[tokenNdx++];  // skip ']'
+    }
+    const isLastToken = tokenNdx === tokens.length;
+    if (isLastToken) {
+      node[accessor] = setter;
+      break;
+    } else {
+      const token = tokens[tokenNdx++];  // has to be . or [
+      const isArray = token === '[';
+      const child = node[accessor] || (isArray ? [] : {});
+      node[accessor] = child;
+      node = child;
+      uniformSetters[path] = uniformSetters[path] || function(node) {
+        return function(value) {
+          setUniformTree(node, value);
+        };
+      }(child);
+      path += token;
+    }
+  }
+}
+
 /**
  * Creates setter functions for all uniforms of a shader
  * program.
@@ -1923,13 +1967,14 @@ function createUniformSetters(gl, program) {
     return setter;
   }
 
-  const uniformSetters = { };
+  const uniformSetters = {};
+  const uniformTree = {};
   const numUniforms = gl.getProgramParameter(program, ACTIVE_UNIFORMS);
 
   for (let ii = 0; ii < numUniforms; ++ii) {
     const uniformInfo = gl.getActiveUniform(program, ii);
     if (isBuiltIn(uniformInfo)) {
-        continue;
+      continue;
     }
     let name = uniformInfo.name;
     // remove the array suffix.
@@ -1939,9 +1984,12 @@ function createUniformSetters(gl, program) {
     const location = gl.getUniformLocation(program, uniformInfo.name);
     // the uniform will have no location if it's in a uniform block
     if (location) {
-      uniformSetters[name] = createUniformSetter(program, uniformInfo, location);
+      const setter = createUniformSetter(program, uniformInfo, location);
+      uniformSetters[name] = setter;
+      addSetterToUniformTree(name, setter, uniformTree, uniformSetters);
     }
   }
+
   return uniformSetters;
 }
 
@@ -1976,6 +2024,7 @@ function createTransformFeedbackInfo(gl, program) {
 
 /**
  * @typedef {Object} UniformData
+ * @property {string} name The name of the uniform
  * @property {number} type The WebGL type enum for this uniform
  * @property {number} size The number of elements for this uniform
  * @property {number} blockNdx The block index this uniform appears in
@@ -2002,7 +2051,7 @@ function createTransformFeedbackInfo(gl, program) {
  * UniformBlockObjects for a given program
  *
  * @typedef {Object} UniformBlockSpec
- * @property {Object.<string, module:twgl.BlockSpec> blockSpecs The BlockSpec for each block by block name
+ * @property {Object.<string, module:twgl.BlockSpec>} blockSpecs The BlockSpec for each block by block name
  * @property {UniformData[]} uniformData An array of data for each uniform by uniform index.
  * @memberOf module:twgl
  */
@@ -2027,9 +2076,6 @@ function createUniformBlockSpecFromProgram(gl, program) {
     uniformIndices.push(ii);
     uniformData.push({});
     const uniformInfo = gl.getActiveUniform(program, ii);
-    if (isBuiltIn(uniformInfo)) {
-      break;
-    }
     uniformData[ii].name = uniformInfo.name;
   }
 
@@ -2066,6 +2112,17 @@ function createUniformBlockSpecFromProgram(gl, program) {
     blockSpecs: blockSpecs,
     uniformData: uniformData,
   };
+}
+
+function setUniformTree(tree, values) {
+  for (const name in values) {
+    const prop = tree[name];
+    if (typeof prop === 'function') {
+      prop(values[name]);
+    } else {
+      setUniformTree(tree[name], values[name]);
+    }
+  }
 }
 
 /**
@@ -2180,13 +2237,49 @@ function createUniformBlockSpecFromProgram(gl, program) {
  *     twgl.setUniforms(programInfo, sharedUniforms);
  *     twgl.setUniforms(programInfo, localUniforms};
  *
+ *   You can also fill out structure and array values either via
+ *   shortcut. Example
+ *
+ *     // -- in shader --
+ *     struct Light {
+ *       float intensity;
+ *       vec4 color;
+ *     };
+ *     uniform Light lights[2];
+ *
+ *     // in JavaScript
+ *
+ *     twgl.setUniforms(programInfo, {
+ *       lights: [
+ *         { intensity: 5.0, color: [1, 0, 0, 1] },
+ *         { intensity: 2.0, color: [0, 0, 1, 1] },
+ *       ],
+ *     });
+ *
+ *   or the more traditional way
+ *
+ *     twgl.setUniforms(programInfo, {
+ *       "lights[0].intensity": 5.0,
+ *       "lights[0].color": [1, 0, 0, 1],
+ *       "lights[1].intensity": 2.0,
+ *       "lights[1].color": [0, 0, 1, 1],
+ *     });
+ *
+ *   You can also specify partial paths
+ *
+ *     twgl.setUniforms(programInfo, {
+ *       'lights[1]: { intensity: 5.0, color: [1, 0, 0, 1] },
+ *     });
+ *
+ *   But you can not specify leaf array indices
+ *
  * @memberOf module:twgl/programs
  */
-function setUniforms(setters, values) {  // eslint-disable-line
+function setUniforms(setters, ...args) {  // eslint-disable-line
   const actualSetters = setters.uniformSetters || setters;
-  const numArgs = arguments.length;
-  for (let aNdx = 1; aNdx < numArgs; ++aNdx) {
-    const values = arguments[aNdx];
+  const numArgs = args.length;
+  for (let aNdx = 0; aNdx < numArgs; ++aNdx) {
+    const values = args[aNdx];
     if (Array.isArray(values)) {
       const numValues = values.length;
       for (let ii = 0; ii < numValues; ++ii) {
@@ -2221,7 +2314,7 @@ function createAttributeSetters(gl, program) {
   for (let ii = 0; ii < numAttribs; ++ii) {
     const attribInfo = gl.getActiveAttrib(program, ii);
     if (isBuiltIn(attribInfo)) {
-        continue;
+      continue;
     }
     const index = gl.getAttribLocation(program, attribInfo.name);
     const typeInfo = attrTypeMap[attribInfo.type];
@@ -2349,7 +2442,7 @@ function setBuffersAndAttributes(gl, programInfo, buffers) {
  * @property {WebGLProgram} program A shader program
  * @property {Object<string, function>} uniformSetters object of setters as returned from createUniformSetters,
  * @property {Object<string, function>} attribSetters object of setters as returned from createAttribSetters,
- * @property {module:twgl.UniformBlockSpec} [uniformBlockSpace] a uniform block spec for making UniformBlockInfos with createUniformBlockInfo etc..
+ * @property {module:twgl.UniformBlockSpec} [uniformBlockSpec] a uniform block spec for making UniformBlockInfos with createUniformBlockInfo etc..
  * @property {Object<string, module:twgl.TransformFeedbackInfo>} [transformFeedbackInfo] info for transform feedbacks
  * @memberOf module:twgl
  */
@@ -2375,9 +2468,9 @@ function createProgramInfoFromProgram(gl, program) {
   const uniformSetters = createUniformSetters(gl, program);
   const attribSetters = createAttributeSetters(gl, program);
   const programInfo = {
-    program: program,
-    uniformSetters: uniformSetters,
-    attribSetters: attribSetters,
+    program,
+    uniformSetters,
+    attribSetters,
   };
 
   if (isWebGL2(gl)) {
@@ -2619,7 +2712,7 @@ class WebGLCanvasDrawer extends Drawer {
 
     // Multiply point size by the ratio of max dimension and current width
     const pointSize = Math.max(
-      1,
+      1.75,
       Math.min(
         1 /
           (scaleXWindowSpace(this.currentXRange[1]) -

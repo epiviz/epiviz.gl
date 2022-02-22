@@ -60,8 +60,15 @@ const varyingColorsFragmentShader = `#version 300 es
   in vec4 vColor;
 
   out vec4 outColor;
+
   void main(void) {
-    outColor = vColor;
+    // outColor = vColor;
+    float d = distance(gl_PointCoord, vec2(0.5, 0.5));
+    
+    if(d < .5) { 
+        outColor = vColor;
+    }
+    else { discard; }
   }
 `;
 

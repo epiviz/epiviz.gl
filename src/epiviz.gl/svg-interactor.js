@@ -312,6 +312,13 @@ class SVGInteractor {
 
     return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
   }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clear() {
+    this._selectMarker.setAttribute("points", "");
+  }
 }
 
 export default SVGInteractor;

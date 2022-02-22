@@ -38,7 +38,7 @@ class MouseReader {
 
     this._currentSelectionPoints = [];
 
-    this.tool = "box";
+    this.tool = "pan";
 
     // Initializing elements to show user their current selection
     this.SVGInteractor = new SVGInteractor(
@@ -369,6 +369,14 @@ class MouseReader {
     // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
     const scaleY = scale([this.height, 0], this.currentYRange);
     return [scaleX(canvasX), scaleY(canvasY)];
+  }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clear() {
+    this._currentSelectionPoints = [];
+    this.SVGInteractor.clear();
   }
 }
 

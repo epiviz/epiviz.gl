@@ -311,6 +311,20 @@ yarn start
 
 Then navigate to `localhost:1234`
 
+## Build the package
+
+```shell
+yarn build-package
+```
+
+Be sure to commit the `dist` folder if changes made should be distributed.
+
+## Deploy to Github Pages
+
+```shell
+yarn deploy
+```
+
 ## Run the tests
 
 ```shell

@@ -3,6 +3,8 @@ import csv10 from "url:./data/tsne_tenth.csv";
 export default JSON.stringify(
   {
     defaultData: csv10,
+    xAxis: "none",
+    yAxis: "none",
     tracks: [
       {
         tooltips: 0.01,
@@ -26,7 +28,7 @@ export default JSON.stringify(
           cardinality: 32,
           colorScheme: "interpolateRainbow",
         },
-        opacity: { value: 0.05 },
+        opacity: { value: 1 },
       },
     ],
   },

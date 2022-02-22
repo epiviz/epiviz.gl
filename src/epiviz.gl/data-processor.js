@@ -141,9 +141,12 @@ class DataProcessor {
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    return this.index
+    let indices = this.index
       .search(smallerX, smallerY, largerX, largerY)
-      .map((i) => this.data[i]);
+    
+    let tpoints =  indices.map((i) => this.data[i]);
+
+    return {indices, "points": tpoints};
   }
 
   /**
@@ -184,12 +187,19 @@ class DataProcessor {
       highQuality: false,
     });
 
-    return candidatePoints.filter((point) => {
-      return booleanPointInPolygon(
+    let findices = [];
+    let fpoints = candidatePoints.points.filter((point, i) => {
+      let tbool = booleanPointInPolygon(
         point.geometry.coordinates,
         simplifiedBoundingPolygon
       );
+
+      if (tbool) findices.push(candidatePoints.indices[i])
+
+      return tbool;
     });
+
+    return {"indices": findices, "points": fpoints}
   }
 }
 

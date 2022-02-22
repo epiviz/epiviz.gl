@@ -41,6 +41,14 @@ class App {
       this.onSpecificationSubmit.bind(this);
 
     window.addEventListener("resize", this.onWindowResize.bind(this));
+
+    // choose the tsne as the default visualization
+
+    let selem = document.getElementById("specification-select");
+    selem.value = "tsne-10th";
+    selem.dispatchEvent(new Event('change'));
+
+    document.getElementById("refresh-specification").click();
   }
 
   /**

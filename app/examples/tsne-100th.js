@@ -3,6 +3,8 @@ import csv100 from "url:./data/tsne_hundreth.csv";
 export default JSON.stringify(
   {
     defaultData: csv100,
+    xAxis: "none",
+    yAxis: "none",
     tracks: [
       {
         tooltips: 0.01,
@@ -26,7 +28,7 @@ export default JSON.stringify(
           cardinality: 32,
           colorScheme: "interpolateRainbow",
         },
-        opacity: { value: 0.5 },
+        opacity: { value: 0.95 },
       },
     ],
   },

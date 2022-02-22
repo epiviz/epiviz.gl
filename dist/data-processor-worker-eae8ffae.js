@@ -1,5 +1,5 @@
-import { S as SIZE_UNITS, t as transformGenomicRangeArcToStandard, a as transformGenomicRangeToStandard, b as SpecificationProcessor } from './specification-processor-ddf3cd75.js';
-import { b as getViewportForSpecification } from './utilities-2e08b1bd.js';
+import { S as SIZE_UNITS, t as transformGenomicRangeArcToStandard, a as transformGenomicRangeToStandard, b as SpecificationProcessor } from './specification-processor-c0c3027c.js';
+import { i as getViewportForSpecification } from './rgb-390029e9.js';
 
 class FlatQueue {
 
@@ -824,7 +824,7 @@ function cleanCoords(geojson, options) {
             var existing = {};
             getCoords(geojson).forEach(function (coord) {
                 var key = coord.join("-");
-                if (!existing.hasOwnProperty(key)) {
+                if (!Object.prototype.hasOwnProperty.call(existing, key)) {
                     newCoords.push(coord);
                     existing[key] = true;
                 }
@@ -1821,9 +1821,12 @@ class DataProcessor {
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    return this.index
-      .search(smallerX, smallerY, largerX, largerY)
-      .map((i) => this.data[i]);
+    let indices = this.index
+      .search(smallerX, smallerY, largerX, largerY);
+    
+    let tpoints =  indices.map((i) => this.data[i]);
+
+    return {indices, "points": tpoints};
   }
 
   /**
@@ -1864,12 +1867,19 @@ class DataProcessor {
       highQuality: false,
     });
 
-    return candidatePoints.filter((point) => {
-      return booleanPointInPolygon(
+    let findices = [];
+    let fpoints = candidatePoints.points.filter((point, i) => {
+      let tbool = booleanPointInPolygon(
         point.geometry.coordinates,
         simplifiedBoundingPolygon
       );
+
+      if (tbool) findices.push(candidatePoints.indices[i]);
+
+      return tbool;
     });
+
+    return {"indices": findices, "points": fpoints}
   }
 }
 
