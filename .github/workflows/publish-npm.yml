@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Get to the right branch
-      run: |
-        git fetch --all
-        git checkout $GITHUB_SHA
 
     - name: Update NPM packages
       run: yarn install
