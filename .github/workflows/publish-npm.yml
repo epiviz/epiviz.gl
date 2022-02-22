@@ -1,0 +1,32 @@
+on: [push]
+
+# on: [push]
+
+name: Build and publish to NPM 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get to the right branch
+      run: |
+        git fetch --all
+        git checkout $GITHUB_SHA
+
+    - name: Update NPM packages
+      run: yarn install
+
+    - name: create builds
+      run: npm run build-lib
+
+    - uses: actions/setup-node@v2
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      with:
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Publish to NPM
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      run: npm publish || true
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
