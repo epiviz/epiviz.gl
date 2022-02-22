@@ -367,6 +367,14 @@ class MouseReader {
     const scaleY = scale([this.height, 0], this.currentYRange);
     return [scaleX(canvasX), scaleY(canvasY)];
   }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clear() {
+    this._currentSelectionPoints = [];
+    this.SVGInteractor.clear();
+  }
 }
 
 export default MouseReader;

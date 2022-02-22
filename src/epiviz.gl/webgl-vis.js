@@ -250,6 +250,13 @@ class WebGLVis {
   addEventListener(type, listener, options) {
     this.parent.addEventListener(type, listener, options);
   }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clearSelection() {
+    this.mouseReader.clear();
+  }
 }
 
 export default WebGLVis;

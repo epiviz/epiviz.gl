@@ -2782,6 +2782,13 @@ class SVGInteractor {
 
     return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
   }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clear() {
+    this._selectMarker.setAttribute("points", "");
+  }
 }
 
 /**
@@ -3137,6 +3144,14 @@ class MouseReader {
     // Flipped for Y since canvas using typical graphics coordinates but GPU clipspace is typical cartesian coordinates
     const scaleY = scale([this.height, 0], this.currentYRange);
     return [scaleX(canvasX), scaleY(canvasY)];
+  }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clear() {
+    this._currentSelectionPoints = [];
+    this.SVGInteractor.clear();
   }
 }
 
@@ -7148,6 +7163,25 @@ class WebGLVis {
   }
 
   /**
+   * Set the specification of the visualization, and then render it.
+   *
+   * @param {Object} specification describing visualization
+   * @returns boolean on whether the specification was accepted
+   */
+  updateSpecification(specification) {
+    if (!isJSONValid(specification)) {
+      return false;
+    }
+
+    this._setMargins(specification);
+    this.mouseReader.setSpecification(specification);
+    this.sendDrawerState(this.mouseReader.getViewport());
+    this.webglWorker.postMessage({ type: "specification", specification });
+    // this.dataWorker.postMessage({ type: "init", specification });
+    return true;
+  }
+
+  /**
    * Send the viewport to the drawer. Use setViewOptions to change the viewport.
    *
    * @param {Object} viewport likely from this.mouseReader.getViewport()
@@ -7226,6 +7260,13 @@ class WebGLVis {
    */
   addEventListener(type, listener, options) {
     this.parent.addEventListener(type, listener, options);
+  }
+
+  /**
+   * Clears the polygon selection on the visualization
+   */
+  clearSelection() {
+    this.mouseReader.clear();
   }
 }
 
