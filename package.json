@@ -3,7 +3,24 @@
   "version": "1.0.0",
   "repository": "https://github.com/epiviz/epiviz.gl",
   "homepage": "https://github.com/epiviz/epiviz.gl",
-  "author": "Sam Rosen",
+  "author": {
+    "name": "Jayaram Kancherla",
+    "email": "jayaram.kancherla@gmail.com",
+    "url": "https://www.jkanche.com"
+  },
+  "contributors": [
+    {
+      "name": "Sam Rosen",
+      "email": "samrosen90@gmail.com"
+    }
+  ],
+  "bugs": "https://github.com/epiviz/epiviz.gl/issues",
+  "keywords": [
+    "bioinformatics",
+    "data-visualization",
+    "webgl",
+    "webworkers"
+  ],
   "license": "MIT",
   "type": "module",
   "source": "src/index.js",
