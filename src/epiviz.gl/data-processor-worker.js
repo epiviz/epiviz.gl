@@ -28,9 +28,10 @@ self.onmessage = (message) => {
       });
       break;
     case "getClosestPoint":
+      const result = self.processor.getClosestPoint(message.data.point);
       postMessage({
         type: message.data.type,
-        point: self.processor.getClosestPoint(message.data.point),
+        ...result,
       });
       break;
     default:

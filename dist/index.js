@@ -1,4 +1,4 @@
-import { e as exponent, c as constant$1, a as color, r as rgb, f as formatSpecifier, p as precisionRound, b as formatPrefix, d as format, g as getDimAndMarginStyleForSpecification, h as getScaleForSpecification, s as scale, i as getViewportForSpecification, D as DEFAULT_WIDTH, j as DEFAULT_HEIGHT } from './rgb-390029e9.js';
+import { e as exponent, c as constant$1, a as color, r as rgb, f as formatSpecifier, p as precisionRound, b as formatPrefix, d as format, g as getDimAndMarginStyleForSpecification, h as getScaleForSpecification, s as scale, i as getViewportForSpecification, D as DEFAULT_WIDTH, j as DEFAULT_HEIGHT } from './rgb-6a05388e.js';
 
 /*!
  * FPSMeter 0.3.1 - 9th May 2013
@@ -2896,6 +2896,9 @@ class MouseReader {
     this.element.addEventListener(
       "mousemove",
       (event) => {
+        this.handler.getClosestPoint(
+          this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+        );
         if (!mouseDown) {
           return;
         }
@@ -7068,7 +7071,7 @@ class WebGLVis {
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
 
-    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-60aed407.js", import.meta.url),
+    this.webglWorker = new Worker(new URL("offscreen-webgl-worker-f8d20d92.js", import.meta.url),
       { type: "module" }
     );
     this.webglWorker.postMessage(
@@ -7088,15 +7091,27 @@ class WebGLVis {
     };
 
     this.dataWorkerStream = [];
-    this.dataWorker = new Worker(new URL("data-processor-worker-eae8ffae.js", import.meta.url),
+    this.dataWorker = new Worker(new URL("data-processor-worker-43d4f68e.js", import.meta.url),
       { type: "module" }
     );
     this.dataWorker.onmessage = (message) => {
-      this.dataWorkerStream.push(message);
-      this.parent.dispatchEvent(
-        new CustomEvent("onSelectionEnd", { detail: message })
-      );
-      console.log(this.dataWorkerStream);
+      if (message.data.type === "getClosestPoint") {
+        if (message.data.closestPoint === undefined) {
+          return;
+        }
+        this.parent.dispatchEvent(
+          new CustomEvent("pointHovered", { detail: message })
+        );
+      } else if (
+        message.data.type === "selectBox" ||
+        message.data.type === "selectLasso"
+      ) {
+        this.parent.dispatchEvent(
+          new CustomEvent("onSelectionEnd", { detail: message })
+        );
+        this.dataWorkerStream.push(message);
+        console.log(this.dataWorkerStream);
+      }
     };
 
     // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
@@ -7163,25 +7178,6 @@ class WebGLVis {
   }
 
   /**
-   * Set the specification of the visualization, and then render it.
-   *
-   * @param {Object} specification describing visualization
-   * @returns boolean on whether the specification was accepted
-   */
-  updateSpecification(specification) {
-    if (!isJSONValid(specification)) {
-      return false;
-    }
-
-    this._setMargins(specification);
-    this.mouseReader.setSpecification(specification);
-    this.sendDrawerState(this.mouseReader.getViewport());
-    this.webglWorker.postMessage({ type: "specification", specification });
-    // this.dataWorker.postMessage({ type: "init", specification });
-    return true;
-  }
-
-  /**
    * Send the viewport to the drawer. Use setViewOptions to change the viewport.
    *
    * @param {Object} viewport likely from this.mouseReader.getViewport()
@@ -7224,7 +7220,10 @@ class WebGLVis {
    * @param {Array} point to get closest point to
    */
   getClosestPoint(point) {
-    this.dataWorker.postMessage({ type: "getClosestPoint", point });
+    this.dataWorker.postMessage({
+      type: "getClosestPoint",
+      point,
+    });
   }
 
   /**
@@ -7250,6 +7249,7 @@ class WebGLVis {
    * "pan": fires when user pans
    * "onSelection": fires while user is changing the selection box/lasso
    * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
+   * "pointHovered": fires when pointer hovers over a datapoint
    *
    * For information on the parameters and functionality see:
    *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener

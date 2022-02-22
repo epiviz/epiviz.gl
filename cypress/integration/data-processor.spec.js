@@ -770,15 +770,71 @@ describe("Get closest point", () => {
     cy.wrap(dataProcessor)
       .should("have.property", "index")
       .then(() => {
-        let closest = dataProcessor.getClosestPoint([1.1, 1.1]);
+        let closest = dataProcessor.getClosestPoint([1.1, 1.1]).closestPoint;
         expect(closest.category).to.eq("a");
         expect(closest.x).to.eq(1);
         expect(closest.y).to.eq(1);
 
-        closest = dataProcessor.getClosestPoint([5.2, 5.2]);
+        closest = dataProcessor.getClosestPoint([5.2, 5.2]).closestPoint;
         expect(closest.category).to.eq("b");
         expect(closest.x).to.eq(5);
         expect(closest.y).to.eq(5);
+      });
+  });
+
+  it("can get the closest point in cartesian space with a max distance", () => {
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationPoints))
+    );
+
+    cy.wrap(dataProcessor)
+      .should("have.property", "index")
+      .then(() => {
+        let closest = dataProcessor.getClosestPoint([1, 1]);
+        expect(closest.closestPoint.category).to.eq("a");
+        expect(closest.closestPoint.x).to.eq(1);
+        expect(closest.closestPoint.y).to.eq(1);
+        expect(closest.isInside).to.eq(true);
+        expect(closest.distance).to.eq(0);
+
+        closest = dataProcessor.getClosestPoint([1.1, 1.1]);
+        expect(closest.closestPoint.category).to.eq("a");
+        expect(closest.closestPoint.x).to.eq(1);
+        expect(closest.closestPoint.y).to.eq(1);
+        expect(closest.isInside).to.eq(false);
+        expect(closest.distance).to.be.closeTo(
+          Math.sqrt(1 / 10 ** 2 + 1 / 10 ** 2),
+          1e-10
+        );
+      });
+  });
+
+  it("can get the closest point in a rectangle in cartesian space with a max distance", () => {
+    // Deep copy to since specification processor modifies original object
+    dataProcessor = new DataProcessor(
+      JSON.parse(JSON.stringify(specificationRects))
+    );
+
+    cy.wrap(dataProcessor)
+      .should("have.property", "index")
+      .then(() => {
+        let closest = dataProcessor.getClosestPoint([1.1, 1.1]);
+        expect(closest.closestPoint.category).to.eq("a");
+        expect(closest.closestPoint.x).to.eq(1);
+        expect(closest.closestPoint.y).to.eq(1);
+        expect(closest.isInside).to.eq(true);
+        expect(closest.distance).to.eq(0);
+
+        closest = dataProcessor.getClosestPoint([2, 1.5]);
+        expect(closest.closestPoint.category).to.eq("a");
+        expect(closest.closestPoint.x).to.eq(1);
+        expect(closest.closestPoint.y).to.eq(1);
+        expect(closest.isInside).to.eq(false);
+        expect(closest.distance).to.be.closeTo(
+          Math.sqrt(1 ** 2 + 1 / 2 ** 2),
+          1e-10
+        );
       });
   });
 
@@ -794,14 +850,14 @@ describe("Get closest point", () => {
         let closest = dataProcessor.getClosestPoint([
           testGenomeScale.toClipSpaceFromString("chr1:101"),
           0,
-        ]);
+        ]).closestPoint;
         expect(closest.category).to.eq("a");
         expect(closest.start).to.eq(100);
 
         closest = dataProcessor.getClosestPoint([
           testGenomeScale.toClipSpaceFromString("chr1:501"),
           0,
-        ]);
+        ]).closestPoint;
         expect(closest.category).to.eq("b");
         expect(closest.end).to.eq(605);
       });

@@ -108,14 +108,27 @@ class DataProcessor {
   }
 
   /**
-   * Find the closest point in the data to a given point. Only finds point if it is
-   * sufficiently close.
+   * Find the closest point in the data to a given point.
    *
    * @param {Array} point of two floats to find closest point to
    * @returns closest point or undefined
    */
   getClosestPoint(point) {
-    return this.data[this.index.neighbors(point[0], point[1], 1)];
+    let indices = this.index.neighbors(point[0], point[1], 1, 0)
+    let pointToReturn =
+      this.data[indices];
+    let distance = 0;
+    let isInside = true;
+    if (pointToReturn === undefined) {
+      indices = this.index.neighbors(point[0], point[1], 1)
+      pointToReturn = this.data[indices];
+      distance = Math.sqrt(
+        (pointToReturn.geometry.coordinates[0] - point[0]) ** 2 +
+          (pointToReturn.geometry.coordinates[1] - point[1]) ** 2
+      );
+      isInside = false;
+    }
+    return { closestPoint: pointToReturn, distance, isInside, indices };
   }
 
   /**
