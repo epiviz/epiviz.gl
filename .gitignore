@@ -3,6 +3,7 @@ dist-app
 .env
 .cache
 .DS_Store
+dist/*
 
 .parcel-cache
 yarn-error.log

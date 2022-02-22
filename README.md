@@ -6,8 +6,16 @@ The `epiviz.gl` project is meant to visualize genomic data using webgl and webwo
 
 # Install
 
+Package is published to npm registry @ https://www.npmjs.com/package/epiviz.gl
+
 ```
-$ yarn install git+https://github.com/epiviz/epiviz.gl
+$ yarn add epiviz.gl
+```
+
+or through `npm`
+
+```
+$ npm install --save epiviz.gl
 ```
 
 ## Usage
