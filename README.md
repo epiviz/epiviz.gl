@@ -7,7 +7,13 @@ The `epiviz.gl` project is meant to visualize genomic data using webgl and webwo
 # Install
 
 ```
-$ yarn install git+https://github.com/epiviz/epiviz.gl
+$ yarn add epiviz.gl
+```
+
+or through `npm`
+
+```
+$ npm install --save epiviz.gl
 ```
 
 ## Usage
