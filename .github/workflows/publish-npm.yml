@@ -2,27 +2,27 @@ on: [push]
 
 # on: [push]
 
-name: Build and publish to NPM 
+name: Build and publish to NPM
 
 jobs:
-  build:
+  publish-npm:
     runs-on: ubuntu-latest
-
     steps:
+      - uses: actions/checkout@v2
 
-    - name: Update NPM packages
-      run: yarn install
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
 
-    - name: create builds
-      run: npm run build-lib
+      - name: install dependencies
+        run: npm ci
 
-    - uses: actions/setup-node@v2
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      with:
-        registry-url: 'https://registry.npmjs.org'
+      - name: create builds
+        run: npm run build-lib
 
-    - name: Publish to NPM
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      run: npm publish || true
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to NPM
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        run: npm publish || true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
