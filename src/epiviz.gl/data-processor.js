@@ -114,19 +114,21 @@ class DataProcessor {
    * @returns closest point or undefined
    */
   getClosestPoint(point) {
+    let indices = this.index.neighbors(point[0], point[1], 1, 0)
     let pointToReturn =
-      this.data[this.index.neighbors(point[0], point[1], 1, 0)];
+      this.data[indices];
     let distance = 0;
     let isInside = true;
     if (pointToReturn === undefined) {
-      pointToReturn = this.data[this.index.neighbors(point[0], point[1], 1)];
+      indices = this.index.neighbors(point[0], point[1], 1)
+      pointToReturn = this.data[indices];
       distance = Math.sqrt(
         (pointToReturn.geometry.coordinates[0] - point[0]) ** 2 +
           (pointToReturn.geometry.coordinates[1] - point[1]) ** 2
       );
       isInside = false;
     }
-    return { closestPoint: pointToReturn, distance, isInside };
+    return { closestPoint: pointToReturn, distance, isInside, indices };
   }
 
   /**
