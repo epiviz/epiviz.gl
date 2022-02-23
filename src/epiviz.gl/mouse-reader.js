@@ -292,8 +292,8 @@ class MouseReader {
       const xDampen = (this.currentXRange[1] - this.currentXRange[0]) / 1000;
       this.currentXRange[0] -= event.movementX * xDampen;
       this.currentXRange[1] -= event.movementX * xDampen;
-      this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
-      this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
+      // this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
+      // this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
 
       if (!this._validateXRange()) {
         this.currentXRange = previousX;
@@ -305,8 +305,8 @@ class MouseReader {
       const yDampen = (this.currentYRange[1] - this.currentYRange[0]) / 1000;
       this.currentYRange[0] += event.movementY * yDampen;
       this.currentYRange[1] += event.movementY * yDampen;
-      this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
-      this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
+      // this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
+      // this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
 
       if (!this._validateYRange()) {
         this.currentYRange = previousY;
