@@ -28,6 +28,7 @@ self.onmessage = (message) => {
       });
       break;
     case "getClosestPoint":
+    case "getClickPoint":
       const result = self.processor.getClosestPoint(message.data.point);
       postMessage({
         type: message.data.type,

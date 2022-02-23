@@ -192,6 +192,16 @@ class MouseReader {
           break;
       }
     });
+
+    this.element.addEventListener(
+      "dblclick",
+      (event) => {
+        this.handler.getClickPoint(
+          this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+        );
+      },
+      false
+    );
   }
 
   /**

@@ -120,7 +120,10 @@ class DataProcessor {
     let distance = 0;
     let isInside = true;
     if (pointToReturn === undefined) {
-      indices = this.index.neighbors(point[0], point[1], 1)
+      indices = this.index.neighbors(point[0], point[1], 1, 5)
+      if(indices.length === 0) {
+        indices = this.index.neighbors(point[0], point[1], 1)
+      }
       pointToReturn = this.data[indices];
       distance = Math.sqrt(
         (pointToReturn.geometry.coordinates[0] - point[0]) ** 2 +
