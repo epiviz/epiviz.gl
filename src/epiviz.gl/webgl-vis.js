@@ -107,6 +107,13 @@ class WebGLVis {
         this.parent.dispatchEvent(
           new CustomEvent("pointHovered", { detail: message })
         );
+      } else if (message.data.type === "getClickPoint") {
+        if (message.data.closestPoint === undefined) {
+          return;
+        }
+        this.parent.dispatchEvent(
+          new CustomEvent("pointClicked", { detail: message })
+        );
       } else if (
         message.data.type === "selectBox" ||
         message.data.type === "selectLasso"
@@ -227,6 +234,19 @@ class WebGLVis {
   getClosestPoint(point) {
     this.dataWorker.postMessage({
       type: "getClosestPoint",
+      point,
+    });
+  }
+
+   /**
+   * Utility method to have data worker call {@link DataProcessor#getClosestPoint}.
+   * Does not return, posts result to this.dataWorkerStream.
+   *
+   * @param {Array} point to get closest point to
+   */
+  getClickPoint(point) {
+    this.dataWorker.postMessage({
+      type: "getClickPoint",
       point,
     });
   }
