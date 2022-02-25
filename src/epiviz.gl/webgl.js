@@ -54,7 +54,7 @@ const vertexShaderSuffix = (opacityName, colorName, sizeName) => `
 /**
  * A fragment shader which chooses color simply passed to by vertex shader.
  */
-const varyingColorsFragmentShader = `#version 300 es
+const varyingColorsFragmentShaderDots = `#version 300 es
   precision highp float;
 
   in vec4 vColor;
@@ -70,6 +70,21 @@ const varyingColorsFragmentShader = `#version 300 es
     }
     else { discard; }
   }
+`;
+
+/**
+ * A fragment shader which chooses color simply passed to by vertex shader.
+ */
+ const varyingColorsFragmentShader = `#version 300 es
+ precision highp float;
+
+ in vec4 vColor;
+
+ out vec4 outColor;
+
+ void main(void) {
+    outColor = vColor;
+ }
 `;
 
 class VertexShader {
@@ -242,4 +257,4 @@ class VertexShader {
   }
 }
 
-export { varyingColorsFragmentShader, VertexShader };
+export { varyingColorsFragmentShader, VertexShader, varyingColorsFragmentShaderDots };
