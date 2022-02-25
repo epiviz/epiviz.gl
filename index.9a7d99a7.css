@@ -122,7 +122,7 @@ a.github {
 a.github:before {
   position: absolute;
   content: "";
-  background-image: url("github.48f06e53.png");
+  background-image: url("github.d88ef15b.png");
   background-size: contain;
   width: 20px;
   height: 20px;
@@ -133,4 +133,4 @@ a.github:hover {
   border-color: #333;
 }
 
-/*# sourceMappingURL=index.7ae3e135.css.map */
+/*# sourceMappingURL=index.9a7d99a7.css.map */
