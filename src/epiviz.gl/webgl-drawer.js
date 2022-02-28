@@ -3,7 +3,7 @@ import SpecificationProcessor from "./specification-processor";
 import { scale } from "./utilities";
 import VertexCalculator from "./vertex-calculator";
 import SemanticZoomer from "./semantic-zoomer";
-import { VertexShader, varyingColorsFragmentShader } from "./webgl.js";
+import { VertexShader, varyingColorsFragmentShader, varyingColorsFragmentShaderDots } from "./webgl.js";
 
 import * as twgl from "twgl.js";
 
@@ -194,7 +194,7 @@ class WebGLCanvasDrawer extends Drawer {
     this.programInfos = this.trackShaders.map((trackShader) =>
       twgl.createProgramInfo(
         this.gl,
-        [trackShader.buildShader(), varyingColorsFragmentShader],
+        [trackShader.buildShader(), trackShader.drawMode === "POINTS" ? varyingColorsFragmentShaderDots : varyingColorsFragmentShader],
         ALL_POTENTIAL_ATTRIBUTES
       )
     );
