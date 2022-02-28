@@ -189,6 +189,15 @@ class WebGLVis {
     return true;
   }
 
+  updateSpecification(specification) {
+    if (!isJSONValid(specification)) {
+      return false;
+    }
+
+    this.webglWorker.postMessage({ type: "specification", specification });
+    return true;
+  }
+
   /**
    * Send the viewport to the drawer. Use setViewOptions to change the viewport.
    *
