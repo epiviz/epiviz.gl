@@ -87,11 +87,11 @@ const varyingColorsFragmentShaderDots = `#version 300 es
  }
 `;
 
-SUPPORTED_CHANNEL_ATTRIBUTES = Object.freeze([
+const SUPPORTED_CHANNEL_ATTRIBUTES = [
   "color",
   "size",
   "opacity",
-]);
+];
 
 class VertexShader {
 
