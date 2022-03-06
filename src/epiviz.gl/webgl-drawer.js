@@ -3,11 +3,11 @@ import SpecificationProcessor from "./specification-processor";
 import { scale } from "./utilities";
 import VertexCalculator from "./vertex-calculator";
 import SemanticZoomer from "./semantic-zoomer";
-import { VertexShader, varyingColorsFragmentShader, varyingColorsFragmentShaderDots } from "./webgl.js";
+import { VertexShader, varyingColorsFragmentShader, varyingColorsFragmentShaderDots, SUPPORTED_CHANNEL_ATTRIBUTES } from "./webgl.js";
 
 import * as twgl from "twgl.js";
 
-const ALL_POTENTIAL_ATTRIBUTES = VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.map(
+const ALL_POTENTIAL_ATTRIBUTES = SUPPORTED_CHANNEL_ATTRIBUTES.map(
   (attr) => `a_${attr}`
 ).concat("a_VertexPosition");
 

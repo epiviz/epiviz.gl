@@ -8,14 +8,6 @@ import {
 } from "./utilities";
 
 class WebGLVis {
-  POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
-    "lockedX",
-    "lockedY",
-    "tool",
-    "viewport",
-    "currentXRange",
-    "currentYRange",
-  ]);
 
   /**
    * A class meant to display a visualization based off a given specification using webgl.
@@ -32,6 +24,15 @@ class WebGLVis {
 
     this.canvas = document.createElement("canvas");
     this.canvas.style.position = "absolute";
+
+    this.POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
+      "lockedX",
+      "lockedY",
+      "tool",
+      "viewport",
+      "currentXRange",
+      "currentYRange",
+    ]);
   }
 
   /**

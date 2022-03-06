@@ -87,12 +87,13 @@ const varyingColorsFragmentShaderDots = `#version 300 es
  }
 `;
 
+SUPPORTED_CHANNEL_ATTRIBUTES = Object.freeze([
+  "color",
+  "size",
+  "opacity",
+]);
+
 class VertexShader {
-  static SUPPORTED_CHANNEL_ATTRIBUTES = Object.freeze([
-    "color",
-    "size",
-    "opacity",
-  ]);
 
   /**
    * A class meant to contain all the relevant information for a shader program, such as uniforms
@@ -238,7 +239,7 @@ class VertexShader {
           }
 
           // These are currently the only supported channels for shader usage
-          if (VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
+          if (SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
             vsBuilder.addChannelBuffer(
               channel,
               DEFAULT_CHANNELS[channel].numComponents
@@ -247,7 +248,7 @@ class VertexShader {
         }
       } else {
         // Channel not listed, set default
-        if (VertexShader.SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
+        if (SUPPORTED_CHANNEL_ATTRIBUTES.includes(channel)) {
           vsBuilder.setChannelUniform(channel, DEFAULT_CHANNELS[channel].value);
         }
       }
@@ -257,4 +258,4 @@ class VertexShader {
   }
 }
 
-export { varyingColorsFragmentShader, VertexShader, varyingColorsFragmentShaderDots };
+export { varyingColorsFragmentShader, VertexShader, varyingColorsFragmentShaderDots, SUPPORTED_CHANNEL_ATTRIBUTES};
