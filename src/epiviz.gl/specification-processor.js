@@ -281,7 +281,7 @@ class Track {
    * @param {String} channel one of the channels listed in default channels
    * @returns the function
    */
-  buildMapperForChannel = (channel) => {
+  buildMapperForChannel(channel) {
     if (channel in this.track) {
       const channelInfo = this.track[channel];
       if ("value" in channelInfo) {

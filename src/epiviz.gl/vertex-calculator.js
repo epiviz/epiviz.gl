@@ -317,7 +317,9 @@ class VertexCalculator {
     ];
   }
 
-  _getVertexForDot = (mark) => this._mapToGPUSpace([mark.x, mark.y]);
+  _getVertexForDot(mark) {
+    return this._mapToGPUSpace([mark.x, mark.y]);
+  }
 
   _getVerticesForSquare(mark) {
     const center = this._mapToGPUSpace([mark.x, mark.y]);
