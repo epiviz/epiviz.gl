@@ -30,7 +30,6 @@ class MouseReader {
    */
   constructor(element, handler) {
     this.element = element;
-    this.element.style.position = "absolute";
     this.element.style.width = "100%";
     this.element.style.height = "100%";
 

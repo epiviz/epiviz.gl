@@ -8,7 +8,6 @@ import {
 } from "./utilities";
 
 class WebGLVis {
-
   /**
    * A class meant to display a visualization based off a given specification using webgl.
    *
@@ -23,7 +22,6 @@ class WebGLVis {
     this.parent.style.overflow = "hidden";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.style.position = "absolute";
 
     this.POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
       "lockedX",
@@ -248,7 +246,7 @@ class WebGLVis {
     });
   }
 
-   /**
+  /**
    * Utility method to have data worker call {@link DataProcessor#getClosestPoint}.
    * Does not return, posts result to this.dataWorkerStream.
    *
