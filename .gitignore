@@ -1,8 +1,13 @@
 node_modules
-dist
+dist-app
 .env
 .cache
 .DS_Store
+dist/*
 
 .parcel-cache
 yarn-error.log
+
+cypress/fixtures/failed-test-images
+cypress/videos
+cypress/screenshots

@@ -1,0 +1,93 @@
+<html>
+
+<head>
+  <title>epiviz.gl demo</title>
+  <meta name="title" content="Epiviz.gl demo" />
+  <meta name="description" content="A demo of an interactive point visualization using WebGL" />
+  <link rel="stylesheet" href="./styles/index.css" />
+  <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
+  <script type="module" src="./scripts/index.js"></script>
+</head>
+
+<body>
+  <main>
+    <div class="toolbar">
+      <div class="specification-select">
+        <label for="specification-select">Load Spec:</label>
+        <select name="specification-select" id="specification-select">
+          <option value="line-plot">Line Plot</option>
+          <option value="double-line-plot">Double Line Plot</option>
+          <option value="area-chart">Area Chart</option>
+          <option value="stacked-area-chart">Stacked Area Chart</option>
+          <option value="tick-chart">Tick Chart</option>
+          <option value="inline-data">Inline Data</option>
+          <option value="data-defined-channels">Data Defined Channels</option>
+          <option value="double-inline-data">Double Inline Data</option>
+          <option value="scatter-grid">Grid Scatter Plot</option>
+          <option value="scatter-grid-margins">
+            Grid Scatter Plot With Margins
+          </option>
+          <option value="tiny-scatter">Tiny Scatter Plot</option>
+          <option value="heatmap">Heatmap</option>
+          <option value="signed-bar-chart">Signed Bar Chart</option>
+          <option value="vertical-signed-bar-chart">
+            Vertical Signed Bar Chart
+          </option>
+          <option value="all-tracks">All Tracks</option>
+          <option value="arc-track">Arc Track</option>
+          <option value="box-track">Box Track</option>
+          <option value="line-track">Line Track</option>
+          <option value="tsne-100th">t-SNE Dataset (1/100)</option>
+          <option value="tsne-10th">t-SNE Dataset (1/10)</option>
+          <option value="tsne">t-SNE Dataset</option>
+          <option value="matrix">Large Matrix</option>
+        </select>
+      </div>
+      <div class="controls">
+        Control modes:
+        <span>
+          <img src="./assets/pan_tool_black_24dp.svg" alt="pan tool" />
+          Pan Tool </span>
+        <span>
+          <img src="./assets/highlight_alt_black_24dp.svg" alt="box select" />
+          Selection (Box)
+        </span>
+        <span>
+          <img src="./assets/gesture_black_24dp.svg" alt="lasso select" />
+          Selection (Lasso)
+        </span>
+        <!-- <img src="./assets/zoom_in_black_24dp.svg" alt="zoom in" /> -->
+        <!-- <img src="./assets/touch_app_black_24dp.svg" alt="tooltip examine" /> -->
+      </div>
+
+      <div class="scroll-state">
+        Lock pan/zoom along an axis ?
+        <span>
+          <label for="lock-x">Lock X</label>
+          <input type="checkbox" id="lock-x" name="lock-x" />
+        </span>
+        <span>
+          <label for="lock-x">Lock Y</label>
+          <input type="checkbox" id="lock-y" name="lock-y" />
+        </span>
+      </div>
+    </div>
+    <div class="panes">
+      <div class="json-editor">
+        <div>
+          <label for="specification-editor">Visualization Specification</label>
+          <button id="refresh-specification">RUN</button>
+        </div>
+        <textarea id="specification-editor" name="specification-editor"></textarea>
+      </div>
+      <div class="content"></div>
+    </div>
+  </main>
+  <footer>
+    <a class="github" href="https://github.com/epiviz/epiviz.gl">
+      See on GitHub
+    </a>
+  </footer>
+</body>
+
+</html>

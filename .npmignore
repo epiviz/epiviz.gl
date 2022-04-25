@@ -1,0 +1,9 @@
+build*
+app/*
+cypress/
+docs/*
+tests/
+.parcel-cache
+.github
+jest.config.js
+CMakeLists.txt

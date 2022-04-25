@@ -1,0 +1,28 @@
+on: [push]
+
+# on: [push]
+
+name: Build and publish to NPM
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+
+      - name: install dependencies
+        run: yarn install
+
+      - name: create builds
+        run: npm run build-lib
+
+      - name: Publish to NPM
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        run: npm publish || true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
