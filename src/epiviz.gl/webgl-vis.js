@@ -5,10 +5,12 @@ import {
   getDimAndMarginStyleForSpecification,
   DEFAULT_HEIGHT,
   DEFAULT_WIDTH,
+  POINT_CLICKED_EVENT_NAME,
+  POINT_HOVERED_EVENT_NAME,
+  ON_SELECTION_END_EVENT_NAME,
 } from "./utilities";
 
 class WebGLVis {
-
   /**
    * A class meant to display a visualization based off a given specification using webgl.
    *
@@ -33,6 +35,9 @@ class WebGLVis {
       "currentXRange",
       "currentYRange",
     ]);
+
+    // This is a map of event listeners that are subscribed
+    this.eventListentersMap = new Map();
   }
 
   /**
@@ -106,21 +111,21 @@ class WebGLVis {
           return;
         }
         this.parent.dispatchEvent(
-          new CustomEvent("pointHovered", { detail: message })
+          new CustomEvent(POINT_HOVERED_EVENT_NAME, { detail: message })
         );
       } else if (message.data.type === "getClickPoint") {
         if (message.data.closestPoint === undefined) {
           return;
         }
         this.parent.dispatchEvent(
-          new CustomEvent("pointClicked", { detail: message })
+          new CustomEvent(POINT_CLICKED_EVENT_NAME, { detail: message })
         );
       } else if (
         message.data.type === "selectBox" ||
         message.data.type === "selectLasso"
       ) {
         this.parent.dispatchEvent(
-          new CustomEvent("onSelectionEnd", { detail: message })
+          new CustomEvent(ON_SELECTION_END_EVENT_NAME, { detail: message })
         );
         this.dataWorkerStream.push(message);
         console.log(this.dataWorkerStream);
@@ -228,10 +233,13 @@ class WebGLVis {
    *    using points as a polygon
    */
   selectPoints(points) {
-    if (points.length === 4) {
-      this.dataWorker.postMessage({ type: "selectBox", points });
-    } else if (points.length >= 6) {
-      this.dataWorker.postMessage({ type: "selectLasso", points });
+    // Only send the points if there is a listener for it
+    if (this.eventListentersMap.get(ON_SELECTION_START_EVENT_NAME)) {
+      if (points.length === 4) {
+        this.dataWorker.postMessage({ type: "selectBox", points });
+      } else if (points.length >= 6) {
+        this.dataWorker.postMessage({ type: "selectLasso", points });
+      }
     }
   }
 
@@ -242,23 +250,29 @@ class WebGLVis {
    * @param {Array} point to get closest point to
    */
   getClosestPoint(point) {
-    this.dataWorker.postMessage({
-      type: "getClosestPoint",
-      point,
-    });
+    //Only send the point if there is a listener for it
+    if (this.eventListentersMap.get(POINT_HOVERED_EVENT_NAME)) {
+      this.dataWorker.postMessage({
+        type: "getClosestPoint",
+        point,
+      });
+    }
   }
 
-   /**
+  /**
    * Utility method to have data worker call {@link DataProcessor#getClosestPoint}.
    * Does not return, posts result to this.dataWorkerStream.
    *
    * @param {Array} point to get closest point to
    */
   getClickPoint(point) {
-    this.dataWorker.postMessage({
-      type: "getClickPoint",
-      point,
-    });
+    //Only send the point if there is a listener for it
+    if (this.eventListentersMap.get(POINT_CLICKED_EVENT_NAME)) {
+      this.dataWorker.postMessage({
+        type: "getClickPoint",
+        point,
+      });
+    }
   }
 
   /**
@@ -285,6 +299,7 @@ class WebGLVis {
    * "onSelection": fires while user is changing the selection box/lasso
    * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
    * "pointHovered": fires when pointer hovers over a datapoint
+   * "pointClicked": fires when pointer clicks on a datapoint
    *
    * For information on the parameters and functionality see:
    *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
@@ -294,6 +309,7 @@ class WebGLVis {
    * @param {Object} options
    */
   addEventListener(type, listener, options) {
+    this.eventListentersMap.set(type, true);
     this.parent.addEventListener(type, listener, options);
   }
 

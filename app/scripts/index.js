@@ -27,6 +27,9 @@ class App {
     this.visualization.addEventListener("pointHovered", (event) =>
       console.log("pointHovered", event)
     );
+    this.visualization.addEventListener("pointClicked", (event) =>
+      console.log("pointClicked", event)
+    );
     this.visualization.addEventListener("pan", (event) =>
       console.log("pan", event)
     );
@@ -46,7 +49,7 @@ class App {
 
     let selem = document.getElementById("specification-select");
     selem.value = "tsne-10th";
-    selem.dispatchEvent(new Event('change'));
+    selem.dispatchEvent(new Event("change"));
 
     document.getElementById("refresh-specification").click();
   }

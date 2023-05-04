@@ -17,7 +17,10 @@ class DataProcessor {
 
     console.log("Loading data...");
 
-    new SpecificationProcessor(specification, this.indexData.bind(this));
+    new SpecificationProcessor(
+      specification,
+      this.specificationCallback.bind(this)
+    );
   }
 
   /**
@@ -25,7 +28,20 @@ class DataProcessor {
    *
    * @param {SpecificationProcessor} specificationHelper that is built in the constructor
    */
-  indexData(specificationHelper) {
+
+  specificationCallback(specificationHelper) {
+    this.specificationHelper = specificationHelper;
+  }
+
+  /**
+   * Indexes the data in the specificationHelper and stores it in the data and index fields of the DataProcessor
+   * object.
+   */
+  indexDataIfNotAlreadyIndexed() {
+    // If the data has already been indexed or specificationHelper hasn't been built yet, do nothing
+    if (this.index || !this.specificationHelper) return;
+    // Otherwise, index the data
+    const specificationHelper = this.specificationHelper;
     let totalPoints = 0;
 
     for (const track of specificationHelper.tracks) {
@@ -114,15 +130,14 @@ class DataProcessor {
    * @returns closest point or undefined
    */
   getClosestPoint(point) {
-    let indices = this.index.neighbors(point[0], point[1], 1, 0)
-    let pointToReturn =
-      this.data[indices];
+    let indices = this.index.neighbors(point[0], point[1], 1, 0);
+    let pointToReturn = this.data[indices];
     let distance = 0;
     let isInside = true;
     if (pointToReturn === undefined) {
-      indices = this.index.neighbors(point[0], point[1], 1, 5)
-      if(indices.length === 0) {
-        indices = this.index.neighbors(point[0], point[1], 1)
+      indices = this.index.neighbors(point[0], point[1], 1, 5);
+      if (indices.length === 0) {
+        indices = this.index.neighbors(point[0], point[1], 1);
       }
       pointToReturn = this.data[indices];
       distance = Math.sqrt(
@@ -146,12 +161,11 @@ class DataProcessor {
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    let indices = this.index
-      .search(smallerX, smallerY, largerX, largerY)
-    
-    let tpoints =  indices.map((i) => this.data[i]);
+    let indices = this.index.search(smallerX, smallerY, largerX, largerY);
 
-    return {indices, "points": tpoints};
+    let tpoints = indices.map((i) => this.data[i]);
+
+    return { indices, points: tpoints };
   }
 
   /**
@@ -199,12 +213,12 @@ class DataProcessor {
         simplifiedBoundingPolygon
       );
 
-      if (tbool) findices.push(candidatePoints.indices[i])
+      if (tbool) findices.push(candidatePoints.indices[i]);
 
       return tbool;
     });
 
-    return {"indices": findices, "points": fpoints}
+    return { indices: findices, points: fpoints };
   }
 }
 

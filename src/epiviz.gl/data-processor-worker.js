@@ -9,31 +9,41 @@
 import DataProcessor from "./data-processor";
 
 self.onmessage = (message) => {
+  function handleSelection(type, points) {
+    const selectionMethod = type === "selectBox" ? "selectBox" : "selectLasso";
+    const selection = self.processor[selectionMethod](points);
+    postMessage({
+      type,
+      selection,
+      bounds: points,
+    });
+  }
+
+  function handlePoint(type, point) {
+    const result = self.processor.getClosestPoint(point);
+    postMessage({
+      type,
+      ...result,
+    });
+  }
+
   switch (message.data.type) {
     case "init":
       self.processor = new DataProcessor(message.data.specification);
       break;
     case "selectBox":
-      postMessage({
-        type: message.data.type,
-        selection: self.processor.selectBox(message.data.points),
-        bounds: message.data.points,
-      });
-      break;
     case "selectLasso":
-      postMessage({
-        type: message.data.type,
-        selection: self.processor.selectLasso(message.data.points),
-        bounds: message.data.points,
-      });
-      break;
     case "getClosestPoint":
     case "getClickPoint":
-      const result = self.processor.getClosestPoint(message.data.point);
-      postMessage({
-        type: message.data.type,
-        ...result,
-      });
+      self.processor.indexDataIfNotAlreadyIndexed();
+      if (
+        message.data.type === "selectBox" ||
+        message.data.type === "selectLasso"
+      ) {
+        handleSelection(message.data.type, message.data.points);
+      } else {
+        handlePoint(message.data.type, message.data.point);
+      }
       break;
     default:
       console.error(`Received unknown message type: ${message.type}`);
