@@ -28,5 +28,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Start application and wait for it to be accessible
+        run: |
+          yarn serve-app & npx wait-on http://localhost:1234
+
       - name: Run Cypress tests
         run: yarn cypress:run

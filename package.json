@@ -46,8 +46,7 @@
     "deploy": "gh-pages -d dist-app",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
     "cypress:open": "cypress open",
-    "start:ci": "yarn serve-app & npx wait-on http://localhost:1234",
-    "cypress:run": "yarn start:ci && cypress run"
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
