@@ -41,3 +41,7 @@ self.onmessage = (message) => {
       console.error(`Received unknown message type: ${message.type}`);
   }
 };
+
+self.onerror = (error) => {
+  throw error;
+};
