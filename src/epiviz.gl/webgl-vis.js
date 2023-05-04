@@ -234,7 +234,7 @@ class WebGLVis {
    */
   selectPoints(points) {
     // Only send the points if there is a listener for it
-    if (this.eventListentersMap.get(ON_SELECTION_START_EVENT_NAME)) {
+    if (this.eventListentersMap.get(ON_SELECTION_END_EVENT_NAME)) {
       if (points.length === 4) {
         this.dataWorker.postMessage({ type: "selectBox", points });
       } else if (points.length >= 6) {
