@@ -45,7 +45,9 @@
     "predeploy": "yarn clean && yarn build && yarn build-app",
     "deploy": "gh-pages -d dist-app",
     "copy": "source .env && rsync -qazP $DEPLOY_FILES $DEPLOY_TARGET",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "start:ci": "yarn serve-app & npx wait-on http://localhost:1234",
+    "cypress:run": "yarn start:ci && cypress run"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
@@ -79,6 +81,7 @@
     "gh-pages": "^3.2.0",
     "parcel": "^2.3.1",
     "querystring-es3": "^0.2.1",
-    "rollup": "^2.67.2"
+    "rollup": "^2.67.2",
+    "wait-on": "^7.0.1"
   }
 }
