@@ -3,7 +3,12 @@ import SpecificationProcessor from "./specification-processor";
 import { scale } from "./utilities";
 import VertexCalculator from "./vertex-calculator";
 import SemanticZoomer from "./semantic-zoomer";
-import { VertexShader, varyingColorsFragmentShader, varyingColorsFragmentShaderDots, SUPPORTED_CHANNEL_ATTRIBUTES } from "./webgl.js";
+import {
+  VertexShader,
+  varyingColorsFragmentShader,
+  varyingColorsFragmentShaderDots,
+  SUPPORTED_CHANNEL_ATTRIBUTES,
+} from "./webgl.js";
 
 import * as twgl from "twgl.js";
 
@@ -21,6 +26,15 @@ class WebGLCanvasDrawer extends Drawer {
       alpha: false,
       premultipliedAlpha: false,
     });
+
+    this.gl.canvas.addEventListener(
+      "webglcontextlost",
+      (event) => {
+        event.preventDefault();
+        throw `WebGL context lost`;
+      },
+      false
+    );
 
     if (!this.gl) {
       console.error("Unable to initialize WebGL!");
@@ -194,7 +208,12 @@ class WebGLCanvasDrawer extends Drawer {
     this.programInfos = this.trackShaders.map((trackShader) =>
       twgl.createProgramInfo(
         this.gl,
-        [trackShader.buildShader(), trackShader.drawMode === "POINTS" ? varyingColorsFragmentShaderDots : varyingColorsFragmentShader],
+        [
+          trackShader.buildShader(),
+          trackShader.drawMode === "POINTS"
+            ? varyingColorsFragmentShaderDots
+            : varyingColorsFragmentShader,
+        ],
         ALL_POTENTIAL_ATTRIBUTES
       )
     );
