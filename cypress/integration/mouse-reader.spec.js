@@ -169,6 +169,7 @@ describe("The mouse reader should select points appropriately", () => {
         .should("have.property", "visualization")
         .should("have.property", "dataWorkerStream")
         .then(() => {
+          cy.wait(1000);
           const event = win.app.visualization.dataWorkerStream.pop();
           expect(event.data.selection.points.length).to.eq(pointCount);
         });
