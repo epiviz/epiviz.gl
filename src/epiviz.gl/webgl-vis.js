@@ -8,7 +8,6 @@ import {
 } from "./utilities";
 
 class WebGLVis {
-
   /**
    * A class meant to display a visualization based off a given specification using webgl.
    *
@@ -95,6 +94,10 @@ class WebGLVis {
       }
     };
 
+    this.webglWorker.onerror = (e) => {
+      throw e;
+    };
+
     this.dataWorkerStream = [];
     this.dataWorker = new Worker(
       new URL("data-processor-worker.js", import.meta.url),
@@ -125,6 +128,9 @@ class WebGLVis {
         this.dataWorkerStream.push(message);
         console.log(this.dataWorkerStream);
       }
+    };
+    this.dataWorker.onerror = (e) => {
+      throw e;
     };
 
     // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
@@ -248,7 +254,7 @@ class WebGLVis {
     });
   }
 
-   /**
+  /**
    * Utility method to have data worker call {@link DataProcessor#getClosestPoint}.
    * Does not return, posts result to this.dataWorkerStream.
    *
