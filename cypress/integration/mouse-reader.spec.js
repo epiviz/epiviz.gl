@@ -164,9 +164,8 @@ describe("The mouse reader should select points appropriately", () => {
   const expectThisManyPointsSelected = (pointCount) => {
     cy.wait(100);
     cy.window().then((win) => {
+      cy.wait(1000);
       const event = win.app.visualization.dataWorkerStream.pop();
-
-      console.log("inside", event, pointCount);
       expect(event.data.selection.points.length).to.eq(pointCount);
     });
   };
