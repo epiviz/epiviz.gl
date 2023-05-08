@@ -1,0 +1,36 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches:
+      - main # change this to the name of your default branch if it's not 'main'
+  pull_request:
+    branches:
+      - main # change this to the name of your default branch if it's not 'main'
+
+jobs:
+  cypress-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Start application and wait for it to be accessible
+        run: |
+          yarn serve-app & npx wait-on http://localhost:1234
+
+      - name: Run Cypress tests
+        run: yarn cypress:run
