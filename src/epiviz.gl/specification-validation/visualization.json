@@ -70,8 +70,13 @@
         }
       ],
       "type": ["string", "object"],
-      "additionalProperties": true,
-      "minProperties": 1
+      "minProperties": 1,
+      "patternProperties": {
+        "^.*$": {
+          "type": "array",
+          "items": {}
+        }
+      }
     },
     "width": {
       "description": "Width of the visualization in css units",

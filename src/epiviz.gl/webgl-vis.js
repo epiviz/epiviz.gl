@@ -100,6 +100,10 @@ class WebGLVis {
       }
     };
 
+    this.webglWorker.onerror = (e) => {
+      throw e;
+    };
+
     this.dataWorkerStream = [];
     this.dataWorker = new Worker(
       new URL("data-processor-worker.js", import.meta.url),
@@ -130,6 +134,9 @@ class WebGLVis {
         this.dataWorkerStream.push(message);
         console.log(this.dataWorkerStream);
       }
+    };
+    this.dataWorker.onerror = (e) => {
+      throw e;
     };
 
     // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with

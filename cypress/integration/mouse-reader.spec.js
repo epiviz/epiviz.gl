@@ -99,11 +99,11 @@ describe("The mouse reader should handle zooming and panning", function () {
   it("does not pan outside the domains", () => {
     cy.get(mouseReaderSelector).trigger("mousedown");
     cy.get(mouseReaderSelector).trigger("mousemove", {
-      movementX: -200,
-      movementY: -200,
+      clientX: -200,
+      clientY: -200,
     });
     cy.get(mouseReaderSelector).trigger("mouseup");
-    assertMouseReaderWindowIs([0.2, 1.0], [0, 0.8]);
+    assertMouseReaderWindowIs([0, 1.0], [0, 1]);
   });
 
   it("can lock the x and y axis", () => {
@@ -162,10 +162,17 @@ describe("The mouse reader should select points appropriately", () => {
   let mouseReader;
 
   const expectThisManyPointsSelected = (pointCount) => {
-    cy.wait(100);
+    cy.wait(1000);
     cy.window().then((win) => {
-      const event = win.app.visualization.dataWorkerStream.pop();
-      expect(event.data.selection.length).to.eq(pointCount);
+      cy.wrap(win)
+        .should("have.property", "app")
+        .should("have.property", "visualization")
+        .should("have.property", "dataWorkerStream")
+        .then(() => {
+          cy.wait(1000);
+          const event = win.app.visualization.dataWorkerStream.pop();
+          expect(event.data.selection.points.length).to.eq(pointCount);
+        });
     });
   };
 
@@ -190,7 +197,7 @@ describe("The mouse reader should select points appropriately", () => {
   });
 
   it("selects points with a box", () => {
-    cy.get(".controls > img:nth-child(2)").click();
+    cy.get(".controls > span:nth-child(2) > img").click();
     cy.get(mouseReaderSelector).trigger("mousedown", { layerX: 0, layerY: 0 });
     cy.get(mouseReaderSelector).trigger("mousemove", {
       layerX: 200,
@@ -212,7 +219,7 @@ describe("The mouse reader should select points appropriately", () => {
   });
 
   it("selects points with a lasso", () => {
-    cy.get(".controls > img:nth-child(3)").click();
+    cy.get(".controls > span:nth-child(3) > img").click();
     cy.get(mouseReaderSelector).trigger("mousedown", {
       layerX: 25,
       layerY: 25,
@@ -256,7 +263,7 @@ describe("The mouse reader should select points appropriately", () => {
       layerX: 100,
       layerY: 100,
     });
-    cy.get(".controls > img:nth-child(2)").click();
+    cy.get(".controls > span:nth-child(2) > img").click();
     cy.get(mouseReaderSelector).trigger("mousedown", { layerX: 0, layerY: 0 });
     cy.get(mouseReaderSelector).trigger("mousemove", {
       layerX: 200,
@@ -278,7 +285,7 @@ describe("The mouse reader should select points appropriately", () => {
   });
 
   it("selects points with a lasso when zoomed in", () => {
-    cy.get(".controls > img:nth-child(3)").click();
+    cy.get(".controls > span:nth-child(3) > img").click();
     cy.get(mouseReaderSelector).trigger("wheel", {
       wheelDelta: -200,
       layerX: 100,

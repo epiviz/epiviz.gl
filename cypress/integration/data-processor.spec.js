@@ -191,7 +191,8 @@ describe("Box selection", () => {
       .should("have.property", "specificationHelper")
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
-        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
+        const { points: allPoints } = dataProcessor.selectBox([1, 1, 7, 7]);
+
         expect(allPoints).to.have.lengthOf(
           specificationPoints.defaultData.x.length
         );
@@ -199,13 +200,15 @@ describe("Box selection", () => {
           specificationPoints.defaultData.category
         );
 
-        const somePoints = dataProcessor.selectBox([2, 2, 4, 4]);
+        const { points: somePoints } = dataProcessor.selectBox([2, 2, 4, 4]);
         expect(somePoints).to.have.lengthOf(3);
 
-        const onePoint = dataProcessor.selectBox([5, 5, 5, 5]);
+        const { points: onePoint } = dataProcessor.selectBox([5, 5, 5, 5]);
         expect(onePoint).to.have.lengthOf(1);
 
-        const noPoints = dataProcessor.selectBox([10, 10, 100, 100]);
+        const { points: noPoints } = dataProcessor.selectBox([
+          10, 10, 100, 100,
+        ]);
         expect(noPoints).to.have.lengthOf(0);
       });
   });
@@ -219,7 +222,7 @@ describe("Box selection", () => {
       .should("have.property", "specificationHelper")
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
-        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
+        const { points: allPoints } = dataProcessor.selectBox([1, 1, 7, 7]);
         expect(allPoints).to.have.lengthOf(
           specificationPoints.defaultData.x.length
         );
@@ -228,32 +231,34 @@ describe("Box selection", () => {
         );
 
         // some points
-        expect(dataProcessor.selectBox([1.1, 1.1, 3.3, 3.3])).to.have.lengthOf(
-          3
-        );
+        expect(
+          dataProcessor.selectBox([1.1, 1.1, 3.3, 3.3]).points
+        ).to.have.lengthOf(3);
 
         // lower left corner
-        expect(dataProcessor.selectBox([3.9, 3.9, 4.5, 4.5])).to.have.lengthOf(
-          1
-        );
+        expect(
+          dataProcessor.selectBox([3.9, 3.9, 4.5, 4.5]).points
+        ).to.have.lengthOf(1);
 
         // lower right corner
-        expect(dataProcessor.selectBox([5.3, 4.9, 5.5, 5.1])).to.have.lengthOf(
-          1
-        );
+        expect(
+          dataProcessor.selectBox([5.3, 4.9, 5.5, 5.1]).points
+        ).to.have.lengthOf(1);
 
         // top left corner
-        expect(dataProcessor.selectBox([0.1, 1.1, 1.1, 2.1])).to.have.lengthOf(
-          1
-        );
+        expect(
+          dataProcessor.selectBox([0.1, 1.1, 1.1, 2.1]).points
+        ).to.have.lengthOf(1);
 
         // top right corner
-        expect(dataProcessor.selectBox([5.9, 5.9, 6.1, 6.1])).to.have.lengthOf(
-          1
-        );
+        expect(
+          dataProcessor.selectBox([5.9, 5.9, 6.1, 6.1]).points
+        ).to.have.lengthOf(1);
 
         // no points
-        expect(dataProcessor.selectBox([10, 10, 100, 100])).to.have.lengthOf(0);
+        expect(
+          dataProcessor.selectBox([10, 10, 100, 100]).points
+        ).to.have.lengthOf(0);
       });
   });
 
@@ -266,7 +271,7 @@ describe("Box selection", () => {
       .should("have.property", "specificationHelper")
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
-        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
+        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]).points;
         expect(allPoints).to.have.lengthOf(
           specificationPoints.defaultData.x.length
         );
@@ -275,22 +280,32 @@ describe("Box selection", () => {
         );
 
         // some points
-        expect(dataProcessor.selectBox([1.1, 1.1, 3.3, 3.3])).to.have.lengthOf(
-          2
-        );
+        expect(
+          dataProcessor.selectBox([1.1, 1.1, 3.3, 3.3]).points
+        ).to.have.lengthOf(2);
 
         // no points
-        expect(dataProcessor.selectBox([1.1, 0, 1.1, 10])).to.have.length(0);
-        expect(dataProcessor.selectBox([10, 10, 100, 100])).to.have.lengthOf(0);
+        expect(
+          dataProcessor.selectBox([1.1, 0, 1.1, 10]).points
+        ).to.have.length(0);
+        expect(
+          dataProcessor.selectBox([10, 10, 100, 100]).points
+        ).to.have.lengthOf(0);
 
         // center of tick
-        expect(dataProcessor.selectBox([1, 0.9, 1, 1.1])).to.have.length(1);
+        expect(dataProcessor.selectBox([1, 0.9, 1, 1.1]).points).to.have.length(
+          1
+        );
 
         // top of tick
-        expect(dataProcessor.selectBox([1, 1.3, 1, 2])).to.have.length(1);
+        expect(dataProcessor.selectBox([1, 1.3, 1, 2]).points).to.have.length(
+          1
+        );
 
         // bottom of tick
-        expect(dataProcessor.selectBox([1, 0.9, 1, 1.1])).to.have.length(1);
+        expect(dataProcessor.selectBox([1, 0.9, 1, 1.1]).points).to.have.length(
+          1
+        );
       });
   });
 
@@ -303,7 +318,7 @@ describe("Box selection", () => {
       .should("have.property", "specificationHelper")
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
-        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
+        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]).points;
         expect(allPoints).to.have.lengthOf(
           specificationTicks.defaultData.x.length
         );
@@ -312,20 +327,32 @@ describe("Box selection", () => {
         );
 
         // some points
-        expect(dataProcessor.selectBox([1, 1, 3.3, 3.3])).to.have.lengthOf(3);
+        expect(
+          dataProcessor.selectBox([1, 1, 3.3, 3.3]).points
+        ).to.have.lengthOf(3);
 
         // no points
-        expect(dataProcessor.selectBox([0, 1.1, 10, 1.1])).to.have.length(0);
-        expect(dataProcessor.selectBox([10, 10, 100, 100])).to.have.lengthOf(0);
+        expect(
+          dataProcessor.selectBox([0, 1.1, 10, 1.1]).points
+        ).to.have.length(0);
+        expect(
+          dataProcessor.selectBox([10, 10, 100, 100]).points
+        ).to.have.lengthOf(0);
 
         // center of tick
-        expect(dataProcessor.selectBox([0.9, 1, 1.1, 1])).to.have.length(1);
+        expect(dataProcessor.selectBox([0.9, 1, 1.1, 1]).points).to.have.length(
+          1
+        );
 
         // left of tick
-        expect(dataProcessor.selectBox([0.9, 1, 1, 1])).to.have.length(1);
+        expect(dataProcessor.selectBox([0.9, 1, 1, 1]).points).to.have.length(
+          1
+        );
 
         // right of tick
-        expect(dataProcessor.selectBox([1.1, 1, 1.5, 1])).to.have.length(1);
+        expect(dataProcessor.selectBox([1.1, 1, 1.5, 1]).points).to.have.length(
+          1
+        );
       });
   });
 
@@ -338,7 +365,7 @@ describe("Box selection", () => {
       .should("have.property", "specificationHelper")
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
-        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]);
+        const allPoints = dataProcessor.selectBox([1, 1, 7, 7]).points;
         expect(allPoints).to.have.lengthOf(
           specificationArcs.defaultData.x.length
         );
@@ -347,22 +374,24 @@ describe("Box selection", () => {
         );
 
         // some points, arc bbox only includes the endpoints
-        expect(dataProcessor.selectBox([1.1, 1.1, 3.3, 3.3])).to.have.lengthOf(
-          2
-        );
+        expect(
+          dataProcessor.selectBox([1.1, 1.1, 3.3, 3.3]).points
+        ).to.have.lengthOf(2);
 
         // lower left corner
-        expect(dataProcessor.selectBox([3.9, 3.9, 4.5, 4.5])).to.have.lengthOf(
-          1
-        );
+        expect(
+          dataProcessor.selectBox([3.9, 3.9, 4.5, 4.5]).points
+        ).to.have.lengthOf(1);
 
         // lower right corner
-        expect(dataProcessor.selectBox([5.3, 4.9, 5.5, 5.1])).to.have.lengthOf(
-          1
-        );
+        expect(
+          dataProcessor.selectBox([5.3, 4.9, 5.5, 5.1]).points
+        ).to.have.lengthOf(1);
 
         // no points
-        expect(dataProcessor.selectBox([10, 10, 100, 100])).to.have.lengthOf(0);
+        expect(
+          dataProcessor.selectBox([10, 10, 100, 100]).points
+        ).to.have.lengthOf(0);
       });
   });
 
@@ -380,7 +409,7 @@ describe("Box selection", () => {
           -1,
           testGenomeScale.toClipSpaceFromString("chr1:1000"),
           1,
-        ]);
+        ]).points;
         expect(allPoints).to.have.lengthOf(
           specificationGenomicPoints.defaultData.start.length
         );
@@ -393,7 +422,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:10"),
             1,
-          ])
+          ]).points
         ).to.have.length(1);
         expect(
           dataProcessor.selectBox([
@@ -401,7 +430,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:100"),
             0,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -409,7 +438,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:199"),
             0,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -417,7 +446,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:310"),
             0,
-          ])
+          ]).points
         ).to.have.length(3);
         expect(
           dataProcessor.selectBox([
@@ -425,7 +454,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:700"),
             1,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -433,7 +462,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:310"),
             1,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -441,7 +470,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:501"),
             1,
-          ])
+          ]).points
         ).to.have.length(1);
       });
   });
@@ -460,7 +489,7 @@ describe("Box selection", () => {
           -1,
           testGenomeScale.toClipSpaceFromString("chr1:1000"),
           1,
-        ]);
+        ]).points;
         expect(allPoints).to.have.lengthOf(
           specificationGenomicPoints.defaultData.start.length
         );
@@ -473,7 +502,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:10"),
             1,
-          ])
+          ]).points
         ).to.have.length(1);
         expect(
           dataProcessor.selectBox([
@@ -481,7 +510,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:100"),
             0,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -489,7 +518,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:199"),
             0,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -497,7 +526,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:310"),
             0,
-          ])
+          ]).points
         ).to.have.length(3);
         expect(
           dataProcessor.selectBox([
@@ -505,7 +534,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:700"),
             1,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -513,7 +542,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:200"),
             1,
-          ])
+          ]).points
         ).to.have.length(3);
         expect(
           dataProcessor.selectBox([
@@ -521,7 +550,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:500"),
             1,
-          ])
+          ]).points
         ).to.have.length(1);
       });
   });
@@ -540,7 +569,7 @@ describe("Box selection", () => {
           -1,
           testGenomeScale.toClipSpaceFromString("chr1:1000"),
           1,
-        ]);
+        ]).points;
         expect(allPoints).to.have.lengthOf(
           specificationGenomicArcs.defaultData.start.length
         );
@@ -553,7 +582,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:10"),
             1,
-          ])
+          ]).points
         ).to.have.length(1);
         expect(
           dataProcessor.selectBox([
@@ -561,7 +590,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:110"),
             0,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -569,7 +598,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:199"),
             0,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -577,7 +606,7 @@ describe("Box selection", () => {
             0,
             testGenomeScale.toClipSpaceFromString("chr1:310"),
             0,
-          ])
+          ]).points
         ).to.have.length(3);
         expect(
           dataProcessor.selectBox([
@@ -585,7 +614,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:700"),
             1,
-          ])
+          ]).points
         ).to.have.length(2);
         expect(
           dataProcessor.selectBox([
@@ -593,7 +622,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:312"),
             1,
-          ])
+          ]).points
         ).to.have.length(3);
         expect(
           dataProcessor.selectBox([
@@ -601,7 +630,7 @@ describe("Box selection", () => {
             -1,
             testGenomeScale.toClipSpaceFromString("chr1:655"),
             1,
-          ])
+          ]).points
         ).to.have.length(2);
       });
   });
@@ -624,7 +653,7 @@ describe("Lasso selection", () => {
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
-          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5])
+          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
         ).to.have.length(2);
       });
   });
@@ -639,7 +668,7 @@ describe("Lasso selection", () => {
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
-          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5])
+          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
         ).to.have.length(2);
       });
   });
@@ -654,7 +683,7 @@ describe("Lasso selection", () => {
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
-          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5])
+          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
         ).to.have.length(2);
       });
   });
@@ -669,7 +698,7 @@ describe("Lasso selection", () => {
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
-          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5])
+          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
         ).to.have.length(2);
       });
   });
@@ -684,7 +713,7 @@ describe("Lasso selection", () => {
       .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
-          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5])
+          dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
         ).to.have.length(2);
       });
   });
@@ -712,7 +741,7 @@ describe("Lasso selection", () => {
             0.1,
             testGenomeScale.toClipSpaceFromString("chr1:10"),
             0.1,
-          ])
+          ]).points
         ).to.have.length(3);
       });
   });
@@ -740,7 +769,7 @@ describe("Lasso selection", () => {
             0.1,
             testGenomeScale.toClipSpaceFromString("chr1:10"),
             0.1,
-          ])
+          ]).points
         ).to.have.length(3);
       });
   });
@@ -768,7 +797,7 @@ describe("Lasso selection", () => {
             0.1,
             testGenomeScale.toClipSpaceFromString("chr1:10"),
             0.1,
-          ])
+          ]).points
         ).to.have.length(3);
       });
   });
