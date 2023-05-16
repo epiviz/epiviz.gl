@@ -143,7 +143,7 @@ class WebGLCanvasDrawer extends Drawer {
   animate() {
     if (!this.needsAnimation) {
       // Prevent pointless animation if canvas does not change
-      this.lastFrame = requestAnimationFrame(this.animate.bind(this));
+      self.postMessage({ command: "requestAnimationFrame" });
       this.tick();
       return;
     }
@@ -194,7 +194,7 @@ class WebGLCanvasDrawer extends Drawer {
     });
 
     this.needsAnimation = false;
-    this.lastFrame = requestAnimationFrame(this.animate.bind(this));
+    self.postMessage({ command: "requestAnimationFrame" });
     this.tick();
   }
 

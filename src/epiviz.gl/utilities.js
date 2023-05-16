@@ -168,6 +168,8 @@ const getPixelMeasurement = (cssMeasurement) => {
   return isNaN(asFloat) ? false : asFloat;
 };
 
+const WEBGL_WORKER_NAME = "offscreen-webgl-worker.js";
+const DATA_WORKER_NAME = "data-processor-worker.js";
 const DEFAULT_MARGIN = "50px";
 const DEFAULT_WIDTH = "100%";
 const DEFAULT_HEIGHT = DEFAULT_WIDTH;
@@ -275,4 +277,6 @@ export {
   getQuadraticBezierCurveForPoints,
   DEFAULT_WIDTH,
   DEFAULT_HEIGHT,
+  WEBGL_WORKER_NAME,
+  DATA_WORKER_NAME,
 };

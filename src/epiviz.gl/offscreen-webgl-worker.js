@@ -19,6 +19,9 @@ self.onmessage = (message) => {
         ? new OffscreenWebGLDrawer(message.data)
         : new WebGLDrawer(message.data);
       break;
+    case "animate":
+      self.drawer.animate();
+      break;
     case "viewport":
       self.drawer.receiveViewport(message.data);
       break;
