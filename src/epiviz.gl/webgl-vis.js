@@ -124,7 +124,6 @@ class WebGLVis {
                 new CustomEvent("onSelectionEnd", { detail: messageToSend })
               );
               this.dataWorkerStream.push(messageToSend);
-              console.log(this.dataWorkerStream);
             }
           }
           break;

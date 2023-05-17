@@ -1,4 +1,11 @@
-import { DATA_WORKER_NAME, WEBGL_WORKER_NAME } from "./utilities";
+import {
+  DATA_WORKER_NAME,
+  WEBGL_WORKER_NAME,
+  cloneArrayBuffer,
+  fetchArrayBuffer,
+  prepareData,
+  transformSpecification,
+} from "./utilities";
 
 const webglWorker = new Worker(
   new URL("offscreen-webgl-worker.js", import.meta.url),
@@ -39,14 +46,27 @@ self.onmessage = (message) => {
   const { worker, data, action } = message.data;
 
   if (action === "setSpecification") {
-    webglWorker.postMessage({
-      type: "specification",
-      specification: data.specification,
-    });
-    dataWorker.postMessage({
-      type: "init",
-      specification: data.specification,
-    });
+    transformSpecification(data.specification).then(
+      ({ specification, buffers }) => {
+        const clonedBuffers = buffers.map(cloneArrayBuffer);
+
+        webglWorker.postMessage(
+          {
+            type: "specification",
+            specification,
+          },
+          clonedBuffers
+        );
+
+        dataWorker.postMessage(
+          {
+            type: "init",
+            specification,
+          },
+          buffers
+        );
+      }
+    );
     return;
   }
 

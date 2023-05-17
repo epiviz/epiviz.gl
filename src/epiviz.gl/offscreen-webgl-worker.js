@@ -41,6 +41,6 @@ self.onmessage = (message) => {
       self.drawer.gl.viewport(0, 0, message.data.width, message.data.height);
       break;
     default:
-      console.error(`Received unknown message type: ${message.type}`);
+      console.error(`Received unknown message type: ${message.data.type}`);
   }
 };

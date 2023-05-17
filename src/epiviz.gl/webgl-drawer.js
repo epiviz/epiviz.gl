@@ -92,11 +92,10 @@ class WebGLCanvasDrawer extends Drawer {
    */
   setSpecification(specification) {
     super.render(); // Cancels current animation frame
-
     // Populate buffers needs a trackShader built to know what buffers to fill
     this.trackShaders = VertexShader.fromSpecification(specification);
-
-    new SpecificationProcessor(specification, this.populateBuffers.bind(this));
+    const processedSpecification = new SpecificationProcessor(specification);
+    this.populateBuffers(processedSpecification);
   }
 
   /**

@@ -102,34 +102,15 @@ class SpecificationProcessor {
    * @param {Object} specification user defined specification
    * @param {Function} callback function to call after all the data has been loaded
    */
-  constructor(specification, callback) {
+  constructor(specification) {
     this.index = 0;
     this.specification = specification;
-    if (typeof specification.defaultData === "string") {
-      // data is a url to get
-      this.dataPromise = fetch(specification.defaultData)
-        .then((response) => response.text())
-        .then((text) => (this.data = text.split("\n")));
-    } else if (specification.defaultData) {
-      // default data is defined, assumed to be an object
-      this.data = specification.defaultData;
-      this.isInlineData = true;
-    }
-    this.tracks = specification.tracks.map((track) => new Track(this, track));
-
-    const allPromises = this.tracks
-      .map((track) => track.dataPromise)
-      .filter((p) => p); // Removes undefined
-    if (this.dataPromise) {
-      allPromises.push(this.dataPromise);
-    }
+    this.tracks = specification.tracks.map(
+      (track) => new Track(specification, track)
+    );
 
     this.xScale = getScaleForSpecification("x", specification);
     this.yScale = getScaleForSpecification("y", specification);
-
-    // When all tracks have acquired their data, call the callback
-    // TODO: Allow tracks to be processed while waiting for others, need to keep in mind order
-    Promise.all(allPromises).then(() => callback(this));
   }
 
   /**
@@ -154,33 +135,49 @@ class Track {
    */
   constructor(specification, track) {
     this.track = track;
-
-    if (typeof track.data === "string") {
-      // Track has its own data to GET
-      this.dataPromise = fetch(track.data)
-        .then((response) => response.text())
-        .then((text) => {
-          this.data = text.split(/[\n\r]+/);
-          this.processHeadersAndMappers();
-          this.hasOwnData = true;
-        });
-    } else if (track.data) {
-      // Track has its own inline data
-      this.data = track.data;
-      this.isInlineData = true;
-      this.processHeadersAndMappers();
+    if (track.data) {
+      // Track has its own data
+      let data;
+      if (track.data.isInlineData) {
+        // Track has its own inline data
+        data = {};
+        for (let i = 0; i < track.data.keys.length; i++) {
+          const key = track.data.keys[i];
+          data[key] = new Int8Array(track.data.defaultDataBuffers[i]);
+        }
+      } else {
+        // Track has its own data file
+        const decodedData = new TextDecoder("utf-8").decode(
+          new Uint8Array(track.data.defaultDataBuffers[0])
+        );
+        data = decodedData.split("\n");
+      }
+      this.data = data;
       this.hasOwnData = true;
-    } else if (specification.data) {
-      // Track does not have its own data, but the specification has default data
-      this.data = specification.data;
-      this.isInlineData = specification.isInlineData;
+      this.isInlineData = track.data.isInlineData;
       this.processHeadersAndMappers();
-    } else if (specification.dataPromise) {
-      // Track does not have its own data, but the specification is GETting default data
-      specification.dataPromise.then(() => {
-        this.data = specification.data;
-        this.processHeadersAndMappers();
-      });
+    } else if (specification.defaultData) {
+      // Track does not have its own data, but the specification has default data
+      let defaultData;
+      if (specification.defaultData.isInlineData) {
+        // Specification has inline data
+        defaultData = {};
+        for (let i = 0; i < specification.defaultData.keys.length; i++) {
+          const key = specification.defaultData.keys[i];
+          defaultData[key] = new Int8Array(
+            specification.defaultData.defaultDataBuffers[i]
+          );
+        }
+      } else {
+        // Specification has data file
+        const decodedData = new TextDecoder("utf-8").decode(
+          new Uint8Array(specification.defaultData.defaultDataBuffers[0])
+        );
+        defaultData = decodedData.split("\n");
+      }
+      this.isInlineData = specification.defaultData.isInlineData;
+      this.data = defaultData;
+      this.processHeadersAndMappers();
     } else {
       console.error(
         `Could not find data (no defaultData in specification and no data specified for this track) for track ${track}.`
@@ -333,7 +330,7 @@ class Track {
     } else {
       return () => DEFAULT_CHANNELS[channel].value;
     }
-  };
+  }
 }
 
 /**
