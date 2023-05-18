@@ -527,9 +527,21 @@ describe("Visualization Specification Validation", function () {
       tracks: [baseValidTrack, baseValidTrack],
     };
 
+    const baseValidVisualizationWithTypedArrays = {
+      defaultData: {
+        attr1: new Float32Array([1, 2, 3, 4]),
+        attr2: new Uint32Array([1, 2, 3, 4]),
+      },
+      tracks: [baseValidTrack, baseValidTrack],
+    };
+
     it("can require tracks property", function () {
       expect(isJSONValid(baseValidVisualization)).to.eq(true);
       expect(isJSONValid({})).to.eq(false);
+    });
+
+    it("should validate if defaultData has typed arrays", function () {
+      expect(isJSONValid(baseValidVisualizationWithTypedArrays)).to.eq(true);
     });
 
     it("can reject if a track is not valid", function () {
