@@ -264,6 +264,10 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
+const POINT_HOVERED_EVENT_NAME = "pointHovered";
+const POINT_CLICKED_EVENT_NAME = "pointClicked";
+const ON_SELECTION_END_EVENT_NAME = "onSelectionEnd";
+
 export {
   scale,
   rgbToHex,
@@ -275,4 +279,7 @@ export {
   getQuadraticBezierCurveForPoints,
   DEFAULT_WIDTH,
   DEFAULT_HEIGHT,
+  ON_SELECTION_END_EVENT_NAME,
+  POINT_HOVERED_EVENT_NAME,
+  POINT_CLICKED_EVENT_NAME,
 };

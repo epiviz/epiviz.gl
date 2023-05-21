@@ -188,7 +188,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const { points: allPoints } = dataProcessor.selectBox([1, 1, 7, 7]);
 
@@ -218,7 +219,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const { points: allPoints } = dataProcessor.selectBox([1, 1, 7, 7]);
         expect(allPoints).to.have.lengthOf(
@@ -266,7 +268,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]).points;
         expect(allPoints).to.have.lengthOf(
@@ -312,7 +315,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]).points;
         expect(allPoints).to.have.lengthOf(
@@ -358,7 +362,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const allPoints = dataProcessor.selectBox([1, 1, 7, 7]).points;
         expect(allPoints).to.have.lengthOf(
@@ -396,7 +401,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const allPoints = dataProcessor.selectBox([
           testGenomeScale.toClipSpaceFromString("chr1:1"),
@@ -475,7 +481,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const allPoints = dataProcessor.selectBox([
           testGenomeScale.toClipSpaceFromString("chr1:1"),
@@ -554,7 +561,8 @@ describe("Box selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         const allPoints = dataProcessor.selectBox([
           testGenomeScale.toClipSpaceFromString("chr1:1"),
@@ -641,7 +649,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
@@ -655,7 +664,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
@@ -669,7 +679,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
@@ -683,7 +694,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
@@ -697,7 +709,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([1, 1, 2, 1, 3, 2, 2, 2.5]).points
@@ -711,7 +724,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([
@@ -738,7 +752,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([
@@ -765,7 +780,8 @@ describe("Lasso selection", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         expect(
           dataProcessor.selectLasso([
@@ -797,7 +813,8 @@ describe("Get closest point", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         let closest = dataProcessor.getClosestPoint([1.1, 1.1]).closestPoint;
         expect(closest.category).to.eq("a");
@@ -818,7 +835,8 @@ describe("Get closest point", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         let closest = dataProcessor.getClosestPoint([1, 1]);
         expect(closest.closestPoint.category).to.eq("a");
@@ -846,7 +864,8 @@ describe("Get closest point", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         let closest = dataProcessor.getClosestPoint([1.1, 1.1]);
         expect(closest.closestPoint.category).to.eq("a");
@@ -874,7 +893,8 @@ describe("Get closest point", () => {
     );
 
     cy.wrap(dataProcessor)
-      .should("have.property", "index")
+      .should("have.property", "specificationHelper")
+      .then(() => dataProcessor.indexDataIfNotAlreadyIndexed())
       .then(() => {
         let closest = dataProcessor.getClosestPoint([
           testGenomeScale.toClipSpaceFromString("chr1:101"),
