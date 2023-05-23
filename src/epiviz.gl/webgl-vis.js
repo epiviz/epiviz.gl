@@ -5,6 +5,8 @@ import {
   getDimAndMarginStyleForSpecification,
   DEFAULT_HEIGHT,
   DEFAULT_WIDTH,
+  WEBGL_WORKER_NAME,
+  DATA_WORKER_NAME,
 } from "./utilities";
 
 class WebGLVis {
@@ -41,10 +43,13 @@ class WebGLVis {
    * @param {Number} height in pixels to resize the canvas to
    */
   setCanvasSize(width, height) {
-    this.webglWorker.postMessage({
-      type: "resize",
-      width,
-      height,
+    this.managerWorker.postMessage({
+      worker: WEBGL_WORKER_NAME,
+      data: {
+        type: "resize",
+        width,
+        height,
+      },
     });
 
     this.canvas.style.width = width;
@@ -73,63 +78,75 @@ class WebGLVis {
     }
 
     const offscreenCanvas = this.canvas.transferControlToOffscreen();
+    this.dataWorkerStream = [];
 
-    this.webglWorker = new Worker(
-      new URL("offscreen-webgl-worker.js", import.meta.url),
+    this.managerWorker = new Worker(
+      new URL("manager-worker.js", import.meta.url),
       { type: "module" }
     );
-    this.webglWorker.postMessage(
+
+    this.managerWorker.onmessage = (message) => {
+      const { worker, data } = message.data;
+      switch (worker) {
+        case WEBGL_WORKER_NAME:
+          switch (data.type) {
+            case "tick":
+              this.meter.tick();
+              break;
+          }
+          break;
+        case DATA_WORKER_NAME:
+          {
+            // Construct the message in same format as it was before
+            const messageToSend = {
+              ...message,
+              data,
+            };
+            if (data.type === "getClosestPoint") {
+              if (data.closestPoint === undefined) {
+                return;
+              }
+              this.parent.dispatchEvent(
+                new CustomEvent("pointHovered", { detail: messageToSend })
+              );
+            } else if (data.type === "getClickPoint") {
+              if (data.closestPoint === undefined) {
+                return;
+              }
+              this.parent.dispatchEvent(
+                new CustomEvent("pointClicked", { detail: messageToSend })
+              );
+            } else if (
+              data.type === "selectBox" ||
+              data.type === "selectLasso"
+            ) {
+              this.parent.dispatchEvent(
+                new CustomEvent("onSelectionEnd", { detail: messageToSend })
+              );
+              this.dataWorkerStream.push(messageToSend);
+            }
+          }
+          break;
+
+        default:
+          console.error(`Received unknown worker name: ${worker}`);
+      }
+    };
+
+    this.managerWorker.postMessage(
       {
-        type: "init",
-        canvas: offscreenCanvas,
-        displayFPSMeter,
+        worker: WEBGL_WORKER_NAME,
+        data: {
+          type: "init",
+          canvas: offscreenCanvas,
+          displayFPSMeter,
+        },
       },
       [offscreenCanvas]
     );
 
-    // Allow OffScreenWebGLDrawer to tick FPS meter
-    this.webglWorker.onmessage = (e) => {
-      if (e.data.type === "tick") {
-        this.meter.tick();
-      }
-    };
-
-    this.webglWorker.onerror = (e) => {
-      throw e;
-    };
-
-    this.dataWorkerStream = [];
-    this.dataWorker = new Worker(
-      new URL("data-processor-worker.js", import.meta.url),
-      { type: "module" }
-    );
-    this.dataWorker.onmessage = (message) => {
-      if (message.data.type === "getClosestPoint") {
-        if (message.data.closestPoint === undefined) {
-          return;
-        }
-        this.parent.dispatchEvent(
-          new CustomEvent("pointHovered", { detail: message })
-        );
-      } else if (message.data.type === "getClickPoint") {
-        if (message.data.closestPoint === undefined) {
-          return;
-        }
-        this.parent.dispatchEvent(
-          new CustomEvent("pointClicked", { detail: message })
-        );
-      } else if (
-        message.data.type === "selectBox" ||
-        message.data.type === "selectLasso"
-      ) {
-        this.parent.dispatchEvent(
-          new CustomEvent("onSelectionEnd", { detail: message })
-        );
-        this.dataWorkerStream.push(message);
-        console.log(this.dataWorkerStream);
-      }
-    };
-    this.dataWorker.onerror = (e) => {
+    this.managerWorker.onerror = (e) => {
+      console.log("Error in manager worker", e);
       throw e;
     };
 
@@ -191,8 +208,13 @@ class WebGLVis {
     this._setMargins(specification);
     this.mouseReader.setSpecification(specification);
     this.sendDrawerState(this.mouseReader.getViewport());
-    this.webglWorker.postMessage({ type: "specification", specification });
-    this.dataWorker.postMessage({ type: "init", specification });
+
+    this.managerWorker.postMessage({
+      worker: null,
+      data: { specification },
+      action: "setSpecification",
+    });
+
     return true;
   }
 
@@ -201,7 +223,11 @@ class WebGLVis {
       return false;
     }
 
-    this.webglWorker.postMessage({ type: "specification", specification });
+    this.managerWorker.postMessage({
+      worker: null,
+      data: { type: "specification", specification },
+      action: "setSpecification",
+    });
     return true;
   }
 
@@ -211,16 +237,22 @@ class WebGLVis {
    * @param {Object} viewport likely from this.mouseReader.getViewport()
    */
   sendDrawerState(viewport) {
-    this.webglWorker.postMessage({ type: "viewport", ...viewport });
+    this.managerWorker.postMessage({
+      worker: WEBGL_WORKER_NAME,
+      data: { type: "viewport", ...viewport },
+    });
   }
 
   /**
    * Calls render in the drawer.
    */
   forceDrawerRender() {
-    this.webglWorker.postMessage({
-      type: "render",
-      ...this.mouseReader.getViewport(),
+    this.managerWorker.postMessage({
+      worker: WEBGL_WORKER_NAME,
+      data: {
+        type: "render",
+        ...this.mouseReader.getViewport(),
+      },
     });
   }
 
@@ -235,9 +267,15 @@ class WebGLVis {
    */
   selectPoints(points) {
     if (points.length === 4) {
-      this.dataWorker.postMessage({ type: "selectBox", points });
+      this.managerWorker.postMessage({
+        worker: DATA_WORKER_NAME,
+        data: { type: "selectBox", points },
+      });
     } else if (points.length >= 6) {
-      this.dataWorker.postMessage({ type: "selectLasso", points });
+      this.managerWorker.postMessage({
+        worker: DATA_WORKER_NAME,
+        data: { type: "selectLasso", points },
+      });
     }
   }
 
@@ -248,9 +286,12 @@ class WebGLVis {
    * @param {Array} point to get closest point to
    */
   getClosestPoint(point) {
-    this.dataWorker.postMessage({
-      type: "getClosestPoint",
-      point,
+    this.managerWorker.postMessage({
+      worker: DATA_WORKER_NAME,
+      data: {
+        type: "getClosestPoint",
+        point,
+      },
     });
   }
 
@@ -261,9 +302,12 @@ class WebGLVis {
    * @param {Array} point to get closest point to
    */
   getClickPoint(point) {
-    this.dataWorker.postMessage({
-      type: "getClickPoint",
-      point,
+    this.managerWorker.postMessage({
+      worker: DATA_WORKER_NAME,
+      data: {
+        type: "getClickPoint",
+        point,
+      },
     });
   }
 

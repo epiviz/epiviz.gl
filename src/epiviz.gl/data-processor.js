@@ -17,7 +17,9 @@ class DataProcessor {
 
     console.log("Loading data...");
 
-    new SpecificationProcessor(specification, this.indexData.bind(this));
+    const processesSpecification = new SpecificationProcessor(specification);
+
+    this.indexData(processesSpecification);
   }
 
   /**
@@ -49,30 +51,28 @@ class DataProcessor {
     console.log("Reading data...");
 
     // Process the global data in the specification processor
-    if (specificationHelper.data) {
-      for (let track of specificationHelper.tracks) {
-        if (!track.hasOwnData) {
-          const geometryMapper = new GeometryMapper(specificationHelper, track);
+    for (let track of specificationHelper.tracks) {
+      if (!track.hasOwnData) {
+        const geometryMapper = new GeometryMapper(specificationHelper, track);
 
-          let currentPoint = track.getNextDataPoint();
-          while (currentPoint) {
-            geometryMapper.modifyGeometry(currentPoint.geometry);
+        let currentPoint = track.getNextDataPoint();
+        while (currentPoint) {
+          geometryMapper.modifyGeometry(currentPoint.geometry);
 
-            this.data[
-              this.index.add(
-                currentPoint.geometry.coordinates[0],
-                currentPoint.geometry.coordinates[1],
-                currentPoint.geometry.coordinates[0] +
-                  currentPoint.geometry.dimensions[0],
-                currentPoint.geometry.coordinates[1] +
-                  currentPoint.geometry.dimensions[1]
-              )
-            ] = currentPoint;
+          this.data[
+            this.index.add(
+              currentPoint.geometry.coordinates[0],
+              currentPoint.geometry.coordinates[1],
+              currentPoint.geometry.coordinates[0] +
+                currentPoint.geometry.dimensions[0],
+              currentPoint.geometry.coordinates[1] +
+                currentPoint.geometry.dimensions[1]
+            )
+          ] = currentPoint;
 
-            currentPoint = track.getNextDataPoint();
-          }
-          break;
+          currentPoint = track.getNextDataPoint();
         }
+        break;
       }
     }
 
@@ -114,15 +114,14 @@ class DataProcessor {
    * @returns closest point or undefined
    */
   getClosestPoint(point) {
-    let indices = this.index.neighbors(point[0], point[1], 1, 0)
-    let pointToReturn =
-      this.data[indices];
+    let indices = this.index.neighbors(point[0], point[1], 1, 0);
+    let pointToReturn = this.data[indices];
     let distance = 0;
     let isInside = true;
     if (pointToReturn === undefined) {
-      indices = this.index.neighbors(point[0], point[1], 1, 5)
-      if(indices.length === 0) {
-        indices = this.index.neighbors(point[0], point[1], 1)
+      indices = this.index.neighbors(point[0], point[1], 1, 5);
+      if (indices.length === 0) {
+        indices = this.index.neighbors(point[0], point[1], 1);
       }
       pointToReturn = this.data[indices];
       distance = Math.sqrt(
@@ -146,12 +145,11 @@ class DataProcessor {
     const largerX = Math.max(points[0], points[2]);
     const largerY = Math.max(points[1], points[3]);
 
-    let indices = this.index
-      .search(smallerX, smallerY, largerX, largerY)
-    
-    let tpoints =  indices.map((i) => this.data[i]);
+    let indices = this.index.search(smallerX, smallerY, largerX, largerY);
 
-    return {indices, "points": tpoints};
+    let tpoints = indices.map((i) => this.data[i]);
+
+    return { indices, points: tpoints };
   }
 
   /**
@@ -199,12 +197,12 @@ class DataProcessor {
         simplifiedBoundingPolygon
       );
 
-      if (tbool) findices.push(candidatePoints.indices[i])
+      if (tbool) findices.push(candidatePoints.indices[i]);
 
       return tbool;
     });
 
-    return {"indices": findices, "points": fpoints}
+    return { indices: findices, points: fpoints };
   }
 }
 

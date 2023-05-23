@@ -168,6 +168,8 @@ const getPixelMeasurement = (cssMeasurement) => {
   return isNaN(asFloat) ? false : asFloat;
 };
 
+const WEBGL_WORKER_NAME = "offscreen-webgl-worker.js";
+const DATA_WORKER_NAME = "data-processor-worker.js";
 const DEFAULT_MARGIN = "50px";
 const DEFAULT_WIDTH = "100%";
 const DEFAULT_HEIGHT = DEFAULT_WIDTH;
@@ -264,7 +266,152 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
+/**
+ * Clones an ArrayBuffer.
+ *
+ * This function creates a new ArrayBuffer and copies the content of the source
+ * ArrayBuffer into the new one.
+ *
+ * @param {ArrayBuffer} src - The source ArrayBuffer to be cloned.
+ * @returns {ArrayBuffer} The new cloned ArrayBuffer.
+ */
+function cloneArrayBuffer(src) {
+  const dst = new ArrayBuffer(src.byteLength);
+  new Uint8Array(dst).set(new Uint8Array(src));
+  return dst;
+}
+
+/**
+ * Fetches an ArrayBuffer from a URL.
+ *
+ * This function sends a HTTP GET request to the provided URL and returns the
+ * response body as an ArrayBuffer.
+ *
+ * @param {string} url - The URL to fetch the ArrayBuffer from.
+ * @returns {Promise<ArrayBuffer>} A promise that resolves to the fetched ArrayBuffer.
+ */
+async function fetchArrayBuffer(url) {
+  const response = await fetch(url);
+  const buffer = await response.arrayBuffer();
+  return buffer;
+}
+
+/**
+ * Prepares the data from the defaultData object.
+ *
+ * This function converts the arrays in the defaultData object to Int8Array and
+ * stores them in an ArrayBuffer or SharedArrayBuffer depending on the availability.
+ * It then returns an object containing the keys, ArrayBuffers and a flag indicating
+ * that the data is inline.
+ *
+ * @param {Object} defaultData - The defaultData object containing the data arrays.
+ * @returns {Object} An object containing the keys, ArrayBuffers and a flag indicating inline data.
+ */
+function prepareData(defaultData) {
+  const data = {};
+  Object.keys(defaultData).forEach((key) => {
+    const typedArray = new (
+      typeof SharedArrayBuffer !== "undefined" ? SharedArrayBuffer : ArrayBuffer
+    )(defaultData[key].length);
+    data[key] = new Int8Array(typedArray);
+    data[key].set(defaultData[key]);
+  });
+
+  const buffers = Object.values(data).map((typedArray) => typedArray.buffer);
+
+  return {
+    keys: Object.keys(data),
+    defaultDataBuffers: buffers,
+    isInlineData: true,
+  };
+}
+
+/**
+ * Transform a specification object.
+ *
+ * This function processes a specification object by fetching the ArrayBuffers
+ * for defaultData and track data if they are URLs or converting them to
+ * ArrayBuffers if they are inline data. The function returns an object
+ * containing the processed specification and the ArrayBuffers.
+ *
+ * @param {Object} specification - The specification object to process.
+ * @returns {Promise<Object>} A promise that resolves to an object containing
+ *                            the processed specification and the ArrayBuffers.
+ */
+async function transformSpecification(specification) {
+  const transformedSpecification = Object.assign({}, specification); // Clone specification
+
+  // Process defaultData
+  if (specification.defaultData) {
+    if (typeof specification.defaultData === "string") {
+      transformedSpecification.defaultData = fetchArrayBuffer(
+        specification.defaultData
+      ).then((buffer) => ({
+        keys: ["defaultData"],
+        defaultDataBuffers: [buffer],
+        isInlineData: false,
+      }));
+    } else {
+      transformedSpecification.defaultData = Promise.resolve(
+        prepareData(specification.defaultData)
+      );
+    }
+  }
+
+  // Process tracks
+  if (Array.isArray(specification.tracks)) {
+    specification.tracks.forEach((track, i) => {
+      if (track.data) {
+        if (typeof track.data === "string") {
+          transformedSpecification.tracks[i].data = fetchArrayBuffer(
+            track.data
+          ).then((buffer) => ({
+            keys: [`defaultData`],
+            defaultDataBuffers: [buffer],
+            isInlineData: false,
+          }));
+        } else {
+          transformedSpecification.tracks[i].data = Promise.resolve(
+            prepareData(track.data)
+          );
+        }
+      }
+    });
+  }
+
+  // Resolve all promises
+  if (
+    transformedSpecification.defaultData &&
+    transformedSpecification.defaultData instanceof Promise
+  ) {
+    transformedSpecification.defaultData =
+      await transformedSpecification.defaultData;
+  }
+  if (Array.isArray(transformedSpecification.tracks)) {
+    for (let i = 0; i < transformedSpecification.tracks.length; i++) {
+      if (transformedSpecification.tracks[i].data instanceof Promise) {
+        transformedSpecification.tracks[i].data = await transformedSpecification
+          .tracks[i].data;
+      }
+    }
+  }
+
+  return {
+    specification: transformedSpecification,
+    buffers: [
+      ...(transformedSpecification.defaultData?.defaultDataBuffers || []),
+      ...transformedSpecification.tracks.flatMap(
+        (track) => track.data?.defaultDataBuffers || []
+      ),
+    ],
+  };
+}
+
 export {
+  prepareData,
+  cloneArrayBuffer,
+  fetchArrayBuffer,
+  transformSpecification,
   scale,
   rgbToHex,
   rgbStringToHex,
@@ -275,4 +422,6 @@ export {
   getQuadraticBezierCurveForPoints,
   DEFAULT_WIDTH,
   DEFAULT_HEIGHT,
+  WEBGL_WORKER_NAME,
+  DATA_WORKER_NAME,
 };
