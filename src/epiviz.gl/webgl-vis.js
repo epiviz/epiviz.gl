@@ -108,25 +108,18 @@ class WebGLVis {
         if (message.data.closestPoint === undefined) {
           return;
         }
-        this.parent.dispatchEvent(
-          new CustomEvent("pointHovered", { detail: message })
-        );
+        this.dispatchEvent("pointHovered", message);
       } else if (message.data.type === "getClickPoint") {
         if (message.data.closestPoint === undefined) {
           return;
         }
-        this.parent.dispatchEvent(
-          new CustomEvent("pointClicked", { detail: message })
-        );
+        this.dispatchEvent("pointClicked", message);
       } else if (
         message.data.type === "selectBox" ||
         message.data.type === "selectLasso"
       ) {
-        this.parent.dispatchEvent(
-          new CustomEvent("onSelectionEnd", { detail: message })
-        );
+        this.dispatchEvent("onSelectionEnd", message);
         this.dataWorkerStream.push(message);
-        console.log(this.dataWorkerStream);
       }
     };
     this.dataWorker.onerror = (e) => {
@@ -134,7 +127,7 @@ class WebGLVis {
     };
 
     // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
-    this.mouseReader.init();
+    this.mouseReader.init(this.parent);
   }
 
   /**
@@ -291,6 +284,8 @@ class WebGLVis {
    * "onSelection": fires while user is changing the selection box/lasso
    * "onSelectionEnd": fires when a selection has been completed and the results are in the dataWorkerStream
    * "pointHovered": fires when pointer hovers over a datapoint
+   * "pointClicked": fires when pointer clicks on a datapoint
+   * "labelClicked": fires when pointer clicks on a label
    *
    * For information on the parameters and functionality see:
    *   https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
@@ -301,6 +296,16 @@ class WebGLVis {
    */
   addEventListener(type, listener, options) {
     this.parent.addEventListener(type, listener, options);
+  }
+
+  /**
+   * Dispatches an event on the visualization on the appropriate component.
+   * @param {String} eventName
+   * @param {Object} message
+   **/
+  dispatchEvent(eventName, message) {
+    const event = new CustomEvent(eventName, { detail: message });
+    this.parent.dispatchEvent(event);
   }
 
   /**

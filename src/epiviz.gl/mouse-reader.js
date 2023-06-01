@@ -42,7 +42,8 @@ class MouseReader {
 
     // Initializing elements to show user their current selection
     this.SVGInteractor = new SVGInteractor(
-      document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      handler.dispatchEvent.bind(handler, "labelClicked")
     );
   }
 

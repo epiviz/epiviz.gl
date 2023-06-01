@@ -27,6 +27,9 @@ class App {
     this.visualization.addEventListener("pointHovered", (event) =>
       console.log("pointHovered", event)
     );
+    this.visualization.addEventListener("labelClicked", (event) =>
+      console.log("labelClicked", event)
+    );
     this.visualization.addEventListener("pan", (event) =>
       console.log("pan", event)
     );
