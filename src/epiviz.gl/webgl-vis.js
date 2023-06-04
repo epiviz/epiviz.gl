@@ -301,6 +301,11 @@ class WebGLVis {
   /**
    * Dispatches an event on the visualization on the appropriate component.
    * @param {String} eventName
+   * event name can be one of the following:
+   * "pointHovered" - fires when pointer hovers over a datapoint
+   * "pointClicked" - fires when pointer clicks on a datapoint
+   * "labelClicked" - fires when pointer clicks on a label
+   * "onSelectionEnd" - fires when a selection has been completed and the results are in the dataWorkerStream
    * @param {Object} message
    **/
   dispatchEvent(eventName, message) {
