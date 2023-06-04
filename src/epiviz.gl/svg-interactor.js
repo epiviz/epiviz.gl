@@ -153,17 +153,39 @@ class SVGInteractor {
           labelObject: d,
         });
       })
-      .attr("x", (d, i) => {
+      .attr("x", (d, i, nodes) => {
+        const svgNode = this.d3SVG.node();
+        const rect = svgNode.getBoundingClientRect();
+        const width = rect.width;
+
         if (d.fixedX) {
           return this.initialX[i];
         }
-        return this._calculateViewportSpotInverse(d.x, d.y)[0];
+
+        const xPos = this._calculateViewportSpotInverse(d.x, d.y)[0];
+
+        if (xPos < 0 || xPos > width) {
+          select(nodes[i]).remove();
+        } else {
+          return xPos;
+        }
       })
-      .attr("y", (d, i) => {
+      .attr("y", (d, i, nodes) => {
+        const svgNode = this.d3SVG.node();
+        const rect = svgNode.getBoundingClientRect();
+        const height = rect.height;
+
         if (d.fixedY) {
           return this.initialY[i];
         }
-        return this._calculateViewportSpotInverse(d.x, d.y)[1];
+
+        const yPos = this._calculateViewportSpotInverse(d.x, d.y)[1];
+
+        if (yPos < 0 || yPos > height) {
+          select(nodes[i]).remove();
+        } else {
+          return yPos;
+        }
       })
       .each(function (d) {
         // Set any possible svg properties specified in label
