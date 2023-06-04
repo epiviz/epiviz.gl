@@ -127,7 +127,7 @@ class WebGLVis {
     };
 
     // Needs to be called at the end of addToDOM so mouseReader has correct dimensions to work with
-    this.mouseReader.init(this.parent);
+    this.mouseReader.init();
   }
 
   /**
