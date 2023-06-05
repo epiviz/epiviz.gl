@@ -15,7 +15,8 @@ class SVGInteractor {
    *
    * @param {SVGElement} svg container for all svg elements
    */
-  constructor(svg) {
+  constructor(svg, labelClickHandler) {
+    this.labelClickHandler = labelClickHandler;
     this.svg = svg;
     this.d3SVG = select(this.svg);
     this.svg.style.width = "100%";
@@ -52,6 +53,7 @@ class SVGInteractor {
     this.svg.style.width = styles.width;
     this.svg.style.height = styles.height;
     this.svg.style.margin = styles.margin;
+    this.svg.style.cursor = "default"; // or "none"
 
     this.initialX = undefined; // used for updating labels
     this.initialY = undefined;
@@ -129,21 +131,61 @@ class SVGInteractor {
       );
     }
 
-    select(this._labelMarker)
+    const labels = select(this._labelMarker)
       .selectAll("text")
-      .data(this.specification.labels)
+      .data(this.specification.labels);
+    labels
+      .enter()
+      .append("text")
+      .merge(labels) // Updates both existing and new nodes
       .text((d) => d.text)
-      .attr("x", (d, i) => {
+      .attr("style", "pointer-events: bounding-box") // Add this line to make the labels respond to pointer events
+      .style("user-select", "none") // add this line
+      .on("click", (event, d) => {
+        const clickedIndex = select(this._labelMarker)
+          .selectAll("text")
+          .nodes()
+          .indexOf(event.currentTarget);
+
+        this.labelClickHandler({
+          label: d.text,
+          index: clickedIndex,
+          labelObject: d,
+        });
+      })
+      .attr("x", (d, i, nodes) => {
+        const svgNode = this.d3SVG.node();
+        const rect = svgNode.getBoundingClientRect();
+        const width = rect.width;
+
         if (d.fixedX) {
           return this.initialX[i];
         }
-        return this._calculateViewportSpotInverse(d.x, d.y)[0];
+
+        const xPos = this._calculateViewportSpotInverse(d.x, d.y)[0];
+
+        if (xPos < 0 || xPos > width) {
+          select(nodes[i]).remove();
+        } else {
+          return xPos;
+        }
       })
-      .attr("y", (d, i) => {
+      .attr("y", (d, i, nodes) => {
+        const svgNode = this.d3SVG.node();
+        const rect = svgNode.getBoundingClientRect();
+        const height = rect.height;
+
         if (d.fixedY) {
           return this.initialY[i];
         }
-        return this._calculateViewportSpotInverse(d.x, d.y)[1];
+
+        const yPos = this._calculateViewportSpotInverse(d.x, d.y)[1];
+
+        if (yPos < 0 || yPos > height) {
+          select(nodes[i]).remove();
+        } else {
+          return yPos;
+        }
       })
       .each(function (d) {
         // Set any possible svg properties specified in label
@@ -154,6 +196,9 @@ class SVGInteractor {
           select(this).attr(property, d[property]);
         }
       });
+
+    // Remove any old labels
+    labels.exit().remove();
   }
 
   _calculateAxis(dimension, orientation, specification, genomeScale, anchor) {
