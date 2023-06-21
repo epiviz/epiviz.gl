@@ -15,8 +15,15 @@ class SVGInteractor {
    *
    * @param {SVGElement} svg container for all svg elements
    */
-  constructor(svg, labelClickHandler) {
+  constructor(
+    svg,
+    labelClickHandler,
+    labelMouseOverHandler,
+    labelMouseOutHandler
+  ) {
     this.labelClickHandler = labelClickHandler;
+    this.labelMouseOverHandler = labelMouseOverHandler;
+    this.labelMouseOutHandler = labelMouseOutHandler;
     this.svg = svg;
     this.d3SVG = select(this.svg);
     this.svg.style.width = "100%";
@@ -151,6 +158,33 @@ class SVGInteractor {
           label: d.text,
           index: clickedIndex,
           labelObject: d,
+          event,
+        });
+      })
+      .on("mouseover", (event, d) => {
+        const hoveredIndex = select(this._labelMarker)
+          .selectAll("text")
+          .nodes()
+          .indexOf(event.currentTarget);
+
+        this.labelMouseOverHandler({
+          label: d.text,
+          index: hoveredIndex,
+          labelObject: d,
+          event,
+        });
+      })
+      .on("mouseout", (event, d) => {
+        const hoveredIndex = select(this._labelMarker)
+          .selectAll("text")
+          .nodes()
+          .indexOf(event.currentTarget);
+
+        this.labelMouseOutHandler({
+          label: d.text,
+          index: hoveredIndex,
+          labelObject: d,
+          event,
         });
       })
       .attr("x", (d, i, nodes) => {
@@ -187,10 +221,30 @@ class SVGInteractor {
           return yPos;
         }
       })
+      .each((d, i, nodes) => {
+        const xPos = d.fixedX
+          ? this.initialX[i]
+          : this._calculateViewportSpotInverse(d.x, d.y)[0];
+        const yPos = d.fixedY
+          ? this.initialY[i]
+          : this._calculateViewportSpotInverse(d.x, d.y)[1];
+
+        // Check if the 'transformRotate' property exists
+        if (d.transformRotate) {
+          select(nodes[i]).attr(
+            "transform",
+            `rotate(${d.transformRotate}, ${xPos}, ${yPos})`
+          );
+        }
+      })
       .each(function (d) {
         // Set any possible svg properties specified in label
         for (const property in d) {
-          if (["x", "y", "text"].includes(property)) {
+          if (
+            ["x", "y", "text", "transformRotate", "type", "index"].includes(
+              property
+            )
+          ) {
             continue;
           }
           select(this).attr(property, d[property]);
