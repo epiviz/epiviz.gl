@@ -226,11 +226,11 @@ class WebGLVis {
    *  if points.length == 4, does a box select, if points.length >= 6 does a lasso select
    *    using points as a polygon
    */
-  selectPoints(points) {
+  selectPoints(points, event) {
     if (points.length === 4) {
-      this.dataWorker.postMessage({ type: "selectBox", points });
+      this.dataWorker.postMessage({ type: "selectBox", points, event });
     } else if (points.length >= 6) {
-      this.dataWorker.postMessage({ type: "selectLasso", points });
+      this.dataWorker.postMessage({ type: "selectLasso", points, event });
     }
   }
 
