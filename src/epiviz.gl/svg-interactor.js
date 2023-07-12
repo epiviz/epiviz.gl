@@ -29,7 +29,6 @@ class SVGInteractor {
     this.svg.style.width = "100%";
     this.svg.style.height = "100%";
     this.svg.style.position = "absolute";
-    this.svg.style.zIndex = "1000";
     this.svg.style.pointerEvents = "none";
     this.svg.style.overflow = "visible";
 
@@ -171,6 +170,7 @@ class SVGInteractor {
           label: d.text,
           index: hoveredIndex,
           labelObject: d,
+          groupNode: this._labelMarker,
           event,
         });
       })
@@ -184,6 +184,7 @@ class SVGInteractor {
           label: d.text,
           index: hoveredIndex,
           labelObject: d,
+          groupNode: this._labelMarker,
           event,
         });
       })

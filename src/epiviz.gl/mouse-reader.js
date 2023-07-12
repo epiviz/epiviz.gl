@@ -2,6 +2,7 @@ import {
   scale,
   getViewportForSpecification,
   getDimAndMarginStyleForSpecification,
+  cloneMouseEvent,
   getPointsBySelectMode,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
@@ -172,7 +173,7 @@ class MouseReader {
               }
             }
             if (this.handler.uniDirectionSelectionEnabled) {
-              this.handler.dispatchEvent.call(this.handler, "onSelection", {
+              this.handler.dispatchEvent("onSelection", {
                 bounds: getPointsBySelectMode(
                   this.selectMode,
                   this._currentSelectionPoints,
@@ -180,13 +181,13 @@ class MouseReader {
                   this.currentYRange
                 ),
                 type: this.tool,
-                event: event,
+                event: cloneMouseEvent(event),
               });
             } else {
-              this.handler.dispatchEvent.call(this.handler, "onSelection", {
+              this.handler.dispatchEvent("onSelection", {
                 bounds: this._currentSelectionPoints,
                 type: this.tool,
-                event: event,
+                event: cloneMouseEvent(event),
               });
             }
             break;
@@ -194,14 +195,11 @@ class MouseReader {
             this._currentSelectionPoints.push(
               ...this._calculateViewportSpot(...getLayerXandYFromEvent(event))
             );
-            this.element.parentElement.dispatchEvent(
-              new CustomEvent("onSelection", {
-                detail: {
-                  bounds: this._currentSelectionPoints,
-                  type: this.tool,
-                },
-              })
-            );
+            this.handler.dispatchEvent("onSelection", {
+              bounds: this._currentSelectionPoints,
+              type: this.tool,
+              event: cloneMouseEvent(event),
+            });
             break;
           case "tooltip":
             break;
@@ -224,7 +222,7 @@ class MouseReader {
             return;
           }
           this._updateSVG();
-          this._onSelect(event);
+          this._onSelect(cloneMouseEvent(event));
           break;
         case "lasso":
           if (this._currentSelectionPoints.length < 6) {
@@ -232,7 +230,7 @@ class MouseReader {
             this._updateSVG();
             return;
           }
-          this._onSelect();
+          this._onSelect(cloneMouseEvent(event));
           break;
       }
     });
@@ -325,15 +323,11 @@ class MouseReader {
         this.currentYRange = previousY;
       }
     }
-
-    this.element.parentElement.dispatchEvent(
-      new CustomEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
-        detail: {
-          viewport: this.getViewport(),
-          type: this.tool,
-        },
-      })
-    );
+    this.handler.dispatchEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
+      viewport: this.getViewport(),
+      type: this.tool,
+      event: cloneMouseEvent(event),
+    });
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
@@ -371,14 +365,11 @@ class MouseReader {
       }
     }
 
-    this.element.parentElement.dispatchEvent(
-      new CustomEvent("pan", {
-        detail: {
-          viewport: this.getViewport(),
-          type: this.tool,
-        },
-      })
-    );
+    this.handler.dispatchEvent("pan", {
+      viewport: this.getViewport(),
+      type: this.tool,
+      event: cloneMouseEvent(event),
+    });
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();

@@ -264,6 +264,38 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
+const cloneMouseEvent = (e) => {
+  return {
+    altKey: e.altKey,
+    button: e.button,
+    buttons: e.buttons,
+    clientX: e.clientX,
+    clientY: e.clientY,
+    ctrlKey: e.ctrlKey,
+    metaKey: e.metaKey,
+    movementX: e.movementX,
+    movementY: e.movementY,
+    offsetX: e.offsetX,
+    offsetY: e.offsetY,
+    pageX: e.pageX,
+    pageY: e.pageY,
+    screenX: e.screenX,
+    screenY: e.screenY,
+    shiftKey: e.shiftKey,
+    x: e.x,
+    y: e.y,
+    detail: e.detail,
+    bubbles: e.bubbles,
+    cancelable: e.cancelable,
+    composed: e.composed,
+    eventPhase: e.eventPhase,
+    isTrusted: e.isTrusted,
+    returnValue: e.returnValue,
+    timeStamp: e.timeStamp,
+    type: e.type,
+  };
+};
+
 
 const getPointsBySelectMode = (selectMode, originalPoints, xRange, yRange) => {
   const points = [...originalPoints];
@@ -281,6 +313,7 @@ const getPointsBySelectMode = (selectMode, originalPoints, xRange, yRange) => {
 };
 
 export {
+  cloneMouseEvent,
   scale,
   rgbToHex,
   rgbStringToHex,
