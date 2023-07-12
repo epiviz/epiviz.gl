@@ -43,7 +43,6 @@ class MouseReader {
     this._currentSelectionPoints = [];
 
     this.tool = "pan";
-    this.selectMode = "box";
     this.selectStartPoint = null;
     this.selectEndPoint = null;
 
@@ -107,6 +106,8 @@ class MouseReader {
           case "pan":
             break;
           case "box":
+          case "boxh":
+          case "boxv":
           case "lasso":
             {
               this._currentSelectionPoints = [
@@ -141,6 +142,8 @@ class MouseReader {
             this._onPan(event);
             break;
           case "box":
+          case "boxh":
+          case "boxv":
             this._currentSelectionPoints = this._currentSelectionPoints
               .slice(0, 2)
               .concat(
@@ -160,22 +163,16 @@ class MouseReader {
             );
 
             if (diffX <= SELECT_THRESHOLD && diffY > SELECT_THRESHOLD) {
-              if (this.selectMode !== "vertical") {
-                this.selectMode = "vertical";
-              }
+              this.tool = "boxv";
             } else if (diffY <= SELECT_THRESHOLD && diffX > SELECT_THRESHOLD) {
-              if (this.selectMode !== "horizontal") {
-                this.selectMode = "horizontal";
-              }
+              this.tool = "boxh";
             } else {
-              if (this.selectMode !== "box") {
-                this.selectMode = "box";
-              }
+              this.tool = "box";
             }
             if (this.handler.uniDirectionSelectionEnabled) {
               this.handler.dispatchEvent("onSelection", {
                 bounds: getPointsBySelectMode(
-                  this.selectMode,
+                  this.tool,
                   this._currentSelectionPoints,
                   this.currentXRange,
                   this.currentYRange
@@ -217,6 +214,8 @@ class MouseReader {
         case "pan":
           break;
         case "box":
+        case "boxh":
+        case "boxv":
           if (this._currentSelectionPoints.length !== 4) {
             this._currentSelectionPoints = [];
             return;
@@ -241,6 +240,8 @@ class MouseReader {
           mouseDown = false;
           break;
         case "box":
+        case "boxh":
+        case "boxv":
           break;
         case "lasso":
           break;
@@ -406,28 +407,34 @@ class MouseReader {
       this.width,
       this.height
     );
-    if (this.tool === "box" && this.handler.uniDirectionSelectionEnabled) {
-      this.SVGInteractor.updateSelectView(
-        getPointsBySelectMode(
-          this.selectMode,
-          this._currentSelectionPoints,
-          this.currentXRange,
-          this.currentYRange
-        )
+
+    let selectionPoints = this._currentSelectionPoints;
+
+    if (
+      this.handler.uniDirectionSelectionEnabled &&
+      (this.tool === "box" || this.tool === "boxh" || this.tool === "boxv")
+    ) {
+      selectionPoints = getPointsBySelectMode(
+        this.tool,
+        this._currentSelectionPoints,
+        this.currentXRange,
+        this.currentYRange
       );
-    } else {
-      this.SVGInteractor.updateSelectView(this._currentSelectionPoints);
     }
+
+    this.SVGInteractor.updateSelectView(selectionPoints);
   }
 
   /**
    * Executes when user has confirmed selection points (typically by releasing mouse)
+   * and calls handler.selectPoints with the points.
+   * @param {MouseEvent} event from the event it is called from
    */
   _onSelect(event) {
     if (this.tool === "box" && this.handler.uniDirectionSelectionEnabled) {
       this.handler.selectPoints(
         getPointsBySelectMode(
-          this.selectMode,
+          this.tool,
           this._currentSelectionPoints,
           this.currentXRange,
           this.currentYRange
