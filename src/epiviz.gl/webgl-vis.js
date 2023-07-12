@@ -24,6 +24,8 @@ class WebGLVis {
     this.canvas = document.createElement("canvas");
     this.canvas.style.position = "absolute";
 
+    this.uniDirectionSelectionEnabled = false;
+
     this.POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
       "lockedX",
       "lockedY",
@@ -52,6 +54,17 @@ class WebGLVis {
     this.mouseReader.width = width;
     this.mouseReader.height = height;
     this.sendDrawerState(this.mouseReader.getViewport());
+  }
+
+  /**
+   * Set the flag for uniDirectionSelectEnabled to be used by the mouse reader
+   * to determine whether user is allowed to do horizontal or vertical selection
+   * @param {Boolean} enabled whether or not to enable uniDirectionSelect
+   * @memberof WebGLVis
+   * @returns {void}
+   */
+  setUniDirectionSelectEnabled(enabled) {
+    this.uniDirectionSelectionEnabled = enabled;
   }
 
   /**

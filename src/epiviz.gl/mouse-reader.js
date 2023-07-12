@@ -2,8 +2,11 @@ import {
   scale,
   getViewportForSpecification,
   getDimAndMarginStyleForSpecification,
+  getPointsBySelectMode,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
+
+const SELECT_THRESHOLD = 30;
 
 /**
  * event.layerX and event.layerY are deprecated. We will use them if they are on the event, but
@@ -39,6 +42,9 @@ class MouseReader {
     this._currentSelectionPoints = [];
 
     this.tool = "pan";
+    this.selectMode = "box";
+    this.selectStartPoint = null;
+    this.selectEndPoint = null;
 
     // Initializing elements to show user their current selection
     this.SVGInteractor = new SVGInteractor(
@@ -101,9 +107,19 @@ class MouseReader {
             break;
           case "box":
           case "lasso":
-            this._currentSelectionPoints = [
-              ...this._calculateViewportSpot(...getLayerXandYFromEvent(event)),
-            ];
+            {
+              this._currentSelectionPoints = [
+                ...this._calculateViewportSpot(
+                  ...getLayerXandYFromEvent(event)
+                ),
+              ];
+              this.selectStartPoint = {
+                x: event.clientX,
+                y: event.clientY,
+              };
+              this.selectEndPoint = null;
+            }
+
             break;
         }
       },
@@ -129,14 +145,50 @@ class MouseReader {
               .concat(
                 this._calculateViewportSpot(...getLayerXandYFromEvent(event))
               );
-            this.element.parentElement.dispatchEvent(
-              new CustomEvent("onSelection", {
-                detail: {
-                  bounds: this._currentSelectionPoints,
-                  type: this.tool,
-                },
-              })
+
+            if (!this.selectStartPoint) {
+              return;
+            }
+            this.selectEndPoint = { x: event.clientX, y: event.clientY };
+
+            const diffX = Math.abs(
+              this.selectStartPoint.x - this.selectEndPoint.x
             );
+            const diffY = Math.abs(
+              this.selectStartPoint.y - this.selectEndPoint.y
+            );
+
+            if (diffX <= SELECT_THRESHOLD && diffY > SELECT_THRESHOLD) {
+              if (this.selectMode !== "vertical") {
+                this.selectMode = "vertical";
+              }
+            } else if (diffY <= SELECT_THRESHOLD && diffX > SELECT_THRESHOLD) {
+              if (this.selectMode !== "horizontal") {
+                this.selectMode = "horizontal";
+              }
+            } else {
+              if (this.selectMode !== "box") {
+                this.selectMode = "box";
+              }
+            }
+            if (this.handler.uniDirectionSelectionEnabled) {
+              this.handler.dispatchEvent.call(this.handler, "onSelection", {
+                bounds: getPointsBySelectMode(
+                  this.selectMode,
+                  this._currentSelectionPoints,
+                  this.currentXRange,
+                  this.currentYRange
+                ),
+                type: this.tool,
+                event: event,
+              });
+            } else {
+              this.handler.dispatchEvent.call(this.handler, "onSelection", {
+                bounds: this._currentSelectionPoints,
+                type: this.tool,
+                event: event,
+              });
+            }
             break;
           case "lasso":
             this._currentSelectionPoints.push(
@@ -161,6 +213,8 @@ class MouseReader {
 
     this.element.addEventListener("mouseup", (event) => {
       mouseDown = false;
+      this.selectStartPoint = null;
+      this.selectEndPoint = null;
       switch (this.tool) {
         case "pan":
           break;
@@ -169,7 +223,8 @@ class MouseReader {
             this._currentSelectionPoints = [];
             return;
           }
-          this._onSelect();
+          this._updateSVG();
+          this._onSelect(event);
           break;
         case "lasso":
           if (this._currentSelectionPoints.length < 6) {
@@ -360,14 +415,35 @@ class MouseReader {
       this.width,
       this.height
     );
-    this.SVGInteractor.updateSelectView(this._currentSelectionPoints);
+    if (this.tool === "box" && this.handler.uniDirectionSelectionEnabled) {
+      this.SVGInteractor.updateSelectView(
+        getPointsBySelectMode(
+          this.selectMode,
+          this._currentSelectionPoints,
+          this.currentXRange,
+          this.currentYRange
+        )
+      );
+    } else {
+      this.SVGInteractor.updateSelectView(this._currentSelectionPoints);
+    }
   }
 
   /**
    * Executes when user has confirmed selection points (typically by releasing mouse)
    */
-  _onSelect() {
-    this.handler.selectPoints(this._currentSelectionPoints);
+  _onSelect(event) {
+    if (this.tool === "box" && this.handler.uniDirectionSelectionEnabled) {
+      this.handler.selectPoints(
+        getPointsBySelectMode(
+          this.selectMode,
+          this._currentSelectionPoints,
+          this.currentXRange,
+          this.currentYRange
+        ),
+        event
+      );
+    } else this.handler.selectPoints(this._currentSelectionPoints, event);
   }
 
   /**

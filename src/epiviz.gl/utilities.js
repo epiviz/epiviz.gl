@@ -264,10 +264,27 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
+
+const getPointsBySelectMode = (selectMode, originalPoints, xRange, yRange) => {
+  const points = [...originalPoints];
+  switch (selectMode) {
+    case "horizontal":
+      points[1] = yRange[0];
+      points[3] = yRange[1];
+      break;
+    case "vertical":
+      points[0] = xRange[0];
+      points[2] = xRange[1];
+      break;
+  }
+  return points;
+};
+
 export {
   scale,
   rgbToHex,
   rgbStringToHex,
+  getPointsBySelectMode,
   getViewportForSpecification,
   colorSpecifierToHex,
   getScaleForSpecification,
