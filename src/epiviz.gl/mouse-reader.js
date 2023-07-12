@@ -130,7 +130,7 @@ class MouseReader {
               .concat(
                 this._calculateViewportSpot(...getLayerXandYFromEvent(event))
               );
-            this.handler.dispatchEvent.call(this.handler, "onSelection", {
+            this.handler.dispatchEvent("onSelection", {
               bounds: this._currentSelectionPoints,
               type: this.tool,
               event: cloneMouseEvent(event),
@@ -140,7 +140,7 @@ class MouseReader {
             this._currentSelectionPoints.push(
               ...this._calculateViewportSpot(...getLayerXandYFromEvent(event))
             );
-            this.handler.dispatchEvent.call(this.handler, "onSelection", {
+            this.handler.dispatchEvent("onSelection", {
               bounds: this._currentSelectionPoints,
               type: this.tool,
               event: cloneMouseEvent(event),
@@ -265,15 +265,11 @@ class MouseReader {
         this.currentYRange = previousY;
       }
     }
-    this.handler.dispatchEvent.call(
-      this.handler,
-      event.wheelDelta < 0 ? "zoomIn" : "zoomOut",
-      {
-        viewport: this.getViewport(),
-        type: this.tool,
-        event: cloneMouseEvent(event),
-      }
-    );
+    this.handler.dispatchEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
+      viewport: this.getViewport(),
+      type: this.tool,
+      event: cloneMouseEvent(event),
+    });
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
@@ -311,7 +307,7 @@ class MouseReader {
       }
     }
 
-    this.handler.dispatchEvent.call(this.handler, "pan", {
+    this.handler.dispatchEvent("pan", {
       viewport: this.getViewport(),
       type: this.tool,
       event: cloneMouseEvent(event),
