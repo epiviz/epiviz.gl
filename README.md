@@ -66,6 +66,17 @@ All visualizations also include an ability to box or lasso select:
 
 ![selection](./docs/images/selection.gif)
 
+### Unidirectional Selection:
+
+`epiviz.gl` supports unidirectional selection in the plot which allows the selection to occur only horizontally or vertically depending upon the major axis of the movement. This feature is disabled by default. It can be enabled or disabled using the `setUniDirectionSelectEnabled` function as shown below:
+
+```javascript
+plot.setUniDirectionSelectEnabled(true); // enables unidirectional selection
+plot.setUniDirectionSelectEnabled(false); // disables unidirectional selection
+```
+
+By setting the argument to true, the unidirectional selection will be enabled. Setting it to false will disable this feature.
+
 # Specifications
 
 Documentation for specifications can be found in [docs/specification_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/specification_doc.md). Documentation for the specifications can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
