@@ -18,6 +18,7 @@ self.onmessage = (message) => {
         type: message.data.type,
         selection: self.processor.selectBox(message.data.points),
         bounds: message.data.points,
+        event: message.data?.event,
       });
       break;
     case "selectLasso":
@@ -25,6 +26,7 @@ self.onmessage = (message) => {
         type: message.data.type,
         selection: self.processor.selectLasso(message.data.points),
         bounds: message.data.points,
+        event: message.data?.event,
       });
       break;
     case "getClosestPoint":

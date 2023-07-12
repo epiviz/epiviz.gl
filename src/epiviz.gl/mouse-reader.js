@@ -2,6 +2,7 @@ import {
   scale,
   getViewportForSpecification,
   getDimAndMarginStyleForSpecification,
+  cloneMouseEvent,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
 
@@ -129,27 +130,21 @@ class MouseReader {
               .concat(
                 this._calculateViewportSpot(...getLayerXandYFromEvent(event))
               );
-            this.element.parentElement.dispatchEvent(
-              new CustomEvent("onSelection", {
-                detail: {
-                  bounds: this._currentSelectionPoints,
-                  type: this.tool,
-                },
-              })
-            );
+            this.handler.dispatchEvent("onSelection", {
+              bounds: this._currentSelectionPoints,
+              type: this.tool,
+              event: cloneMouseEvent(event),
+            });
             break;
           case "lasso":
             this._currentSelectionPoints.push(
               ...this._calculateViewportSpot(...getLayerXandYFromEvent(event))
             );
-            this.element.parentElement.dispatchEvent(
-              new CustomEvent("onSelection", {
-                detail: {
-                  bounds: this._currentSelectionPoints,
-                  type: this.tool,
-                },
-              })
-            );
+            this.handler.dispatchEvent("onSelection", {
+              bounds: this._currentSelectionPoints,
+              type: this.tool,
+              event: cloneMouseEvent(event),
+            });
             break;
           case "tooltip":
             break;
@@ -169,7 +164,7 @@ class MouseReader {
             this._currentSelectionPoints = [];
             return;
           }
-          this._onSelect();
+          this._onSelect(cloneMouseEvent(event));
           break;
         case "lasso":
           if (this._currentSelectionPoints.length < 6) {
@@ -177,7 +172,7 @@ class MouseReader {
             this._updateSVG();
             return;
           }
-          this._onSelect();
+          this._onSelect(cloneMouseEvent(event));
           break;
       }
     });
@@ -270,15 +265,11 @@ class MouseReader {
         this.currentYRange = previousY;
       }
     }
-
-    this.element.parentElement.dispatchEvent(
-      new CustomEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
-        detail: {
-          viewport: this.getViewport(),
-          type: this.tool,
-        },
-      })
-    );
+    this.handler.dispatchEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
+      viewport: this.getViewport(),
+      type: this.tool,
+      event: cloneMouseEvent(event),
+    });
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
@@ -316,14 +307,11 @@ class MouseReader {
       }
     }
 
-    this.element.parentElement.dispatchEvent(
-      new CustomEvent("pan", {
-        detail: {
-          viewport: this.getViewport(),
-          type: this.tool,
-        },
-      })
-    );
+    this.handler.dispatchEvent("pan", {
+      viewport: this.getViewport(),
+      type: this.tool,
+      event: cloneMouseEvent(event),
+    });
 
     this.handler.sendDrawerState(this.getViewport());
     this._updateSVG();
@@ -366,8 +354,8 @@ class MouseReader {
   /**
    * Executes when user has confirmed selection points (typically by releasing mouse)
    */
-  _onSelect() {
-    this.handler.selectPoints(this._currentSelectionPoints);
+  _onSelect(event) {
+    this.handler.selectPoints(this._currentSelectionPoints, event);
   }
 
   /**
