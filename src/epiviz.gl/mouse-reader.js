@@ -169,7 +169,7 @@ class MouseReader {
             } else {
               this.tool = "box";
             }
-            if (this.handler.uniDirectionSelectionEnabled) {
+            if (this.uniDirectionalSelectionEnabled) {
               this.handler.dispatchEvent("onSelection", {
                 bounds: getPointsBySelectMode(
                   this.tool,
@@ -411,7 +411,7 @@ class MouseReader {
     let selectionPoints = this._currentSelectionPoints;
 
     if (
-      this.handler.uniDirectionSelectionEnabled &&
+      this.uniDirectionalSelectionEnabled &&
       (this.tool === "box" || this.tool === "boxh" || this.tool === "boxv")
     ) {
       selectionPoints = getPointsBySelectMode(
@@ -431,7 +431,7 @@ class MouseReader {
    * @param {MouseEvent} event from the event it is called from
    */
   _onSelect(event) {
-    if (this.tool === "box" && this.handler.uniDirectionSelectionEnabled) {
+    if (this.tool === "box" && this.uniDirectionalSelectionEnabled) {
       this.handler.selectPoints(
         getPointsBySelectMode(
           this.tool,

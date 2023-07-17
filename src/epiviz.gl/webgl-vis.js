@@ -24,8 +24,6 @@ class WebGLVis {
     this.canvas = document.createElement("canvas");
     this.canvas.style.position = "absolute";
 
-    this.uniDirectionSelectionEnabled = false;
-
     this.POSSIBLE_MOUSE_READER_OPTIONS = Object.freeze([
       "lockedX",
       "lockedY",
@@ -33,6 +31,7 @@ class WebGLVis {
       "viewport",
       "currentXRange",
       "currentYRange",
+      "uniDirectionalSelectionEnabled",
     ]);
   }
 
@@ -54,17 +53,6 @@ class WebGLVis {
     this.mouseReader.width = width;
     this.mouseReader.height = height;
     this.sendDrawerState(this.mouseReader.getViewport());
-  }
-
-  /**
-   * Set the flag for uniDirectionSelectEnabled to be used by the mouse reader
-   * to determine whether user is allowed to do horizontal or vertical selection
-   * @param {Boolean} enabled whether or not to enable uniDirectionSelect
-   * @memberof WebGLVis
-   * @returns {void}
-   */
-  setUniDirectionSelectEnabled(enabled) {
-    this.uniDirectionSelectionEnabled = enabled;
   }
 
   /**
@@ -153,6 +141,7 @@ class WebGLVis {
    *   viewport: [minX, maxX, minY, maxY] (all Numbers)
    *   currentXRange: [x1, x2] (Numbers that should be within the viewport minX and maxX)
    *   currentYRange: [y1, y2] (Numbers that should be within the viewport minY and maxY)
+   *   uniDirectionalSelectionEnabled: boolean
    *   tool: one of ["pan", "box", "lasso"]
    *
    * @param {Object} options with keys under WebGLVis.POSSIBLE_MOUSE_READER_OPTIONS
