@@ -53,6 +53,7 @@ class MouseReader {
       handler.dispatchEvent.bind(handler, "labelHovered"),
       handler.dispatchEvent.bind(handler, "labelUnhovered")
     );
+    this.uniDirectionalSelectionEnabled = true;
   }
 
   /**
@@ -162,14 +163,18 @@ class MouseReader {
               this.selectStartPoint.y - this.selectEndPoint.y
             );
 
-            if (diffX <= SELECT_THRESHOLD && diffY > SELECT_THRESHOLD) {
+            if (this.lockedX) {
+              this.tool = "boxv";
+            } else if (this.lockedY) {
+              this.tool = "boxh";
+            } else if (diffX <= SELECT_THRESHOLD && diffY > SELECT_THRESHOLD) {
               this.tool = "boxv";
             } else if (diffY <= SELECT_THRESHOLD && diffX > SELECT_THRESHOLD) {
               this.tool = "boxh";
             } else {
               this.tool = "box";
             }
-            if (this.uniDirectionalSelectionEnabled) {
+            if (this.isUniDirectionalSelectionAllowed) {
               this.handler.dispatchEvent("onSelection", {
                 bounds: getPointsBySelectMode(
                   this.tool,
@@ -411,7 +416,7 @@ class MouseReader {
     let selectionPoints = this._currentSelectionPoints;
 
     if (
-      this.uniDirectionalSelectionEnabled &&
+      this.isUniDirectionalSelectionAllowed &&
       (this.tool === "box" || this.tool === "boxh" || this.tool === "boxv")
     ) {
       selectionPoints = getPointsBySelectMode(
@@ -431,7 +436,7 @@ class MouseReader {
    * @param {MouseEvent} event from the event it is called from
    */
   _onSelect(event) {
-    if (this.tool === "box" && this.uniDirectionalSelectionEnabled) {
+    if (this.tool === "box" && this.isUniDirectionalSelectionAllowed) {
       this.handler.selectPoints(
         getPointsBySelectMode(
           this.tool,
@@ -464,6 +469,10 @@ class MouseReader {
   clear() {
     this._currentSelectionPoints = [];
     this.SVGInteractor.clear();
+  }
+
+  get isUniDirectionalSelectionAllowed() {
+    return this.uniDirectionalSelectionEnabled || this.lockedX || this.lockedY;
   }
 }
 
