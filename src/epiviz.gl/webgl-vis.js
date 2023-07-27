@@ -31,6 +31,9 @@ class WebGLVis {
       "viewport",
       "currentXRange",
       "currentYRange",
+      "maxZoomLevel",
+      "maxXZoomLevel",
+      "maxYZoomLevel",
     ]);
   }
 
@@ -141,6 +144,9 @@ class WebGLVis {
    *   currentXRange: [x1, x2] (Numbers that should be within the viewport minX and maxX)
    *   currentYRange: [y1, y2] (Numbers that should be within the viewport minY and maxY)
    *   tool: one of ["pan", "box", "lasso"]
+   *   maxZoomLevel: Number
+   *   maxXZoomLevel: Number
+   *   maxYZoomLevel: Number
    *
    * @param {Object} options with keys under WebGLVis.POSSIBLE_MOUSE_READER_OPTIONS
    */

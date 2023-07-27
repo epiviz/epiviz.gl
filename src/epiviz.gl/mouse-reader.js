@@ -3,6 +3,7 @@ import {
   getViewportForSpecification,
   getDimAndMarginStyleForSpecification,
   cloneMouseEvent,
+  calculateZoomLevel,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
 
@@ -225,8 +226,11 @@ class MouseReader {
    */
   _onWheel(event) {
     event.preventDefault();
+
+    let previousX = null;
+    let previousY = null;
     if (!this.lockedX) {
-      const previousX = [...this.currentXRange]; // ... to avoid aliasing
+      previousX = [...this.currentXRange]; // ... to avoid aliasing
       const t = -event.wheelDelta / 1000;
       const inDataSpace = this._calculateViewportSpot(
         ...getLayerXandYFromEvent(event)
@@ -239,15 +243,10 @@ class MouseReader {
 
       this.currentXRange[0] = Math.max(this.currentXRange[0], this.minX);
       this.currentXRange[1] = Math.min(this.currentXRange[1], this.maxX);
-
-      if (!this._validateXRange()) {
-        // Zoom in limit
-        this.currentXRange = previousX;
-      }
     }
 
     if (!this.lockedY) {
-      const previousY = [...this.currentYRange];
+      previousY = [...this.currentYRange];
       const t = -event.wheelDelta / 1000;
       const inDataSpace = this._calculateViewportSpot(
         ...getLayerXandYFromEvent(event)
@@ -259,14 +258,34 @@ class MouseReader {
         t * inDataSpace[1] + (1 - t) * this.currentYRange[1];
       this.currentYRange[0] = Math.max(this.currentYRange[0], this.minY);
       this.currentYRange[1] = Math.min(this.currentYRange[1], this.maxY);
+    }
 
-      if (!this._validateYRange()) {
+    if (!this.lockedX || !this.lockedY) {
+      const { xZoomLevel, yZoomLevel } = calculateZoomLevel(this.getViewport());
+      const maxXZoomLevel = this.maxXZoomLevel || this.maxZoomLevel;
+      const maxYZoomLevel = this.maxYZoomLevel || this.maxZoomLevel;
+      if (
+        !this.lockedX &&
+        (!this._validateXRange() ||
+          (maxXZoomLevel && maxXZoomLevel < xZoomLevel))
+      ) {
+        // Zoom in limit
+        this.currentXRange = previousX;
+      }
+
+      if (
+        !this.lockedY &&
+        (!this._validateYRange() ||
+          (maxYZoomLevel && maxYZoomLevel < yZoomLevel))
+      ) {
         // Zoom in limit
         this.currentYRange = previousY;
       }
     }
+
     this.handler.dispatchEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
       viewport: this.getViewport(),
+      zoomLevel: calculateZoomLevel(this.getViewport()),
       type: this.tool,
       event: cloneMouseEvent(event),
     });
