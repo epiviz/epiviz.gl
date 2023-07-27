@@ -262,12 +262,10 @@ class MouseReader {
 
     if (!this.lockedX || !this.lockedY) {
       const { xZoomLevel, yZoomLevel } = calculateZoomLevel(this.getViewport());
-      const maxXZoomLevel = this.maxXZoomLevel || this.maxZoomLevel;
-      const maxYZoomLevel = this.maxYZoomLevel || this.maxZoomLevel;
       if (
         !this.lockedX &&
         (!this._validateXRange() ||
-          (maxXZoomLevel && maxXZoomLevel < xZoomLevel))
+          (this.maxZoomLevel && this.maxZoomLevel < xZoomLevel))
       ) {
         // Zoom in limit
         this.currentXRange = previousX;
@@ -276,7 +274,7 @@ class MouseReader {
       if (
         !this.lockedY &&
         (!this._validateYRange() ||
-          (maxYZoomLevel && maxYZoomLevel < yZoomLevel))
+          (this.maxZoomLevel && this.maxZoomLevel < yZoomLevel))
       ) {
         // Zoom in limit
         this.currentYRange = previousY;
