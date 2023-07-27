@@ -296,16 +296,32 @@ const cloneMouseEvent = (e) => {
   };
 };
 
+const throttleWithRAF = (callback) => {
+  let scheduledFrame;
+
+  return function (...args) {
+    if (!scheduledFrame) {
+      scheduledFrame = true;
+
+      requestAnimationFrame(() => {
+        scheduledFrame = false;
+        callback(...args);
+      });
+    }
+  };
+};
+
 export {
   cloneMouseEvent,
-  scale,
-  rgbToHex,
-  rgbStringToHex,
   getViewportForSpecification,
   colorSpecifierToHex,
   getScaleForSpecification,
   getDimAndMarginStyleForSpecification,
   getQuadraticBezierCurveForPoints,
+  rgbToHex,
+  rgbStringToHex,
+  scale,
+  throttleWithRAF,
   DEFAULT_WIDTH,
   DEFAULT_HEIGHT,
 };

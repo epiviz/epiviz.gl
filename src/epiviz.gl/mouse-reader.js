@@ -3,6 +3,7 @@ import {
   getViewportForSpecification,
   getDimAndMarginStyleForSpecification,
   cloneMouseEvent,
+  throttleWithRAF,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
 
@@ -48,6 +49,7 @@ class MouseReader {
       handler.dispatchEvent.bind(handler, "labelHovered"),
       handler.dispatchEvent.bind(handler, "labelUnhovered")
     );
+    this.throttledUpdateSVG = throttleWithRAF(this._updateSVG.bind(this));
   }
 
   /**
@@ -272,7 +274,7 @@ class MouseReader {
     });
 
     this.handler.sendDrawerState(this.getViewport());
-    this._updateSVG();
+    this.throttledUpdateSVG();
   }
 
   /**

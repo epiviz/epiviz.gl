@@ -137,6 +137,11 @@ class SVGInteractor {
       );
     }
 
+    const svgNode = this.d3SVG.node();
+    const svgRect = svgNode.getBoundingClientRect();
+    const svgWidth = svgRect.width;
+    const svgHeight = svgRect.height;
+
     const labels = select(this._labelMarker)
       .selectAll("text")
       .data(this.specification.labels);
@@ -189,34 +194,26 @@ class SVGInteractor {
         });
       })
       .attr("x", (d, i, nodes) => {
-        const svgNode = this.d3SVG.node();
-        const rect = svgNode.getBoundingClientRect();
-        const width = rect.width;
-
         if (d.fixedX) {
           return this.initialX[i];
         }
 
         const xPos = this._calculateViewportSpotInverse(d.x, d.y)[0];
 
-        if (xPos < 0 || xPos > width) {
+        if (xPos < 0 || xPos > svgWidth) {
           select(nodes[i]).remove();
         } else {
           return xPos;
         }
       })
       .attr("y", (d, i, nodes) => {
-        const svgNode = this.d3SVG.node();
-        const rect = svgNode.getBoundingClientRect();
-        const height = rect.height;
-
         if (d.fixedY) {
           return this.initialY[i];
         }
 
         const yPos = this._calculateViewportSpotInverse(d.x, d.y)[1];
 
-        if (yPos < 0 || yPos > height) {
+        if (yPos < 0 || yPos > svgHeight) {
           select(nodes[i]).remove();
         } else {
           return yPos;
