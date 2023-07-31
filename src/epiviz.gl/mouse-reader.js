@@ -3,9 +3,12 @@ import {
   getViewportForSpecification,
   getDimAndMarginStyleForSpecification,
   cloneMouseEvent,
+  getPointsBySelectMode,
   throttleWithRAF,
 } from "./utilities";
 import SVGInteractor from "./svg-interactor";
+
+const SELECT_THRESHOLD = 30;
 
 /**
  * event.layerX and event.layerY are deprecated. We will use them if they are on the event, but
@@ -41,6 +44,8 @@ class MouseReader {
     this._currentSelectionPoints = [];
 
     this.tool = "pan";
+    this.selectStartPoint = null;
+    this.selectEndPoint = null;
 
     // Initializing elements to show user their current selection
     this.SVGInteractor = new SVGInteractor(
@@ -50,6 +55,7 @@ class MouseReader {
       handler.dispatchEvent.bind(handler, "labelUnhovered")
     );
     this.throttledUpdateSVG = throttleWithRAF(this._updateSVG.bind(this));
+    this.uniDirectionalSelectionEnabled = true;
   }
 
   /**
@@ -103,10 +109,22 @@ class MouseReader {
           case "pan":
             break;
           case "box":
+          case "boxh":
+          case "boxv":
           case "lasso":
-            this._currentSelectionPoints = [
-              ...this._calculateViewportSpot(...getLayerXandYFromEvent(event)),
-            ];
+            {
+              this._currentSelectionPoints = [
+                ...this._calculateViewportSpot(
+                  ...getLayerXandYFromEvent(event)
+                ),
+              ];
+              this.selectStartPoint = {
+                x: event.clientX,
+                y: event.clientY,
+              };
+              this.selectEndPoint = null;
+            }
+
             break;
         }
       },
@@ -127,16 +145,55 @@ class MouseReader {
             this._onPan(event);
             break;
           case "box":
+          case "boxh":
+          case "boxv":
             this._currentSelectionPoints = this._currentSelectionPoints
               .slice(0, 2)
               .concat(
                 this._calculateViewportSpot(...getLayerXandYFromEvent(event))
               );
-            this.handler.dispatchEvent("onSelection", {
-              bounds: this._currentSelectionPoints,
-              type: this.tool,
-              event: cloneMouseEvent(event),
-            });
+
+            if (!this.selectStartPoint) {
+              return;
+            }
+            this.selectEndPoint = { x: event.clientX, y: event.clientY };
+
+            const diffX = Math.abs(
+              this.selectStartPoint.x - this.selectEndPoint.x
+            );
+            const diffY = Math.abs(
+              this.selectStartPoint.y - this.selectEndPoint.y
+            );
+
+            if (this.lockedX) {
+              this.tool = "boxv";
+            } else if (this.lockedY) {
+              this.tool = "boxh";
+            } else if (diffX <= SELECT_THRESHOLD && diffY > SELECT_THRESHOLD) {
+              this.tool = "boxv";
+            } else if (diffY <= SELECT_THRESHOLD && diffX > SELECT_THRESHOLD) {
+              this.tool = "boxh";
+            } else {
+              this.tool = "box";
+            }
+            if (this.isUniDirectionalSelectionAllowed) {
+              this.handler.dispatchEvent("onSelection", {
+                bounds: getPointsBySelectMode(
+                  this.tool,
+                  this._currentSelectionPoints,
+                  this.currentXRange,
+                  this.currentYRange
+                ),
+                type: this.tool,
+                event: cloneMouseEvent(event),
+              });
+            } else {
+              this.handler.dispatchEvent("onSelection", {
+                bounds: this._currentSelectionPoints,
+                type: this.tool,
+                event: cloneMouseEvent(event),
+              });
+            }
             break;
           case "lasso":
             this._currentSelectionPoints.push(
@@ -158,14 +215,19 @@ class MouseReader {
 
     this.element.addEventListener("mouseup", (event) => {
       mouseDown = false;
+      this.selectStartPoint = null;
+      this.selectEndPoint = null;
       switch (this.tool) {
         case "pan":
           break;
         case "box":
+        case "boxh":
+        case "boxv":
           if (this._currentSelectionPoints.length !== 4) {
             this._currentSelectionPoints = [];
             return;
           }
+          this._updateSVG();
           this._onSelect(cloneMouseEvent(event));
           break;
         case "lasso":
@@ -185,6 +247,8 @@ class MouseReader {
           mouseDown = false;
           break;
         case "box":
+        case "boxh":
+        case "boxv":
           break;
         case "lasso":
           break;
@@ -350,14 +414,41 @@ class MouseReader {
       this.width,
       this.height
     );
-    this.SVGInteractor.updateSelectView(this._currentSelectionPoints);
+
+    let selectionPoints = this._currentSelectionPoints;
+
+    if (
+      this.isUniDirectionalSelectionAllowed &&
+      (this.tool === "box" || this.tool === "boxh" || this.tool === "boxv")
+    ) {
+      selectionPoints = getPointsBySelectMode(
+        this.tool,
+        this._currentSelectionPoints,
+        this.currentXRange,
+        this.currentYRange
+      );
+    }
+
+    this.SVGInteractor.updateSelectView(selectionPoints);
   }
 
   /**
    * Executes when user has confirmed selection points (typically by releasing mouse)
+   * and calls handler.selectPoints with the points.
+   * @param {MouseEvent} event from the event it is called from
    */
   _onSelect(event) {
-    this.handler.selectPoints(this._currentSelectionPoints, event);
+    if (this.tool === "box" && this.isUniDirectionalSelectionAllowed) {
+      this.handler.selectPoints(
+        getPointsBySelectMode(
+          this.tool,
+          this._currentSelectionPoints,
+          this.currentXRange,
+          this.currentYRange
+        ),
+        event
+      );
+    } else this.handler.selectPoints(this._currentSelectionPoints, event);
   }
 
   /**
@@ -380,6 +471,10 @@ class MouseReader {
   clear() {
     this._currentSelectionPoints = [];
     this.SVGInteractor.clear();
+  }
+
+  get isUniDirectionalSelectionAllowed() {
+    return this.uniDirectionalSelectionEnabled || this.lockedX || this.lockedY;
   }
 }
 
