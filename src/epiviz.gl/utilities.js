@@ -296,11 +296,27 @@ const cloneMouseEvent = (e) => {
   };
 };
 
+const getPointsBySelectMode = (selectMode, originalPoints, xRange, yRange) => {
+  const points = [...originalPoints];
+  switch (selectMode) {
+    case "boxh":
+      points[1] = yRange[0];
+      points[3] = yRange[1];
+      break;
+    case "boxv":
+      points[0] = xRange[0];
+      points[2] = xRange[1];
+      break;
+  }
+  return points;
+};
+
 export {
   cloneMouseEvent,
   scale,
   rgbToHex,
   rgbStringToHex,
+  getPointsBySelectMode,
   getViewportForSpecification,
   colorSpecifierToHex,
   getScaleForSpecification,
