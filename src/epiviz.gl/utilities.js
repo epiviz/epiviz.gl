@@ -264,8 +264,15 @@ const getQuadraticBezierCurveForPoints = (P0, P1, P2) => {
   return (t) => [x(t), y(t)];
 };
 
+/**
+ * Clones the relevant properties of a MouseEvent.
+ *
+ * @param {MouseEvent} e - The original mouse event to clone.
+ * @returns {Object} - An object containing the relevant properties of the mouse event.
+ */
 const cloneMouseEvent = (e) => {
   return {
+    // Basic mouse properties
     altKey: e.altKey,
     button: e.button,
     buttons: e.buttons,
@@ -284,6 +291,8 @@ const cloneMouseEvent = (e) => {
     shiftKey: e.shiftKey,
     x: e.x,
     y: e.y,
+
+    // Other event properties
     detail: e.detail,
     bubbles: e.bubbles,
     cancelable: e.cancelable,
@@ -296,6 +305,15 @@ const cloneMouseEvent = (e) => {
   };
 };
 
+/**
+ * Adjusts the given points based on the selected mode.
+ *
+ * @param {string} selectMode - The mode of selection ("boxh" or "boxv").
+ * @param {Array<number>} originalPoints - The original set of points.
+ * @param {Array<number>} xRange - The range for the x-axis.
+ * @param {Array<number>} yRange - The range for the y-axis.
+ * @returns {Array<number>} - The adjusted points based on the selected mode.
+ */
 const getPointsBySelectMode = (selectMode, originalPoints, xRange, yRange) => {
   const points = [...originalPoints];
   switch (selectMode) {
@@ -311,6 +329,15 @@ const getPointsBySelectMode = (selectMode, originalPoints, xRange, yRange) => {
   return points;
 };
 
+/**
+ * Throttles a callback function using the requestAnimationFrame method.
+ *
+ * This ensures that the callback function is not called too often,
+ * and instead, is called only once per frame, providing a smoother experience.
+ *
+ * @param {Function} callback - The callback function to be throttled.
+ * @returns {Function} - A throttled version of the provided callback.
+ */
 const throttleWithRAF = (callback) => {
   let scheduledFrame;
 
