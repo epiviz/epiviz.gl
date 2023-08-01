@@ -31,6 +31,7 @@ class WebGLVis {
       "viewport",
       "currentXRange",
       "currentYRange",
+      "uniDirectionalSelectionEnabled",
       "maxZoomLevel",
     ]);
   }
@@ -141,6 +142,7 @@ class WebGLVis {
    *   viewport: [minX, maxX, minY, maxY] (all Numbers)
    *   currentXRange: [x1, x2] (Numbers that should be within the viewport minX and maxX)
    *   currentYRange: [y1, y2] (Numbers that should be within the viewport minY and maxY)
+   *   uniDirectionalSelectionEnabled: boolean
    *   tool: one of ["pan", "box", "lasso"]
    *   maxZoomLevel: Number
    *
