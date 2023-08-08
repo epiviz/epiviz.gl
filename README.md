@@ -81,6 +81,16 @@ plot.setViewOptions({
 
 By setting the argument to true, the unidirectional selection will be enabled. Setting it to false will disable this feature.
 
+### Graph Zoom Control
+
+The enhanced graph visualization tool now offers refined zoom controls, ensuring a precise and adaptable data representation. You can now set max zoom level allowed in the graph using the `setViewOptions` function.
+
+```javascript
+setViewOptions({
+  maxZoomLevel: 0,
+});
+```
+
 # Specifications
 
 Documentation for specifications can be found in [docs/specification_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/specification_doc.md). Documentation for the specifications can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):

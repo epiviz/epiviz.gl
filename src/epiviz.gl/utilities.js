@@ -305,6 +305,26 @@ const cloneMouseEvent = (e) => {
   };
 };
 
+const calculateZoomLevel = (viewport) => {
+  const { minX, minY, maxX, maxY, xRange, yRange } = viewport;
+  // Calculate the full range for content
+  const fullXRange = maxX - minX;
+  const fullYRange = maxY - minY;
+
+  // Calculate the range of the visible viewport
+  const viewportWidth = xRange[1] - xRange[0];
+  const viewportHeight = yRange[1] - yRange[0];
+
+  // Determine the zoom levels for X and Y
+  const xZoomLevel = fullXRange / viewportWidth;
+  const yZoomLevel = fullYRange / viewportHeight;
+
+  return {
+    xZoomLevel,
+    yZoomLevel,
+  };
+};
+
 /**
  * Adjusts the given points based on the selected mode.
  *
@@ -355,9 +375,10 @@ const throttleWithRAF = (callback) => {
 
 export {
   cloneMouseEvent,
+  calculateZoomLevel,
+  colorSpecifierToHex,
   getPointsBySelectMode,
   getViewportForSpecification,
-  colorSpecifierToHex,
   getScaleForSpecification,
   getDimAndMarginStyleForSpecification,
   getQuadraticBezierCurveForPoints,
