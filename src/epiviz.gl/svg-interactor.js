@@ -21,6 +21,12 @@ class SVGInteractor {
     labelMouseOverHandler,
     labelMouseOutHandler
   ) {
+    /* This function is used to determine whether or not to render labels, and is called every time the labels are updated.
+      By default, it returns null, which means that labels will always be rendered
+      If the user wants to specify a function to determine whether or not to render labels, they can do so by calling the setShouldRenderLabels function
+      with a function that accepts the plot as an argument and returns true or false
+    */
+    this.shouldRenderLabels = null;
     this.labelClickHandler = labelClickHandler;
     this.labelMouseOverHandler = labelMouseOverHandler;
     this.labelMouseOutHandler = labelMouseOutHandler;
@@ -126,13 +132,37 @@ class SVGInteractor {
   }
 
   updateLabels() {
-    if (!this.initialX && this.specification.labels) {
-      this.initialX = this.specification.labels.map(
+    let specificationLabels = this.specification.labels;
+
+    // If the user has specified a function to determine whether or not to render labels, check that
+    if (this.shouldRenderLabels) {
+      const shouldRenderLabels = this.shouldRenderLabels();
+
+      // If the function returns a boolean value and it is false, remove all labels and do not render any
+      // If the function returns a boolean value and it is true, dont do anything (render all labels)
+      if (typeof shouldRenderLabels === "boolean" && !shouldRenderLabels) {
+        select(this._labelMarker).selectAll("*").remove();
+        return;
+      } else if (
+        Array.isArray(shouldRenderLabels) &&
+        shouldRenderLabels.length === 2
+      ) {
+        // If the function returns an array of boolean values, remove the labels that correspond to false values
+        specificationLabels = specificationLabels.filter(
+          (label) =>
+            (label.type === "row" && shouldRenderLabels[0]) ||
+            (label.type === "column" && shouldRenderLabels[1])
+        );
+      }
+    }
+
+    if (!this.initialX && specificationLabels) {
+      this.initialX = specificationLabels.map(
         (label) => this._calculateViewportSpotInverse(label.x, label.y)[0]
       );
     }
-    if (!this.initialY && this.specification.labels) {
-      this.initialY = this.specification.labels.map(
+    if (!this.initialY && specificationLabels) {
+      this.initialY = specificationLabels.map(
         (label) => this._calculateViewportSpotInverse(label.x, label.y)[1]
       );
     }
@@ -144,7 +174,7 @@ class SVGInteractor {
 
     const labels = select(this._labelMarker)
       .selectAll("text")
-      .data(this.specification.labels);
+      .data(specificationLabels);
     labels
       .enter()
       .append("text")
@@ -408,6 +438,25 @@ class SVGInteractor {
     const inverseScaleY = scale(this.currentYRange, [this.height, 0]);
 
     return [inverseScaleX(viewportX), inverseScaleY(viewportY)];
+  }
+
+  /**
+   * Set the function that determines whether or not to render labels
+   * @param {Function} shouldRenderLabels function that returns a boolean value or an array of boolean values
+   * @returns null
+   * @example
+   * This example shows how to set a function that will render both row and column labels
+   * (plot) => {
+   *  return true;
+   * }
+   * @example
+   * This example shows how to set a function that will render row labels but not column labels
+   * (plot) => {
+   * return [true, false];
+   * }
+   */
+  setShouldRenderLabels(shouldRenderLabels) {
+    this.shouldRenderLabels = shouldRenderLabels;
   }
 
   /**

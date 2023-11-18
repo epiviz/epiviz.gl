@@ -133,20 +133,25 @@ class WebGLVis {
   }
 
   /**
-   * The main method for changing the state of the visualization, such as active tool,
-   * viewport, locking axis, or changing the zoom.
+   * The main method for changing the state of the visualization. This method is used
+   * to dynamically adjust various aspects of the visualization tool, including the active tool,
+   * viewport settings, axis locking, and zoom level. It also provides a mechanism to control
+   * the rendering of labels based on the current state of the plot.
    *
-   * The format of the options:
-   *   lockedX: boolean
-   *   lockedY: boolean
-   *   viewport: [minX, maxX, minY, maxY] (all Numbers)
-   *   currentXRange: [x1, x2] (Numbers that should be within the viewport minX and maxX)
-   *   currentYRange: [y1, y2] (Numbers that should be within the viewport minY and maxY)
-   *   uniDirectionalSelectionEnabled: boolean
-   *   tool: one of ["pan", "box", "lasso"]
-   *   maxZoomLevel: Number
+   * The format of the options object is as follows:
+   *   - lockedX: boolean - Determines whether the X-axis is locked.
+   *   - lockedY: boolean - Determines whether the Y-axis is locked.
+   *   - viewport: [minX, maxX, minY, maxY] - Array of Numbers specifying the viewport boundaries.
+   *   - currentXRange: [x1, x2] - Array of Numbers specifying the visible range on the X-axis within the viewport.
+   *   - currentYRange: [y1, y2] - Array of Numbers specifying the visible range on the Y-axis within the viewport.
+   *   - uniDirectionalSelectionEnabled: boolean - Specifies if uni-directional selection is enabled.
+   *   - tool: String - Indicates the active tool, can be one of ["pan", "box", "lasso"].
+   *   - maxZoomLevel: Number - Specifies the maximum allowable zoom level.
+   *   - shouldRenderLabels: Function - A callback function to determine if labels should be rendered. This function should return a boolean value or an array of boolean values.
+   *     If a boolean value is returned, it will be applied to both row and column labels. If an array of boolean values is returned, the first value will be applied to row labels and the second value will be applied to column labels.
+   *     This callback is typically used to render labels conditionally based on different parameters. The function takes a single parameter, which is the current plot object.
    *
-   * @param {Object} options with keys under WebGLVis.POSSIBLE_MOUSE_READER_OPTIONS
+   * @param {Object} options - An object containing the configuration options. The keys of this object should correspond to the WebGLVis.POSSIBLE_MOUSE_READER_OPTIONS.
    */
   setViewOptions(options) {
     for (const option of this.POSSIBLE_MOUSE_READER_OPTIONS) {
@@ -154,6 +159,14 @@ class WebGLVis {
         this.mouseReader[option] = options[option];
       }
     }
+
+    if (options.shouldRenderLabels) {
+      // Set the function with the first parameter bound to plot object
+      this.mouseReader.SVGInteractor.setShouldRenderLabels((...args) =>
+        options.shouldRenderLabels(this, ...args)
+      );
+    }
+
     this.sendDrawerState(this.mouseReader.getViewport());
   }
 
