@@ -457,7 +457,10 @@ class MouseReader {
    * @param {MouseEvent} event from the event it is called from
    */
   _onSelect(event) {
-    if (this.tool === "box" && this.isUniDirectionalSelectionAllowed) {
+    if (
+      (this.tool === "box" || this.tool === "boxh" || this.tool === "boxv") &&
+      this.isUniDirectionalSelectionAllowed
+    ) {
       this.handler.selectPoints(
         getPointsBySelectMode(
           this.tool,
