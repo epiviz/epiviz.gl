@@ -136,7 +136,8 @@ class MouseReader {
       "mousemove",
       (event) => {
         this.handler.getClosestPoint(
-          this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+          this._calculateViewportSpot(...getLayerXandYFromEvent(event)),
+          cloneMouseEvent(event)
         );
         if (!mouseDown) {
           return;
@@ -262,7 +263,8 @@ class MouseReader {
       "dblclick",
       (event) => {
         this.handler.getClickPoint(
-          this._calculateViewportSpot(...getLayerXandYFromEvent(event))
+          this._calculateViewportSpot(...getLayerXandYFromEvent(event)),
+          cloneMouseEvent(event)
         );
       },
       false

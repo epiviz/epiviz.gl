@@ -244,11 +244,13 @@ class WebGLVis {
    * Does not return, posts result to this.dataWorkerStream.
    *
    * @param {Array} point to get closest point to
+   * @param {Object=} event refers to mouse event has triggered this function. Optional Parameter
    */
-  getClosestPoint(point) {
+  getClosestPoint(point, event) {
     this.dataWorker.postMessage({
       type: "getClosestPoint",
       point,
+      event,
     });
   }
 
@@ -257,11 +259,13 @@ class WebGLVis {
    * Does not return, posts result to this.dataWorkerStream.
    *
    * @param {Array} point to get closest point to
+   * @param {Object=} event refers to mouse event that triggered this function. Optional parameter
    */
-  getClickPoint(point) {
+  getClickPoint(point, event) {
     this.dataWorker.postMessage({
       type: "getClickPoint",
       point,
+      event,
     });
   }
 
