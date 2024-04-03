@@ -57,6 +57,7 @@ class MouseReader {
     );
     this.throttledUpdateSVG = throttleWithRAF(this._updateSVG.bind(this));
     this.uniDirectionalSelectionEnabled = true;
+    this.useNaturalScrolling = false;
   }
 
   /**
@@ -299,7 +300,9 @@ class MouseReader {
     let previousY = null;
     if (!this.lockedX) {
       previousX = [...this.currentXRange]; // ... to avoid aliasing
-      const t = -event.wheelDelta / 1000;
+      const t = this.useNaturalScrolling
+        ? event.wheelDelta / 1000
+        : -event.wheelDelta / 1000; // Invert based on scrolling preference
       const inDataSpace = this._calculateViewportSpot(
         ...getLayerXandYFromEvent(event)
       );
@@ -315,7 +318,9 @@ class MouseReader {
 
     if (!this.lockedY) {
       previousY = [...this.currentYRange];
-      const t = -event.wheelDelta / 1000;
+      const t = this.useNaturalScrolling
+        ? event.wheelDelta / 1000
+        : -event.wheelDelta / 1000; // Invert based on scrolling preference
       const inDataSpace = this._calculateViewportSpot(
         ...getLayerXandYFromEvent(event)
       );
@@ -349,12 +354,17 @@ class MouseReader {
       }
     }
 
-    this.handler.dispatchEvent(event.wheelDelta < 0 ? "zoomIn" : "zoomOut", {
-      viewport: this.getViewport(),
-      zoomLevel: calculateZoomLevel(this.getViewport()),
-      type: this.tool,
-      event: cloneMouseEvent(event),
-    });
+    this.handler.dispatchEvent(
+      (this.useNaturalScrolling ? event.wheelDelta < 0 : event.wheelDelta > 0)
+        ? "zoomIn"
+        : "zoomOut",
+      {
+        viewport: this.getViewport(),
+        zoomLevel: calculateZoomLevel(this.getViewport()),
+        type: this.tool,
+        event: cloneMouseEvent(event),
+      }
+    );
 
     this.handler.sendDrawerState(this.getViewport());
     this.throttledUpdateSVG();

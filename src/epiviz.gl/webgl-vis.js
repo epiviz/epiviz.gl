@@ -33,6 +33,7 @@ class WebGLVis {
       "currentYRange",
       "uniDirectionalSelectionEnabled",
       "maxZoomLevel",
+      "useNaturalScrolling",
     ]);
   }
 

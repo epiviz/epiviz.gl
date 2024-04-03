@@ -49,7 +49,7 @@ class App {
 
     let selem = document.getElementById("specification-select");
     selem.value = "tsne-10th";
-    selem.dispatchEvent(new Event('change'));
+    selem.dispatchEvent(new Event("change"));
 
     document.getElementById("refresh-specification").click();
   }

@@ -1,6 +1,6 @@
 {
   "name": "epiviz.gl",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "repository": "https://github.com/epiviz/epiviz.gl",
   "homepage": "https://github.com/epiviz/epiviz.gl",
   "author": {
@@ -12,6 +12,10 @@
     {
       "name": "Sam Rosen",
       "email": "samrosen90@gmail.com"
+    },
+    {
+      "name": "Ossama Rafique",
+      "email": "ossamarafique@gmail.com"
     }
   ],
   "bugs": "https://github.com/epiviz/epiviz.gl/issues",
