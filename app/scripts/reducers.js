@@ -8,6 +8,7 @@ const controlsSlice = createSlice({
     specification: csv10,
     lockedX: false,
     lockedY: false,
+    useNaturalScrolling: false,
   },
   reducers: {
     setSpecification(state, action) {
@@ -19,10 +20,16 @@ const controlsSlice = createSlice({
     },
 
     setScroll(state, action) {
-      if (action.payload.axis === "x") {
-        state.lockedX = action.payload.checked;
-      } else if (action.payload.axis === "y") {
-        state.lockedY = action.payload.checked;
+      if (action.payload.axis) {
+        if (action.payload.axis === "x") {
+          state.lockedX = action.payload.checked;
+        } else if (action.payload.axis === "y") {
+          state.lockedY = action.payload.checked;
+        }
+      } else {
+        for (const key in action.payload) {
+          state[key] = action.payload[key];
+        }
       }
     },
   },

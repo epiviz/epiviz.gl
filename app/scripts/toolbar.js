@@ -70,6 +70,11 @@ class Toolbar {
     document.getElementById("lock-y").addEventListener("change", (event) => {
       this.dispatch(setScroll({ axis: "y", checked: event.target.checked }));
     });
+    document
+      .getElementById("use-natural-scroll")
+      .addEventListener("change", (event) => {
+        this.dispatch(setScroll({ useNaturalScrolling: event.target.checked }));
+      });
 
     document.getElementById("specification-select").value = this.specification;
     this.dispatch(setSpecification(exampleMap.get(this.specification)));

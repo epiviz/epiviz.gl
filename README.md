@@ -91,6 +91,16 @@ setViewOptions({
 });
 ```
 
+### Zoom Control Direction
+
+You can now specify to use natural scrolling or inverted scrolling for zooming in and out using the `setViewOptions` function. Default value is `true`.
+
+```javascript
+setViewOptions({
+  useNaturalScrolling: false,
+});
+```
+
 # Specifications
 
 Documentation for specifications can be found in [docs/specification_doc.md](https://github.com/epiviz/epiviz.gl/blob/main/docs/specification_doc.md). Documentation for the specifications can be generated with [json-schema-for-humans](https://pypi.org/project/json-schema-for-humans/):
