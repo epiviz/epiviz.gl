@@ -158,6 +158,30 @@ class WebGLVis {
     this.sendDrawerState(this.mouseReader.getViewport());
   }
 
+  /**
+   * Set the options for the SVG overlay.
+   * @param {Object} options
+   * @param {String} options.selectionAttributes - CSS attributes for the selection box
+   *
+   * @example
+   * setSVGOptions({
+   *  svgStyle: {
+   *    position: "absolute",
+   *  },
+   *  selectionMarkerAttributes: {
+   *    fill: "none",
+   *    stroke: "black",
+   *    "stroke-width": "2",
+   *    "stroke-dasharray": "5,5"
+   *  }
+   * });
+   *
+   **/
+
+  setSVGOptions(options) {
+    this.mouseReader.setSVGOptions(options);
+  }
+
   _setMargins(specification) {
     const styles = getDimAndMarginStyleForSpecification(specification);
     this.parent.style.width = specification.width || DEFAULT_WIDTH;

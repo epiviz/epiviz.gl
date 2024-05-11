@@ -26,25 +26,43 @@ class SVGInteractor {
     this.labelMouseOutHandler = labelMouseOutHandler;
     this.svg = svg;
     this.d3SVG = select(this.svg);
-    this.svg.style.width = "100%";
-    this.svg.style.height = "100%";
-    this.svg.style.position = "absolute";
-    this.svg.style.pointerEvents = "none";
-    this.svg.style.overflow = "visible";
+
+    this.options = {
+      svgStyle: {
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        pointerEvents: "none",
+        overflow: "visible",
+      },
+      selectionMarkerAttributes: {
+        fill: "rgba(124, 124, 247, 0.3)",
+        stroke: "rgb(136, 128, 247)",
+        "stroke-width": "1",
+        "stroke-dasharray": "5,5",
+      },
+    };
+
+    // Create a clip path to clip the selection box to the viewport
+    const defs = this.d3SVG.append("defs");
+    this.clipPath = defs.append("clipPath").attr("id", "clipPolygon");
+    this.clipPath
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", "100%")
+      .attr("height", "100%");
 
     this._selectMarker = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "polygon"
     );
-    this._selectMarker.setAttribute("fill", "rgba(124, 124, 247, 0.3)");
-    this._selectMarker.setAttribute("stroke", "rgb(136, 128, 247)");
-    this._selectMarker.setAttribute("stroke-width", 1);
-    this._selectMarker.setAttribute("stroke-dasharray", "5,5");
-
     this._labelMarker = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "g"
     );
+
+    this.applyOptions();
   }
 
   /**
@@ -61,6 +79,9 @@ class SVGInteractor {
     this.svg.style.margin = styles.margin;
     this.svg.style.cursor = "default"; // or "none"
 
+    this.clipPath.style("width", styles.width);
+    this.clipPath.style("height", styles.height);
+
     this.initialX = undefined; // used for updating labels
     this.initialY = undefined;
     select(this._labelMarker).selectAll("*").remove();
@@ -69,11 +90,39 @@ class SVGInteractor {
     }
   }
 
+  setOptions(options) {
+    this.options = {
+      ...this.options,
+      ...options,
+    };
+
+    this.applyOptions();
+  }
+
+  applyOptions() {
+    for (const key in this.options.svgStyle) {
+      this.svg.style[key] = this.options.svgStyle[key];
+    }
+
+    for (const key in this.options.selectionMarkerAttributes) {
+      this._selectMarker.setAttribute(
+        key,
+        this.options.selectionMarkerAttributes[key]
+      );
+    }
+  }
+
   /**
    * Add svg elements to the DOM
    */
   init() {
-    this.svg.appendChild(this._selectMarker);
+    const selectionMarkerGroup = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g"
+    );
+    selectionMarkerGroup.setAttribute("clip-path", "url(#clipPolygon)");
+    selectionMarkerGroup.appendChild(this._selectMarker);
+    this.svg.appendChild(selectionMarkerGroup);
     this.svg.appendChild(this._labelMarker);
     this.xAxisAnchor = this.d3SVG.append("g");
     this.yAxisAnchor = this.d3SVG.append("g");

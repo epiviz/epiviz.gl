@@ -75,6 +75,10 @@ class MouseReader {
     this._updateSVG();
   }
 
+  setSVGOptions(options) {
+    this.SVGInteractor.setOptions(options);
+  }
+
   /**
    * Set the viewport in the format mouseReader.viewport = [minX, maxX, minY, maxY].
    * Mostly used to make WebGLVis.setViewOptions simpler.
