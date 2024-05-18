@@ -11,3 +11,17 @@ import WebGLCanvasDrawer from "./epiviz.gl/webgl-drawer";
 import WebGLVis from "./epiviz.gl/webgl-vis";
 
 export default WebGLVis;
+
+export {
+  DataProcessor,
+  Drawer,
+  GenomeSizes,
+  GeometryMapper,
+  MouseReader,
+  SVGInteractor,
+  SemanticZoomer,
+  SpecificationProcessor,
+  WebGLCanvasDrawer,
+  WebGLVis,
+  utilities,
+};
