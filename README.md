@@ -91,6 +91,33 @@ setViewOptions({
 });
 ```
 
+### SVG Options
+
+You can now specify the SVG options for the visualization using the `setSVGOptions` function. Default value is
+
+```javascript
+{
+  svgStyle: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    overflow: "visible",
+  },
+  selectionMarkerAttributes: {
+    fill: "rgba(124, 124, 247, 0.3)",
+    stroke: "rgb(136, 128, 247)",
+    "stroke-width": "1",
+    "stroke-dasharray": "5,5",
+  },
+}
+```
+
+It supports the following options:
+
+- `svgStyle`: An object containing the style attributes for the SVG element.
+- `selectionMarkerAttributes`: An object containing the style attributes for the selection marker.
+
 ### Zoom Control Direction
 
 You can now specify to use natural scrolling or inverted scrolling for zooming in and out using the `setViewOptions` function. Default value is `true`.
@@ -451,3 +478,7 @@ const exampleMap = new Map([
 If your example is particularly long to render due to many vertices or a large amount of data, consider adding it to the [`longPresets`](https://github.com/epiviz/epiviz.gl/blob/main/cypress/support/index.js#:~:text=const-,longPresets,-%3D%20%5B%22tsne%22%2C%20%22tsne-10th) array.
 
 6. If you completed step 5, rerecord the tests, but be sure to **only commit only the test-image from your example (provided it is correct)**.
+
+```
+
+```
